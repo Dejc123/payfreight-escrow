@@ -17,8 +17,9 @@
 //! 2. CMR Upload: The carrier fulfills the transport and uploads the hash of the 
 //!    verified CMR document via the interface.
 //! 3. Approval & Release: The administrator reviews the CMR and approves the payout. 
-//!    The smart contract automatically transfers net USDC to the carrier, deducts a 0.5% 
-//!    platform fee, and returns the locked $PAYFREIGHT tokens to the shipper.
+//!    The smart contract automatically applies dynamic fees (0.5% if $PAYFREIGHT tokens 
+//!    are locked, or 1.5% standard fee if not), transfers net USDC to the carrier, collects 
+//!    the platform fee, and returns the locked $PAYFREIGHT tokens to the shipper.
 //! =============================================================================
 
 use anchor_lang::prelude::*;
@@ -93,7 +94,7 @@ pub mod payfreight_escrow {
         Ok(())
     }
 
-    /// 3. Admin manually reviews CMR, releases USDC to carrier/platform, and returns tokens to shipper
+    /// 3. Admin manually reviews CMR, applies dynamic fee, releases USDC, and returns tokens to shipper
     pub fn approve_and_release(ctx: Context<ApproveAndRelease>) -> Result<()> {
         let escrow = &mut ctx.accounts.escrow_account;
 
@@ -113,8 +114,16 @@ pub mod payfreight_escrow {
         ];
         let signer_seeds = &[&seeds[..]];
 
-        // Fee calculation: 0.5% (50 basis points) for platform, 99.5% for carrier
-        let platform_fee = (escrow.usdc_amount * 50) / 10000;
+        // Dynamic Fee Calculation:
+        // - 0.5% (50 basis points) if $PAYFREIGHT tokens are locked
+        // - 1.5% (150 basis points) standard fee if no tokens are locked
+        let fee_percentage = if escrow.payfreight_token_amount > 0 {
+            50   // 0.5% discounted fee
+        } else {
+            150  // 1.5% standard fee
+        };
+
+        let platform_fee = (escrow.usdc_amount * fee_percentage) / 10000;
         let carrier_payout = escrow.usdc_amount - platform_fee;
 
         let cpi_program = ctx.accounts.token_program.to_account_info();
