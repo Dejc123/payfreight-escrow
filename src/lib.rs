@@ -21,6 +21,7 @@
 //!    are locked, or 1.5% standard fee if not), transfers net USDC to the carrier, collects 
 //!    the platform fee, and returns the locked $PAYFREIGHT tokens to the shipper.
 //! =============================================================================
+pub mod payfreight_escrow_eur;
 
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer};
