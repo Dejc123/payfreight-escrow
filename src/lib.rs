@@ -2,23 +2,23 @@
 //! PAYFREIGHT ESCROW SMART CONTRACT (SOLANA / ANCHOR)
 //! =============================================================================
 //! 
-//! Copyright (c) 2026 Payfreight / Vse pravice pridržane.
+//! Copyright (c) 2026 Payfreight / All Rights Reserved.
 //! 
-//! Ocenjevalci in sodniki dogodka/hackathona si lahko to kodo prosto ogledajo,
-//! jo analizirajo in preizkusijo izključno za namene ocenjevanja tega projekta.
-//! Kakršna koli drugačna uporaba, kopiranje, distribucija, spreminjanje ali
-//! komercialna raba te kode brez izrecnega pisnega dovoljenja avtorja ni dovoljena.
+//! Hackathon judges and evaluators are granted free access to view, analyze,
+//! and test this code exclusively for the purpose of evaluating this project.
+//! Any other use, copying, distribution, modification, or commercial exploitation 
+//! of this code without explicit written permission from the author is strictly prohibited.
 //! 
 //! =============================================================================
-//! OPIS DELOVANJA IN POSLOVNI MODEL:
-//! 1. Zaklep (Escrow): Špediter ustvari naročilo ter v sefe hkrati zaklene 
-//!    voznino v USDC in obvezno količino $PAYFREIGHT žetonov (kot garancijo in 
-//!    pogoj za ugodnejšo provizijo).
-//! 2. Nalaganje CMR: Prevoznik opravi prevoz in preko vmesnika naloži hash 
-//!    overjenega CMR dokumenta.
-//! 3. Izplačilo in Vračilo: Administrator preveri CMR in potrdi izplačilo. 
-//!    Pogodba samodejno izplača neto USDC prevozniku, vzame 0.5% provizije 
-//!    za platformo ter špediterju vrne zaklenjene $PAYFREIGHT žetone.
+//! BUSINESS LOGIC & WORKFLOW DESCRIPTION:
+//! 1. Escrow Initialization: The shipper creates an order and simultaneously locks 
+//!    the freight payment in USDC along with the required amount of $PAYFREIGHT tokens 
+//!    (acting as collateral and a condition for lower platform fees).
+//! 2. CMR Upload: The carrier fulfills the transport and uploads the hash of the 
+//!    verified CMR document via the interface.
+//! 3. Approval & Release: The administrator reviews the CMR and approves the payout. 
+//!    The smart contract automatically transfers net USDC to the carrier, deducts a 0.5% 
+//!    platform fee, and returns the locked $PAYFREIGHT tokens to the shipper.
 //! =============================================================================
 
 use anchor_lang::prelude::*;
@@ -30,7 +30,7 @@ declare_id!("PayfrE1111111111111111111111111111111111111");
 pub mod payfreight_escrow {
     use super::*;
 
-    /// 1. Špediter ustvari naročilo ter zaklene USDC voznino in $PAYFREIGHT žetone
+    /// 1. Shipper creates an order and locks USDC freight and $PAYFREIGHT tokens
     pub fn initialize_escrow(
         ctx: Context<InitializeEscrow>,
         order_id: String,
@@ -49,7 +49,7 @@ pub mod payfreight_escrow {
         escrow.is_completed = false;
         escrow.bump = ctx.bumps.escrow_account;
 
-        // A) Prenos USDC voznine s špediterjevega računa v USDC Vault
+        // A) Transfer USDC freight from shipper's account to the USDC Vault
         let cpi_accounts_usdc = Transfer {
             from: ctx.accounts.shipper_usdc_account.to_account_info(),
             to: ctx.accounts.usdc_vault.to_account_info(),
@@ -61,7 +61,7 @@ pub mod payfreight_escrow {
             usdc_amount,
         )?;
 
-        // B) Prenos $PAYFREIGHT žetonov s špediterjevega računa v Payfreight Token Vault
+        // B) Transfer $PAYFREIGHT tokens from shipper's account to the Token Vault
         let cpi_accounts_token = Transfer {
             from: ctx.accounts.shipper_payfreight_account.to_account_info(),
             to: ctx.accounts.payfreight_vault.to_account_info(),
@@ -72,11 +72,11 @@ pub mod payfreight_escrow {
             payfreight_token_amount,
         )?;
 
-        msg!("Escrow ustvarjen: Zaklenjeno {} USDC in {} $PAYFREIGHT.", usdc_amount, payfreight_token_amount);
+        msg!("Escrow initialized: Locked {} USDC and {} $PAYFREIGHT.", usdc_amount, payfreight_token_amount);
         Ok(())
     }
 
-    /// 2. Prevoznik naloži potrjen/overjen CMR (URL ali hash dokumenta)
+    /// 2. Carrier uploads the verified CMR (document hash or URL)
     pub fn upload_cmr(ctx: Context<UploadCMR>, cmr_hash: String) -> Result<()> {
         let escrow = &mut ctx.accounts.escrow_account;
 
@@ -89,11 +89,11 @@ pub mod payfreight_escrow {
         escrow.cmr_hash = cmr_hash;
         escrow.is_cmr_uploaded = true;
 
-        msg!("Overjen CMR uspešno naložen v sistem.");
+        msg!("Verified CMR successfully uploaded to the system.");
         Ok(())
     }
 
-    /// 3. Admin ročno preveri CMR ter sprosti USDC prevozniku in vam provizijo, žetone pa vrne špediterju
+    /// 3. Admin manually reviews CMR, releases USDC to carrier/platform, and returns tokens to shipper
     pub fn approve_and_release(ctx: Context<ApproveAndRelease>) -> Result<()> {
         let escrow = &mut ctx.accounts.escrow_account;
 
@@ -104,7 +104,7 @@ pub mod payfreight_escrow {
             EscrowError::UnauthorizedAdmin
         );
 
-        // Semena za PDA podpisnika (da pametna pogodba sama sprosti zaklenjena sredstva)
+        // PDA signer seeds allowing the contract to autonomously release funds
         let order_id_bytes = escrow.order_id.as_bytes();
         let seeds = &[
             b"escrow",
@@ -113,13 +113,13 @@ pub mod payfreight_escrow {
         ];
         let signer_seeds = &[&seeds[..]];
 
-        // Izračun provizije: 0.5% (50 bazičnih točk) platformi, 99.5% prevozniku
+        // Fee calculation: 0.5% (50 basis points) for platform, 99.5% for carrier
         let platform_fee = (escrow.usdc_amount * 50) / 10000;
         let carrier_payout = escrow.usdc_amount - platform_fee;
 
         let cpi_program = ctx.accounts.token_program.to_account_info();
 
-        // A) Nakazilo neto voznine Prevozniku (USDC)
+        // A) Transfer net freight to Carrier (USDC)
         let transfer_to_carrier = Transfer {
             from: ctx.accounts.usdc_vault.to_account_info(),
             to: ctx.accounts.carrier_usdc_account.to_account_info(),
@@ -130,7 +130,7 @@ pub mod payfreight_escrow {
             carrier_payout,
         )?;
 
-        // B) Nakazilo provizije na denarnico Payfreight platforme (USDC)
+        // B) Transfer platform fee to Payfreight platform wallet (USDC)
         let transfer_fee = Transfer {
             from: ctx.accounts.usdc_vault.to_account_info(),
             to: ctx.accounts.admin_fee_usdc_account.to_account_info(),
@@ -141,7 +141,7 @@ pub mod payfreight_escrow {
             platform_fee,
         )?;
 
-        // C) Vračilo zaklenjenih $PAYFREIGHT žetonov nazaj Špediterju
+        // C) Return locked $PAYFREIGHT tokens back to the Shipper
         let return_tokens = Transfer {
             from: ctx.accounts.payfreight_vault.to_account_info(),
             to: ctx.accounts.shipper_payfreight_account.to_account_info(),
@@ -154,13 +154,13 @@ pub mod payfreight_escrow {
 
         escrow.is_completed = true;
 
-        msg!("Plačilo sproščeno! Prevoznik: {} USDC, Provizija: {} USDC, Žetoni vrnjeni špediterju.", carrier_payout, platform_fee);
+        msg!("Payment released! Carrier: {} USDC, Fee: {} USDC, Tokens returned to shipper.", carrier_payout, platform_fee);
         Ok(())
     }
 }
 
 // -----------------------------------------------------------------------------
-// STRUKTURE RAČUNOV IN KONTEKSTI
+// ACCOUNTS & CONTEXTS
 // -----------------------------------------------------------------------------
 
 #[derive(Accounts)]
@@ -168,9 +168,9 @@ pub mod payfreight_escrow {
 pub struct InitializeEscrow<'info> {
     #[account(mut)]
     pub shipper: Signer<'info>,
-    /// CHECK: Prevoznikov javni ključ
+    /// CHECK: Carrier public key
     pub carrier: AccountInfo<'info>,
-    /// CHECK: Admin javni ključ
+    /// CHECK: Admin public key
     pub admin: AccountInfo<'info>,
 
     #[account(
@@ -182,7 +182,7 @@ pub struct InitializeEscrow<'info> {
     )]
     pub escrow_account: Account<'info, EscrowAccount>,
 
-    // Sef za USDC voznino
+    // Vault for USDC freight
     #[account(
         init,
         payer = shipper,
@@ -193,7 +193,7 @@ pub struct InitializeEscrow<'info> {
     )]
     pub usdc_vault: Account<'info, TokenAccount>,
 
-    // Sef za $PAYFREIGHT žetone
+    // Vault for $PAYFREIGHT tokens
     #[account(
         init,
         payer = shipper,
@@ -251,35 +251,35 @@ pub struct ApproveAndRelease<'info> {
 }
 
 // -----------------------------------------------------------------------------
-// STANJE ESCROW RAČUNA (STATE)
+// ESCROW STATE
 // -----------------------------------------------------------------------------
 
 #[account]
 pub struct EscrowAccount {
-    pub shipper: Pubkey,                    // Špediter / Naročnik
-    pub carrier: Pubkey,                    // Prevoznik
+    pub shipper: Pubkey,                    // Shipper / Client
+    pub carrier: Pubkey,                    // Carrier / Transporter
     pub admin: Pubkey,                      // Administrator
-    pub usdc_amount: u64,                   // Znesek voznine v USDC
-    pub payfreight_token_amount: u64,     // Količina zaklenjenih $PAYFREIGHT žetonov
-    pub order_id: String,                   // ID naročila ali št. fakture
-    pub cmr_hash: String,                   // Link/Hash potrjenega CMR-ja
-    pub is_cmr_uploaded: bool,            // Ali je CMR naložen
-    pub is_completed: bool,                 // Ali je transakcija zaključena
+    pub usdc_amount: u64,                   // Freight amount in USDC
+    pub payfreight_token_amount: u64,     // Locked $PAYFREIGHT token amount
+    pub order_id: String,                   // Order ID or Invoice Number
+    pub cmr_hash: String,                   // Link/Hash of verified CMR
+    pub is_cmr_uploaded: bool,            // CMR upload status flag
+    pub is_completed: bool,                 // Transaction completion flag
     pub bump: u8,                           // PDA Bump
 }
 
 // -----------------------------------------------------------------------------
-// NAPAKE (ERRORS)
+// ERROR CODES
 // -----------------------------------------------------------------------------
 
 #[error_code]
 pub enum EscrowError {
-    #[msg("Naročilo je že zaključeno.")]
+    #[msg("The order has already been completed.")]
     AlreadyCompleted,
-    #[msg("Samo izbrani prevoznik lahko naloži CMR.")]
+    #[msg("Only the designated carrier can upload the CMR.")]
     UnauthorizedCarrier,
-    #[msg("Samo odobreni administrator lahko potrdi izplačilo.")]
+    #[msg("Only the authorized administrator can approve the payout.")]
     UnauthorizedAdmin,
-    #[msg("CMR dokument še ni bil naložen.")]
+    #[msg("The CMR document has not been uploaded yet.")]
     CMRNotUploaded,
 }
