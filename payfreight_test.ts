@@ -15,33 +15,33 @@ describe("payfreight_escrow", () => {
 
   const program = anchor.workspace.PayfreightEscrow as Program<PayfreightEscrow>;
 
-  // Udeleženci v sistemu
+  // System participants
   const shipper = anchor.web3.Keypair.generate();
   const carrier = anchor.web3.Keypair.generate();
-  const admin = provider.wallet; // Trenutni upravljalec (deployer) deluje kot Admin
+  const admin = provider.wallet; // Current deployer acts as Admin
 
-  // Žetoni
+  // Token mints
   let usdcMint: anchor.web3.PublicKey;
   let payfreightMint: anchor.web3.PublicKey;
 
-  // Računi za žetone
+  // Token accounts
   let shipperUsdcAccount: anchor.web3.PublicKey;
   let shipperPayfreightAccount: anchor.web3.PublicKey;
   let carrierUsdcAccount: anchor.web3.PublicKey;
   let adminFeeUsdcAccount: anchor.web3.PublicKey;
 
-  // Podatki o naročilu
+  // Order parameters
   const orderId = "ORD-2026-001";
-  const usdcAmount = new anchor.BN(1_000_000_000); // 1,000 USDC (6 decimalnih mest)
+  const usdcAmount = new anchor.BN(1_000_000_000); // 1,000 USDC (6 decimals)
   const payfreightAmount = new anchor.BN(50_000_000); // 50 $PAYFREIGHT
 
-  // PDA naslovi (Escrow in Sefa)
+  // PDA addresses (Escrow and Vaults)
   let escrowAccountPda: anchor.web3.PublicKey;
   let usdcVaultPda: anchor.web3.PublicKey;
   let payfreightVaultPda: anchor.web3.PublicKey;
 
   before(async () => {
-    // 1. Napolnimo račune s SOL za transakcijske stroške
+    // 1. Airdrop SOL to participants for transaction fees
     await provider.connection.confirmTransaction(
       await provider.connection.requestAirdrop(shipper.publicKey, 2 * anchor.web3.LAMPORTS_PER_SOL)
     );
@@ -49,7 +49,7 @@ describe("payfreight_escrow", () => {
       await provider.connection.requestAirdrop(carrier.publicKey, 2 * anchor.web3.LAMPORTS_PER_SOL)
     );
 
-    // 2. Ustvarimo imitacijo USDC in PAYFREIGHT žetonov za test
+    // 2. Create mock USDC and PAYFREIGHT mints for testing
     usdcMint = await createMint(
       provider.connection,
       shipper,
@@ -65,7 +65,7 @@ describe("payfreight_escrow", () => {
       6
     );
 
-    // 3. Ustvarimo token račune za posamezne udeležence
+    // 3. Create associated token accounts for participants
     shipperUsdcAccount = await createAssociatedTokenAccount(
       provider.connection,
       shipper,
@@ -91,11 +91,11 @@ describe("payfreight_escrow", () => {
       admin.publicKey
     );
 
-    // 4. Natisnemo žetone na špediterjev račun za test
+    // 4. Mint test tokens to the shipper's account
     await mintTo(provider.connection, shipper, usdcMint, shipperUsdcAccount, admin.payer, 2_000_000_000);
     await mintTo(provider.connection, shipper, payfreightMint, shipperPayfreightAccount, admin.payer, 100_000_000);
 
-    // 5. Izračunamo PDA naslove
+    // 5. Derive PDA addresses
     [escrowAccountPda] = anchor.web3.PublicKey.findProgramAddressSync(
       [Buffer.from("escrow"), Buffer.from(orderId)],
       program.programId
@@ -110,7 +110,7 @@ describe("payfreight_escrow", () => {
     );
   });
 
-  it("1. Špediter uspešno ustvari Escrow (initialize_escrow)", async () => {
+  it("1. Shipper successfully initializes the Escrow (initialize_escrow)", async () => {
     await program.methods
       .initializeEscrow(orderId, usdcAmount, payfreightAmount)
       .accounts({
@@ -137,7 +137,7 @@ describe("payfreight_escrow", () => {
     assert.equal(escrowData.isCompleted, false);
   });
 
-  it("2. Prevoznik naloži CMR dokument (upload_cmr)", async () => {
+  it("2. Carrier uploads the CMR document (upload_cmr)", async () => {
     const cmrHash = "ipfs://QmXyZ123456789CmrDocumentHash";
 
     await program.methods
@@ -154,7 +154,7 @@ describe("payfreight_escrow", () => {
     assert.equal(escrowData.isCmrUploaded, true);
   });
 
-  it("3. Admin preveri CMR ter sprosti sredstva (approve_and_release)", async () => {
+  it("3. Admin verifies CMR and releases funds (approve_and_release)", async () => {
     await program.methods
       .approveAndRelease()
       .accounts({
@@ -172,11 +172,11 @@ describe("payfreight_escrow", () => {
     const escrowData = await program.account.escrowAccount.fetch(escrowAccountPda);
     assert.equal(escrowData.isCompleted, true);
 
-    // Preverimo bilanco prevoznika (moral bi prejti 99.5% od 1000 USDC = 995 USDC)
+    // Verify carrier balance (should receive 99.5% of 1000 USDC = 995 USDC)
     const carrierTokenAccount = await provider.connection.getTokenAccountBalance(carrierUsdcAccount);
     assert.equal(carrierTokenAccount.value.amount, "995000000");
 
-    // Preverimo provizijo admina (0.5% od 1000 USDC = 5 USDC)
+    // Verify admin platform fee (0.5% of 1000 USDC = 5 USDC)
     const adminTokenAccount = await provider.connection.getTokenAccountBalance(adminFeeUsdcAccount);
     assert.equal(adminTokenAccount.value.amount, "5000000");
   });
