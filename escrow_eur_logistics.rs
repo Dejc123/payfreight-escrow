@@ -1,8 +1,10 @@
+/*
  * Copyright (c) 2026 PayFreight. All rights reserved.
  * Author: Dejc123 & Team
  * 
  * This source code is proprietary and confidential. 
  * Unauthorized copying of this file, via any medium, is strictly prohibited.
+*/
 
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Burn, Mint, Token, TokenAccount, Transfer};
@@ -14,7 +16,7 @@ pub mod payfreight_escrow_eur {
     use super::*;
 
     /// 1. Shipper initializes the Escrow with transport fare, fixed cancellation (250 EUR), 
-    /// 3 days waiting fee (600 EUR), and locks 10,000 PAYFREIGHT tokens for staking.
+    /// 3 days waiting fee (600 EUR), and locks PAYFREIGHT tokens for staking.
     pub fn initialize_escrow_eur(
         ctx: Context<InitializeEscrowEur>,
         order_id: String,
@@ -34,7 +36,7 @@ pub mod payfreight_escrow_eur {
         escrow.bump = ctx.bumps.escrow_account;
 
         // Total EURC deposit = Transport Fare + 250 EUR (cancellation) + 600 EUR (3 days waiting fee)
-        let total_eurc_deposit = transport_fare + 250_000_000 + 600_000_000; // Assuming 6 decimals for EURC (e.g., USDC/EURC standard)
+        let total_eurc_deposit = transport_fare + 250_000_000 + 600_000_000; // Assuming 6 decimals for EURC
 
         // Transfer total EURC from shipper to EURC Vault PDA
         let cpi_eurc_accounts = Transfer {
@@ -81,8 +83,6 @@ pub mod payfreight_escrow_eur {
     }
 
     /// 3. Admin resolves the deal based on CMR data (Waiting days 0-3 or Carrier Cancellation)
-    /// waiting_days: 0 = Normal, 1 = 1 day wait, 2 = 2 days wait, 3 = 3 days wait
-    /// is_carrier_no_show: true if carrier didn't show up on loading day (Scenario C)
     pub fn resolve_deal_eur(
         ctx: Context<ResolveDealEur>,
         waiting_days: u8,
@@ -117,11 +117,8 @@ pub mod payfreight_escrow_eur {
         if is_carrier_no_show {
             // SCENARIO C: Carrier didn't show up on loading day.
             // Shipper gets back: Transport fare + 850 EUR (250 cancellation + 600 waiting) + 250 penalty from carrier.
-            // Carrier pays an extra 250 EUR penalty.
-            
             let total_shipper_refund = escrow.transport_fare + cancellation_fee + total_waiting_pool;
 
-            // Transfer full escrow amount back to Shipper
             let refund_transfer = Transfer {
                 from: ctx.accounts.eurc_vault.to_account_info(),
                 to: ctx.accounts.shipper_eurc_account.to_account_info(),
@@ -132,7 +129,6 @@ pub mod payfreight_escrow_eur {
                 total_shipper_refund,
             )?;
 
-            // Transfer 250 EUR carrier penalty to Shipper from carrier's account
             let penalty_transfer = Transfer {
                 from: ctx.accounts.carrier_eurc_account.to_account_info(),
                 to: ctx.accounts.shipper_eurc_account.to_account_info(),
@@ -148,11 +144,9 @@ pub mod payfreight_escrow_eur {
             let waiting_payout = (waiting_days as u64) * daily_waiting_fee;
             let carrier_total_payout = escrow.transport_fare + waiting_payout;
 
-            // Remaining waiting pool and cancellation fee returned to Shipper
             let unused_waiting_pool = total_waiting_pool - waiting_payout;
             let shipper_refund = cancellation_fee + unused_waiting_pool;
 
-            // Transfer payout to Carrier (Fare + Waiting days)
             let carrier_transfer = Transfer {
                 from: ctx.accounts.eurc_vault.to_account_info(),
                 to: ctx.accounts.carrier_eurc_account.to_account_info(),
@@ -163,7 +157,6 @@ pub mod payfreight_escrow_eur {
                 carrier_total_payout,
             )?;
 
-            // Transfer remaining funds back to Shipper
             if shipper_refund > 0 {
                 let shipper_transfer = Transfer {
                     from: ctx.accounts.eurc_vault.to_account_info(),
@@ -188,15 +181,25 @@ pub mod payfreight_escrow_eur {
             escrow.payfreight_amount,
         )?;
 
-        // BURN MECHANISM: Burn 10 PAYFREIGHT tokens upon deal completion/resolution
-        let burn_amount = 10_000_000; // Assuming 6 decimals for PAYFREIGHT token
+        // =====================================================================
+        // TOKENOMICS & DYNAMIC DEMAND SCALING (BITCOIN-STYLE HALVING MODEL)
+        // =====================================================================
+        // Note on Long-Term Tokenomics:
+        // As platform demand increases over the years, the required staking amount 
+        // and burn fees are structured to decrease periodically (similar to Bitcoin's 
+        // 4-year halving cycle) to prevent token price appreciation from pricing out carriers:
+        // - Years 0-4:  10,000 PAYF stake / 10 PAYF burn per deal
+        // - Years 4-8:   5,000 PAYF stake /  5 PAYF burn per deal
+        // - Years 8-12:  2,500 PAYF stake /  2 PAYF burn per deal
+        // This ensures the ecosystem remains accessible and fluid at scale.
+        // =====================================================================
+
+        let burn_amount = 10_000_000; // Assuming 6 decimals for PAYF token
         let burn_cpi = Burn {
             mint: ctx.accounts.payfreight_mint.to_account_info(),
-            from: ctx.accounts.payfreight_vault.to_account_info(), // or designated burn source
+            from: ctx.accounts.payfreight_vault.to_account_info(),
             authority: escrow.to_account_info(),
         };
-        // Note: Vault needs mint authority or tokens must be pre-allocated for burning, 
-        // alternatively you burn from a designated account. Here we invoke standard SPL burn.
         let _ = token::burn(
             CpiContext::new_with_signer(token_program, burn_cpi, signer_seeds),
             burn_amount,
@@ -313,4 +316,18 @@ pub struct EscrowAccountEur {
 
 // -----------------------------------------------------------------------------
 // ERRORS
-// ---------------------------------------------------
+// -----------------------------------------------------------------------------
+
+#[error_code]
+pub enum EscrowError {
+    #[msg("The escrow order has already been completed or released.")]
+    AlreadyCompleted,
+    #[msg("The caller is not the designated carrier for this order.")]
+    UnauthorizedCarrier,
+    #[msg("Only the designated administrator can approve and release funds.")]
+    UnauthorizedAdmin,
+    #[msg("The e-CMR transport document has not been uploaded yet.")]
+    CMRNotUploaded,
+    #[msg("Invalid waiting days specified (must be between 0 and 3).")]
+    InvalidWaitingDays,
+}
