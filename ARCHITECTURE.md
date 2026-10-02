@@ -1,3 +1,9 @@
+<!--
+ * Copyright (c) 2026 PayFreight. All rights reserved.
+ * Author: Dejc123 & Team
+ * This document is proprietary and confidential.
+-->
+
 # PayFreight Escrow - Architecture & Financial Flow
 
 ## Overview
