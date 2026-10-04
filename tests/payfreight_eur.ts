@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2026 PayFreight. All rights reserved.
+ * Author: PayFreight Protocol Team
+ * 
+ * This source code is proprietary and confidential. 
+ * Unauthorized copying of this file, via any medium, is strictly prohibited.
+*/
+
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
 import { PayfreightEscrowEur } from "../target/types/payfreight_escrow_eur";
@@ -35,6 +43,7 @@ describe("payfreight_escrow_eur", () => {
   let payfreightVaultPda: anchor.web3.PublicKey;
 
   before(async () => {
+    // 1. Airdrop SOL to participants for transaction fees
     await provider.connection.confirmTransaction(
       await provider.connection.requestAirdrop(shipper.publicKey, 2 * anchor.web3.LAMPORTS_PER_SOL)
     );
@@ -42,17 +51,21 @@ describe("payfreight_escrow_eur", () => {
       await provider.connection.requestAirdrop(carrier.publicKey, 2 * anchor.web3.LAMPORTS_PER_SOL)
     );
 
+    // 2. Create mock EURC and PAYFREIGHT mints
     eurcMint = await createMint(provider.connection, shipper, admin.publicKey, null, 6);
     payfreightMint = await createMint(provider.connection, shipper, admin.publicKey, null, 6);
 
+    // 3. Create associated token accounts
     shipperEurcAccount = await createAssociatedTokenAccount(provider.connection, shipper, eurcMint, shipper.publicKey);
     shipperPayfreightAccount = await createAssociatedTokenAccount(provider.connection, shipper, payfreightMint, shipper.publicKey);
     carrierEurcAccount = await createAssociatedTokenAccount(provider.connection, carrier, eurcMint, carrier.publicKey);
     adminFeeEurcAccount = await createAssociatedTokenAccount(provider.connection, shipper, eurcMint, admin.publicKey);
 
+    // 4. Mint tokens to the shipper
     await mintTo(provider.connection, shipper, eurcMint, shipperEurcAccount, admin.payer, 5_000_000_000);
     await mintTo(provider.connection, shipper, payfreightMint, shipperPayfreightAccount, admin.payer, 100_000_000);
 
+    // 5. Derive PDA addresses
     [escrowAccountPda] = anchor.web3.PublicKey.findProgramAddressSync(
       [Buffer.from("escrow_eur"), Buffer.from(orderId)],
       program.programId
