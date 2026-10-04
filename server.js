@@ -1,24 +1,24 @@
 /**
  * Project Name: PayFreight Escrow Protocol
- * Description: Universal backend server for secure logistics escrow settlements, 
- * mapping generic external transaction IDs and participant identifiers to a decentralized or secure ledger.
+ * Description: Universal backend server for secure logistics escrow settlements.
  * 
- * Copyright (c) 2026 PayFreight. All rights reserved.
- * Licensed under the MIT License.
+ * Copyright (c) 2026 Payfreight / Vse pravice pridržane.
  */
 
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// In-memory transaction storage (replace with a database or smart contract in production)
+// Serve static frontend files from the 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 const escrowTransactions = [];
 
-// Endpoint to confirm and initialize escrow via the protocol widget
 app.post('/api/payfreight/confirm', (req, res) => {
     const { externalId, participantId } = req.body;
 
@@ -28,14 +28,13 @@ app.post('/api/payfreight/confirm', (req, res) => {
 
     const transaction = {
         id: 'PF-' + Date.now(),
-        externalId,    // Generic ID representing the order, load, or contract from any external system
-        participantId, // ID of the entity/user confirming the escrow process
+        externalId,
+        participantId,
         status: 'PENDING',
         createdAt: new Date()
     };
 
     escrowTransactions.push(transaction);
-
     console.log('New PayFreight Protocol transaction initialized:', transaction);
 
     res.json({
