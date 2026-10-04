@@ -1,5 +1,5 @@
 //! =============================================================================
-//! PAYFREIGHT ESCROW SMART CONTRACT (SOLANA / ANCHOR)
+//! PAYFREIGHT EUR ESCROW SMART CONTRACT (SOLANA / ANCHOR)
 //! =============================================================================
 //! 
 //! Copyright (c) 2026 Payfreight / All Rights Reserved.
@@ -12,16 +12,15 @@
 //! =============================================================================
 //! BUSINESS LOGIC & WORKFLOW DESCRIPTION:
 //! 1. Escrow Initialization: The shipper creates an order and simultaneously locks 
-//!    the freight payment in USDC along with the required amount of $PAYFREIGHT tokens 
+//!    the freight payment in EURC along with the required amount of $PAYFREIGHT tokens 
 //!    (acting as collateral and a condition for lower platform fees).
 //! 2. CMR Upload: The carrier fulfills the transport and uploads the hash of the 
 //!    verified CMR document via the interface.
 //! 3. Approval & Release: The administrator reviews the CMR and approves the payout. 
 //!    The smart contract automatically applies dynamic fees (0.5% if $PAYFREIGHT tokens 
-//!    are locked, or 1.5% standard fee if not), transfers net USDC to the carrier, collects 
+//!    are locked, or 1.5% standard fee if not), transfers net EURC to the carrier, collects 
 //!    the platform fee, and returns the locked $PAYFREIGHT tokens to the shipper.
 //! =============================================================================
-pub mod payfreight_escrow_eur;
 
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer};
@@ -29,21 +28,21 @@ use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 declare_id!("PayfrE1111111111111111111111111111111111111");
 
 #[program]
-pub mod payfreight_escrow {
+pub mod payfreight_escrow_eur {
     use super::*;
 
-    /// 1. Shipper creates an order and locks USDC freight and $PAYFREIGHT tokens
-    pub fn initialize_escrow(
-        ctx: Context<InitializeEscrow>,
+    /// 1. Shipper creates an order and locks EURC freight and $PAYFREIGHT tokens
+    pub fn initialize_escrow_eur(
+        ctx: Context<InitializeEscrowEur>,
         order_id: String,
-        usdc_amount: u64,
+        eurc_amount: u64,
         payfreight_token_amount: u64,
     ) -> Result<()> {
         let escrow = &mut ctx.accounts.escrow_account;
         escrow.shipper = ctx.accounts.shipper.key();
         escrow.carrier = ctx.accounts.carrier.key();
         escrow.admin = ctx.accounts.admin.key();
-        escrow.usdc_amount = usdc_amount;
+        escrow.eurc_amount = eurc_amount;
         escrow.payfreight_token_amount = payfreight_token_amount;
         escrow.order_id = order_id;
         escrow.cmr_hash = String::from("");
@@ -51,16 +50,16 @@ pub mod payfreight_escrow {
         escrow.is_completed = false;
         escrow.bump = ctx.bumps.escrow_account;
 
-        // A) Transfer USDC freight from shipper's account to the USDC Vault
-        let cpi_accounts_usdc = Transfer {
-            from: ctx.accounts.shipper_usdc_account.to_account_info(),
-            to: ctx.accounts.usdc_vault.to_account_info(),
+        // A) Transfer EURC freight from shipper's account to the EURC Vault
+        let cpi_accounts_eurc = Transfer {
+            from: ctx.accounts.shipper_eurc_account.to_account_info(),
+            to: ctx.accounts.eurc_vault.to_account_info(),
             authority: ctx.accounts.shipper.to_account_info(),
         };
         let cpi_program = ctx.accounts.token_program.to_account_info();
         token::transfer(
-            CpiContext::new(cpi_program.clone(), cpi_accounts_usdc),
-            usdc_amount,
+            CpiContext::new(cpi_program.clone(), cpi_accounts_eurc),
+            eurc_amount,
         )?;
 
         // B) Transfer $PAYFREIGHT tokens from shipper's account to the Token Vault
@@ -74,12 +73,12 @@ pub mod payfreight_escrow {
             payfreight_token_amount,
         )?;
 
-        msg!("Escrow initialized: Locked {} USDC and {} $PAYFREIGHT.", usdc_amount, payfreight_token_amount);
+        msg!("EUR Escrow initialized: Locked {} EURC and {} $PAYFREIGHT.", eurc_amount, payfreight_token_amount);
         Ok(())
     }
 
     /// 2. Carrier uploads the verified CMR (document hash or URL)
-    pub fn upload_cmr(ctx: Context<UploadCMR>, cmr_hash: String) -> Result<()> {
+    pub fn upload_cmr_eur(ctx: Context<UploadCmrEur>, cmr_hash: String) -> Result<()> {
         let escrow = &mut ctx.accounts.escrow_account;
 
         require!(!escrow.is_completed, EscrowError::AlreadyCompleted);
@@ -91,12 +90,12 @@ pub mod payfreight_escrow {
         escrow.cmr_hash = cmr_hash;
         escrow.is_cmr_uploaded = true;
 
-        msg!("Verified CMR successfully uploaded to the system.");
+        msg!("Verified e-CMR successfully uploaded to the system.");
         Ok(())
     }
 
-    /// 3. Admin manually reviews CMR, applies dynamic fee, releases USDC, and returns tokens to shipper
-    pub fn approve_and_release(ctx: Context<ApproveAndRelease>) -> Result<()> {
+    /// 3. Admin manually reviews CMR, applies dynamic fee, releases EURC, and returns tokens to shipper
+    pub fn approve_and_release_eur(ctx: Context<ApproveAndReleaseEur>) -> Result<()> {
         let escrow = &mut ctx.accounts.escrow_account;
 
         require!(!escrow.is_completed, EscrowError::AlreadyCompleted);
@@ -109,7 +108,7 @@ pub mod payfreight_escrow {
         // PDA signer seeds allowing the contract to autonomously release funds
         let order_id_bytes = escrow.order_id.as_bytes();
         let seeds = &[
-            b"escrow",
+            b"escrow_eur",
             order_id_bytes,
             &[escrow.bump],
         ];
@@ -124,15 +123,15 @@ pub mod payfreight_escrow {
             150  // 1.5% standard fee
         };
 
-        let platform_fee = (escrow.usdc_amount * fee_percentage) / 10000;
-        let carrier_payout = escrow.usdc_amount - platform_fee;
+        let platform_fee = (escrow.eurc_amount * fee_percentage) / 10000;
+        let carrier_payout = escrow.eurc_amount - platform_fee;
 
         let cpi_program = ctx.accounts.token_program.to_account_info();
 
-        // A) Transfer net freight to Carrier (USDC)
+        // A) Transfer net freight to Carrier (EURC)
         let transfer_to_carrier = Transfer {
-            from: ctx.accounts.usdc_vault.to_account_info(),
-            to: ctx.accounts.carrier_usdc_account.to_account_info(),
+            from: ctx.accounts.eurc_vault.to_account_info(),
+            to: ctx.accounts.carrier_eurc_account.to_account_info(),
             authority: escrow.to_account_info(),
         };
         token::transfer(
@@ -140,10 +139,10 @@ pub mod payfreight_escrow {
             carrier_payout,
         )?;
 
-        // B) Transfer platform fee to Payfreight platform wallet (USDC)
+        // B) Transfer platform fee to Payfreight platform wallet (EURC)
         let transfer_fee = Transfer {
-            from: ctx.accounts.usdc_vault.to_account_info(),
-            to: ctx.accounts.admin_fee_usdc_account.to_account_info(),
+            from: ctx.accounts.eurc_vault.to_account_info(),
+            to: ctx.accounts.admin_fee_eurc_account.to_account_info(),
             authority: escrow.to_account_info(),
         };
         token::transfer(
@@ -164,7 +163,7 @@ pub mod payfreight_escrow {
 
         escrow.is_completed = true;
 
-        msg!("Payment released! Carrier: {} USDC, Fee: {} USDC, Tokens returned to shipper.", carrier_payout, platform_fee);
+        msg!("EUR Payment released! Carrier: {} EURC, Fee: {} EURC, Tokens returned to shipper.", carrier_payout, platform_fee);
         Ok(())
     }
 }
@@ -175,7 +174,7 @@ pub mod payfreight_escrow {
 
 #[derive(Accounts)]
 #[instruction(order_id: String)]
-pub struct InitializeEscrow<'info> {
+pub struct InitializeEscrowEur<'info> {
     #[account(mut)]
     pub shipper: Signer<'info>,
     /// CHECK: Carrier public key
@@ -187,27 +186,27 @@ pub struct InitializeEscrow<'info> {
         init,
         payer = shipper,
         space = 8 + 32 + 32 + 32 + 8 + 8 + 64 + 128 + 1 + 1 + 1,
-        seeds = [b"escrow", order_id.as_bytes()],
+        seeds = [b"escrow_eur", order_id.as_bytes()],
         bump
     )]
-    pub escrow_account: Account<'info, EscrowAccount>,
+    pub escrow_account: Account<'info, EscrowAccountEur>,
 
-    // Vault for USDC freight
+    // Vault for EURC freight
     #[account(
         init,
         payer = shipper,
-        seeds = [b"usdc_vault", order_id.as_bytes()],
+        seeds = [b"eurc_vault_eur", order_id.as_bytes()],
         bump,
-        token::mint = usdc_mint,
+        token::mint = eurc_mint,
         token::authority = escrow_account,
     )]
-    pub usdc_vault: Account<'info, TokenAccount>,
+    pub eurc_vault: Account<'info, TokenAccount>,
 
     // Vault for $PAYFREIGHT tokens
     #[account(
         init,
         payer = shipper,
-        seeds = [b"payfreight_vault", order_id.as_bytes()],
+        seeds = [b"payfreight_vault_eur", order_id.as_bytes()],
         bump,
         token::mint = payfreight_mint,
         token::authority = escrow_account,
@@ -215,11 +214,11 @@ pub struct InitializeEscrow<'info> {
     pub payfreight_vault: Account<'info, TokenAccount>,
 
     #[account(mut)]
-    pub shipper_usdc_account: Account<'info, TokenAccount>,
+    pub shipper_eurc_account: Account<'info, TokenAccount>,
     #[account(mut)]
     pub shipper_payfreight_account: Account<'info, TokenAccount>,
 
-    pub usdc_mint: Account<'info, token::Mint>,
+    pub eurc_mint: Account<'info, token::Mint>,
     pub payfreight_mint: Account<'info, token::Mint>,
 
     pub system_program: Program<'info, System>,
@@ -228,32 +227,32 @@ pub struct InitializeEscrow<'info> {
 }
 
 #[derive(Accounts)]
-pub struct UploadCMR<'info> {
+pub struct UploadCmrEur<'info> {
     pub carrier: Signer<'info>,
     #[account(mut)]
-    pub escrow_account: Account<'info, EscrowAccount>,
+    pub escrow_account: Account<'info, EscrowAccountEur>,
 }
 
 #[derive(Accounts)]
-pub struct ApproveAndRelease<'info> {
+pub struct ApproveAndReleaseEur<'info> {
     pub admin: Signer<'info>,
 
     #[account(
         mut,
-        has_one = usdc_vault,
+        has_one = eurc_vault,
         has_one = payfreight_vault,
     )]
-    pub escrow_account: Account<'info, EscrowAccount>,
+    pub escrow_account: Account<'info, EscrowAccountEur>,
 
     #[account(mut)]
-    pub usdc_vault: Account<'info, TokenAccount>,
+    pub eurc_vault: Account<'info, TokenAccount>,
     #[account(mut)]
     pub payfreight_vault: Account<'info, TokenAccount>,
 
     #[account(mut)]
-    pub carrier_usdc_account: Account<'info, TokenAccount>,
+    pub carrier_eurc_account: Account<'info, TokenAccount>,
     #[account(mut)]
-    pub admin_fee_usdc_account: Account<'info, TokenAccount>,
+    pub admin_fee_eurc_account: Account<'info, TokenAccount>,
     #[account(mut)]
     pub shipper_payfreight_account: Account<'info, TokenAccount>,
 
@@ -265,17 +264,17 @@ pub struct ApproveAndRelease<'info> {
 // -----------------------------------------------------------------------------
 
 #[account]
-pub struct EscrowAccount {
-    pub shipper: Pubkey,                    // Shipper / Client
-    pub carrier: Pubkey,                    // Carrier / Transporter
-    pub admin: Pubkey,                      // Administrator
-    pub usdc_amount: u64,                   // Freight amount in USDC
-    pub payfreight_token_amount: u64,     // Locked $PAYFREIGHT token amount
-    pub order_id: String,                   // Order ID or Invoice Number
-    pub cmr_hash: String,                   // Link/Hash of verified CMR
-    pub is_cmr_uploaded: bool,            // CMR upload status flag
-    pub is_completed: bool,                 // Transaction completion flag
-    pub bump: u8,                           // PDA Bump
+pub struct EscrowAccountEur {
+    pub shipper: Pubkey,                 // Shipper / Client
+    pub carrier: Pubkey,                 // Carrier / Transporter
+    pub admin: Pubkey,                   // Administrator
+    pub eurc_amount: u64,                // Freight amount in EURC
+    pub payfreight_token_amount: u64,    // Locked $PAYFREIGHT token amount
+    pub order_id: String,                // Order ID or Invoice Number
+    pub cmr_hash: String,                // Link/Hash of verified CMR
+    pub is_cmr_uploaded: bool,           // CMR upload status flag
+    pub is_completed: bool,              // Transaction completion flag
+    pub bump: u8,                        // PDA Bump
 }
 
 // -----------------------------------------------------------------------------
