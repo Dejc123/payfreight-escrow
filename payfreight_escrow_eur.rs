@@ -1,3 +1,11 @@
+/*
+ * Copyright (c) 2026 PayFreight. All rights reserved.
+ * Author: PayFreight Protocol Team
+ * 
+ * This source code is proprietary and confidential. 
+ * Unauthorized copying of this file, via any medium, is strictly prohibited.
+*/
+
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
@@ -220,7 +228,7 @@ pub struct ApproveAndReleaseEur<'info> {
 
 // -----------------------------------------------------------------------------
 // STATE STRUCT
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------
 
 #[account]
 pub struct EscrowAccountEur {
