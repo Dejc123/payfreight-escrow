@@ -1,19 +1,26 @@
+/*
+ * Copyright (c) 2026 PayFreight. All rights reserved.
+ * Author: PayFreight Protocol Team
+ * 
+ * This source code is proprietary and confidential. 
+ * Unauthorized copying of this file, via any medium, is strictly prohibited.
+*/
+
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
-import { PayfreightEscrow } from "../target/types/payfreight_escrow";
+import { PayfreightEscrowEur } from "../target/types/payfreight_escrow_eur";
 import {
   createMint,
   createAssociatedTokenAccount,
   mintTo,
-  getAssociatedTokenAddress,
 } from "@solana/spl-token";
 import { assert } from "chai";
 
-describe("payfreight_escrow", () => {
+describe("payfreight_escrow_eur", () => {
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
 
-  const program = anchor.workspace.PayfreightEscrow as Program<PayfreightEscrow>;
+  const program = anchor.workspace.PayfreightEscrowEur as Program<PayfreightEscrowEur>;
 
   // System participants
   const shipper = anchor.web3.Keypair.generate();
@@ -21,23 +28,23 @@ describe("payfreight_escrow", () => {
   const admin = provider.wallet; // Current deployer acts as Admin
 
   // Token mints
-  let usdcMint: anchor.web3.PublicKey;
+  let eurcMint: anchor.web3.PublicKey;
   let payfreightMint: anchor.web3.PublicKey;
 
   // Token accounts
-  let shipperUsdcAccount: anchor.web3.PublicKey;
+  let shipperEurcAccount: anchor.web3.PublicKey;
   let shipperPayfreightAccount: anchor.web3.PublicKey;
-  let carrierUsdcAccount: anchor.web3.PublicKey;
-  let adminFeeUsdcAccount: anchor.web3.PublicKey;
+  let carrierEurcAccount: anchor.web3.PublicKey;
+  let adminFeeEurcAccount: anchor.web3.PublicKey;
 
   // Order parameters
-  const orderId = "ORD-2026-001";
-  const usdcAmount = new anchor.BN(1_000_000_000); // 1,000 USDC (6 decimals)
+  const orderId = "ORD-2026-EUR-001";
+  const eurcAmount = new anchor.BN(1_000_000_000); // 1,000 EURC (6 decimals)
   const payfreightAmount = new anchor.BN(50_000_000); // 50 $PAYFREIGHT
 
   // PDA addresses (Escrow and Vaults)
   let escrowAccountPda: anchor.web3.PublicKey;
-  let usdcVaultPda: anchor.web3.PublicKey;
+  let eurcVaultPda: anchor.web3.PublicKey;
   let payfreightVaultPda: anchor.web3.PublicKey;
 
   before(async () => {
@@ -49,8 +56,8 @@ describe("payfreight_escrow", () => {
       await provider.connection.requestAirdrop(carrier.publicKey, 2 * anchor.web3.LAMPORTS_PER_SOL)
     );
 
-    // 2. Create mock USDC and PAYFREIGHT mints for testing
-    usdcMint = await createMint(
+    // 2. Create mock EURC and PAYFREIGHT mints for testing
+    eurcMint = await createMint(
       provider.connection,
       shipper,
       admin.publicKey,
@@ -66,10 +73,10 @@ describe("payfreight_escrow", () => {
     );
 
     // 3. Create associated token accounts for participants
-    shipperUsdcAccount = await createAssociatedTokenAccount(
+    shipperEurcAccount = await createAssociatedTokenAccount(
       provider.connection,
       shipper,
-      usdcMint,
+      eurcMint,
       shipper.publicKey
     );
     shipperPayfreightAccount = await createAssociatedTokenAccount(
@@ -78,51 +85,51 @@ describe("payfreight_escrow", () => {
       payfreightMint,
       shipper.publicKey
     );
-    carrierUsdcAccount = await createAssociatedTokenAccount(
-      provider.connection,
-      carrier,
-      usdcMint,
-      carrier.publicKey
-    );
-    adminFeeUsdcAccount = await createAssociatedTokenAccount(
+    carrierEurcAccount = await createAssociatedTokenAccount(
       provider.connection,
       shipper,
-      usdcMint,
+      eurcMint,
+      carrier.publicKey
+    );
+    adminFeeEurcAccount = await createAssociatedTokenAccount(
+      provider.connection,
+      shipper,
+      eurcMint,
       admin.publicKey
     );
 
     // 4. Mint test tokens to the shipper's account
-    await mintTo(provider.connection, shipper, usdcMint, shipperUsdcAccount, admin.payer, 2_000_000_000);
+    await mintTo(provider.connection, shipper, eurcMint, shipperEurcAccount, admin.payer, 2_000_000_000);
     await mintTo(provider.connection, shipper, payfreightMint, shipperPayfreightAccount, admin.payer, 100_000_000);
 
-    // 5. Derive PDA addresses
+    // 5. Derive PDA addresses matching the smart contract seeds
     [escrowAccountPda] = anchor.web3.PublicKey.findProgramAddressSync(
-      [Buffer.from("escrow"), Buffer.from(orderId)],
+      [Buffer.from("escrow_eur"), Buffer.from(orderId)],
       program.programId
     );
-    [usdcVaultPda] = anchor.web3.PublicKey.findProgramAddressSync(
-      [Buffer.from("usdc_vault"), Buffer.from(orderId)],
+    [eurcVaultPda] = anchor.web3.PublicKey.findProgramAddressSync(
+      [Buffer.from("eurc_vault_eur"), Buffer.from(orderId)],
       program.programId
     );
     [payfreightVaultPda] = anchor.web3.PublicKey.findProgramAddressSync(
-      [Buffer.from("payfreight_vault"), Buffer.from(orderId)],
+      [Buffer.from("payfreight_vault_eur"), Buffer.from(orderId)],
       program.programId
     );
   });
 
-  it("1. Shipper successfully initializes the Escrow (initialize_escrow)", async () => {
+  it("1. Shipper successfully initializes the EUR Escrow (initialize_escrow_eur)", async () => {
     await program.methods
-      .initializeEscrow(orderId, usdcAmount, payfreightAmount)
+      .initializeEscrowEur(orderId, eurcAmount, payfreightAmount)
       .accounts({
         shipper: shipper.publicKey,
         carrier: carrier.publicKey,
         admin: admin.publicKey,
         escrowAccount: escrowAccountPda,
-        usdcVault: usdcVaultPda,
+        eurcVault: eurcVaultPda,
         payfreightVault: payfreightVaultPda,
-        shipperUsdcAccount: shipperUsdcAccount,
+        shipperEurcAccount: shipperEurcAccount,
         shipperPayfreightAccount: shipperPayfreightAccount,
-        usdcMint: usdcMint,
+        eurcMint: eurcMint,
         payfreightMint: payfreightMint,
         systemProgram: anchor.web3.SystemProgram.programId,
         tokenProgram: anchor.utils.token.TOKEN_PROGRAM_ID,
@@ -131,17 +138,17 @@ describe("payfreight_escrow", () => {
       .signers([shipper])
       .rpc();
 
-    const escrowData = await program.account.escrowAccount.fetch(escrowAccountPda);
+    const escrowData = await program.account.escrowAccountEur.fetch(escrowAccountPda);
     assert.equal(escrowData.orderId, orderId);
     assert.equal(escrowData.isCmrUploaded, false);
     assert.equal(escrowData.isCompleted, false);
   });
 
-  it("2. Carrier uploads the CMR document (upload_cmr)", async () => {
-    const cmrHash = "ipfs://QmXyZ123456789CmrDocumentHash";
+  it("2. Carrier uploads the CMR document (upload_cmr_eur)", async () => {
+    const cmrHash = "ipfs://QmXyZ123456789CmrDocumentHashEur";
 
     await program.methods
-      .uploadCmr(cmrHash)
+      .uploadCmrEur(cmrHash)
       .accounts({
         carrier: carrier.publicKey,
         escrowAccount: escrowAccountPda,
@@ -149,35 +156,35 @@ describe("payfreight_escrow", () => {
       .signers([carrier])
       .rpc();
 
-    const escrowData = await program.account.escrowAccount.fetch(escrowAccountPda);
+    const escrowData = await program.account.escrowAccountEur.fetch(escrowAccountPda);
     assert.equal(escrowData.cmrHash, cmrHash);
     assert.equal(escrowData.isCmrUploaded, true);
   });
 
-  it("3. Admin verifies CMR and releases funds (approve_and_release)", async () => {
+  it("3. Admin verifies CMR and releases funds (approve_and_release_eur)", async () => {
     await program.methods
-      .approveAndRelease()
+      .approveAndReleaseEur()
       .accounts({
         admin: admin.publicKey,
         escrowAccount: escrowAccountPda,
-        usdcVault: usdcVaultPda,
+        eurcVault: eurcVaultPda,
         payfreightVault: payfreightVaultPda,
-        carrierUsdcAccount: carrierUsdcAccount,
-        adminFeeUsdcAccount: adminFeeUsdcAccount,
+        carrierEurcAccount: carrierEurcAccount,
+        adminFeeEurcAccount: adminFeeEurcAccount,
         shipperPayfreightAccount: shipperPayfreightAccount,
         tokenProgram: anchor.utils.token.TOKEN_PROGRAM_ID,
-      })
-      .rpc();
+    })
+    .rpc();
 
-    const escrowData = await program.account.escrowAccount.fetch(escrowAccountPda);
+    const escrowData = await program.account.escrowAccountEur.fetch(escrowAccountPda);
     assert.equal(escrowData.isCompleted, true);
 
-    // Verify carrier balance (should receive 99.5% of 1000 USDC = 995 USDC)
-    const carrierTokenAccount = await provider.connection.getTokenAccountBalance(carrierUsdcAccount);
+    // Verify carrier balance (receives 99.5% of 1,000 EURC = 995 EURC due to staking discount)
+    const carrierTokenAccount = await provider.connection.getTokenAccountBalance(carrierEurcAccount);
     assert.equal(carrierTokenAccount.value.amount, "995000000");
 
-    // Verify admin platform fee (0.5% of 1000 USDC = 5 USDC)
-    const adminTokenAccount = await provider.connection.getTokenAccountBalance(adminFeeUsdcAccount);
+    // Verify admin platform fee (0.5% of 1,000 EURC = 5 EURC)
+    const adminTokenAccount = await provider.connection.getTokenAccountBalance(adminFeeEurcAccount);
     assert.equal(adminTokenAccount.value.amount, "5000000");
   });
 });
