@@ -1,6 +1,7 @@
-## 📄 Licence & Copyright
+### English Version
 
-This project is protected. For details, please see the [LICENSE.md](./LICENSE.md) file.
+Copyright (c) 2026 Payfreight / All rights reserved.
 
-Copyright (c) 2026 Payfreight / Vse pravice pridržane.  
-Ocenjevalci in sodniki dogodka/hackathona si lahko to kodo prosto ogledajo, jo analizirajo in preizkusijo izključno za namene ocenjevanja tega projekta. Kakršna koli drugačna uporaba, kopiranje, distribucija, spreminjanje ali komercialna raba te kode brez izrecnega pisnega dovoljenja avtorja ni dovoljena.
+Event and hackathon judges/evaluators are granted permission to view, analyze, and test this code exclusively for the purpose of evaluating this project.
+
+Any other use, copying, distribution, modification, or commercial use of this code without explicit written permission from the author is strictly prohibited.
