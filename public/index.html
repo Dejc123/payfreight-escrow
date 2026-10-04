@@ -1,5 +1,5 @@
 <!--
-  Project Name: PayFreight Escrow Protocol
+  Project Name: PayFreight Escrow Protocol Widget
   Description: Frontend widget interface providing a universal "PayFreight" secure payment button 
   for integration into any logistics web page, email template, or browser extension.
   
@@ -11,33 +11,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PayFreight Protocol Widget</title>
     <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background-color: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 420px;
+            width: 100%;
+        }
         .payfreight-btn {
             background-color: #ff6600;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-size: 16px;
             font-weight: bold;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 15px;
+            width: 100%;
         }
         .payfreight-btn:hover {
             background-color: #e55c00;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover {
+            color: #f8fafc;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #94a3b8;
+            word-break: break-all;
         }
     </style>
 </head>
 <body>
 
-    <h2>Logistics Offer / Load Reference #123456</h2>
-    
-    <!-- PayFreight protocol action button with generic identifiers -->
-    <button class="payfreight-btn" onclick="startPayFreight('REF-123456', 'USER-PARTNER-789')">
-        PayFreight Escrow 🔒
-    </button>
+    <div class="card">
+        <h2>Logistics Load #123456</h2>
+        <p style="color: #94a3b8; font-size: 14px;">PayFreight B2B Solana Escrow Protection</p>
+        
+        <!-- PayFreight protocol action button with generic identifiers -->
+        <button class="payfreight-btn" onclick="startPayFreight('REF-123456', 'USER-PARTNER-789')">
+            PayFreight Escrow 🔒
+        </button>
 
-    <p id="result"></p>
+        <p id="result"></p>
+
+        <br>
+        <a href="landing.html" class="back-link">← Back to Landing Page</a>
+    </div>
 
     <script>
         async function startPayFreight(externalId, participantId) {
