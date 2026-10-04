@@ -1,20 +1,19 @@
-# Project Name: PayFreight Escrow Protocol
-# Description: Rust Cargo configuration for Solana smart contracts and decentralized escrow logic.
-# 
-# Copyright (c) 2026 Payfreight / All rights reserved.
-# Licensed under the MIT License / Restricted Evaluation License.
+# =========================================================================
+# PROJECT: Payfreight (PayFi Logistics Settlement Protocol)
+# LICENSE: Copyright (c) 2026 Payfreight. All rights reserved.
+# DESCRIPTION: Cargo configuration for eCMR Compliance & QR Code modules.
+# =========================================================================
 
 [package]
-name = "payfreight-escrow"
-version = "1.0.0"
-description = "Universal secure logistics escrow protocol built on Solana using Anchor."
-authors = ["Payfreight"]
+name = "payfreight_compliance"
+version = "0.1.0"
 edition = "2021"
 
-[lib]
-name = "payfreight_escrow"
-crate-type = ["cdylib", "lib"]
-
 [dependencies]
-anchor-lang = "0.29.0"
-anchor-spl = "0.29.0"
+# Cryptography for eIDAS compliant signatures
+ed25519-dalek = "2.1"
+sha2 = "0.10"
+
+# QR code generation and image export
+qrcode = "0.12"
+image = "0.24"
