@@ -1,6 +1,12 @@
-# 🚚 Payfreight Escrow Smart Contract
+<!--
+ * Copyright (c) 2026 PayFreight. All rights reserved.
+ * Author: PayFreight Protocol Team
+ * This document is proprietary and confidential.
+-->
 
-> Trustless, secure, and automated freight escrow on Solana built with Anchor. Payfreight bridges the logistics industry with Web3 by automating payments, eliminating invoice delays, and introducing token-backed fee discounts.
+# 🚚 PayFreight Escrow Smart Contract
+
+> Trustless, secure, and automated freight escrow on Solana built with Anchor. PayFreight bridges the logistics industry with Web3 by automating payments, eliminating invoice delays, and introducing token-backed fee discounts.
 
 ---
 
@@ -8,7 +14,7 @@
 
 In traditional logistics, payment cycles for freight carriers often take 30 to 90 days, creating severe cash flow bottlenecks. Shippers also face risks of non-delivery or lost cargo documents (CMR).
 
-Payfreight Escrow solves this by locking shipper funds into a secure on-chain escrow account on Solana. Funds are released automatically only after the transport is physically completed, verified via digital CMR documents, and approved by the platform administrator. Furthermore, shippers who stake or lock native `$PAYFREIGHT` tokens benefit from heavily discounted platform fees.
+PayFreight Escrow solves this by locking shipper funds into a secure on-chain escrow account on Solana. Funds are released automatically only after the transport is physically completed, verified via digital CMR documents, and approved by the platform administrator. Furthermore, shippers who stake or lock native `$PAYFREIGHT` tokens benefit from heavily discounted platform fees.
 
 ---
 
@@ -18,14 +24,14 @@ The entire lifecycle of a shipment order flows through 3 main steps on the smart
 
 ### 1. Escrow Initialization (`initialize_escrow`)
 * The shipper creates an order and simultaneously deposits/locks the freight payment in **USDC** into a dedicated PDA vault.
-* The shipper also locks a required amount of **`$PAYFREIGHT` tokens** into a token vault, acting as collateral and unlocking lower platform fees.
+* The shipper also locks an optimized amount of **1,000 `$PAYFREIGHT` tokens** into a token vault, acting as collateral and unlocking lower platform fees.
 
 ### 2. CMR Upload (`upload_cmr`)
 * Once the carrier successfully delivers the cargo, they upload the cryptographic hash (or verified document URL) of the signed **CMR transport document** directly into the system.
 
 ### 3. Approval & Release (`approve_and_release`)
 * The administrator reviews the uploaded CMR. Upon validation, the admin triggers the release function.
-* The smart contract autonomously calculates a **dynamic platform fee** (0.5% if `$PAYFREIGHT` tokens are locked, or 1.5% standard fee otherwise).
+* The smart contract autonomously calculates a **dynamic platform fee** (0.5% if both parties stake, 1.0% if one stakes, or 1.5% standard fee otherwise).
 * Net USDC is transferred to the carrier, the platform fee goes to the treasury, and the locked `$PAYFREIGHT` tokens are automatically returned to the shipper.
 
 ---
@@ -38,7 +44,7 @@ The smart contract is written in **Rust** using the **Anchor Framework**. It uti
 * **Key Components:**
   * `EscrowAccount`: Stores order metadata, participant public keys (shipper, carrier, admin), amounts, and status flags.
   * **USDC Vault (PDA):** Secures the freight funds during transit.
-  * **Payfreight Vault (PDA):** Secures the native utility tokens locked by the shipper.
+  * **PayFreight Vault (PDA):** Secures the native utility tokens locked by the shipper.
 
 ---
 
@@ -61,7 +67,7 @@ Make sure you have the following installed:
 ### Build & Test
 ```bash
 # Clone the repository
-git clone [https://github.com/your-username/payfreight-escrow.git](https://github.com/your-username/payfreight-escrow.git)
+git clone [https://github.com/Dejc123/payfreight-escrow.git](https://github.com/Dejc123/payfreight-escrow.git)
 cd payfreight-escrow
 
 # Build the Anchor program
