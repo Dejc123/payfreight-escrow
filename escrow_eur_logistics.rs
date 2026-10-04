@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2026 PayFreight. All rights reserved.
- * Author: Dejc123 & Team
+ * Author: PayFreight Protocol Team
  * 
  * This source code is proprietary and confidential. 
  * Unauthorized copying of this file, via any medium, is strictly prohibited.
@@ -15,8 +15,8 @@ declare_id!("PayfrE2222222222222222222222222222222222222");
 pub mod payfreight_escrow_eur {
     use super::*;
 
-    /// 1. Shipper initializes the Escrow with transport fare, fixed cancellation (250 EUR), 
-    /// 3 days waiting fee (600 EUR), and locks PAYFREIGHT tokens for staking.
+    /// 1. Shipper initializes the Escrow with transport fare, fixed cancellation fee, 
+    /// and locks 1,000 PAYF tokens for optional staking and fee discounts.
     pub fn initialize_escrow_eur(
         ctx: Context<InitializeEscrowEur>,
         order_id: String,
@@ -35,8 +35,9 @@ pub mod payfreight_escrow_eur {
         escrow.is_completed = false;
         escrow.bump = ctx.bumps.escrow_account;
 
-        // Total EURC deposit = Transport Fare + 250 EUR (cancellation) + 600 EUR (3 days waiting fee)
-        let total_eurc_deposit = transport_fare + 250_000_000 + 600_000_000; // Assuming 6 decimals for EURC
+        // Total EURC deposit = Transport Fare + Fixed Cancellation Fee (250 EUR)
+        let cancellation_fee = 250_000_000; // Assuming 6 decimals for EURC
+        let total_eurc_deposit = transport_fare + cancellation_fee;
 
         // Transfer total EURC from shipper to EURC Vault PDA
         let cpi_eurc_accounts = Transfer {
@@ -61,7 +62,7 @@ pub mod payfreight_escrow_eur {
             payfreight_amount,
         )?;
 
-        msg!("EUR Escrow initialized with strict logistics rules and staking.");
+        msg!("Streamlined Logistics Escrow initialized successfully with 1,000 PAYF staking option.");
         Ok(())
     }
 
@@ -82,10 +83,9 @@ pub mod payfreight_escrow_eur {
         Ok(())
     }
 
-    /// 3. Admin resolves the deal based on CMR data (Waiting days 0-3 or Carrier Cancellation)
+    /// 3. Admin resolves the deal (Normal delivery or Carrier Cancellation)
     pub fn resolve_deal_eur(
         ctx: Context<ResolveDealEur>,
-        waiting_days: u8,
         is_carrier_no_show: bool,
     ) -> Result<()> {
         let escrow = &mut ctx.accounts.escrow_account;
@@ -96,7 +96,6 @@ pub mod payfreight_escrow_eur {
             ctx.accounts.admin.key() == escrow.admin,
             EscrowError::UnauthorizedAdmin
         );
-        require!(waiting_days <= 3, EscrowError::InvalidWaitingDays);
 
         let token_program = ctx.accounts.token_program.to_account_info();
 
@@ -109,15 +108,11 @@ pub mod payfreight_escrow_eur {
         ];
         let signer_seeds = &[&seeds[..]];
 
-        // Constant values (scaled to 6 decimals: 250 EUR = 250_000_000, 200 EUR = 200_000_000)
-        let cancellation_fee = 250_000_000;
-        let daily_waiting_fee = 200_000_000;
-        let total_waiting_pool = 600_000_000;
+        let cancellation_fee = 250_000_000; // 250 EUR scaled to 6 decimals
 
         if is_carrier_no_show {
-            // SCENARIO C: Carrier didn't show up on loading day.
-            // Shipper gets back: Transport fare + 850 EUR (250 cancellation + 600 waiting) + 250 penalty from carrier.
-            let total_shipper_refund = escrow.transport_fare + cancellation_fee + total_waiting_pool;
+            // SCENARIO B: Carrier cancellation / no-show. Shipper gets transport fare + cancellation fee refunded, plus penalty.
+            let total_shipper_refund = escrow.transport_fare + cancellation_fee;
 
             let refund_transfer = Transfer {
                 from: ctx.accounts.eurc_vault.to_account_info(),
@@ -140,12 +135,8 @@ pub mod payfreight_escrow_eur {
             )?;
 
         } else {
-            // SCENARIOS A & B: Normal delivery or waiting days (1, 2, or 3 days)
-            let waiting_payout = (waiting_days as u64) * daily_waiting_fee;
-            let carrier_total_payout = escrow.transport_fare + waiting_payout;
-
-            let unused_waiting_pool = total_waiting_pool - waiting_payout;
-            let shipper_refund = cancellation_fee + unused_waiting_pool;
+            // SCENARIO A: Normal successful delivery. Carrier gets transport fare, shipper gets cancellation fee back.
+            let carrier_payout = escrow.transport_fare;
 
             let carrier_transfer = Transfer {
                 from: ctx.accounts.eurc_vault.to_account_info(),
@@ -154,20 +145,18 @@ pub mod payfreight_escrow_eur {
             };
             token::transfer(
                 CpiContext::new_with_signer(token_program.clone(), carrier_transfer, signer_seeds),
-                carrier_total_payout,
+                carrier_payout,
             )?;
 
-            if shipper_refund > 0 {
-                let shipper_transfer = Transfer {
-                    from: ctx.accounts.eurc_vault.to_account_info(),
-                    to: ctx.accounts.shipper_eurc_account.to_account_info(),
-                    authority: escrow.to_account_info(),
-                };
-                token::transfer(
-                    CpiContext::new_with_signer(token_program.clone(), shipper_transfer, signer_seeds),
-                    shipper_refund,
-                )?;
-            }
+            let shipper_transfer = Transfer {
+                from: ctx.accounts.eurc_vault.to_account_info(),
+                to: ctx.accounts.shipper_eurc_account.to_account_info(),
+                authority: escrow.to_account_info(),
+            };
+            token::transfer(
+                CpiContext::new_with_signer(token_program.clone(), shipper_transfer, signer_seeds),
+                cancellation_fee,
+            )?;
         }
 
         // Return staked PAYFREIGHT tokens back to Shipper
@@ -182,19 +171,13 @@ pub mod payfreight_escrow_eur {
         )?;
 
         // =====================================================================
-        // TOKENOMICS & DYNAMIC DEMAND SCALING (BITCOIN-STYLE HALVING MODEL)
+        // TOKENOMICS & DYNAMIC DEFLATIONARY BURN MODEL (Mass Adoption Scale)
         // =====================================================================
-        // Note on Long-Term Tokenomics:
-        // As platform demand increases over the years, the required staking amount 
-        // and burn fees are structured to decrease periodically (similar to Bitcoin's 
-        // 4-year halving cycle) to prevent token price appreciation from pricing out carriers:
-        // - Years 0-4:  10,000 PAYF stake / 10 PAYF burn per deal
-        // - Years 4-8:   5,000 PAYF stake /  5 PAYF burn per deal
-        // - Years 8-12:  2,500 PAYF stake /  2 PAYF burn per deal
-        // This ensures the ecosystem remains accessible and fluid at scale.
+        // Dynamic burn scaling from 1.0 PAYF down to 0.5 and 0.25 PAYF per deal.
+        // Using 1,000,000 units (representing 1.0 PAYF with 6 decimals).
         // =====================================================================
 
-        let burn_amount = 10_000_000; // Assuming 6 decimals for PAYF token
+        let burn_amount = 1_000_000; 
         let burn_cpi = Burn {
             mint: ctx.accounts.payfreight_mint.to_account_info(),
             from: ctx.accounts.payfreight_vault.to_account_info(),
@@ -206,7 +189,7 @@ pub mod payfreight_escrow_eur {
         );
 
         escrow.is_completed = true;
-        msg!("Escrow successfully resolved and closed according to logistics rules. 10 PAYF burned.");
+        msg!("Escrow successfully resolved and closed. PAYF tokens burned and returned.");
         Ok(())
     }
 }
@@ -328,6 +311,4 @@ pub enum EscrowError {
     UnauthorizedAdmin,
     #[msg("The e-CMR transport document has not been uploaded yet.")]
     CMRNotUploaded,
-    #[msg("Invalid waiting days specified (must be between 0 and 3).")]
-    InvalidWaitingDays,
 }
