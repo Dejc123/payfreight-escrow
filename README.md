@@ -23,16 +23,16 @@ PayFreight Escrow solves this by locking shipper funds into a secure on-chain es
 The entire lifecycle of a shipment order flows through 3 main steps on the smart contract:
 
 ### 1. Escrow Initialization (`initialize_escrow`)
-* The shipper creates an order and simultaneously deposits/locks the freight payment in **USDC** into a dedicated PDA vault.
-* The shipper also locks an optimized amount of **1,000 `$PAYFREIGHT` tokens** into a token vault, acting as collateral and unlocking lower platform fees.
+* The shipper creates an order and simultaneously deposits/locks the freight payment in **EURC** into a dedicated PDA vault.
+* The shipper also locks an optimized amount of native **`$PAYFREIGHT` tokens** into a token vault, acting as collateral and unlocking lower platform fees.
 
 ### 2. CMR Upload (`upload_cmr`)
 * Once the carrier successfully delivers the cargo, they upload the cryptographic hash (or verified document URL) of the signed **CMR transport document** directly into the system.
 
 ### 3. Approval & Release (`approve_and_release`)
 * The administrator reviews the uploaded CMR. Upon validation, the admin triggers the release function.
-* The smart contract autonomously calculates a **dynamic platform fee** (0.5% if both parties stake, 1.0% if one stakes, or 1.5% standard fee otherwise).
-* Net USDC is transferred to the carrier, the platform fee goes to the treasury, and the locked `$PAYFREIGHT` tokens are automatically returned to the shipper.
+* The smart contract autonomously calculates a **dynamic platform fee** (0.5% if both parties hold tokens, 1.0% if one party holds tokens, or 1.5% standard fee otherwise).
+* Net EURC is transferred to the carrier, the platform fee goes to the treasury, and the locked `$PAYFREIGHT` tokens are automatically returned to the shipper.
 
 ---
 
@@ -40,11 +40,11 @@ The entire lifecycle of a shipment order flows through 3 main steps on the smart
 
 The smart contract is written in **Rust** using the **Anchor Framework**. It utilizes Program Derived Addresses (PDAs) to handle secure token vaults without custodial risk.
 
-* **Program ID:** `PayfrE1111111111111111111111111111111111111`
+* **Program ID:** `PayFreightProtocol1111111111111111111111111111`
 * **Key Components:**
   * `EscrowAccount`: Stores order metadata, participant public keys (shipper, carrier, admin), amounts, and status flags.
-  * **USDC Vault (PDA):** Secures the freight funds during transit.
-  * **PayFreight Vault (PDA):** Secures the native utility tokens locked by the shipper.
+  * **EURC Vault (PDA):** Secures the freight funds during transit.
+  * **PayFreight Vault (PDA):** Secures the native utility tokens locked by the participants.
 
 ---
 
