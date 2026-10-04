@@ -1,3 +1,27 @@
+//! =============================================================================
+//! PAYFREIGHT EUR ESCROW SMART CONTRACT (SOLANA / ANCHOR)
+//! =============================================================================
+//! 
+//! Copyright (c) 2026 Payfreight / All Rights Reserved.
+//! 
+//! Hackathon judges and evaluators are granted free access to view, analyze,
+//! and test this code exclusively for the purpose of evaluating this project.
+//! Any other use, copying, distribution, modification, or commercial exploitation 
+//! of this code without explicit written permission from the author is strictly prohibited.
+//! 
+//! =============================================================================
+//! BUSINESS LOGIC & WORKFLOW DESCRIPTION:
+//! 1. Escrow Initialization: The shipper creates an order and simultaneously locks 
+//!    the freight payment in EURC along with the required amount of $PAYFREIGHT tokens 
+//!    (acting as collateral and a condition for lower platform fees).
+//! 2. CMR Upload: The carrier fulfills the transport and uploads the hash of the 
+//!    verified e-CMR document via the interface.
+//! 3. Approval & Release: The administrator reviews the e-CMR and approves the payout. 
+//!    The smart contract automatically applies dynamic fees (0.5% if $PAYFREIGHT tokens 
+//!    are locked, or 1.5% standard fee if not), transfers net EURC to the carrier, collects 
+//!    the platform fee, and returns the locked $PAYFREIGHT tokens to the shipper.
+//! =============================================================================
+
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Mint, Token, TokenAccount, Transfer};
 
