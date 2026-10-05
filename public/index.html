@@ -6,10 +6,10 @@
     <title>PayFreight – Automated Solana Settlement Protocol & e-CMR Compliance</title>
     <style>
         :root {
-            --bg-color: #0b1329; /* Globoka, prestižna fintech modra */
-            --card-bg: #131b36;  /* Malo svetlejši modri odtenek za kartice */
-            --accent: #38bdf8;   /* Zaupanja vredna, čista modra/turkizna (Cyan) za poudarke in glavni gumb */
-            --accent-hover: #0ea5e9;
+            --bg-color: #0b1329;
+            --card-bg: #131b36;
+            --accent: #38bdf8;
+            --accent-hover: #7dd3fc;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: rgba(56, 189, 248, 0.2);
@@ -51,25 +51,26 @@
             margin-bottom: 30px;
             line-height: 1.5;
         }
-        /* Glavni gumb v prestižni fintech modri barvi, ki kliče k akciji */
+        /* Glavni gumb v svetlomodri barvi z maksimalnim poudarkom */
         .cta-main-container {
             margin: 30px 0;
         }
         .cta-main {
             display: inline-block;
             background-color: var(--accent);
-            color: #0b1329; /* Kontrastna temna pisava za maksimalno berljivost in profesionalnost */
+            color: #0b1329;
             padding: 18px 36px;
             font-size: 1.15rem;
             font-weight: 700;
             border-radius: 8px;
             text-decoration: none;
-            box-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
-            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 25px rgba(56, 189, 248, 0.4);
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
         }
         .cta-main:hover {
             background-color: var(--accent-hover);
             transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(56, 189, 248, 0.6);
         }
         .intro-text {
             font-size: 1.05rem;
@@ -148,7 +149,6 @@
         <h1>Pay<span>Freight</span></h1>
         <p class="subtitle">Automated Solana Settlement Protocol & e-CMR Compliance for Global B2B Logistics DeFi</p>
         
-        <!-- Glavni gumb v zaupanja vrednem fintech modrem tonu -->
         <div class="cta-main-container">
             <a href="widget.html" class="cta-main">Upload e-CMR & Receive Instant Payout</a>
         </div>
@@ -172,7 +172,6 @@
             </div>
         </div>
 
-        <!-- Tehnični viri in skupnost v urejenem institucionalnem slogu -->
         <div class="secondary-links">
             <a href="technical.html" class="cta-button-secondary">Technical Architecture</a>
             <a href="https://github.com/Dejc123/payfreight-escrow" class="cta-button-secondary" target="_blank">GitHub Repository</a>
