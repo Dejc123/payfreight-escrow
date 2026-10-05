@@ -14,10 +14,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PayFreight Protocol Widget</title>
     <style>
+        :root {
+            --bg: #0b1329;
+            --card-bg: #131b36;
+            --accent: #38bdf8;
+            --accent-hover: #7dd3fc;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(56, 189, 248, 0.2);
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
+            background-color: var(--bg);
+            color: var(--text);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -26,44 +35,53 @@
             margin: 0;
         }
         .card {
-            background-color: #1e293b;
+            background-color: var(--card-bg);
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.05);
             text-align: center;
             max-width: 420px;
             width: 100%;
         }
+        .card h2 {
+            color: var(--text);
+            margin-top: 0;
+        }
         .payfreight-btn {
-            background-color: #ff6600;
-            color: white;
+            background-color: var(--accent);
+            color: #0b1329;
             border: none;
-            padding: 12px 24px;
+            padding: 14px 24px;
             font-size: 16px;
             font-weight: bold;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
             margin-top: 15px;
             width: 100%;
+            box-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
         }
         .payfreight-btn:hover {
-            background-color: #e55c00;
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 25px rgba(56, 189, 248, 0.5);
         }
         .back-link {
             display: inline-block;
             margin-top: 20px;
-            color: #94a3b8;
+            color: var(--text-muted);
             text-decoration: none;
             font-size: 0.9rem;
+            transition: color 0.2s;
         }
         .back-link:hover {
-            color: #f8fafc;
+            color: var(--accent);
         }
         #result {
             margin-top: 20px;
             font-size: 14px;
-            color: #94a3b8;
+            color: var(--text-muted);
             word-break: break-all;
         }
     </style>
@@ -72,7 +90,7 @@
 
     <div class="card">
         <h2>Logistics Load #123456</h2>
-        <p style="color: #94a3b8; font-size: 14px;">PayFreight B2B Solana Escrow & e-CMR Compliance</p>
+        <p style="color: var(--text-muted); font-size: 14px;">PayFreight B2B Solana Escrow & e-CMR Compliance</p>
         
         <!-- PayFreight protocol action button with generic identifiers -->
         <button class="payfreight-btn" onclick="startPayFreight('REF-123456', 'USER-PARTNER-789')">
