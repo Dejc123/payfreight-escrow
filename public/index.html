@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayFreight – Automated Solana Settlement Protocol & e-CMR Compliance</title>
+    <title>PayFreight Protocol – Settlement & e-CMR Escrow Engine</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%230b1329'/><path d='M7 12l3 3 7-7' stroke='%2338bdf8' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
     <style>
         :root {
@@ -15,7 +15,9 @@
             --indigo-hover: #818cf8;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border-color: rgba(56, 189, 248, 0.2);
+            --border-color: rgba(56, 189, 248, 0.18);
+            --success: #10b981;
+            --emerald: #059669;
         }
 
         * {
@@ -36,29 +38,115 @@
         }
 
         .container {
-            max-width: 900px;
-            width: 90%;
-            margin: 40px auto;
-            padding: 40px 45px;
+            max-width: 820px;
+            width: 92%;
+            margin: 20px auto;
+            padding: 35px 40px;
             background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             text-align: center;
+            position: relative;
         }
 
-        /* HEADER: LOGO IN NASLOV V ISTI LINIJI */
+        /* TOP NAVIGATION / PROTOCOL HEADER BAR */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .status-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            color: var(--success);
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            background-color: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-nav-fiat {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-main);
+            padding: 7px 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-nav-fiat:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-nav-wallet {
+            background: linear-gradient(135deg, var(--indigo) 0%, #4f46e5 100%);
+            border: 1px solid var(--indigo-hover);
+            color: #ffffff;
+            padding: 7px 15px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-nav-wallet:hover {
+            background: linear-gradient(135deg, var(--indigo-hover) 0%, var(--indigo) 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.5);
+        }
+
+        /* BRAND HEADER */
         .brand-header {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 16px;
-            margin-bottom: 8px;
+            gap: 14px;
+            margin-bottom: 6px;
         }
 
         .logo-icon {
-            width: 52px;
-            height: 52px;
+            width: 48px;
+            height: 48px;
             flex-shrink: 0;
             filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.35));
             transition: transform 0.3s ease, filter 0.3s ease;
@@ -66,15 +154,16 @@
 
         .brand-header:hover .logo-icon {
             transform: scale(1.05) rotate(-2deg);
-            filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.6));
+            filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.6));
         }
 
         h1 {
-            font-size: 2.6rem;
+            font-size: 2.4rem;
             margin: 0;
             color: var(--text-main);
             letter-spacing: -0.5px;
             line-height: 1;
+            font-weight: 800;
         }
 
         h1 span {
@@ -82,39 +171,38 @@
         }
 
         p.subtitle {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             color: var(--text-muted);
-            margin-top: 12px;
-            margin-bottom: 25px;
+            margin-top: 10px;
+            margin-bottom: 30px;
             line-height: 1.4;
+            font-weight: 400;
         }
         
-        /* DUAL CTA BUTTONS - COMPACT & ELEGANT */
+        /* DUAL ENTRY ACTIONS */
         .cta-main-container {
             display: flex;
             flex-direction: row;
             gap: 16px;
             justify-content: center;
             align-items: stretch;
-            margin: 25px 0 35px 0;
+            margin: 20px 0 28px 0;
             flex-wrap: wrap;
         }
 
         .cta-card {
             flex: 1;
-            min-width: 220px;
-            max-width: 380px;
+            min-width: 240px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-decoration: none;
-            padding: 14px 20px;
-            border-radius: 8px;
+            padding: 18px 22px;
+            border-radius: 10px;
             transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
         }
         
-        /* LEVI GUMB: INDIGO / VIJOLIČNA */
         .cta-pay-freight {
             background-color: var(--indigo);
             color: #ffffff;
@@ -128,7 +216,6 @@
             box-shadow: 0 6px 24px rgba(99, 102, 241, 0.55);
         }
 
-        /* DESNI GUMB: SVETLO MODRA */
         .cta-carrier-payout {
             background-color: var(--accent);
             color: #0b1329;
@@ -143,79 +230,39 @@
         }
 
         .cta-title {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 700;
             display: block;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
 
         .cta-subtext {
-            font-size: 0.76rem;
-            font-weight: 600;
-            opacity: 0.9;
+            font-size: 0.75rem;
+            font-weight: 700;
+            opacity: 0.88;
             display: block;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.5px;
         }
 
-        .intro-text {
-            font-size: 1rem;
-            color: var(--text-muted);
-            line-height: 1.65;
-            margin: 30px 0;
-            text-align: left;
-            background: rgba(255,255,255,0.015);
-            padding: 22px 25px;
-            border-radius: 8px;
-            border-left: 4px solid var(--accent);
-            border-top: 1px solid rgba(255,255,255,0.03);
-            border-right: 1px solid rgba(255,255,255,0.03);
-            border-bottom: 1px solid rgba(255,255,255,0.03);
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 18px;
-            margin-bottom: 30px;
-            text-align: left;
-        }
-
-        .feature-box {
-            background: rgba(255,255,255,0.02);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.04);
-        }
-
-        .feature-box h3 {
-            color: var(--accent);
-            margin-top: 0;
-            font-size: 1.05rem;
-        }
-
-        .feature-box p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 0;
-            line-height: 1.5;
-        }
-
+        /* PROTOCOL LINKS */
         .secondary-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .cta-button-secondary {
             display: inline-block;
-            background-color: transparent;
+            background-color: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 9px 18px;
-            font-size: 0.9rem;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            font-size: 0.85rem;
             font-weight: 500;
             border-radius: 6px;
             text-decoration: none;
@@ -224,23 +271,37 @@
 
         .cta-button-secondary:hover {
             border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(56, 189, 248, 0.05);
+            color: var(--text-main);
+            background: rgba(56, 189, 248, 0.08);
         }
 
         footer {
-            margin-top: 30px;
-            font-size: 0.82rem;
-            color: var(--text-muted);
-            border-top: 1px solid rgba(255,255,255,0.04);
-            padding-top: 18px;
+            margin-top: 20px;
+            font-size: 0.78rem;
+            color: rgba(148, 163, 184, 0.6);
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- VODORAVNI HEADER -->
+        <!-- TOP PROTOCOL NAVIGATION BAR -->
+        <div class="top-nav">
+            <div class="status-bar">
+                <span class="status-dot"></span> Protocol Active • Solana v1.2
+            </div>
+
+            <div class="nav-actions">
+                <button class="btn-nav-fiat" onclick="alert('Fiat On-Ramp / SEPA Transfer Gateway Initializing...')">
+                    💳 Bank / SEPA Top-Up
+                </button>
+                <button class="btn-nav-wallet" onclick="alert('Connecting to Solana Wallet (Phantom / Solflare)...')">
+                    👻 Connect Wallet
+                </button>
+            </div>
+        </div>
+
+        <!-- HEADER -->
         <div class="brand-header">
             <svg class="logo-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="100" cy="100" r="85" stroke="#38bdf8" stroke-width="8" fill="none"/>
@@ -283,48 +344,30 @@
             <h1>Pay<span>Freight</span></h1>
         </div>
 
-        <p class="subtitle">Automated Solana Settlement Protocol & e-CMR Compliance for Global B2B Logistics DeFi</p>
+        <p class="subtitle">Automated Solana Settlement Protocol & e-CMR Escrow Engine</p>
         
-        <!-- DUAL ENTRY POINT CTA -->
+        <!-- GLAVNI DEFI ENTRY POINTI -->
         <div class="cta-main-container">
             <a href="widget.html?action=create_escrow&v=2" class="cta-card cta-pay-freight">
-                <span class="cta-title">🔒 Pay Freight & Lock Escrow</span>
+                <span class="cta-title">🔒 Lock Escrow & Pay Freight</span>
                 <span class="cta-subtext">For Shippers & Freight Brokers</span>
             </a>
 
             <a href="widget.html?action=upload_cmr&v=2" class="cta-card cta-carrier-payout">
-                <span class="cta-title">📄 Upload e-CMR & Receive Payout</span>
+                <span class="cta-title">📄 Submit e-CMR & Receive Payout</span>
                 <span class="cta-subtext">For Carriers & Transporters</span>
             </a>
         </div>
 
-        <div class="intro-text">
-            Global cross-border logistics is weighed down by legacy banking delays, manual paperwork, and 30 to 90-day invoice cycles. PayFreight bridges the gap between traditional freight operations and high-speed blockchain settlements. By directly tying digital e-CMR compliance verification to automated smart contract escrows on Solana, we eliminate liquidity bottlenecks and ensure carriers get paid the exact second a delivery is verified—completely removing trust and collection risks from the supply chain.
-        </div>
-
-        <div class="features">
-            <div class="feature-box">
-                <h3>⚡ Instant Payouts</h3>
-                <p>Bypass traditional banking lag. Automated on-chain escrow releases funds instantly upon digital e-CMR delivery confirmation.</p>
-            </div>
-            <div class="feature-box">
-                <h3>🛡️ Secure & Trustless</h3>
-                <p>Built with Anchor on Solana. Smart contracts handle the escrow securely without middlemen, chargebacks, or custodial risks.</p>
-            </div>
-            <div class="feature-box">
-                <h3>💎 Dynamic Fees</h3>
-                <p>Benefit from optimized tiered platform fees backed by robust protocol design and secure administrative governance.</p>
-            </div>
-        </div>
-
+        <!-- TEHNIČNI LINKI -->
         <div class="secondary-links">
-            <a href="technical.html" class="cta-button-secondary">Technical Architecture</a>
+            <a href="technical.html" class="cta-button-secondary">Technical Docs</a>
             <a href="https://github.com/Dejc123/payfreight-escrow" class="cta-button-secondary" target="_blank">GitHub Repository</a>
             <a href="https://t.me/+WyYEvCqDLSQ2MzI0" class="cta-button-secondary" target="_blank">Telegram Community</a>
         </div>
         
         <footer>
-            <p>&copy; 2026 PayFreight Protocol Team. All rights reserved. Proprietary & Confidential. | Web: PayFreight.io | Telegram: <a href="https://t.me/+WyYEvCqDLSQ2MzI0" target="_blank" style="color: var(--accent); text-decoration: none;">t.me/+WyYEvCqDLSQ2MzI0</a></p>
+            <p>&copy; 2026 PayFreight Protocol. Trustless B2B Logistics Infrastructure.</p>
         </footer>
     </div>
 
