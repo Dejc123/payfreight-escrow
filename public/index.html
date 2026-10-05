@@ -11,6 +11,8 @@
             --card-bg: #131b36;
             --accent: #38bdf8;
             --accent-hover: #7dd3fc;
+            --emerald: #10b981;
+            --emerald-hover: #34d399;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --border-color: rgba(56, 189, 248, 0.2);
@@ -28,7 +30,7 @@
             min-height: 100vh;
         }
         .container {
-            max-width: 850px;
+            max-width: 900px;
             margin: 20px;
             padding: 50px;
             background: var(--card-bg);
@@ -52,26 +54,65 @@
             margin-bottom: 30px;
             line-height: 1.5;
         }
+        
+        /* TWO-SIDED DUAL CTA BUTTONS */
         .cta-main-container {
-            margin: 30px 0;
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            justify-content: center;
+            align-items: stretch;
+            margin: 35px 0;
+            flex-wrap: wrap;
         }
-        .cta-main {
-            display: inline-block;
-            background-color: var(--accent);
-            color: #0b1329;
-            padding: 18px 36px;
-            font-size: 1.15rem;
-            font-weight: 700;
-            border-radius: 8px;
+        .cta-card {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             text-decoration: none;
-            box-shadow: 0 4px 25px rgba(56, 189, 248, 0.4);
+            padding: 22px 28px;
+            border-radius: 10px;
             transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
         }
-        .cta-main:hover {
+        .cta-pay-freight {
+            background-color: var(--emerald);
+            color: #042f2e;
+            box-shadow: 0 4px 25px rgba(16, 185, 129, 0.3);
+            border: 1px solid var(--emerald-hover);
+        }
+        .cta-pay-freight:hover {
+            background-color: var(--emerald-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(16, 185, 129, 0.5);
+        }
+        .cta-carrier-payout {
+            background-color: var(--accent);
+            color: #0b1329;
+            box-shadow: 0 4px 25px rgba(56, 189, 248, 0.3);
+            border: 1px solid var(--accent-hover);
+        }
+        .cta-carrier-payout:hover {
             background-color: var(--accent-hover);
             transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(56, 189, 248, 0.6);
+            box-shadow: 0 6px 30px rgba(56, 189, 248, 0.5);
         }
+        .cta-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .cta-subtext {
+            font-size: 0.85rem;
+            font-weight: 500;
+            opacity: 0.85;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .intro-text {
             font-size: 1.05rem;
             color: var(--text-muted);
@@ -149,8 +190,19 @@
         <h1>Pay<span>Freight</span></h1>
         <p class="subtitle">Automated Solana Settlement Protocol & e-CMR Compliance for Global B2B Logistics DeFi</p>
         
+        <!-- DUAL ENTRY POINT CTA -->
         <div class="cta-main-container">
-            <a href="widget.html?v=2" class="cta-main">Upload e-CMR & Receive Instant Payout</a>
+            <!-- LEVI GUMB: Za špediterje / tiste ki prodajo furo -->
+            <a href="widget.html?action=create_escrow&v=2" class="cta-card cta-pay-freight">
+                <span class="cta-title">🔒 Pay Freight & Lock Escrow</span>
+                <span class="cta-subtext">For Shippers & Freight Brokers</span>
+            </a>
+
+            <!-- DESNI GUMB: Za prevoznike -->
+            <a href="widget.html?action=upload_cmr&v=2" class="cta-card cta-carrier-payout">
+                <span class="cta-title">📄 Upload e-CMR & Receive Payout</span>
+                <span class="cta-subtext">For Carriers & Transporters</span>
+            </a>
         </div>
 
         <div class="intro-text">
