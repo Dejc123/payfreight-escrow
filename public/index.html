@@ -77,7 +77,7 @@
             transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
         }
         
-        /* LEVI GUMB: ZLATO / AMBER (Za tiste, ki prodajo furo) */
+        /* LEVI GUMB: AMBER / ZLATA (Naročniki prevoza / špediterji) */
         .cta-pay-freight {
             background-color: var(--amber);
             color: #0f172a;
@@ -90,7 +90,7 @@
             box-shadow: 0 6px 30px rgba(245, 158, 11, 0.55);
         }
 
-        /* DESNI GUMB: SVETLO MODRA (Za prevoznike) */
+        /* DESNI GUMB: SVETLO MODRA (Prevozniki) */
         .cta-carrier-payout {
             background-color: var(--accent);
             color: #0b1329;
@@ -164,4 +164,81 @@
             margin-top: 20px;
         }
         .cta-button-secondary {
-            display: inline-
+            display: inline-block;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .cta-button-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(56, 189, 248, 0.05);
+        }
+        footer {
+            margin-top: 35px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255,255,255,0.04);
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Pay<span>Freight</span></h1>
+        <p class="subtitle">Automated Solana Settlement Protocol & e-CMR Compliance for Global B2B Logistics DeFi</p>
+        
+        <!-- DUAL ENTRY POINT CTA -->
+        <div class="cta-main-container">
+            <!-- LEVI GUMB: Naročniki prevoza / Špediterji -->
+            <a href="widget.html?action=create_escrow&v=2" class="cta-card cta-pay-freight">
+                <span class="cta-title">🔒 Pay Freight & Lock Escrow</span>
+                <span class="cta-subtext">For Shippers & Freight Brokers</span>
+            </a>
+
+            <!-- DESNI GUMB: Prevozniki -->
+            <a href="widget.html?action=upload_cmr&v=2" class="cta-card cta-carrier-payout">
+                <span class="cta-title">📄 Upload e-CMR & Receive Payout</span>
+                <span class="cta-subtext">For Carriers & Transporters</span>
+            </a>
+        </div>
+
+        <div class="intro-text">
+            Global cross-border logistics is weighed down by legacy banking delays, manual paperwork, and 30 to 90-day invoice cycles. PayFreight bridges the gap between traditional freight operations and high-speed blockchain settlements. By directly tying digital e-CMR compliance verification to automated smart contract escrows on Solana, we eliminate liquidity bottlenecks and ensure carriers get paid the exact second a delivery is verified—completely removing trust and collection risks from the supply chain.
+        </div>
+
+        <div class="features">
+            <div class="feature-box">
+                <h3>⚡ Instant Payouts</h3>
+                <p>Bypass traditional banking lag. Automated on-chain escrow releases funds instantly upon digital e-CMR delivery confirmation.</p>
+            </div>
+            <div class="feature-box">
+                <h3>🛡️ Secure & Trustless</h3>
+                <p>Built with Anchor on Solana. Smart contracts handle the escrow securely without middlemen, chargebacks, or custodial risks.</p>
+            </div>
+            <div class="feature-box">
+                <h3>💎 Dynamic Fees</h3>
+                <p>Benefit from optimized tiered platform fees backed by robust protocol design and secure administrative governance.</p>
+            </div>
+        </div>
+
+        <div class="secondary-links">
+            <a href="technical.html" class="cta-button-secondary">Technical Architecture</a>
+            <a href="https://github.com/Dejc123/payfreight-escrow" class="cta-button-secondary" target="_blank">GitHub Repository</a>
+            <a href="https://t.me/+WyYEvCqDLSQ2MzI0" class="cta-button-secondary" target="_blank">Telegram Community</a>
+        </div>
+        
+        <footer>
+            <p>&copy; 2026 PayFreight Protocol Team. All rights reserved. Proprietary & Confidential. | Web: PayFreight.io | Telegram: <a href="https://t.me/+WyYEvCqDLSQ2MzI0" target="_blank" style="color: var(--accent); text-decoration: none;">t.me/+WyYEvCqDLSQ2MzI0</a></p>
+        </footer>
+    </div>
+
+</body>
+</html>
