@@ -25,16 +25,16 @@
             min-height: 100vh;
         }
         .container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 20px;
-            padding: 40px;
+            padding: 50px;
             background: var(--card-bg);
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             text-align: center;
         }
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             margin-bottom: 10px;
             color: var(--text-main);
         }
@@ -42,15 +42,27 @@
             color: var(--accent);
         }
         p.subtitle {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--text-muted);
             margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .intro-text {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 40px;
+            text-align: left;
+            background: rgba(255,255,255,0.02);
+            padding: 25px;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
         }
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             text-align: left;
         }
         .feature-box {
@@ -68,6 +80,7 @@
             color: var(--text-muted);
             font-size: 0.95rem;
             margin-bottom: 0;
+            line-height: 1.5;
         }
         .cta-buttons {
             display: flex;
@@ -80,7 +93,8 @@
             display: inline-block;
             background-color: var(--accent);
             color: white;
-            padding: 12px 24px;
+            padding: 14px 28px;
+            font-size: 1.05rem;
             font-weight: bold;
             border-radius: 6px;
             text-decoration: none;
@@ -95,7 +109,7 @@
             opacity: 0.9;
         }
         footer {
-            margin-top: 25px;
+            margin-top: 35px;
             font-size: 0.85rem;
             color: var(--text-muted);
         }
@@ -107,18 +121,22 @@
         <h1>Pay<span>Freight</span></h1>
         <p class="subtitle">Automated Solana Settlement Protocol & e-CMR Compliance for Global B2B Logistics DeFi</p>
         
+        <div class="intro-text">
+            Global cross-border logistics is weighed down by legacy banking delays, manual paperwork, and 30 to 90-day invoice cycles. PayFreight bridges the gap between traditional freight operations and high-speed blockchain settlements. By directly tying digital e-CMR compliance verification to automated smart contract escrows on Solana, we eliminate liquidity bottlenecks and ensure carriers get paid the exact second a delivery is verified—completely removing trust and collection risks from the supply chain.
+        </div>
+
         <div class="features">
             <div class="feature-box">
                 <h3>⚡ Instant Payouts</h3>
-                <p>Eliminate 30 to 90-day invoice delays with automated on-chain escrow releases tied to digital e-CMR notes.</p>
+                <p>Bypass traditional banking lag. Automated on-chain escrow releases funds instantly upon digital e-CMR delivery confirmation.</p>
             </div>
             <div class="feature-box">
                 <h3>🛡️ Secure & Trustless</h3>
-                <p>Built with Anchor on Solana. Fully verified deliveries trigger immediate stablecoin payouts without custodial risk.</p>
+                <p>Built with Anchor on Solana. Smart contracts handle the escrow securely without middlemen, chargebacks, or custodial risks.</p>
             </div>
             <div class="feature-box">
                 <h3>💎 Dynamic Fees</h3>
-                <p>Enjoy tiered platform fees (down to 0.5%) backed by native utility tokens and secure administrative approvals.</p>
+                <p>Benefit from optimized tiered platform fees backed by robust protocol design and secure administrative governance.</p>
             </div>
         </div>
 
