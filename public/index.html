@@ -43,9 +43,9 @@
         }
 
         .container {
-            max-width: 880px;
+            max-width: 920px;
             width: 92%;
-            margin: 20px auto;
+            margin: 30px auto;
             padding: 40px;
             background: var(--card-bg);
             border-radius: 20px;
@@ -109,7 +109,6 @@
         .btn-nav-fiat:hover {
             background-color: #faf6f0;
             border-color: var(--venetian-gold-light);
-            color: var(--text-main);
         }
 
         .btn-nav-wallet {
@@ -163,7 +162,7 @@
             font-size: 0.98rem;
             color: var(--text-muted);
             margin-top: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             line-height: 1.4;
             font-weight: 500;
         }
@@ -175,7 +174,7 @@
             gap: 18px;
             justify-content: center;
             align-items: stretch;
-            margin: 25px 0;
+            margin: 20px 0;
             flex-wrap: wrap;
         }
 
@@ -189,10 +188,9 @@
             text-decoration: none;
             padding: 22px 26px;
             border-radius: 12px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        /* BENEŠKO ZLATO CTA GUMB ZA ESCROW */
         .cta-pay-freight {
             background: linear-gradient(135deg, #e8b265 0%, #df9b41 50%, #c9852f 100%);
             color: #ffffff;
@@ -237,14 +235,91 @@
             letter-spacing: 0.6px;
         }
 
+        /* B2B / ENTERPRISE ADOPTION SECTION */
+        .b2b-protocol-section {
+            background: #faf6f0;
+            border: 1px solid #ebdccb;
+            border-radius: 16px;
+            padding: 24px 20px;
+            margin: 30px 0 25px 0;
+            text-align: center;
+        }
+
+        .b2b-header {
+            margin-bottom: 16px;
+        }
+
+        .b2b-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--venetian-gold-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .b2b-desc {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .b2b-grid {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .b2b-card {
+            flex: 1;
+            min-width: 270px;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px 18px;
+            text-decoration: none;
+            text-align: left;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .b2b-card:hover {
+            border-color: var(--venetian-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(184, 123, 40, 0.12);
+        }
+
+        .b2b-card-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .b2b-card-text {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.35;
+            margin: 0;
+        }
+
         /* PAYMENT STRIP */
         .payment-methods {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            margin: 30px 0 25px 0;
+            gap: 10px;
+            margin: 20px 0 15px 0;
         }
 
         .pay-tag {
@@ -260,12 +335,11 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            background: #faf6f0;
-            padding: 10px 16px;
+            background: #ffffff;
+            padding: 8px 14px;
             border-radius: 40px;
             border: 1px solid var(--border-color);
             width: 100%;
-            max-width: 100%;
             flex-wrap: wrap;
         }
 
@@ -290,13 +364,6 @@
             transform: translateY(-1px);
             border-color: var(--venetian-gold);
             color: var(--venetian-gold-dark);
-            box-shadow: 0 4px 10px rgba(184, 123, 40, 0.15);
-        }
-
-        .pay-badge-crypto:hover {
-            border-color: var(--solana-purple) !important;
-            color: var(--solana-purple) !important;
-            box-shadow: 0 4px 10px rgba(153, 69, 255, 0.15) !important;
         }
 
         .pay-icon {
@@ -306,14 +373,14 @@
             vertical-align: middle;
         }
 
-        /* LINKS */
+        /* SECONDARY LINKS */
         .secondary-links {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
             justify-content: center;
             margin-top: 15px;
-            padding-top: 24px;
+            padding-top: 20px;
             border-top: 1px solid var(--border-color);
         }
 
@@ -399,7 +466,7 @@
 
         <p class="subtitle">Automated Solana Settlement Protocol & e-CMR Escrow Engine</p>
         
-        <!-- INSTITUTIONAL ACTION BUTTONS -->
+        <!-- MAIN ACTION BUTTONS -->
         <div class="cta-main-container">
             <a href="widget.html?action=create_escrow&v=2" class="cta-card cta-pay-freight">
                 <span class="cta-title">🔒 Lock Escrow & Pay Freight</span>
@@ -410,6 +477,26 @@
                 <span class="cta-title">📄 Submit e-CMR & Receive Payout</span>
                 <span class="cta-subtext">For Carriers & Transporters</span>
             </a>
+        </div>
+
+        <!-- B2B & ENTERPRISE INTEGRATION SECTION -->
+        <div class="b2b-protocol-section">
+            <div class="b2b-header">
+                <span class="b2b-title">🌐 Open Infrastructure for Freight Networks</span>
+                <p class="b2b-desc">An open-source, trustless settlement layer built for TMS, ERPs, and Freight Exchanges.</p>
+            </div>
+
+            <div class="b2b-grid">
+                <a href="mailto:partners@payfreight.io?subject=Freight%20Exchange%20Integration" class="b2b-card">
+                    <div class="b2b-card-title">🔌 Connect Your Freight Exchange</div>
+                    <p class="b2b-card-text">Integrate PayFreight Settlement Engine via REST / Solana SDK into your platform.</p>
+                </a>
+
+                <a href="mailto:enterprise@payfreight.io?subject=Enterprise%20Partner%20Inquiry" class="b2b-card">
+                    <div class="b2b-card-title">🤝 Join as Enterprise Partner</div>
+                    <p class="b2b-card-text">Deploy custom escrow parameters, automated e-CMR validation & liquidity pools.</p>
+                </a>
+            </div>
         </div>
 
         <!-- PAYMENT STRIP -->
@@ -446,7 +533,7 @@
                     USDC
                 </div>
 
-                <div class="pay-badge pay-badge-crypto" title="Pay with Crypto (Solana / Web3 Wallet)">
+                <div class="pay-badge" title="Pay with Crypto (Solana / Web3 Wallet)" style="color: var(--solana-purple);">
                     <svg class="pay-icon" viewBox="0 0 24 24" fill="#9945FF"><path d="M4.5 17.5h13l2-3h-13zm0-5.5h13l2-3h-13zm2-5.5h13l-2 3h-13z"/></svg>
                     Pay with Crypto
                 </div>
