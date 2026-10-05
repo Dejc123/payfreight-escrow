@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PayFreight Protocol – Settlement & e-CMR Escrow Engine</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%230b1329'/><path d='M7 12l3 3 7-7' stroke='%2338bdf8' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%230f172a'/><path d='M7 12l3 3 7-7' stroke='%230284c7' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
     <style>
         :root {
-            --bg-color: #0b1329;
-            --card-bg: #131b36;
-            --accent: #38bdf8;
-            --accent-hover: #7dd3fc;
-            --indigo: #6366f1;
-            --indigo-hover: #818cf8;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: rgba(56, 189, 248, 0.18);
-            --success: #10b981;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --accent: #0284c7;
+            --accent-hover: #0369a1;
+            --indigo: #4f46e5;
+            --indigo-hover: #4338ca;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success: #16a34a;
         }
 
         * {
@@ -42,9 +42,9 @@
             margin: 20px auto;
             padding: 35px 40px;
             background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
             text-align: center;
             position: relative;
         }
@@ -56,7 +56,7 @@
             align-items: center;
             margin-bottom: 30px;
             padding-bottom: 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid var(--border-color);
             flex-wrap: wrap;
             gap: 12px;
         }
@@ -65,22 +65,22 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(16, 185, 129, 0.08);
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            padding: 5px 12px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 6px 14px;
             border-radius: 20px;
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             color: var(--success);
             font-weight: 600;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
         }
 
         .status-dot {
-            width: 7px;
-            height: 7px;
+            width: 8px;
+            height: 8px;
             background-color: var(--success);
             border-radius: 50%;
-            box-shadow: 0 0 8px var(--success);
+            box-shadow: 0 0 6px var(--success);
         }
 
         .nav-actions {
@@ -90,11 +90,11 @@
         }
 
         .btn-nav-fiat {
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: var(--text-main);
-            padding: 7px 14px;
-            font-size: 0.82rem;
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            color: #334155;
+            padding: 8px 16px;
+            font-size: 0.83rem;
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
@@ -106,17 +106,17 @@
         }
 
         .btn-nav-fiat:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-color: var(--accent);
-            color: var(--accent);
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+            color: var(--text-main);
         }
 
         .btn-nav-wallet {
-            background: linear-gradient(135deg, var(--indigo) 0%, #4f46e5 100%);
-            border: 1px solid var(--indigo-hover);
+            background: var(--indigo);
+            border: 1px solid var(--indigo);
             color: #ffffff;
-            padding: 7px 15px;
-            font-size: 0.82rem;
+            padding: 8px 16px;
+            font-size: 0.83rem;
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
@@ -124,14 +124,14 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 2px 6px rgba(79, 70, 229, 0.2);
             transition: all 0.2s ease;
         }
 
         .btn-nav-wallet:hover {
-            background: linear-gradient(135deg, var(--indigo-hover) 0%, var(--indigo) 100%);
+            background: var(--indigo-hover);
             transform: translateY(-1px);
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.5);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
         }
 
         /* BRAND HEADER */
@@ -147,20 +147,18 @@
             width: 48px;
             height: 48px;
             flex-shrink: 0;
-            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.35));
-            transition: transform 0.3s ease, filter 0.3s ease;
+            transition: transform 0.3s ease;
         }
 
         .brand-header:hover .logo-icon {
-            transform: scale(1.05) rotate(-2deg);
-            filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.6));
+            transform: scale(1.05);
         }
 
         h1 {
-            font-size: 2.4rem;
+            font-size: 2.5rem;
             margin: 0;
             color: var(--text-main);
-            letter-spacing: -0.5px;
+            letter-spacing: -0.8px;
             line-height: 1;
             font-weight: 800;
         }
@@ -170,12 +168,12 @@
         }
 
         p.subtitle {
-            font-size: 0.95rem;
+            font-size: 0.98rem;
             color: var(--text-muted);
             margin-top: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 28px;
             line-height: 1.4;
-            font-weight: 400;
+            font-weight: 500;
         }
         
         /* DUAL ENTRY ACTIONS */
@@ -197,142 +195,106 @@
             justify-content: center;
             align-items: center;
             text-decoration: none;
-            padding: 18px 22px;
-            border-radius: 10px;
+            padding: 20px 24px;
+            border-radius: 12px;
             position: relative;
             overflow: hidden;
-            transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
         }
 
-        /* Svetlikajoč se preliv na gumbih */
-        .cta-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 50%;
-            height: 200%;
-            background: linear-gradient(
-                60deg, 
-                transparent 30%, 
-                rgba(255, 255, 255, 0.25) 50%, 
-                transparent 70%
-            );
-            transform: rotate(25deg);
-            transition: all 0.6s ease;
-            opacity: 0;
-        }
-
-        .cta-card:hover::after {
-            left: 130%;
-            opacity: 1;
-        }
-        
         .cta-pay-freight {
             background-color: var(--indigo);
             color: #ffffff;
-            box-shadow: 0 4px 18px rgba(99, 102, 241, 0.35);
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
             border: 1px solid var(--indigo-hover);
         }
 
         .cta-pay-freight:hover {
             background-color: var(--indigo-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 28px rgba(99, 102, 241, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.35);
         }
 
         .cta-carrier-payout {
-            background-color: var(--accent);
-            color: #0b1329;
-            box-shadow: 0 4px 18px rgba(56, 189, 248, 0.28);
-            border: 1px solid var(--accent-hover);
+            background-color: #0284c7;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+            border: 1px solid #0369a1;
         }
 
         .cta-carrier-payout:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 28px rgba(56, 189, 248, 0.5);
+            background-color: #0369a1;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
         }
 
         .cta-title {
-            font-size: 1.05rem;
+            font-size: 1.08rem;
             font-weight: 700;
             display: block;
             margin-bottom: 4px;
-            position: relative;
-            z-index: 2;
         }
 
         .cta-subtext {
             font-size: 0.75rem;
-            font-weight: 700;
-            opacity: 0.88;
+            font-weight: 600;
+            opacity: 0.9;
             display: block;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            position: relative;
-            z-index: 2;
         }
 
-        /* SVETLIKAINI INTERAKTIVNI LOGOTIPI (PAYMENT GATEWAYS) */
+        /* FINTECH PAYMENT GATEWAYS STRIP */
         .payment-methods {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            margin: 20px 0 25px 0;
+            margin: 22px 0 28px 0;
         }
 
         .pay-tag {
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             color: var(--text-muted);
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .logos-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 8px 18px;
+            gap: 10px;
+            background: #f8fafc;
+            padding: 10px 20px;
             border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
             flex-wrap: wrap;
-        }
-
-        .logos-container:hover {
-            border-color: rgba(56, 189, 248, 0.35);
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.15), inset 0 0 10px rgba(0, 0, 0, 0.3);
-            background: rgba(255, 255, 255, 0.05);
         }
 
         .pay-badge {
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 0.75rem;
+            gap: 6px;
+            font-size: 0.78rem;
             font-weight: 700;
-            color: #e2e8f0;
-            padding: 4px 8px;
-            border-radius: 6px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.25s ease;
+            color: #334155;
+            padding: 5px 10px;
+            border-radius: 8px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
             cursor: pointer;
         }
 
         .pay-badge:hover {
-            transform: translateY(-2px) scale(1.05);
-            background: rgba(56, 189, 248, 0.15);
+            transform: translateY(-1px);
             border-color: var(--accent);
-            color: #ffffff;
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+            color: var(--accent);
+            box-shadow: 0 3px 8px rgba(2, 132, 199, 0.15);
         }
 
         .pay-icon {
@@ -346,36 +308,36 @@
         .secondary-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 12px;
             justify-content: center;
             margin-top: 10px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 22px;
+            border-top: 1px solid var(--border-color);
         }
 
         .cta-button-secondary {
             display: inline-block;
-            background-color: rgba(255, 255, 255, 0.02);
+            background-color: #f8fafc;
             border: 1px solid var(--border-color);
             color: var(--text-muted);
-            padding: 8px 16px;
+            padding: 8px 18px;
             font-size: 0.85rem;
-            font-weight: 500;
-            border-radius: 6px;
+            font-weight: 600;
+            border-radius: 8px;
             text-decoration: none;
             transition: all 0.2s;
         }
 
         .cta-button-secondary:hover {
-            border-color: var(--accent);
+            border-color: #cbd5e1;
             color: var(--text-main);
-            background: rgba(56, 189, 248, 0.08);
+            background: #f1f5f9;
         }
 
         footer {
-            margin-top: 20px;
-            font-size: 0.78rem;
-            color: rgba(148, 163, 184, 0.6);
+            margin-top: 22px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
     </style>
 </head>
@@ -401,41 +363,33 @@
         <!-- HEADER -->
         <div class="brand-header">
             <svg class="logo-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="100" cy="100" r="85" stroke="#38bdf8" stroke-width="8" fill="none"/>
+                <circle cx="100" cy="100" r="85" stroke="#0284c7" stroke-width="8" fill="none"/>
                 
-                <g fill="#e2e8f0">
+                <g fill="#0f172a">
                     <polygon points="100,28 102.5,35 110,35 104,39 106,46 100,42 94,46 96,39 90,35 97.5,35"/>
                     <polygon points="121,32 123,38 130,38 124,42 126,49 121,45 116,49 118,42 112,38 119,38"/>
                     <polygon points="79,32 81,38 88,38 82,42 84,49 79,45 74,49 76,42 70,38 77,38"/>
-                    <polygon points="140,43 142,49 149,49 143,53 145,60 140,56 135,60 137,53 131,49 138,49"/>
-                    <polygon points="60,43 62,49 69,49 63,53 65,60 60,56 55,60 57,53 51,49 58,49"/>
                 </g>
 
-                <g fill="#e2e8f0">
+                <g fill="#0f172a">
                     <polygon points="100,165 102.5,158 110,158 104,154 106,147 100,151 94,147 96,154 90,158 97.5,158"/>
                     <polygon points="121,161 123,154 130,154 124,150 126,143 121,147 116,143 118,150 112,154 119,154"/>
                     <polygon points="79,161 81,154 88,154 82,150 84,143 79,147 74,143 76,150 70,154 77,154"/>
-                    <polygon points="140,150 142,143 149,143 143,139 145,132 140,136 135,132 137,139 131,143 138,143"/>
-                    <polygon points="60,150 62,143 69,143 63,139 65,132 60,136 55,132 57,139 51,143 58,143"/>
                 </g>
 
-                <path d="M30 87 H65 M26 97 H60 M35 107 H65 M26 117 H55" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
+                <path d="M30 87 H65 M26 97 H60 M35 107 H65 M26 117 H55" stroke="#0284c7" stroke-width="5" stroke-linecap="round"/>
 
-                <path d="M60 80 H115 V125 H60 Z" fill="#38bdf8"/>
-                <path d="M115 85 H138 L158 102 V125 H115 Z" fill="#f8fafc"/>
-                <path d="M125 92 H136 L148 103 H125 Z" fill="#131b36"/>
+                <path d="M60 80 H115 V125 H60 Z" fill="#0284c7"/>
+                <path d="M115 85 H138 L158 102 V125 H115 Z" fill="#0f172a"/>
+                <path d="M125 92 H136 L148 103 H125 Z" fill="#ffffff"/>
 
-                <path d="M72 85 C72 85, 90 80, 100 85 C100 105, 90 122, 100 125 C110 122, 100 105, 100 85 Z" fill="#38bdf8"/>
-                <path d="M74 86 C74 86, 90 81, 98 86 C98 104, 89 120, 98 123 C88 119, 78 104, 74 86 Z" fill="#0b1329"/>
-                <path d="M85 102 L92 108 L105 94" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-
-                <circle cx="65" cy="125" r="12" fill="#f8fafc"/>
-                <circle cx="65" cy="125" r="6" fill="#0b1329"/>
+                <circle cx="65" cy="125" r="12" fill="#0f172a"/>
+                <circle cx="65" cy="125" r="6" fill="#ffffff"/>
                 
-                <circle cx="140" cy="125" r="12" fill="#f8fafc"/>
-                <circle cx="140" cy="125" r="6" fill="#0b1329"/>
+                <circle cx="140" cy="125" r="12" fill="#0f172a"/>
+                <circle cx="140" cy="125" r="6" fill="#ffffff"/>
 
-                <path d="M65 125 Q100 132 140 125" stroke="#38bdf8" stroke-width="4" fill="none"/>
+                <path d="M65 125 Q100 132 140 125" stroke="#0284c7" stroke-width="4" fill="none"/>
             </svg>
 
             <h1>Pay<span>Freight</span></h1>
@@ -443,7 +397,7 @@
 
         <p class="subtitle">Automated Solana Settlement Protocol & e-CMR Escrow Engine</p>
         
-        <!-- GLAVNI DEFI ENTRY POINTI Z SHIMMER/GLOW UČINKOM -->
+        <!-- GLAVNI ENTRY POINTI (WEB 2.5 STIL) -->
         <div class="cta-main-container">
             <a href="widget.html?action=create_escrow&v=2" class="cta-card cta-pay-freight">
                 <span class="cta-title">🔒 Lock Escrow & Pay Freight</span>
@@ -456,9 +410,9 @@
             </a>
         </div>
 
-        <!-- SVETLIKAINI INTERAKTIVNI LOGOTIPI PLAČILNIH SYSTEMOV & COINOV -->
+        <!-- FINTECH PAYMENT GATEWAYS (STRIPE / REVOLUT VIBE) -->
         <div class="payment-methods">
-            <span class="pay-tag">Supported Payment Gateways & Stablecoins</span>
+            <span class="pay-tag">Supported Payment Gateways & Settlement Options</span>
             <div class="logos-container">
                 <!-- VISA -->
                 <div class="pay-badge" title="Visa Credit/Debit Card">
@@ -480,13 +434,13 @@
 
                 <!-- SEPA BANK -->
                 <div class="pay-badge" title="SEPA Direct Bank Transfer">
-                    <svg class="pay-icon" viewBox="0 0 24 24" fill="#38bdf8"><path d="M4 10h16v2H4zm0 4h16v2H4zm8-11L2 7v2h20V7L12 3zm-6 15h3v2H6zm5 0h3v2h-3zm5 0h3v2h-3z"/></svg>
+                    <svg class="pay-icon" viewBox="0 0 24 24" fill="#0284c7"><path d="M4 10h16v2H4zm0 4h16v2H4zm8-11L2 7v2h20V7L12 3zm-6 15h3v2H6zm5 0h3v2h-3zm5 0h3v2h-3z"/></svg>
                     SEPA Instant
                 </div>
 
                 <!-- EURC (EURO STABLECOIN) -->
                 <div class="pay-badge" title="EURC - Euro Stablecoin on Solana">
-                    <svg class="pay-icon" viewBox="0 0 24 24" fill="#10b981"><circle cx="12" cy="12" r="9" fill="none" stroke="#10b981" stroke-width="2"/><text x="12" y="16" font-weight="bold" font-size="12" text-anchor="middle" fill="#10b981">€</text></svg>
+                    <svg class="pay-icon" viewBox="0 0 24 24" fill="#16a34a"><circle cx="12" cy="12" r="9" fill="none" stroke="#16a34a" stroke-width="2"/><text x="12" y="16" font-weight="bold" font-size="12" text-anchor="middle" fill="#16a34a">€</text></svg>
                     EURC (Euro)
                 </div>
 
