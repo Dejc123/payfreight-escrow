@@ -256,4 +256,83 @@
                     <polygon points="100,165 102.5,158 110,158 104,154 106,147 100,151 94,147 96,154 90,158 97.5,158"/>
                     <polygon points="121,161 123,154 130,154 124,150 126,143 121,147 116,143 118,150 112,154 119,154"/>
                     <polygon points="79,161 81,154 88,154 82,150 84,143 79,147 74,143 76,150 70,154 77,154"/>
-                    <polygon points="140,150 142,143 149,143 143,139 145,132 140,136 135,132 137,139 131,143 138,14
+                    <polygon points="140,150 142,143 149,143 143,139 145,132 140,136 135,132 137,139 131,143 138,143"/>
+                    <polygon points="60,150 62,143 69,143 63,139 65,132 60,136 55,132 57,139 51,143 58,143"/>
+                </g>
+
+                <!-- Tovornjak - Črtice za hitrost -->
+                <path d="M30 87 H65 M26 97 H60 M35 107 H65 M26 117 H55" stroke="#00bcd4" stroke-width="5" stroke-linecap="round"/>
+
+                <!-- Tovornjak - Glavno telo -->
+                <path d="M60 80 H115 V125 H60 Z" fill="#00bcd4"/>
+                <path d="M115 85 H138 L158 102 V125 H115 Z" fill="#0a2540"/>
+                <!-- Okno -->
+                <path d="M125 92 H136 L148 103 H125 Z" fill="#ffffff"/>
+
+                <!-- Ščit s kljukico -->
+                <path d="M72 85 C72 85, 90 80, 100 85 C100 105, 90 122, 100 125 C110 122, 100 105, 100 85 Z" fill="#00bcd4"/>
+                <path d="M74 86 C74 86, 90 81, 98 86 C98 104, 89 120, 98 123 C88 119, 78 104, 74 86 Z" fill="#0a2540"/>
+                <path d="M85 102 L92 108 L105 94" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+
+                <!-- Kolesa -->
+                <circle cx="65" cy="125" r="12" fill="#0a2540"/>
+                <circle cx="65" cy="125" r="6" fill="#ffffff"/>
+                
+                <circle cx="140" cy="125" r="12" fill="#0a2540"/>
+                <circle cx="140" cy="125" r="6" fill="#ffffff"/>
+
+                <!-- Spodnja svetlo modra obrobna črta -->
+                <path d="M65 125 Q100 132 140 125" stroke="#00bcd4" stroke-width="4" fill="none"/>
+            </svg>
+        </div>
+
+        <h1>Pay<span>Freight</span></h1>
+        <p class="subtitle">Automated Solana Settlement Protocol & e-CMR Compliance for Global B2B Logistics DeFi</p>
+        
+        <!-- DUAL ENTRY POINT CTA -->
+        <div class="cta-main-container">
+            <!-- LEVI GUMB: Naročniki prevoza / Špediterji (Indigo) -->
+            <a href="widget.html?action=create_escrow&v=2" class="cta-card cta-pay-freight">
+                <span class="cta-title">🔒 Pay Freight & Lock Escrow</span>
+                <span class="cta-subtext">For Shippers & Freight Brokers</span>
+            </a>
+
+            <!-- DESNI GUMB: Prevozniki (Svetlo modra) -->
+            <a href="widget.html?action=upload_cmr&v=2" class="cta-card cta-carrier-payout">
+                <span class="cta-title">📄 Upload e-CMR & Receive Payout</span>
+                <span class="cta-subtext">For Carriers & Transporters</span>
+            </a>
+        </div>
+
+        <div class="intro-text">
+            Global cross-border logistics is weighed down by legacy banking delays, manual paperwork, and 30 to 90-day invoice cycles. PayFreight bridges the gap between traditional freight operations and high-speed blockchain settlements. By directly tying digital e-CMR compliance verification to automated smart contract escrows on Solana, we eliminate liquidity bottlenecks and ensure carriers get paid the exact second a delivery is verified—completely removing trust and collection risks from the supply chain.
+        </div>
+
+        <div class="features">
+            <div class="feature-box">
+                <h3>⚡ Instant Payouts</h3>
+                <p>Bypass traditional banking lag. Automated on-chain escrow releases funds instantly upon digital e-CMR delivery confirmation.</p>
+            </div>
+            <div class="feature-box">
+                <h3>🛡️ Secure & Trustless</h3>
+                <p>Built with Anchor on Solana. Smart contracts handle the escrow securely without middlemen, chargebacks, or custodial risks.</p>
+            </div>
+            <div class="feature-box">
+                <h3>💎 Dynamic Fees</h3>
+                <p>Benefit from optimized tiered platform fees backed by robust protocol design and secure administrative governance.</p>
+            </div>
+        </div>
+
+        <div class="secondary-links">
+            <a href="technical.html" class="cta-button-secondary">Technical Architecture</a>
+            <a href="https://github.com/Dejc123/payfreight-escrow" class="cta-button-secondary" target="_blank">GitHub Repository</a>
+            <a href="https://t.me/+WyYEvCqDLSQ2MzI0" class="cta-button-secondary" target="_blank">Telegram Community</a>
+        </div>
+        
+        <footer>
+            <p>&copy; 2026 PayFreight Protocol Team. All rights reserved. Proprietary & Confidential. | Web: PayFreight.io | Telegram: <a href="https://t.me/+WyYEvCqDLSQ2MzI0" target="_blank" style="color: var(--accent); text-decoration: none;">t.me/+WyYEvCqDLSQ2MzI0</a></p>
+        </footer>
+    </div>
+
+</body>
+</html>
