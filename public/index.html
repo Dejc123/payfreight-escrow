@@ -39,7 +39,7 @@
             max-width: 900px;
             width: 90%;
             margin: 40px auto;
-            padding: 45px 50px;
+            padding: 40px 45px;
             background: var(--card-bg);
             border-radius: 12px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.4);
@@ -52,25 +52,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 18px;
-            margin-bottom: 12px;
+            gap: 16px;
+            margin-bottom: 8px;
         }
 
         .logo-icon {
-            width: 58px;
-            height: 58px;
+            width: 52px;
+            height: 52px;
             flex-shrink: 0;
-            filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.4));
+            filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.35));
             transition: transform 0.3s ease, filter 0.3s ease;
         }
 
         .brand-header:hover .logo-icon {
             transform: scale(1.05) rotate(-2deg);
-            filter: drop-shadow(0 0 22px rgba(56, 189, 248, 0.65));
+            filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.6));
         }
 
         h1 {
-            font-size: 2.8rem;
+            font-size: 2.6rem;
             margin: 0;
             color: var(--text-main);
             letter-spacing: -0.5px;
@@ -82,34 +82,35 @@
         }
 
         p.subtitle {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             color: var(--text-muted);
-            margin-top: 15px;
-            margin-bottom: 30px;
-            line-height: 1.5;
+            margin-top: 12px;
+            margin-bottom: 25px;
+            line-height: 1.4;
         }
         
-        /* DUAL CTA BUTTONS */
+        /* DUAL CTA BUTTONS - COMPACT & ELEGANT */
         .cta-main-container {
             display: flex;
             flex-direction: row;
-            gap: 20px;
+            gap: 16px;
             justify-content: center;
             align-items: stretch;
-            margin: 35px 0;
+            margin: 25px 0 35px 0;
             flex-wrap: wrap;
         }
 
         .cta-card {
             flex: 1;
-            min-width: 260px;
+            min-width: 220px;
+            max-width: 380px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-decoration: none;
-            padding: 22px 28px;
-            border-radius: 10px;
+            padding: 14px 20px;
+            border-radius: 8px;
             transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
         }
         
@@ -117,54 +118,54 @@
         .cta-pay-freight {
             background-color: var(--indigo);
             color: #ffffff;
-            box-shadow: 0 4px 25px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 4px 18px rgba(99, 102, 241, 0.35);
             border: 1px solid var(--indigo-hover);
         }
 
         .cta-pay-freight:hover {
             background-color: var(--indigo-hover);
             transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.6);
+            box-shadow: 0 6px 24px rgba(99, 102, 241, 0.55);
         }
 
         /* DESNI GUMB: SVETLO MODRA */
         .cta-carrier-payout {
             background-color: var(--accent);
             color: #0b1329;
-            box-shadow: 0 4px 25px rgba(56, 189, 248, 0.3);
+            box-shadow: 0 4px 18px rgba(56, 189, 248, 0.28);
             border: 1px solid var(--accent-hover);
         }
 
         .cta-carrier-payout:hover {
             background-color: var(--accent-hover);
             transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(56, 189, 248, 0.5);
+            box-shadow: 0 6px 24px rgba(56, 189, 248, 0.45);
         }
 
         .cta-title {
-            font-size: 1.15rem;
+            font-size: 1rem;
             font-weight: 700;
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 3px;
         }
 
         .cta-subtext {
-            font-size: 0.85rem;
+            font-size: 0.76rem;
             font-weight: 600;
             opacity: 0.9;
             display: block;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
         }
 
         .intro-text {
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: var(--text-muted);
-            line-height: 1.7;
+            line-height: 1.65;
             margin: 30px 0;
             text-align: left;
             background: rgba(255,255,255,0.015);
-            padding: 25px;
+            padding: 22px 25px;
             border-radius: 8px;
             border-left: 4px solid var(--accent);
             border-top: 1px solid rgba(255,255,255,0.03);
@@ -174,15 +175,15 @@
 
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 18px;
             margin-bottom: 30px;
             text-align: left;
         }
 
         .feature-box {
             background: rgba(255,255,255,0.02);
-            padding: 22px;
+            padding: 20px;
             border-radius: 8px;
             border: 1px solid rgba(255,255,255,0.04);
         }
@@ -190,12 +191,12 @@
         .feature-box h3 {
             color: var(--accent);
             margin-top: 0;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
         }
 
         .feature-box p {
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             margin-bottom: 0;
             line-height: 1.5;
         }
@@ -203,7 +204,7 @@
         .secondary-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
             margin-top: 20px;
         }
@@ -213,8 +214,8 @@
             background-color: transparent;
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 10px 20px;
-            font-size: 0.95rem;
+            padding: 9px 18px;
+            font-size: 0.9rem;
             font-weight: 500;
             border-radius: 6px;
             text-decoration: none;
@@ -228,24 +229,22 @@
         }
 
         footer {
-            margin-top: 35px;
-            font-size: 0.85rem;
+            margin-top: 30px;
+            font-size: 0.82rem;
             color: var(--text-muted);
             border-top: 1px solid rgba(255,255,255,0.04);
-            padding-top: 20px;
+            padding-top: 18px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- VODORAVNI HEADER (LOGO + NASLOV TOGETHER) -->
+        <!-- VODORAVNI HEADER -->
         <div class="brand-header">
             <svg class="logo-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Zunanji krog v svetli cyan/srebrni barvi -->
                 <circle cx="100" cy="100" r="85" stroke="#38bdf8" stroke-width="8" fill="none"/>
                 
-                <!-- Zvezdice na vrhu (Svetle) -->
                 <g fill="#e2e8f0">
                     <polygon points="100,28 102.5,35 110,35 104,39 106,46 100,42 94,46 96,39 90,35 97.5,35"/>
                     <polygon points="121,32 123,38 130,38 124,42 126,49 121,45 116,49 118,42 112,38 119,38"/>
@@ -254,7 +253,6 @@
                     <polygon points="60,43 62,49 69,49 63,53 65,60 60,56 55,60 57,53 51,49 58,49"/>
                 </g>
 
-                <!-- Zvezdice na dnu (Svetle) -->
                 <g fill="#e2e8f0">
                     <polygon points="100,165 102.5,158 110,158 104,154 106,147 100,151 94,147 96,154 90,158 97.5,158"/>
                     <polygon points="121,161 123,154 130,154 124,150 126,143 121,147 116,143 118,150 112,154 119,154"/>
@@ -263,28 +261,22 @@
                     <polygon points="60,150 62,143 69,143 63,139 65,132 60,136 55,132 57,139 51,143 58,143"/>
                 </g>
 
-                <!-- Tovornjak - Črtice za hitrost -->
                 <path d="M30 87 H65 M26 97 H60 M35 107 H65 M26 117 H55" stroke="#38bdf8" stroke-width="5" stroke-linecap="round"/>
 
-                <!-- Tovornjak - Glavno telo -->
                 <path d="M60 80 H115 V125 H60 Z" fill="#38bdf8"/>
                 <path d="M115 85 H138 L158 102 V125 H115 Z" fill="#f8fafc"/>
-                <!-- Okno -->
                 <path d="M125 92 H136 L148 103 H125 Z" fill="#131b36"/>
 
-                <!-- Ščit s kljukico -->
                 <path d="M72 85 C72 85, 90 80, 100 85 C100 105, 90 122, 100 125 C110 122, 100 105, 100 85 Z" fill="#38bdf8"/>
                 <path d="M74 86 C74 86, 90 81, 98 86 C98 104, 89 120, 98 123 C88 119, 78 104, 74 86 Z" fill="#0b1329"/>
                 <path d="M85 102 L92 108 L105 94" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
 
-                <!-- Kolesa -->
                 <circle cx="65" cy="125" r="12" fill="#f8fafc"/>
                 <circle cx="65" cy="125" r="6" fill="#0b1329"/>
                 
                 <circle cx="140" cy="125" r="12" fill="#f8fafc"/>
                 <circle cx="140" cy="125" r="6" fill="#0b1329"/>
 
-                <!-- Spodnja svetlo modra obrobna črta -->
                 <path d="M65 125 Q100 132 140 125" stroke="#38bdf8" stroke-width="4" fill="none"/>
             </svg>
 
@@ -295,13 +287,11 @@
         
         <!-- DUAL ENTRY POINT CTA -->
         <div class="cta-main-container">
-            <!-- LEVI GUMB: Naročniki prevoza / Špediterji -->
             <a href="widget.html?action=create_escrow&v=2" class="cta-card cta-pay-freight">
                 <span class="cta-title">🔒 Pay Freight & Lock Escrow</span>
                 <span class="cta-subtext">For Shippers & Freight Brokers</span>
             </a>
 
-            <!-- DESNI GUMB: Prevozniki -->
             <a href="widget.html?action=upload_cmr&v=2" class="cta-card cta-carrier-payout">
                 <span class="cta-title">📄 Upload e-CMR & Receive Payout</span>
                 <span class="cta-subtext">For Carriers & Transporters</span>
