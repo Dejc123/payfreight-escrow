@@ -17,7 +17,6 @@
             --text-muted: #94a3b8;
             --border-color: rgba(56, 189, 248, 0.18);
             --success: #10b981;
-            --emerald: #059669;
         }
 
         * {
@@ -174,7 +173,7 @@
             font-size: 0.95rem;
             color: var(--text-muted);
             margin-top: 10px;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             line-height: 1.4;
             font-weight: 400;
         }
@@ -186,7 +185,7 @@
             gap: 16px;
             justify-content: center;
             align-items: stretch;
-            margin: 20px 0 28px 0;
+            margin: 20px 0 20px 0;
             flex-wrap: wrap;
         }
 
@@ -245,13 +244,53 @@
             letter-spacing: 0.5px;
         }
 
+        /* PAYMENT METHOD LOGOS STRIP */
+        .payment-methods {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin: 15px 0 25px 0;
+            opacity: 0.75;
+            transition: opacity 0.2s ease;
+        }
+
+        .payment-methods:hover {
+            opacity: 1;
+        }
+
+        .pay-tag {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .badge-list {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 4px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        .highlight-eur {
+            color: var(--accent);
+        }
+
         /* PROTOCOL LINKS */
         .secondary-links {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             justify-content: center;
-            margin-top: 25px;
+            margin-top: 10px;
             padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
@@ -357,6 +396,14 @@
                 <span class="cta-title">📄 Submit e-CMR & Receive Payout</span>
                 <span class="cta-subtext">For Carriers & Transporters</span>
             </a>
+        </div>
+
+        <!-- TRAK PODPRTIH NAČINOV PLAČILA IN STABLECOINOV (EURC + USDC + FIAT) -->
+        <div class="payment-methods">
+            <span class="pay-tag">Supported Gateways & Currencies:</span>
+            <div class="badge-list">
+                VISA • Mastercard • PayPal • SEPA • <span class="highlight-eur">EURC (Euro)</span> • USDC
+            </div>
         </div>
 
         <!-- TEHNIČNI LINKI -->
