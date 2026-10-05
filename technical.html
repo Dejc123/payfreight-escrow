@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayFreight Escrow - Architecture & Tech</title>
+    <title>PayFreight - Technical Architecture</title>
     <style>
         :root {
-            --primary: #2563eb;
+            --accent: #ff6600;
             --bg: #0f172a;
             --card-bg: #1e293b;
             --text: #f8fafc;
@@ -43,14 +43,15 @@
         }
         .back-widget:hover {
             background: rgba(255, 255, 255, 0.1);
-            border-color: var(--primary);
+            border-color: var(--accent);
         }
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            background: linear-gradient(to right, #38bdf8, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text);
+        }
+        h1 span {
+            color: var(--accent);
         }
         .subtitle {
             font-size: 1.2rem;
@@ -66,7 +67,7 @@
         }
         h2 {
             font-size: 1.4rem;
-            color: #38bdf8;
+            color: var(--accent);
             margin-top: 0;
         }
         code {
@@ -74,26 +75,33 @@
             padding: 2px 6px;
             border-radius: 4px;
             font-family: monospace;
-            color: #f472b6;
+            color: #ffaa66;
+        }
+        ul {
+            padding-left: 20px;
+            color: var(--text-muted);
+        }
+        li {
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <a href="index.html" class="back-widget">
-            <span>←</span> Back to Main Page
+            <span>←</span> Back to Landing Page
         </a>
 
-        <h1>Technical Architecture</h1>
+        <h1>Technical <span>Architecture</span></h1>
         <div class="subtitle">A brief look under the hood of the PayFreight Escrow repository.</div>
 
         <div class="card">
             <h2>Smart Contracts (Solana / Anchor)</h2>
             <p>Core logic is written in <code>Rust</code> using the Anchor framework:</p>
             <ul>
-                <li><code>payfreight_escrow_eur.rs</code>: Manages the escrow lifecycle and token locks.</li>
-                <li><code>payfreight_settlement.rs</code>: Handles final trade/transport settlements.</li>
-                <li><code>escrow_eur_logistics.rs</code>: Binds logistical milestones to financial payouts.</li>
+                <li><code>payfreight_escrow_eur.rs</code>: Manages the escrow lifecycle, stablecoin token locks, and rules.</li>
+                <li><code>payfreight_settlement.rs</code>: Handles final trade and transport settlements.</li>
+                <li><code>escrow_eur_logistics.rs</code>: Binds e-CMR and logistical milestones directly to financial payouts.</li>
             </ul>
         </div>
 
@@ -101,7 +109,7 @@
             <h2>Backend & Services</h2>
             <p>Node.js environment bridging off-chain data with the blockchain:</p>
             <ul>
-                <li><code>server.js</code> & <code>settlementService.ts</code>: Core backend services managing triggers, APIs, and status updates.</li>
+                <li><code>server.js</code> & <code>settlementService.ts</code>: Core backend services managing triggers, APIs, and real-time status updates.</li>
                 <li><code>payfreight_test.ts</code>: Comprehensive test suite for contract validation.</li>
             </ul>
         </div>
