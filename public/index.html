@@ -441,7 +441,7 @@
         <!-- TOP NAVIGATION BAR -->
         <div class="top-nav">
             <div class="status-bar">
-                <span class="status-dot"></span> ISO 20022, FedNow & e-CMR Compliant • Automated Global Escrow
+                <span class="status-dot"></span> ISO 20022, FedNow, ACH & e-CMR Compliant • Automated Global Escrow
             </div>
 
             <div class="nav-actions">
@@ -451,7 +451,7 @@
                 <button class="btn-nav-safety" onclick="openFundSafetyModal()">
                     🛡️ Fund Safety & Escrow
                 </button>
-                <button class="btn-nav-fiat" onclick="showToast('Supported: SEPA Instant, US FedNow/ACH, Wire, VISA & Mastercard.')">
+                <button class="btn-nav-fiat" onclick="showToast('Supported: US FedNow, ACH, Wire, SEPA Instant, VISA & Mastercard.')">
                     💵 USD / EUR Banking
                 </button>
                 <button class="btn-nav-wallet" onclick="showToast('Connecting Institutional Settlement Engine...')">
@@ -495,10 +495,10 @@
             <h1>Pay<span>Freight</span></h1>
         </div>
 
-        <p class="subtitle">Automated Global Freight Settlement Engine • USD & EUR Institutional Escrow</p>
+        <p class="subtitle">Automated Global Freight Settlement Engine • USD ($) & EUR (€) Institutional Escrow</p>
         
         <div class="copyright-banner">
-            🔒 Protected by PayFreight Infrastructure License • ISO 20022 & UN/CEFACT e-CMR Standards
+            🔒 Protected by PayFreight Infrastructure License • ISO 20022, US ACH/FedNow & UN/CEFACT e-CMR Standards
         </div>
         
         <!-- MAIN ACTION BUTTONS -->
@@ -509,8 +509,8 @@
             </a>
 
             <a href="widget.html?action=upload_cmr&v=2" class="cta-card cta-carrier-payout">
-                <span class="cta-title">📄 Submit e-CMR & Receive Payout</span>
-                <span class="cta-subtext">For Carriers & Transporters</span>
+                <span class="cta-title">📄 Submit e-CMR / POD & Receive Payout</span>
+                <span class="cta-subtext">For Carriers & Transporters (Direct Bank Payout)</span>
             </a>
         </div>
 
@@ -534,15 +534,15 @@
 
         <!-- PAYMENT STRIP INCLUDING US BANKING -->
         <div class="payment-methods">
-            <span class="pay-tag">Supported Payment Gateways & Banking Systems</span>
+            <span class="pay-tag">Supported Payment Gateways & Global Banking Networks</span>
             <div class="logos-container">
-                <div class="pay-badge" title="US FedNow / ACH">🇺🇸 FedNow / ACH</div>
-                <div class="pay-badge" title="SEPA Instant">🇪🇺 SEPA Instant</div>
+                <div class="pay-badge" title="US FedNow / ACH">🇺🇸 US FedNow / ACH / Wire</div>
+                <div class="pay-badge" title="SEPA Instant">🇪🇺 EU SEPA Instant</div>
                 <div class="pay-badge" title="Visa Card">VISA</div>
                 <div class="pay-badge" title="Mastercard">Mastercard</div>
-                <div class="pay-badge" title="USDC / USDT">USDC / USDT ($)</div>
-                <div class="pay-badge" title="EURC">EURC (€)</div>
-                <div class="pay-badge" style="color: #0d9488;">Crypto (Auto-USD/EUR)</div>
+                <div class="pay-badge" title="USDC / USDT">USDC / USDT ($ USD)</div>
+                <div class="pay-badge" title="EURC">EURC (€ EUR)</div>
+                <div class="pay-badge" style="color: #0d9488;">Crypto (Auto-USD/EUR FX)</div>
             </div>
         </div>
 
@@ -597,7 +597,7 @@
               <input type="file" id="pdfFileInput" accept=".pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handlePdfUpload(this)">
               <div class="text-3xl mb-2">📥</div>
               <p class="font-bold text-gray-800 text-sm">Drag & Drop Transport Order PDF here</p>
-              <p class="text-xs text-gray-500 mt-1">Supports US Rate Confirmations, e-CMR & Freight Orders (Auto-extracts IBAN, SWIFT, Routing & Price)</p>
+              <p class="text-xs text-gray-500 mt-1">Supports US Rate Confirmations, e-CMR & Freight Orders (Auto-extracts IBAN, US Account No, ABA Routing, SWIFT & Price)</p>
             </div>
           </div>
 
@@ -611,7 +611,7 @@
 
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Carrier / Transporter ID</label>
-                <input type="text" id="exchangeCarrierId" placeholder="e.g. MC-982341 / CARRIER-55" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
+                <input type="text" id="exchangeCarrierId" placeholder="e.g. MC-982341 / DOT-12345 / CARRIER-55" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
               </div>
             </div>
 
@@ -641,29 +641,29 @@
                 <input type="text" id="manualCarrierName" placeholder="e.g. US Freight Express Inc. / TransLogistics" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Tax / VAT / EIN Number *</label>
-                <input type="text" id="manualCarrierVat" placeholder="e.g. US-987654321 / SI12345678" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Tax / VAT / EIN / MC Number *</label>
+                <input type="text" id="manualCarrierVat" placeholder="e.g. EIN 12-3456789 / MC-982341 / VAT SI12345678" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
               </div>
             </div>
 
             <div class="p-3 bg-amber-50/80 border border-amber-200 rounded-xl space-y-2.5">
               <span class="block text-xs font-extrabold text-amber-900 border-b border-amber-200/80 pb-1 flex items-center gap-1.5">
-                🏦 Carrier Payout Bank Details (IBAN / ACH Routing)
+                🏦 Carrier Payout Bank Details (US ACH Routing / EU IBAN)
               </span>
 
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">IBAN Account or US Account Number *</label>
-                <input type="text" id="manualCarrierIban" placeholder="e.g. SI56 0110 0000 1234 567 or US Account No." class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white focus:ring-2 focus:ring-amber-500 outline-none uppercase">
+                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">IBAN Account (EUR) or US Account Number (USD) *</label>
+                <input type="text" id="manualCarrierIban" placeholder="e.g. US Account No. 9876543210 or SI56 0110 0000 1234 567" class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white focus:ring-2 focus:ring-amber-500 outline-none uppercase">
               </div>
 
               <div class="grid grid-cols-2 gap-3">
                 <div>
-                  <label class="block text-[11px] font-bold text-gray-700 mb-0.5">SWIFT / BIC / Routing Number *</label>
-                  <input type="text" id="manualCarrierSwift" placeholder="e.g. LJBASI2X or ABA Routing (9-digits)" class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white focus:ring-2 focus:ring-amber-500 outline-none uppercase">
+                  <label class="block text-[11px] font-bold text-gray-700 mb-0.5">SWIFT / BIC / ABA Routing (9-digits) *</label>
+                  <input type="text" id="manualCarrierSwift" placeholder="e.g. ABA Routing 021000021 or SWIFT LJBASI2X" class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white focus:ring-2 focus:ring-amber-500 outline-none uppercase">
                 </div>
                 <div>
                   <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Bank Name & Country *</label>
-                  <input type="text" id="manualBankName" placeholder="e.g. Chase Bank US / Commercial Bank" class="w-full border border-amber-300 rounded-lg p-2 text-xs bg-white focus:ring-2 focus:ring-amber-500 outline-none">
+                  <input type="text" id="manualBankName" placeholder="e.g. JPMorgan Chase (USA) / Commercial Bank (EU)" class="w-full border border-amber-300 rounded-lg p-2 text-xs bg-white focus:ring-2 focus:ring-amber-500 outline-none">
                 </div>
               </div>
             </div>
@@ -697,7 +697,7 @@
             <div class="grid grid-cols-2 gap-3">
               <label class="flex items-center gap-2 border rounded-xl p-2.5 cursor-pointer hover:bg-amber-50 border-amber-300 transition">
                 <input type="radio" name="paymentType" value="FIAT" checked class="text-amber-600 focus:ring-amber-500">
-                <span class="text-xs font-semibold">💳 USD / EUR Bank Transfer (FedNow / ACH / SEPA)</span>
+                <span class="text-xs font-semibold">💳 USD / EUR Bank Transfer (FedNow / ACH / Wire / SEPA)</span>
               </label>
               <label class="flex items-center gap-2 border rounded-xl p-2.5 cursor-pointer hover:bg-amber-50 border-amber-300 transition">
                 <input type="radio" name="paymentType" value="CRYPTO" class="text-amber-600 focus:ring-amber-500">
@@ -754,7 +754,7 @@
               <!-- Escrow Vault Box -->
               <rect x="220" y="15" width="160" height="90" rx="12" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
               <text x="300" y="45" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">🔒 PayFreight Escrow</text>
-              <text x="300" y="63" font-size="9" fill="#e0f2fe" text-anchor="middle">Automated Bank Trezor</text>
+              <text x="300" y="63" font-size="9" fill="#e0f2fe" text-anchor="middle">Automated Bank Vault</text>
               <text x="300" y="80" font-size="8" font-weight="bold" fill="#fef08a" text-anchor="middle">FUNDS SECURED (1:1 USD/EUR)</text>
 
               <!-- Arrow 2 -->
@@ -773,7 +773,7 @@
             <div class="w-8 h-8 rounded-full bg-amber-500 text-white font-extrabold text-sm flex items-center justify-center shrink-0">1</div>
             <div>
               <h4 class="font-bold text-gray-900 text-sm">Shipper Locks Freight Payment</h4>
-              <p class="text-xs text-gray-600 mt-0.5">Shipper deposits payment via USD/EUR Bank Transfer (FedNow, ACH, SEPA), Card or Crypto. Funds are locked safely in 1:1 USD or EUR value until cargo delivery.</p>
+              <p class="text-xs text-gray-600 mt-0.5">Shipper deposits payment via USD or EUR Bank Transfer (FedNow, ACH, Wire, SEPA Instant), Card or Crypto. Funds are locked safely in 1:1 USD or EUR value until cargo delivery.</p>
             </div>
           </div>
 
@@ -791,7 +791,7 @@
             <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">3</div>
             <div>
               <h4 class="font-bold text-gray-900 text-sm">Instant Automated Bank Payout</h4>
-              <p class="text-xs text-gray-600 mt-0.5">Escrow automatically releases funds directly to carrier's bank account (via ACH/FedNow in US, SEPA Instant in EU) or Settlement wallet. Zero delays, zero middleman fee gouging.</p>
+              <p class="text-xs text-gray-600 mt-0.5">Escrow automatically releases funds directly to carrier's bank account (via ACH/FedNow in US Dollars or SEPA Instant in Euros) or Settlement wallet. Zero delays, zero middleman fee gouging.</p>
             </div>
           </div>
 
@@ -804,7 +804,7 @@
       </div>
     </div>
 
-    <!-- PRENOVLJENO MODALNO OKNO: FUND SAFETY & ESCROW (USD & EUR INSTITUTIONAL GUARANTEE) -->
+    <!-- PRENOVLJENO MODALNO OKNO: FUND SAFETY & ESCROW (POPOLNA PODPORA ZA USD BANČNA NAKAZILA) -->
     <div id="fundSafetyModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full overflow-hidden border-2 border-emerald-500 text-left max-h-[92vh] flex flex-col">
         
@@ -838,23 +838,23 @@
                   <strong>Locked in Fiat Value ($ USD / € EUR):</strong> All freight escrow funds are strictly locked in 1:1 fiat-backed value (USD/EUR via regulated USDC/USDT/EURC). 
                 </p>
                 <div class="pt-1.5 text-xs text-amber-950 font-semibold border-t border-amber-200/80 mt-2">
-                  ⚡ <strong>Automatic FX Conversion:</strong> If a payment is deposited using volatile digital assets, it is <span class="bg-amber-200 text-amber-950 px-1.5 py-0.5 rounded font-bold">instantly converted into USD or EUR on the exact millisecond of deposit</span>. The carrier is <strong>always paid the exact fixed amount in USD or EUR</strong> on their bank account.
+                  ⚡ <strong>Automatic FX Conversion:</strong> If a payment is deposited using volatile digital assets, it is <span class="bg-amber-200 text-amber-950 px-1.5 py-0.5 rounded font-bold">instantly converted into USD or EUR on the exact millisecond of deposit</span>. The carrier is <strong>always paid the exact fixed amount in USD or EUR</strong> directly to their bank account.
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- 4 GLAVNE TOČKE ZA ZADNJI DVOM -->
+          <!-- 4 GLAVNE TOČKE POPRAVLJENE Z EKSPLICITNO PODPORO ZA USD BANČNA NAKAZILA -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
             
             <!-- TOČKA 1 -->
             <div class="p-3.5 rounded-xl border border-emerald-200 bg-white shadow-sm space-y-1">
               <div class="flex items-center gap-2 text-emerald-800 font-extrabold text-xs">
                 <span class="bg-emerald-100 text-emerald-800 p-1 rounded">🔒</span>
-                <span>1. Non-Custodial Smart Lock</span>
+                <span>1. Non-Custodial Smart Lock ($ USD / € EUR)</span>
               </div>
               <p class="text-[11px] text-gray-600 leading-relaxed">
-                Funds are held in <strong class="text-gray-900">automated smart vaults</strong>. PayFreight employees have <strong class="text-emerald-700">zero manual access</strong> to move or withdraw locked funds unilaterally.
+                Funds deposited in <strong class="text-gray-900">USD or EUR</strong> are held in <strong class="text-gray-900">automated smart vaults</strong>. PayFreight employees have <strong class="text-emerald-700">zero manual access</strong> to move or withdraw locked funds unilaterally.
               </p>
             </div>
 
@@ -862,10 +862,10 @@
             <div class="p-3.5 rounded-xl border border-emerald-200 bg-white shadow-sm space-y-1">
               <div class="flex items-center gap-2 text-emerald-800 font-extrabold text-xs">
                 <span class="bg-emerald-100 text-emerald-800 p-1 rounded">📄</span>
-                <span>2. e-CMR & POD Release</span>
+                <span>2. e-CMR & POD Release Trigger</span>
               </div>
               <p class="text-[11px] text-gray-600 leading-relaxed">
-                Release conditions are <strong class="text-gray-900">strictly programmatic</strong>. Payout is triggered immediately upon cryptographic e-CMR verification or Proof of Delivery sign-off.
+                Release conditions are <strong class="text-gray-900">strictly programmatic</strong>. Payout in USD or EUR is triggered immediately upon cryptographic e-CMR verification or Proof of Delivery sign-off.
               </p>
             </div>
 
@@ -873,10 +873,10 @@
             <div class="p-3.5 rounded-xl border border-emerald-200 bg-white shadow-sm space-y-1">
               <div class="flex items-center gap-2 text-emerald-800 font-extrabold text-xs">
                 <span class="bg-emerald-100 text-emerald-800 p-1 rounded">🏦</span>
-                <span>3. Direct Bank Payout (ACH / SEPA)</span>
+                <span>3. Direct Bank Payout (USD ACH/FedNow / EU SEPA)</span>
               </div>
               <p class="text-[11px] text-gray-600 leading-relaxed">
-                Carriers do not need a crypto wallet. Payouts arrive directly to the carrier's <strong class="text-gray-900">bank account via ACH/FedNow (USD) or SEPA Instant (EUR)</strong>.
+                Carriers do not need a crypto wallet. Payouts arrive directly to the carrier's <strong class="text-gray-900">US bank account via ACH/FedNow/Wire (USD)</strong> or <strong class="text-gray-900">European bank account via SEPA Instant (EUR)</strong>.
               </p>
             </div>
 
@@ -884,10 +884,10 @@
             <div class="p-3.5 rounded-xl border border-emerald-200 bg-white shadow-sm space-y-1">
               <div class="flex items-center gap-2 text-emerald-800 font-extrabold text-xs">
                 <span class="bg-emerald-100 text-emerald-800 p-1 rounded">⚖️</span>
-                <span>4. Global Banking Compliance</span>
+                <span>4. Regulated US & EU Banking Infrastructure</span>
               </div>
               <p class="text-[11px] text-gray-600 leading-relaxed">
-                Operates through licensed, <strong class="text-gray-900">US & EU regulated banking partners</strong> adhering strictly to ISO 20022 and international e-CMR standards.
+                Operates through licensed, <strong class="text-gray-900">US & EU regulated banking partners</strong> adhering strictly to ISO 20022 financial standards, US banking rules (ABA/ACH), and UN/CEFACT e-CMR protocols.
               </p>
             </div>
 
@@ -899,7 +899,7 @@
               🔎 Real-time Auditable & Immutable Ledger
             </span>
             <span class="text-[10px] text-slate-500">
-              Every deposit transaction generates an auditable cryptographic proof linkable to global transport orders.
+              Every deposit transaction (USD or EUR) generates an auditable cryptographic proof linkable to global transport orders.
             </span>
           </div>
 
@@ -908,7 +908,7 @@
         <!-- Modal Footer -->
         <div class="bg-gray-100 p-3 px-6 flex justify-between items-center border-t border-gray-200 shrink-0">
           <span class="text-[11px] font-semibold text-emerald-800">
-            ✅ Certified Safe for Transporters, Brokers & Shippers
+            ✅ Certified Safe for US & Global Transporters, Brokers & Shippers
           </span>
           <button onclick="closeFundSafetyModal()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold py-2 px-6 rounded-lg shadow transition">
             Understood & Confirmed
