@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PayFreight Protocol – Settlement & e-CMR Escrow Engine</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%23DF9B41'/><path d='M7 12l3 3 7-7' stroke='%23ffffff' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+    
+    <!-- TAILWIND CSS CDN ZA INTERAKTIVNE MODALE -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
         :root {
             --bg-color: #fdfbf7;
@@ -189,6 +193,7 @@
             padding: 22px 26px;
             border-radius: 12px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
         }
 
         .cta-pay-freight {
@@ -468,7 +473,7 @@
         
         <!-- MAIN ACTION BUTTONS -->
         <div class="cta-main-container">
-            <a href="widget.html?action=create_escrow&v=2" class="cta-card cta-pay-freight">
+            <a onclick="openEscrowModal()" class="cta-card cta-pay-freight">
                 <span class="cta-title">🔒 Lock Escrow & Pay Freight</span>
                 <span class="cta-subtext">For Shippers & Freight Brokers</span>
             </a>
@@ -552,218 +557,217 @@
         </footer>
     </div>
 
-<!-- ESCROW MODAL DIALOG -->
-<div id="escrowModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-amber-200 animate-fade-in">
-    
-    <!-- Modal Header -->
-    <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-5 text-white flex justify-between items-center">
-      <div>
-        <h3 class="text-xl font-bold flex items-center gap-2">
-          🔒 Lock Escrow & Pay Freight
-        </h3>
-        <p class="text-xs text-amber-100 mt-1">Create a secure smart escrow settlement for your freight order</p>
-      </div>
-      <button onclick="closeEscrowModal()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
-    </div>
+    <!-- ESCROW MODAL DIALOG -->
+    <div id="escrowModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-amber-200 animate-fade-in text-left">
+        
+        <!-- Modal Header -->
+        <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-5 text-white flex justify-between items-center">
+          <div>
+            <h3 class="text-xl font-bold flex items-center gap-2">
+              🔒 Lock Escrow & Pay Freight
+            </h3>
+            <p class="text-xs text-amber-100 mt-1">Create a secure smart escrow settlement for your freight order</p>
+          </div>
+          <button onclick="closeEscrowModal()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
+        </div>
 
-    <!-- TAB NAVIGATION -->
-    <div class="flex border-b border-gray-200 bg-gray-50 p-2 gap-2 text-sm font-semibold">
-      <button id="tab-pdf-btn" onclick="switchTab('pdf')" class="flex-1 py-2.5 px-3 rounded-xl border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-2">
-        📄 1. PDF Order
-      </button>
-      <button id="tab-exchange-btn" onclick="switchTab('exchange')" class="flex-1 py-2.5 px-3 rounded-xl border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-2">
-        🔗 2. Freight Exchange / TMS
-      </button>
-      <button id="tab-manual-btn" onclick="switchTab('manual')" class="flex-1 py-2.5 px-3 rounded-xl border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-2">
-        ✍️ 3. Manual Entry
-      </button>
-    </div>
+        <!-- TAB NAVIGATION -->
+        <div class="flex border-b border-gray-200 bg-gray-50 p-2 gap-2 text-sm font-semibold">
+          <button id="tab-pdf-btn" onclick="switchTab('pdf')" class="flex-1 py-2.5 px-3 rounded-xl border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-2">
+            📄 1. PDF Order
+          </button>
+          <button id="tab-exchange-btn" onclick="switchTab('exchange')" class="flex-1 py-2.5 px-3 rounded-xl border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-2">
+            🔗 2. Freight Exchange / TMS
+          </button>
+          <button id="tab-manual-btn" onclick="switchTab('manual')" class="flex-1 py-2.5 px-3 rounded-xl border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-2">
+            ✍️ 3. Manual Entry
+          </button>
+        </div>
 
-    <!-- MODAL BODY / CONTENT -->
-    <div class="p-6">
-      
-      <!-- TAB 1: PDF ORDER PARSER -->
-      <div id="tab-pdf" class="tab-content">
-        <div class="border-2 border-dashed border-amber-300 rounded-2xl p-8 text-center bg-amber-50/50 hover:bg-amber-50 transition cursor-pointer relative group">
-          <input type="file" id="pdfFileInput" accept=".pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handlePdfUpload(this)">
-          <div class="text-4xl mb-2">📥</div>
-          <p class="font-bold text-gray-800">Drag & Drop Transport Order PDF here</p>
-          <p class="text-xs text-gray-500 mt-1">or click to browse files (Supports e-CMR, Freight Orders, Waybills)</p>
+        <!-- MODAL BODY / CONTENT -->
+        <div class="p-6">
           
-          <!-- Hover Tooltip -->
-          <div class="absolute -top-10 left-1/2 -translate-x-1/2 hidden group-hover:block bg-gray-900 text-white text-xs py-1 px-3 rounded shadow-md whitespace-nowrap">
-            💡 System automatically parses amount, load ID, and carrier info.
+          <!-- TAB 1: PDF ORDER PARSER -->
+          <div id="tab-pdf" class="tab-content">
+            <div class="border-2 border-dashed border-amber-300 rounded-2xl p-8 text-center bg-amber-50/50 hover:bg-amber-50 transition cursor-pointer relative group">
+              <input type="file" id="pdfFileInput" accept=".pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handlePdfUpload(this)">
+              <div class="text-4xl mb-2">📥</div>
+              <p class="font-bold text-gray-800">Drag & Drop Transport Order PDF here</p>
+              <p class="text-xs text-gray-500 mt-1">or click to browse files (Supports e-CMR, Freight Orders, Waybills)</p>
+              
+              <!-- Hover Tooltip -->
+              <div class="absolute -top-10 left-1/2 -translate-x-1/2 hidden group-hover:block bg-gray-900 text-white text-xs py-1 px-3 rounded shadow-md whitespace-nowrap">
+                💡 System automatically parses amount, load ID, and carrier info.
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
-      <!-- TAB 2: FREIGHT EXCHANGE / TMS INTEGRATION -->
-      <div id="tab-exchange" class="tab-content hidden space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1 flex items-center gap-1">
-            Freight Exchange / TMS Platform Name
-            <span class="group relative cursor-pointer text-amber-600">ⓘ
-              <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-900 text-white text-xs font-normal py-1 px-2 rounded w-52 text-center">
-                Enter the exact name of the exchange or internal ERP/TMS platform.
-              </span>
-            </span>
-          </label>
-          <!-- Open input field without datalist or predefined dropdown options -->
-          <input type="text" id="exchangeName" placeholder="Enter exchange name (e.g., TimoCom, Trans.eu, Teleroute, Custom TMS...)" class="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
-        </div>
+          <!-- TAB 2: FREIGHT EXCHANGE / TMS INTEGRATION -->
+          <div id="tab-exchange" class="tab-content hidden space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1 flex items-center gap-1">
+                Freight Exchange / TMS Platform Name
+                <span class="group relative cursor-pointer text-amber-600">ⓘ
+                  <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-900 text-white text-xs font-normal py-1 px-2 rounded w-52 text-center">
+                    Enter the exact name of the exchange or internal ERP/TMS platform.
+                  </span>
+                </span>
+              </label>
+              <input type="text" id="exchangeName" placeholder="Enter exchange name (e.g., TimoCom, Trans.eu, Teleroute, Custom TMS...)" class="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+            </div>
 
-        <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1 flex items-center gap-1">
-            Cargo / Freight Offer ID
-            <span class="group relative cursor-pointer text-amber-600">ⓘ
-              <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-900 text-white text-xs font-normal py-1 px-2 rounded w-48 text-center">
-                Unique identifier for the shipment from the source platform.
-              </span>
-            </span>
-          </label>
-          <input type="text" id="exchangeCargoId" placeholder="e.g., TC-889102" class="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
-        </div>
-      </div>
-
-      <!-- TAB 3: MANUAL DATA ENTRY -->
-      <div id="tab-manual" class="tab-content hidden space-y-3">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">Order Ref / ID</label>
-            <input type="text" id="manualCargoId" placeholder="e.g., ORDER-2026-01" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm outline-none focus:ring-2 focus:ring-amber-500">
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1 flex items-center gap-1">
+                Cargo / Freight Offer ID
+                <span class="group relative cursor-pointer text-amber-600">ⓘ
+                  <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-900 text-white text-xs font-normal py-1 px-2 rounded w-48 text-center">
+                    Unique identifier for the shipment from the source platform.
+                  </span>
+                </span>
+              </label>
+              <input type="text" id="exchangeCargoId" placeholder="e.g., TC-889102" class="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+            </div>
           </div>
-          <div>
-            <label class="block text-xs font-bold text-gray-700 mb-1">Freight Price (€ / USDC)</label>
-            <input type="number" id="manualAmount" placeholder="1250.00" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm outline-none focus:ring-2 focus:ring-amber-500">
+
+          <!-- TAB 3: MANUAL DATA ENTRY -->
+          <div id="tab-manual" class="tab-content hidden space-y-3">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1">Order Ref / ID</label>
+                <input type="text" id="manualCargoId" placeholder="e.g., ORDER-2026-01" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm outline-none focus:ring-2 focus:ring-amber-500">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-700 mb-1">Freight Price (€ / USDC)</label>
+                <input type="number" id="manualAmount" placeholder="1250.00" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm outline-none focus:ring-2 focus:ring-amber-500">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-700 mb-1">Carrier Email or Wallet Address</label>
+              <input type="text" id="manualCarrier" placeholder="carrier@transport.com or Solana Public Key" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm outline-none focus:ring-2 focus:ring-amber-500">
+            </div>
           </div>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-700 mb-1">Carrier Email or Wallet Address</label>
-          <input type="text" id="manualCarrier" placeholder="carrier@transport.com or Solana Public Key" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm outline-none focus:ring-2 focus:ring-amber-500">
-        </div>
-      </div>
 
-      <!-- COMMON SETTLEMENT PAYMENT SELECTION -->
-      <div class="mt-6 pt-4 border-t border-gray-100">
-        <label class="block text-xs font-bold text-gray-700 mb-2">Select Settlement Payment Gateway:</label>
-        <div class="grid grid-cols-2 gap-3">
-          <label class="flex items-center gap-2 border rounded-xl p-3 cursor-pointer hover:bg-amber-50 border-amber-300">
-            <input type="radio" name="paymentType" value="FIAT" checked class="text-amber-600 focus:ring-amber-500">
-            <span class="text-xs font-semibold">💳 Card / SEPA / Bank Transfer</span>
-          </label>
-          <label class="flex items-center gap-2 border rounded-xl p-3 cursor-pointer hover:bg-amber-50 border-amber-300">
-            <input type="radio" name="paymentType" value="CRYPTO" class="text-amber-600 focus:ring-amber-500">
-            <span class="text-xs font-semibold">🔑 Crypto / Web3 Wallet (USDC/EURC)</span>
-          </label>
-        </div>
-      </div>
+          <!-- COMMON SETTLEMENT PAYMENT SELECTION -->
+          <div class="mt-6 pt-4 border-t border-gray-100">
+            <label class="block text-xs font-bold text-gray-700 mb-2">Select Settlement Payment Gateway:</label>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="flex items-center gap-2 border rounded-xl p-3 cursor-pointer hover:bg-amber-50 border-amber-300">
+                <input type="radio" name="paymentType" value="FIAT" checked class="text-amber-600 focus:ring-amber-500">
+                <span class="text-xs font-semibold">💳 Card / SEPA / Bank Transfer</span>
+              </label>
+              <label class="flex items-center gap-2 border rounded-xl p-3 cursor-pointer hover:bg-amber-50 border-amber-300">
+                <input type="radio" name="paymentType" value="CRYPTO" class="text-amber-600 focus:ring-amber-500">
+                <span class="text-xs font-semibold">🔑 Crypto / Web3 Wallet (USDC/EURC)</span>
+              </label>
+            </div>
+          </div>
 
+        </div>
+
+        <!-- MODAL FOOTER -->
+        <div class="bg-gray-50 p-4 px-6 flex justify-between items-center border-t border-gray-100">
+          <button onclick="closeEscrowModal()" class="text-xs text-gray-500 hover:text-gray-800 font-semibold">Cancel</button>
+          <button onclick="submitEscrow()" class="bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-2.5 px-6 rounded-xl shadow-lg hover:from-amber-600 hover:to-amber-700 transition">
+            Lock Escrow & Confirm ➔
+          </button>
+        </div>
+
+      </div>
     </div>
 
-    <!-- MODAL FOOTER -->
-    <div class="bg-gray-50 p-4 px-6 flex justify-between items-center border-t border-gray-100">
-      <button onclick="closeEscrowModal()" class="text-xs text-gray-500 hover:text-gray-800 font-semibold">Cancel</button>
-      <button onclick="submitEscrow()" class="bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-2.5 px-6 rounded-xl shadow-lg hover:from-amber-600 hover:to-amber-700 transition">
-        Lock Escrow & Confirm ➔
-      </button>
-    </div>
-
-  </div>
-</div>
-    <!-- Povezava do JavaScript skripte za Escrow Modal -->
-  <!-- JAVASCRIPT LOGIKA DIREKTNO V HTML -->
-<script>
-  /**
-   * Opens the Escrow Modal overlay
-   */
-  function openEscrowModal() {
-    document.getElementById('escrowModal').classList.remove('hidden');
-  }
-
-  /**
-   * Closes the Escrow Modal overlay
-   */
-  function closeEscrowModal() {
-    document.getElementById('escrowModal').classList.add('hidden');
-  }
-
-  /**
-   * Handles Tab navigation switching (PDF, Exchange, Manual)
-   * @param {string} tabName - Selected tab identifier ('pdf', 'exchange', 'manual')
-   */
-  function switchTab(tabName) {
-    // Hide all tab content containers
-    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-    
-    // Reset tab button styling
-    ['pdf', 'exchange', 'manual'].forEach(t => {
-      const btn = document.getElementById(`tab-${t}-btn`);
-      if (btn) {
-        btn.className = "flex-1 py-2.5 px-3 rounded-xl border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-2";
+    <!-- JAVASCRIPT LOGIKA -->
+    <script>
+      /**
+       * Opens the Escrow Modal overlay
+       */
+      function openEscrowModal() {
+        document.getElementById('escrowModal').classList.remove('hidden');
       }
-    });
 
-    // Display selected tab content and highlight active tab button
-    document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-    const activeBtn = document.getElementById(`tab-${tabName}-btn`);
-    if (activeBtn) {
-      activeBtn.className = "flex-1 py-2.5 px-3 rounded-xl border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-2";
-    }
-  }
+      /**
+       * Closes the Escrow Modal overlay
+       */
+      function closeEscrowModal() {
+        document.getElementById('escrowModal').classList.add('hidden');
+      }
 
-  /**
-   * Handles PDF File Upload
-   */
-  function handlePdfUpload(input) {
-    if (input.files && input.files[0]) {
-      const fileName = input.files[0].name;
-      console.log(`[OCR/AI Parser] Uploaded file: ${fileName}`);
-    }
-  }
+      /**
+       * Handles Tab navigation switching (PDF, Exchange, Manual)
+       * @param {string} tabName - Selected tab identifier ('pdf', 'exchange', 'manual')
+       */
+      function switchTab(tabName) {
+        // Hide all tab content containers
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        
+        // Reset tab button styling
+        ['pdf', 'exchange', 'manual'].forEach(t => {
+          const btn = document.getElementById(`tab-${t}-btn`);
+          if (btn) {
+            btn.className = "flex-1 py-2.5 px-3 rounded-xl border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-2";
+          }
+        });
 
-  /**
-   * Submits payload data to the Settlement Protocol Backend
-   */
-  async function submitEscrow() {
-    const activeTab = document.querySelector('.tab-content:not(.hidden)').id;
-    const paymentMethod = document.querySelector('input[name="paymentType"]:checked').value;
+        // Display selected tab content and highlight active tab button
+        document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+        const activeBtn = document.getElementById(`tab-${tabName}-btn`);
+        if (activeBtn) {
+          activeBtn.className = "flex-1 py-2.5 px-3 rounded-xl border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-2";
+        }
+      }
 
-    let payload = {
-      payment_method: paymentMethod,
-      source_type: activeTab
-    };
+      /**
+       * Handles PDF File Upload
+       */
+      function handlePdfUpload(input) {
+        if (input.files && input.files[0]) {
+          const fileName = input.files[0].name;
+          console.log(`[OCR/AI Parser] Uploaded file: ${fileName}`);
+        }
+      }
 
-    if (activeTab === 'tab-exchange') {
-      payload.exchange_details = {
-        exchange_name: document.getElementById('exchangeName').value,
-        cargo_id: document.getElementById('exchangeCargoId').value
-      };
-    } else if (activeTab === 'tab-manual') {
-      payload.freight_details = {
-        cargo_id: document.getElementById('manualCargoId').value,
-        amount: document.getElementById('manualAmount').value,
-        carrier_identifier: document.getElementById('manualCarrier').value
-      };
-    }
+      /**
+       * Submits payload data to the Settlement Protocol Backend
+       */
+      async function submitEscrow() {
+        const activeTab = document.querySelector('.tab-content:not(.hidden)').id;
+        const paymentMethod = document.querySelector('input[name="paymentType"]:checked').value;
 
-    console.log("[Escrow Protocol Payload Sent]:", payload);
+        let payload = {
+          payment_method: paymentMethod,
+          source_type: activeTab
+        };
 
-    try {
-      const response = await fetch('/api/create-escrow', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      
-      const result = await response.json();
-      console.log("[Escrow Created Successfully]:", result);
-      closeEscrowModal();
-    } catch (err) {
-      console.error("[Backend Settlement API Error]:", err);
-    }
-  }
-</script>
+        if (activeTab === 'tab-exchange') {
+          payload.exchange_details = {
+            exchange_name: document.getElementById('exchangeName').value,
+            cargo_id: document.getElementById('exchangeCargoId').value
+          };
+        } else if (activeTab === 'tab-manual') {
+          payload.freight_details = {
+            cargo_id: document.getElementById('manualCargoId').value,
+            amount: document.getElementById('manualAmount').value,
+            carrier_identifier: document.getElementById('manualCarrier').value
+          };
+        }
+
+        console.log("[Escrow Protocol Payload Sent]:", payload);
+
+        try {
+          const response = await fetch('/api/create-escrow', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          
+          const result = await response.json();
+          console.log("[Escrow Created Successfully]:", result);
+          closeEscrowModal();
+        } catch (err) {
+          console.error("[Backend Settlement API Error]:", err);
+        }
+      }
+    </script>
 
 </body>
 </html>
