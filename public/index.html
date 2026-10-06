@@ -186,7 +186,7 @@
             background: linear-gradient(135deg, var(--venetian-gold) 0%, var(--venetian-gold-dark) 100%);
         }
 
-        /* BRAND HEADER - LEVO ZGORNJA STRAN, KREDIBILNO IN UDELEŽENO */
+        /* POSODOBLJEN BRAND HEADER - LOGOTIP IN IME V ISTI VRSTICI, PRECEJ VEČJA */
         .brand-header-container {
             display: flex;
             flex-direction: column;
@@ -197,28 +197,50 @@
         .brand-header {
             display: flex;
             align-items: center;
-            justify-content: flex-start;
-            gap: 14px;
+            justify-content: space-between;
+            width: 100%;
+            gap: 15px;
             margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .brand-left-group {
+            display: flex;
+            align-items: center;
+            gap: 18px;
         }
 
         .logo-icon {
-            width: 52px;
-            height: 52px;
+            width: 75px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #0c2340;
             flex-shrink: 0;
         }
 
         h1 {
-            font-size: 2.6rem;
+            font-size: 3rem;
             margin: 0;
-            color: var(--venetian-gold);
-            letter-spacing: -0.8px;
+            color: #0c2340; /* Temno modra iz logotipa */
+            letter-spacing: -1px;
             line-height: 1;
             font-weight: 800;
         }
 
         h1 span {
-            color: var(--accent-blue);
+            color: #00b4d8; /* Turkizna iz logotipa */
+        }
+
+        .header-iso-badge {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: #f4efe6;
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 8px;
+            letter-spacing: 0.5px;
         }
 
         p.subtitle {
@@ -385,14 +407,26 @@
         .logos-container {
             display: inline-flex;
             align-items: center;
-            justify-content: flex-start;
-            gap: 6px;
+            justify-content: space-between;
+            gap: 12px;
             background: #ffffff;
-            padding: 6px 12px;
-            border-radius: 20px;
+            padding: 8px 16px;
+            border-radius: 12px;
             border: 1px solid var(--border-color);
             flex-wrap: wrap;
             width: 100%;
+        }
+
+        .pay-badge-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .payment-icon {
+            height: 26px;
+            width: auto;
+            object-fit: contain;
         }
 
         .pay-badge {
@@ -405,7 +439,6 @@
             padding: 4px 10px;
             border-radius: 12px;
             background: #ffffff;
-            cursor: pointer;
             white-space: nowrap;
         }
 
@@ -437,15 +470,107 @@
             border-color: var(--venetian-gold-light);
         }
 
-        footer {
-            margin-top: 16px;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            text-align: left;
-        }
+        <footer>
+            <script>
+              // Dinamičen vpis trenutnega leta v avtorske pravice, če je potrebno
+            </script>
+            <div style="margin-top: 16px; font-size: 0.7rem; color: var(--text-muted); text-align: left;">
+                Copyright © 2026 PayFreight Protocol. All Rights Reserved.
+            </div>
+        </footer>
     </style>
 </head>
 <body>
+
+    <div class="container">
+        <!-- TOP NAVIGATION -->
+        <div class="top-nav">
+            <div class="status-bar">
+                <span class="status-dot"></span>
+                Protocol Online & Secure
+            </div>
+            <div class="nav-actions">
+                <button class="btn-nav-info">e-CMR Engine</button>
+                <button class="btn-nav-safety">Escrow Active</button>
+                <button class="btn-nav-fiat">ISO 20022</button>
+                <button class="btn-nav-wallet">Connect Wallet</button>
+            </div>
+        </div>
+
+        <!-- BRAND HEADER (VEČJI LOGOTIP, IME V BARVAH LOGOTIPA IN ISO V ISTI VRSTICI) -->
+        <div class="brand-header-container">
+            <div class="brand-header">
+                <div class="brand-left-group">
+                    <img src="https://i.ibb.co/3m20j2Z/image-c9dd24.png" alt="PayFreight Logo" class="logo-icon">
+                    <h1>Pay<span>Freight</span></h1>
+                </div>
+                <div class="header-iso-badge">
+                    ISO 20022 / 2022 Verified
+                </div>
+            </div>
+            <p class="subtitle">Global Freight Settlement & e-CMR Escrow Engine</p>
+        </div>
+
+        <!-- COPYRIGHT NOTICE BANNER -->
+        <div class="copyright-banner">
+            <strong>Legal & Security Notice:</strong> Smart contract architecture protected under PayFreight Open Infrastructure License v1.0. Fully compliant with US ACH/FedNow & UN/CEFACT standards.
+        </div>
+
+        <!-- MAIN CTA BUTTONS -->
+        <div class="cta-main-container">
+            <a href="#" class="cta-card cta-pay-freight">
+                <span class="cta-title">Execute PayFreight Settlement</span>
+                <span class="cta-subtext">Secure Escrow & Instant Release</span>
+            </a>
+            <a href="#" class="cta-card cta-carrier-payout">
+                <span class="cta-title">Carrier Payout Portal</span>
+                <span class="cta-subtext">Instant Liquidity & e-CMR Proof</span>
+            </a>
+        </div>
+
+        <!-- B2B PROTOCOL SECTION -->
+        <div class="b2b-protocol-section">
+            <span class="b2b-title">Enterprise Infrastructure</span>
+            <p class="b2b-desc">Advanced settlement rails built for international logistics and automated freight forwarding.</p>
+            <div class="b2b-grid">
+                <a href="#" class="b2b-card">
+                    <div class="b2b-card-title">Instant Settlement</div>
+                    <p class="b2b-card-text">Automated escrow release upon verified digital delivery confirmation.</p>
+                </a>
+                <a href="#" class="b2b-card">
+                    <div class="b2b-card-title">Multi-Rail Payouts</div>
+                    <p class="b2b-card-text">Seamless routing across global banking rails and supported digital assets.</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- PAYMENT METHODS & TRUST BADGES -->
+        <div class="payment-methods">
+            <span class="pay-tag">Supported Payment Rails & Settlement Options</span>
+            <div class="logos-container">
+                <div class="pay-badge-group">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo_%282006%E2%80%932014%29.svg" alt="Visa" class="payment-icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" class="payment-icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" class="payment-icon" style="height: 22px;">
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span class="pay-badge">🔒 Escrow Protected</span>
+                    <span class="pay-badge">⚡ FedNow / ACH</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECONDARY LINKS -->
+        <div class="secondary-links">
+            <a href="#" class="cta-button-secondary">Protocol Docs</a>
+            <a href="#" class="cta-button-secondary">Compliance & ISO</a>
+            <a href="#" class="cta-button-secondary">API Reference</a>
+            <a href="#" class="cta-button-secondary">Support Center</a>
+        </div>
+    </div>
+
+</body>
+</html>
 
     <div class="container">
         <!-- TOP NAVIGATION BAR -->
