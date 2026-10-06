@@ -11,10 +11,10 @@
 
     <style>
         :root {
-            --bg-color: #fdfbf7;
+            --bg-color: #f8f6f0;
             --card-bg: #ffffff;
             
-            /* BENEŠKO ZLATO (GOLDEN AGE OF VENICE) */
+            /* BENEŠKO ZLATO */
             --venetian-gold-light: #e8b265;
             --venetian-gold: #df9b41;
             --venetian-gold-dark: #b87b28;
@@ -38,7 +38,7 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding: 0;
+            padding: 20px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -46,66 +46,67 @@
             min-height: 100vh;
         }
 
+        /* GLAVNI ZABOJNIK (Kompaktnejši max-width) */
         .container {
-            max-width: 920px;
-            width: 92%;
-            margin: 30px auto;
-            padding: 40px;
+            max-width: 760px;
+            width: 90%;
+            margin: 0 auto;
+            padding: 28px 32px;
             background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px -15px rgba(184, 123, 40, 0.15), 0 0 1px 1px rgba(223, 155, 65, 0.1);
+            border-radius: 18px;
+            box-shadow: 0 12px 30px -10px rgba(184, 123, 40, 0.12), 0 0 1px 1px rgba(223, 155, 65, 0.1);
             border: 1px solid var(--border-color);
             text-align: center;
             position: relative;
         }
 
-        /* TOP NAVIGATION BAR */
+        /* NAVIGACIJA */
         .top-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 32px;
-            padding-bottom: 18px;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
             border-bottom: 1px solid var(--border-color);
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
 
         .status-bar {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             background: var(--success-bg);
             border: 1px solid #bbf7d0;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.75rem;
             color: var(--success);
             font-weight: 600;
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             background-color: var(--success);
             border-radius: 50%;
-            box-shadow: 0 0 6px var(--success);
+            box-shadow: 0 0 5px var(--success);
         }
 
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .btn-nav-fiat {
             background-color: #ffffff;
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 8px 16px;
-            font-size: 0.83rem;
+            padding: 6px 12px;
+            font-size: 0.78rem;
             font-weight: 600;
-            border-radius: 8px;
+            border-radius: 7px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
@@ -119,10 +120,10 @@
             background: linear-gradient(135deg, var(--venetian-gold-light) 0%, var(--venetian-gold) 100%);
             border: 1px solid var(--venetian-gold-dark);
             color: #ffffff;
-            padding: 8px 16px;
-            font-size: 0.83rem;
+            padding: 6px 12px;
+            font-size: 0.78rem;
             font-weight: 600;
-            border-radius: 8px;
+            border-radius: 7px;
             cursor: pointer;
             transition: all 0.2s ease;
             text-shadow: 0 1px 2px rgba(0,0,0,0.15);
@@ -131,29 +132,28 @@
         .btn-nav-wallet:hover {
             background: linear-gradient(135deg, var(--venetian-gold) 0%, var(--venetian-gold-dark) 100%);
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(184, 123, 40, 0.3);
         }
 
-        /* BRAND HEADER */
+        /* HEADER */
         .brand-header {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 14px;
-            margin-bottom: 8px;
+            gap: 10px;
+            margin-bottom: 4px;
         }
 
         .logo-icon {
-            width: 50px;
-            height: 50px;
+            width: 38px;
+            height: 38px;
             flex-shrink: 0;
         }
 
         h1 {
-            font-size: 2.6rem;
+            font-size: 2.1rem;
             margin: 0;
             color: var(--venetian-gold);
-            letter-spacing: -0.9px;
+            letter-spacing: -0.8px;
             line-height: 1;
             font-weight: 800;
         }
@@ -163,35 +163,35 @@
         }
 
         p.subtitle {
-            font-size: 0.98rem;
+            font-size: 0.88rem;
             color: var(--text-muted);
-            margin-top: 10px;
-            margin-bottom: 25px;
-            line-height: 1.4;
+            margin-top: 6px;
+            margin-bottom: 20px;
+            line-height: 1.3;
             font-weight: 500;
         }
         
-        /* MAIN ACTION BUTTONS */
+        /* GLAVNI GUMBI (Kompaktnejša višina in razmerje) */
         .cta-main-container {
             display: flex;
             flex-direction: row;
-            gap: 18px;
+            gap: 14px;
             justify-content: center;
             align-items: stretch;
-            margin: 20px 0;
+            margin: 16px 0;
             flex-wrap: wrap;
         }
 
         .cta-card {
             flex: 1;
-            min-width: 260px;
+            min-width: 240px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-decoration: none;
-            padding: 22px 26px;
-            border-radius: 12px;
+            padding: 14px 20px;
+            border-radius: 10px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
         }
@@ -199,7 +199,7 @@
         .cta-pay-freight {
             background: linear-gradient(135deg, #e8b265 0%, #df9b41 50%, #c9852f 100%);
             color: #ffffff;
-            box-shadow: 0 4px 18px rgba(184, 123, 40, 0.35);
+            box-shadow: 0 4px 14px rgba(184, 123, 40, 0.28);
             border: 1px solid var(--venetian-gold-dark);
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
@@ -207,65 +207,63 @@
         .cta-pay-freight:hover {
             background: linear-gradient(135deg, #df9b41 0%, #c9852f 50%, #b87b28 100%);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(184, 123, 40, 0.45);
         }
 
         .cta-carrier-payout {
             background-color: var(--accent-blue);
             color: #ffffff;
-            box-shadow: 0 4px 16px rgba(2, 132, 199, 0.25);
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.22);
             border: 1px solid var(--accent-blue-hover);
         }
 
         .cta-carrier-payout:hover {
             background-color: var(--accent-blue-hover);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(2, 132, 199, 0.35);
         }
 
         .cta-title {
-            font-size: 1.1rem;
+            font-size: 0.98rem;
             font-weight: 700;
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             letter-spacing: -0.2px;
         }
 
         .cta-subtext {
-            font-size: 0.76rem;
+            font-size: 0.70rem;
             font-weight: 600;
-            opacity: 0.95;
+            opacity: 0.92;
             display: block;
             text-transform: uppercase;
-            letter-spacing: 0.6px;
+            letter-spacing: 0.5px;
         }
 
-        /* B2B / ENTERPRISE ADOPTION SECTION */
+        /* B2B SEKCIJA */
         .b2b-protocol-section {
             background: #faf6f0;
             border: 1px solid #ebdccb;
-            border-radius: 16px;
-            padding: 24px 20px;
-            margin: 30px 0 25px 0;
+            border-radius: 12px;
+            padding: 16px 16px;
+            margin: 20px 0;
             text-align: center;
         }
 
         .b2b-header {
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         .b2b-title {
-            font-size: 0.92rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: var(--venetian-gold-dark);
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.7px;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .b2b-desc {
-            font-size: 0.83rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
             margin: 0;
             font-weight: 500;
@@ -273,19 +271,19 @@
 
         .b2b-grid {
             display: flex;
-            gap: 14px;
+            gap: 10px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 16px;
+            margin-top: 10px;
         }
 
         .b2b-card {
             flex: 1;
-            min-width: 270px;
+            min-width: 220px;
             background: #ffffff;
             border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 16px 18px;
+            border-radius: 8px;
+            padding: 12px 14px;
             text-decoration: none;
             text-align: left;
             transition: all 0.2s ease;
@@ -296,96 +294,94 @@
 
         .b2b-card:hover {
             border-color: var(--venetian-gold);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(184, 123, 40, 0.12);
+            transform: translateY(-1px);
         }
 
         .b2b-card-title {
-            font-size: 0.92rem;
+            font-size: 0.84rem;
             font-weight: 700;
             color: var(--text-main);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
 
         .b2b-card-text {
-            font-size: 0.78rem;
+            font-size: 0.74rem;
             color: var(--text-muted);
-            line-height: 1.35;
+            line-height: 1.3;
             margin: 0;
         }
 
-        /* PAYMENT STRIP */
+        /* PLAČILA (Kompaktna prilagojena vrstica) */
         .payment-methods {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            margin: 20px 0 15px 0;
+            gap: 8px;
+            margin: 16px 0 10px 0;
         }
 
         .pay-tag {
-            font-size: 0.72rem;
+            font-size: 0.68rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             color: var(--text-muted);
             font-weight: 700;
         }
 
         .logos-container {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             background: #ffffff;
-            padding: 8px 14px;
-            border-radius: 40px;
+            padding: 5px 10px;
+            border-radius: 30px;
             border: 1px solid var(--border-color);
-            width: 100%;
             flex-wrap: wrap;
+            width: auto; /* Prepreči raztegovanje čez 100% */
         }
 
         .pay-badge {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.78rem;
+            gap: 5px;
+            font-size: 0.73rem;
             font-weight: 700;
             color: var(--text-main);
-            padding: 6px 12px;
-            border-radius: 20px;
+            padding: 4px 10px;
+            border-radius: 16px;
             background: #ffffff;
             border: 1px solid #e8e2d8;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
             transition: all 0.2s ease;
             cursor: pointer;
             white-space: nowrap;
         }
 
         .pay-badge:hover {
-            transform: translateY(-1px);
             border-color: var(--venetian-gold);
             color: var(--venetian-gold-dark);
         }
 
         .pay-icon {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             display: inline-block;
             vertical-align: middle;
         }
 
-        /* SECONDARY LINKS */
+        /* SPODNJE POVEZAVE */
         .secondary-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 8px;
             justify-content: center;
-            margin-top: 15px;
-            padding-top: 20px;
+            margin-top: 14px;
+            padding-top: 14px;
             border-top: 1px solid var(--border-color);
         }
 
@@ -394,10 +390,10 @@
             background-color: #ffffff;
             border: 1px solid var(--border-color);
             color: var(--text-muted);
-            padding: 8px 18px;
-            font-size: 0.85rem;
+            padding: 6px 14px;
+            font-size: 0.78rem;
             font-weight: 600;
-            border-radius: 8px;
+            border-radius: 6px;
             text-decoration: none;
             transition: all 0.2s;
         }
@@ -409,8 +405,8 @@
         }
 
         footer {
-            margin-top: 24px;
-            font-size: 0.8rem;
+            margin-top: 16px;
+            font-size: 0.75rem;
             color: var(--text-muted);
         }
     </style>
@@ -434,7 +430,7 @@
             </div>
         </div>
 
-        <!-- HEADER Z BENEŠKIM ZLATOM -->
+        <!-- HEADER -->
         <div class="brand-header">
             <svg class="logo-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="100" cy="100" r="85" stroke="#0284c7" stroke-width="8" fill="none"/>
@@ -530,7 +526,7 @@
 
                 <div class="pay-badge" title="EURC - Euro Stablecoin">
                     <svg class="pay-icon" viewBox="0 0 24 24" fill="#15803d"><circle cx="12" cy="12" r="9" fill="none" stroke="#15803d" stroke-width="2"/><text x="12" y="16" font-weight="bold" font-size="12" text-anchor="middle" fill="#15803d">€</text></svg>
-                    EURC (Euro)
+                    EURC
                 </div>
 
                 <div class="pay-badge" title="USDC - Digital Dollar">
@@ -538,7 +534,7 @@
                     USDC
                 </div>
 
-                <div class="pay-badge" title="Pay with Crypto (Solana / Web3 Wallet)" style="color: var(--solana-purple);">
+                <div class="pay-badge" title="Pay with Crypto" style="color: var(--solana-purple);">
                     <svg class="pay-icon" viewBox="0 0 24 24" fill="#9945FF"><path d="M4.5 17.5h13l2-3h-13zm0-5.5h13l2-3h-13zm2-5.5h13l-2 3h-13z"/></svg>
                     Pay with Crypto
                 </div>
@@ -559,106 +555,87 @@
 
     <!-- ESCROW MODAL DIALOG -->
     <div id="escrowModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-amber-200 animate-fade-in text-left">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-amber-200 text-left">
         
         <!-- Modal Header -->
-        <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-5 text-white flex justify-between items-center">
+        <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-4 px-6 text-white flex justify-between items-center">
           <div>
-            <h3 class="text-xl font-bold flex items-center gap-2">
+            <h3 class="text-lg font-bold flex items-center gap-2">
               🔒 Lock Escrow & Pay Freight
             </h3>
-            <p class="text-xs text-amber-100 mt-1">Create a secure smart escrow settlement for your freight order</p>
+            <p class="text-xs text-amber-100 mt-0.5">Create a secure smart escrow settlement for your freight order</p>
           </div>
           <button onclick="closeEscrowModal()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
         </div>
 
         <!-- TAB NAVIGATION -->
-        <div class="flex border-b border-gray-200 bg-gray-50 p-2 gap-2 text-sm font-semibold">
-          <button id="tab-pdf-btn" onclick="switchTab('pdf')" class="flex-1 py-2.5 px-3 rounded-xl border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-2">
+        <div class="flex border-b border-gray-200 bg-gray-50 p-2 gap-2 text-xs font-semibold">
+          <button id="tab-pdf-btn" onclick="switchTab('pdf')" class="flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5">
             📄 1. PDF Order
           </button>
-          <button id="tab-exchange-btn" onclick="switchTab('exchange')" class="flex-1 py-2.5 px-3 rounded-xl border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-2">
+          <button id="tab-exchange-btn" onclick="switchTab('exchange')" class="flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5">
             🔗 2. Freight Exchange / TMS
           </button>
-          <button id="tab-manual-btn" onclick="switchTab('manual')" class="flex-1 py-2.5 px-3 rounded-xl border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-2">
+          <button id="tab-manual-btn" onclick="switchTab('manual')" class="flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5">
             ✍️ 3. Manual Entry
           </button>
         </div>
 
-        <!-- MODAL BODY / CONTENT -->
-        <div class="p-6">
+        <!-- MODAL BODY -->
+        <div class="p-5">
           
           <!-- TAB 1: PDF ORDER PARSER -->
           <div id="tab-pdf" class="tab-content">
-            <div class="border-2 border-dashed border-amber-300 rounded-2xl p-8 text-center bg-amber-50/50 hover:bg-amber-50 transition cursor-pointer relative group">
+            <div class="border-2 border-dashed border-amber-300 rounded-xl p-6 text-center bg-amber-50/50 hover:bg-amber-50 transition cursor-pointer relative group">
               <input type="file" id="pdfFileInput" accept=".pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handlePdfUpload(this)">
-              <div class="text-4xl mb-2">📥</div>
-              <p class="font-bold text-gray-800">Drag & Drop Transport Order PDF here</p>
+              <div class="text-3xl mb-1">📥</div>
+              <p class="font-bold text-gray-800 text-sm">Drag & Drop Transport Order PDF here</p>
               <p class="text-xs text-gray-500 mt-1">or click to browse files (Supports e-CMR, Freight Orders, Waybills)</p>
-              
-              <!-- Hover Tooltip -->
-              <div class="absolute -top-10 left-1/2 -translate-x-1/2 hidden group-hover:block bg-gray-900 text-white text-xs py-1 px-3 rounded shadow-md whitespace-nowrap">
-                💡 System automatically parses amount, load ID, and carrier info.
-              </div>
             </div>
           </div>
 
-          <!-- TAB 2: FREIGHT EXCHANGE / TMS INTEGRATION -->
-          <div id="tab-exchange" class="tab-content hidden space-y-4">
+          <!-- TAB 2: FREIGHT EXCHANGE -->
+          <div id="tab-exchange" class="tab-content hidden space-y-3">
             <div>
-              <label class="block text-xs font-bold text-gray-700 mb-1 flex items-center gap-1">
-                Freight Exchange / TMS Platform Name
-                <span class="group relative cursor-pointer text-amber-600">ⓘ
-                  <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-900 text-white text-xs font-normal py-1 px-2 rounded w-52 text-center">
-                    Enter the exact name of the exchange or internal ERP/TMS platform.
-                  </span>
-                </span>
-              </label>
-              <input type="text" id="exchangeName" placeholder="Enter exchange name (e.g., TimoCom, Trans.eu, Teleroute, Custom TMS...)" class="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              <label class="block text-xs font-bold text-gray-700 mb-1">Freight Exchange / TMS Platform Name</label>
+              <input type="text" id="exchangeName" placeholder="e.g., TimoCom, Trans.eu, Teleroute, Custom TMS..." class="w-full border border-gray-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
 
             <div>
-              <label class="block text-xs font-bold text-gray-700 mb-1 flex items-center gap-1">
-                Cargo / Freight Offer ID
-                <span class="group relative cursor-pointer text-amber-600">ⓘ
-                  <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-900 text-white text-xs font-normal py-1 px-2 rounded w-48 text-center">
-                    Unique identifier for the shipment from the source platform.
-                  </span>
-                </span>
-              </label>
-              <input type="text" id="exchangeCargoId" placeholder="e.g., TC-889102" class="w-full border border-gray-300 rounded-xl p-3 text-sm focus:ring-2 focus:ring-amber-500 outline-none">
+              <label class="block text-xs font-bold text-gray-700 mb-1">Cargo / Freight Offer ID</label>
+              <input type="text" id="exchangeCargoId" placeholder="e.g., TC-889102" class="w-full border border-gray-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
             </div>
           </div>
 
-          <!-- TAB 3: MANUAL DATA ENTRY -->
+          <!-- TAB 3: MANUAL ENTRY -->
           <div id="tab-manual" class="tab-content hidden space-y-3">
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Order Ref / ID</label>
-                <input type="text" id="manualCargoId" placeholder="e.g., ORDER-2026-01" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm outline-none focus:ring-2 focus:ring-amber-500">
+                <input type="text" id="manualCargoId" placeholder="e.g., ORDER-2026-01" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
               </div>
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Freight Price (€ / USDC)</label>
-                <input type="number" id="manualAmount" placeholder="1250.00" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm outline-none focus:ring-2 focus:ring-amber-500">
+                <input type="number" id="manualAmount" placeholder="1250.00" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
               </div>
             </div>
             <div>
               <label class="block text-xs font-bold text-gray-700 mb-1">Carrier Email or Wallet Address</label>
-              <input type="text" id="manualCarrier" placeholder="carrier@transport.com or Solana Public Key" class="w-full border border-gray-300 rounded-xl p-2.5 text-sm outline-none focus:ring-2 focus:ring-amber-500">
+              <input type="text" id="manualCarrier" placeholder="carrier@transport.com or Solana Public Key" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
             </div>
           </div>
 
-          <!-- COMMON SETTLEMENT PAYMENT SELECTION -->
-          <div class="mt-6 pt-4 border-t border-gray-100">
+          <!-- PAYMENT SELECTION -->
+          <div class="mt-5 pt-3 border-t border-gray-100">
             <label class="block text-xs font-bold text-gray-700 mb-2">Select Settlement Payment Gateway:</label>
-            <div class="grid grid-cols-2 gap-3">
-              <label class="flex items-center gap-2 border rounded-xl p-3 cursor-pointer hover:bg-amber-50 border-amber-300">
+            <div class="grid grid-cols-2 gap-2">
+              <label class="flex items-center gap-2 border rounded-lg p-2.5 cursor-pointer hover:bg-amber-50 border-amber-300">
                 <input type="radio" name="paymentType" value="FIAT" checked class="text-amber-600 focus:ring-amber-500">
-                <span class="text-xs font-semibold">💳 Card / SEPA / Bank Transfer</span>
+                <span class="text-xs font-semibold">💳 Card / SEPA / Bank</span>
               </label>
-              <label class="flex items-center gap-2 border rounded-xl p-3 cursor-pointer hover:bg-amber-50 border-amber-300">
+              <label class="flex items-center gap-2 border rounded-lg p-2.5 cursor-pointer hover:bg-amber-50 border-amber-300">
                 <input type="radio" name="paymentType" value="CRYPTO" class="text-amber-600 focus:ring-amber-500">
-                <span class="text-xs font-semibold">🔑 Crypto / Web3 Wallet (USDC/EURC)</span>
+                <span class="text-xs font-semibold">🔑 Web3 Wallet (USDC/EURC)</span>
               </label>
             </div>
           </div>
@@ -666,9 +643,9 @@
         </div>
 
         <!-- MODAL FOOTER -->
-        <div class="bg-gray-50 p-4 px-6 flex justify-between items-center border-t border-gray-100">
+        <div class="bg-gray-50 p-3 px-5 flex justify-between items-center border-t border-gray-100">
           <button onclick="closeEscrowModal()" class="text-xs text-gray-500 hover:text-gray-800 font-semibold">Cancel</button>
-          <button onclick="submitEscrow()" class="bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-2.5 px-6 rounded-xl shadow-lg hover:from-amber-600 hover:to-amber-700 transition">
+          <button onclick="submitEscrow()" class="bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-2 px-5 rounded-lg text-xs shadow hover:from-amber-600 hover:to-amber-700 transition">
             Lock Escrow & Confirm ➔
           </button>
         </div>
@@ -678,57 +655,37 @@
 
     <!-- JAVASCRIPT LOGIKA -->
     <script>
-      /**
-       * Opens the Escrow Modal overlay
-       */
       function openEscrowModal() {
         document.getElementById('escrowModal').classList.remove('hidden');
       }
 
-      /**
-       * Closes the Escrow Modal overlay
-       */
       function closeEscrowModal() {
         document.getElementById('escrowModal').classList.add('hidden');
       }
 
-      /**
-       * Handles Tab navigation switching (PDF, Exchange, Manual)
-       * @param {string} tabName - Selected tab identifier ('pdf', 'exchange', 'manual')
-       */
       function switchTab(tabName) {
-        // Hide all tab content containers
         document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
         
-        // Reset tab button styling
         ['pdf', 'exchange', 'manual'].forEach(t => {
           const btn = document.getElementById(`tab-${t}-btn`);
           if (btn) {
-            btn.className = "flex-1 py-2.5 px-3 rounded-xl border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-2";
+            btn.className = "flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5";
           }
         });
 
-        // Display selected tab content and highlight active tab button
         document.getElementById(`tab-${tabName}`).classList.remove('hidden');
         const activeBtn = document.getElementById(`tab-${tabName}-btn`);
         if (activeBtn) {
-          activeBtn.className = "flex-1 py-2.5 px-3 rounded-xl border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-2";
+          activeBtn.className = "flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5";
         }
       }
 
-      /**
-       * Handles PDF File Upload
-       */
       function handlePdfUpload(input) {
         if (input.files && input.files[0]) {
-          const fileName = input.files[0].name;
-          console.log(`[OCR/AI Parser] Uploaded file: ${fileName}`);
+          console.log(`[OCR/AI Parser] Uploaded file: ${input.files[0].name}`);
         }
       }
 
-      /**
-       * Submits payload data to the Settlement Protocol Backend
-       */
       async function submitEscrow() {
         const activeTab = document.querySelector('.tab-content:not(.hidden)').id;
         const paymentMethod = document.querySelector('input[name="paymentType"]:checked').value;
