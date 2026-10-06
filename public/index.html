@@ -10,20 +10,15 @@
     LEGAL NOTICE & INTELLECTUAL PROPERTY:
     - Code & Smart Contract Architecture: Protected under PayFreight Open Infrastructure License v1.0.
     - Regulatory Compliance: ISO 20022 Financial Messaging & UN/CEFACT e-CMR Protocol Specifications.
-    - Trademarks: Visa, Mastercard, PayPal, SEPA, Solana, USDC, and EURC are registered 
-      trademarks of their respective owners. Their appearance does not imply endorsement.
     ================================================================================
     -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PayFreight Protocol – Settlement & e-CMR Escrow Engine</title>
     
-    <meta name="author" content="PayFreight Protocol Development Team">
-    <meta name="copyright" content="Copyright (c) 2026 PayFreight Protocol">
-    
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect width='24' height='24' rx='6' fill='%23DF9B41'/><path d='M7 12l3 3 7-7' stroke='%23ffffff' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
     
-    <!-- TAILWIND CSS CDN ZA INTERAKTIVNE MODALE -->
+    <!-- TAILWIND CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
@@ -31,7 +26,7 @@
             --bg-color: #f8f6f0;
             --card-bg: #ffffff;
             
-            /* BENEŠKO ZLATO */
+            /* VENETIAN GOLD & BLUE ACCENTS */
             --venetian-gold-light: #e8b265;
             --venetian-gold: #df9b41;
             --venetian-gold-dark: #b87b28;
@@ -68,7 +63,6 @@
             min-height: 100vh;
         }
 
-        /* ROBUSTNA IN OPTIMALNA ŠIRINA ZABOJNIKA (840px) */
         .container {
             max-width: 840px !important;
             width: 100% !important;
@@ -82,7 +76,6 @@
             overflow: hidden;
         }
 
-        /* NAVIGACIJA */
         .top-nav {
             display: flex;
             justify-content: space-between;
@@ -121,6 +114,23 @@
             gap: 8px;
         }
 
+        .btn-nav-info {
+            background-color: #fff8ee;
+            border: 1px solid var(--venetian-gold-light);
+            color: var(--venetian-gold-dark);
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-nav-info:hover {
+            background-color: #fcefdc;
+            border-color: var(--venetian-gold-dark);
+        }
+
         .btn-nav-fiat {
             background-color: #ffffff;
             border: 1px solid var(--border-color);
@@ -154,7 +164,6 @@
             background: linear-gradient(135deg, var(--venetian-gold) 0%, var(--venetian-gold-dark) 100%);
         }
 
-        /* HEADER */
         .brand-header {
             display: flex;
             align-items: center;
@@ -201,8 +210,7 @@
             margin-bottom: 16px;
             text-align: center;
         }
-        
-        /* GUMBI */
+
         .cta-main-container {
             display: flex;
             flex-direction: row;
@@ -267,7 +275,6 @@
             letter-spacing: 0.4px;
         }
 
-        /* B2B SEKCIJA */
         .b2b-protocol-section {
             background: #faf6f0;
             border: 1px solid #ebdccb;
@@ -328,7 +335,6 @@
             margin: 2px 0 0 0;
         }
 
-        /* PLAČILA */
         .payment-methods {
             display: flex;
             flex-direction: column;
@@ -371,7 +377,6 @@
             white-space: nowrap;
         }
 
-        /* SPODNJE POVEZAVE */
         .secondary-links {
             display: flex;
             flex-wrap: wrap;
@@ -417,6 +422,9 @@
             </div>
 
             <div class="nav-actions">
+                <button class="btn-nav-info" onclick="openHowItWorksModal()">
+                    ❓ How It Works?
+                </button>
                 <button class="btn-nav-fiat" onclick="showToast('Supported: Bank Transfer, VISA, Mastercard & SEPA Instant.')">
                     💳 Cards / Bank
                 </button>
@@ -514,6 +522,7 @@
 
         <!-- SECONDARY DOCUMENTATION LINKS -->
         <div class="secondary-links">
+            <a onclick="openHowItWorksModal()" class="cta-button-secondary cursor-pointer" style="color: var(--venetian-gold-dark); font-weight:700;">❓ How It Works Guide</a>
             <a href="technical.html" class="cta-button-secondary">Technical Docs</a>
             <a href="https://github.com/Dejc123/payfreight-escrow" class="cta-button-secondary" target="_blank">GitHub</a>
             <a href="https://t.me/+WyYEvCqDLSQ2MzI0" class="cta-button-secondary" target="_blank">Telegram</a>
@@ -524,7 +533,7 @@
         </footer>
     </div>
 
-    <!-- ESCROW MODAL DIALOG (RAZŠIRJEN NA 720px ZA PROSTORNOST) -->
+    <!-- ESCROW MODAL DIALOG -->
     <div id="escrowModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-amber-200 text-left">
         
@@ -565,7 +574,7 @@
             </div>
           </div>
 
-          <!-- TAB 2: FREIGHT EXCHANGE / NETWORK ID (NEVTRALNO & GENERIČNO) -->
+          <!-- TAB 2: FREIGHT EXCHANGE / NETWORK ID -->
           <div id="tab-exchange" class="tab-content hidden space-y-3">
             <div class="grid grid-cols-2 gap-3">
               <div>
@@ -599,7 +608,6 @@
 
           <!-- TAB 3: FULL MANUAL ENTRY -->
           <div id="tab-manual" class="tab-content hidden space-y-3">
-            <!-- Podjetje & Davčna -->
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Carrier Company Name *</label>
@@ -611,7 +619,6 @@
               </div>
             </div>
 
-            <!-- OBVEZNI BANČNI PODATKI ZA SEPA / BANK PAYOUT -->
             <div class="p-3 bg-amber-50/80 border border-amber-200 rounded-xl space-y-2.5">
               <span class="block text-xs font-extrabold text-amber-900 border-b border-amber-200/80 pb-1 flex items-center gap-1.5">
                 🏦 Carrier Payout Bank Details (MANDATORY FOR SETTLEMENT)
@@ -634,7 +641,6 @@
               </div>
             </div>
 
-            <!-- Lokacija & Kontakt -->
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Country & City *</label>
@@ -646,7 +652,6 @@
               </div>
             </div>
 
-            <!-- Order Ref & Cena -->
             <div class="grid grid-cols-2 gap-3 pt-1 border-t border-gray-100">
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Order Ref / ID *</label>
@@ -687,12 +692,115 @@
       </div>
     </div>
 
+    <!-- HOW IT WORKS MODAL (ENSTAVNA RAZLAGA Z VISUAL DIAGRAMOM) -->
+    <div id="howItWorksModal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full overflow-hidden border border-amber-200 text-left max-h-[90vh] flex flex-col">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 p-4 px-6 text-white flex justify-between items-center shrink-0">
+          <div>
+            <h3 class="text-xl font-extrabold flex items-center gap-2">
+              💡 How PayFreight Escrow Engine Works
+            </h3>
+            <p class="text-xs text-amber-100 mt-0.5">Simple, Bank-grade & Instant Settlement Logic for Logisticians</p>
+          </div>
+          <button onclick="closeHowItWorksModal()" class="text-white/80 hover:text-white text-3xl font-bold">&times;</button>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="p-6 space-y-6 overflow-y-auto">
+          
+          <!-- FLOWCHART DIAGRAM -->
+          <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-4 text-center">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-800 block mb-3">⚡ Money Flow Architecture (Simplified)</span>
+            
+            <svg class="w-full max-w-lg mx-auto" viewBox="0 0 600 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Shipper Box -->
+              <rect x="10" y="25" width="140" height="70" rx="10" fill="#ffffff" stroke="#df9b41" stroke-width="2"/>
+              <text x="80" y="52" font-size="12" font-weight="bold" fill="#27221d" text-anchor="middle">🏢 Shipper / Broker</text>
+              <text x="80" y="70" font-size="9" fill="#786f66" text-anchor="middle">Locks Fiat / Crypto</text>
+
+              <!-- Arrow 1 -->
+              <path d="M155 60 H215" stroke="#0284c7" stroke-width="3" marker-end="url(#arrow)"/>
+              <text x="185" y="52" font-size="9" font-weight="bold" fill="#0284c7" text-anchor="middle">1. Deposit</text>
+
+              <!-- Escrow Vault Box -->
+              <rect x="220" y="15" width="160" height="90" rx="12" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
+              <text x="300" y="45" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">🔒 PayFreight Escrow</text>
+              <text x="300" y="63" font-size="9" fill="#e0f2fe" text-anchor="middle">Virtual IBAN / Smart Vault</text>
+              <text x="300" y="80" font-size="8" font-weight="bold" fill="#fef08a" text-anchor="middle">FUNDS SECURED</text>
+
+              <!-- Arrow 2 -->
+              <path d="M385 60 H445" stroke="#15803d" stroke-width="3"/>
+              <text x="415" y="52" font-size="9" font-weight="bold" fill="#15803d" text-anchor="middle">2. e-CMR</text>
+
+              <!-- Carrier Box -->
+              <rect x="450" y="25" width="140" height="70" rx="10" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
+              <text x="520" y="52" font-size="12" font-weight="bold" fill="#27221d" text-anchor="middle">🚛 Transporter</text>
+              <text x="520" y="70" font-size="9" fill="#15803d" text-anchor="middle">Instant SEPA Payout</text>
+            </svg>
+          </div>
+
+          <!-- STEP 1 -->
+          <div class="flex gap-4 items-start">
+            <div class="w-8 h-8 rounded-full bg-amber-500 text-white font-extrabold text-sm flex items-center justify-center shrink-0">1</div>
+            <div>
+              <h4 class="text-sm font-bold text-gray-900">Shipper Deposit & Escrow Lock (Step 1)</h4>
+              <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+                When the Shipper clicks <strong>"Lock Escrow & Confirm"</strong>, the system generates a unique payment reference (Virtual IBAN / SEPA Instant / QR Code or Credit Card Checkout).
+              </p>
+              <div class="mt-2 text-[11px] bg-gray-50 border border-gray-200 rounded-lg p-2.5 font-mono text-gray-700">
+                <div>• <strong>Bank Transfer (TR/TRR):</strong> Virtual IBAN (e.g. <code>SI00-ESCROW-2026-98234</code>) receives funds.</div>
+                <div>• <strong>Status:</strong> Automatically updates from <code>Pending Payment</code> ➔ <code>Escrow Funds Locked 🔒</code>.</div>
+                <div>• <strong>Notification:</strong> Transporter receives instant proof that funds are safely held in escrow.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="flex gap-4 items-start">
+            <div class="w-8 h-8 rounded-full bg-sky-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">2</div>
+            <div>
+              <h4 class="text-sm font-bold text-gray-900">Freight Transport & Signed e-CMR Proof (Step 2)</h4>
+              <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+                The driver carries out the transport. Upon delivery, the recipient signs the <strong>e-CMR document</strong> (or a photo of the physical signed CMR is uploaded via the widget).
+              </p>
+            </div>
+          </div>
+
+          <!-- STEP 3 -->
+          <div class="flex gap-4 items-start">
+            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">3</div>
+            <div>
+              <h4 class="text-sm font-bold text-gray-900">Instant Automated Bank Payout (Step 3)</h4>
+              <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+                Our OCR & AI engine verifies the signed e-CMR. The backend automatically triggers a <strong>SEPA Instant Payout API</strong> transfer directly to the carrier's IBAN bank account.
+              </p>
+              <div class="mt-2 text-[11px] bg-emerald-50 border border-emerald-200 rounded-lg p-2.5 font-mono text-emerald-900">
+                ⚡ <strong>Result:</strong> Transporter gets paid in <strong>minutes</strong> after unloading—instead of waiting 30, 60, or 90 days!
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-50 p-4 px-6 border-t border-gray-200 flex justify-between items-center shrink-0">
+          <span class="text-xs text-gray-500 font-medium">PayFreight Engine: Web1 Bank Simplicity + Web3 Instant Security</span>
+          <button onclick="closeHowItWorksModal()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs py-2 px-5 rounded-xl transition">
+            Got It, Thanks!
+          </button>
+        </div>
+
+      </div>
+    </div>
+
     <!-- TOAST NOTIFICATION CONTAINER -->
     <div id="toastNotification" class="fixed bottom-5 right-5 bg-gray-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl z-50 opacity-0 transition-opacity duration-300 pointer-events-none flex items-center gap-2">
       <span id="toastMessage">Notification</span>
     </div>
 
-    <!-- JAVASCRIPT LOGIKA Z VALIDACIJO BANČNIH PODATKOV -->
+    <!-- JAVASCRIPT INTERACTION LOGIC -->
     <script>
       function showToast(msg) {
         const toast = document.getElementById('toastNotification');
@@ -710,6 +818,14 @@
 
       function closeEscrowModal() {
         document.getElementById('escrowModal').classList.add('hidden');
+      }
+
+      function openHowItWorksModal() {
+        document.getElementById('howItWorksModal').classList.remove('hidden');
+      }
+
+      function closeHowItWorksModal() {
+        document.getElementById('howItWorksModal').classList.add('hidden');
       }
 
       function switchTab(tabName) {
@@ -741,16 +857,16 @@
         const statusEl = document.getElementById('exchangeStatus');
 
         if (!carrierId) {
-          showToast("⚠️ Prosimo vnesite Carrier ID prevoznika.");
+          showToast("⚠️ Please enter Carrier ID.");
           return;
         }
 
         statusEl.classList.remove('hidden');
-        statusEl.innerText = `Povezovanje z ${platform} API za pridobivanje podatkov prevoznika (ID: ${carrierId})...`;
+        statusEl.innerText = `Connecting to ${platform} API to fetch carrier info (ID: ${carrierId})...`;
 
         setTimeout(() => {
-          statusEl.innerText = `✅ Prevoznik preverjen: TransLogistics Ltd | IBAN: SI56 0110 *** *** 567 | SWIFT: LJBASI2X | Banka: NLB d.d.`;
-          showToast("Podatki prevoznika in banke (IBAN/SWIFT) so bili uspešno pridobljeni!");
+          statusEl.innerText = `✅ Carrier Verified: TransLogistics Ltd | IBAN: SI56 0110 *** *** 567 | SWIFT: LJBASI2X | Bank: NLB d.d.`;
+          showToast("Carrier profile & banking details (IBAN/SWIFT) successfully fetched!");
         }, 1200);
       }
 
@@ -772,7 +888,7 @@
           const companyName = document.getElementById('manualCarrierName').value.trim();
 
           if (!iban || !swift || !bankName || !companyName) {
-            showToast("⚠️ Napaka: IBAN, SWIFT, Ime banke in Ime podjetja prevoznika so obvezni!");
+            showToast("⚠️ Error: Carrier IBAN, SWIFT, Bank Name and Company Name are required!");
             return;
           }
 
@@ -814,11 +930,11 @@
           const result = await response.json();
           console.log("[Escrow Created Successfully]:", result);
           closeEscrowModal();
-          showToast('Escrow uspešno ustvarjen z IBAN & SWIFT podatki!');
+          showToast('Escrow created successfully with IBAN & SWIFT data!');
         } catch (err) {
           console.error("[Backend Settlement API Error]:", err);
           closeEscrowModal();
-          showToast('Escrow uspešno iniciiran z bančnimi podatki prevoznika!');
+          showToast('Escrow lock initiated with carrier bank details!');
         }
       }
     </script>
