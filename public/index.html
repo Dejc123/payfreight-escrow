@@ -38,7 +38,6 @@
             --border-color: #e8e2d8;
             --success: #15803d;
             --success-bg: #f0fdf4;
-            --solana-purple: #9945FF;
         }
 
         *, *::before, *::after {
@@ -190,29 +189,33 @@
         .brand-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            justify-content: flex-start;
+            gap: 14px;
             margin-bottom: 4px;
+            text-align: left;
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
+            width: 52px;
+            height: 52px;
             flex-shrink: 0;
         }
 
-        /* PayFreight font velikost nastavljena na manjšo vrednost (med prejšnjo majhno in preveliko) */
+        /* PayFreight - odebeljeno, v barvah logotipa in 2 fonta večje (2.6rem) */
         h1 {
-            font-size: 2.1rem;
+            font-size: 2.6rem;
             margin: 0;
-            color: var(--venetian-gold);
+            background: linear-gradient(135deg, #0284c7 0%, #df9b41 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             letter-spacing: -0.5px;
-            line-height: 1;
+            line-height: 1.1;
             font-weight: 800;
         }
 
         h1 span {
-            color: var(--accent-blue);
+            color: var(--venetian-gold);
+            -webkit-text-fill-color: var(--venetian-gold);
         }
 
         p.subtitle {
@@ -222,6 +225,7 @@
             margin-bottom: 14px;
             line-height: 1.3;
             font-weight: 500;
+            text-align: left;
         }
 
         .copyright-banner {
@@ -461,36 +465,44 @@
             </div>
         </div>
 
-        <!-- HEADER (ZAMENJAN LOGOTIP IN MANJŠI PAYFREIGHT NASLOV) -->
+        <!-- HEADER (Z IZBRANIM LOGOTIPOM IN PAYFREIGHT LEVO, ODEBELJENO, VEČJE IN V BARVAH LOGOTIPA) -->
         <div class="brand-header">
             <svg class="logo-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="100" cy="100" r="85" stroke="#0284c7" stroke-width="8" fill="none"/>
+                <!-- Zunanji krog z zvezdicami in pika-pika vzorcem -->
+                <circle cx="100" cy="100" r="90" stroke="#0f172a" stroke-width="10" fill="#ffffff"/>
+                <circle cx="100" cy="100" r="76" stroke="#0284c7" stroke-width="2" stroke-dasharray="4 6" fill="none"/>
                 
-                <g fill="#df9b41">
-                    <polygon points="100,28 102.5,35 110,35 104,39 106,46 100,42 94,46 96,39 90,35 97.5,35"/>
-                    <polygon points="121,32 123,38 130,38 124,42 126,49 121,45 116,49 118,42 112,38 119,38"/>
-                    <polygon points="79,32 81,38 88,38 82,42 84,49 79,45 74,49 76,42 70,38 77,38"/>
+                <!-- Zvezdice zgoraj in spodaj -->
+                <g fill="#0f172a">
+                    <polygon points="100,18 102.5,25 110,25 104,29 106,36 100,32 94,36 96,29 90,25 97.5,25"/>
+                    <polygon points="70,22 72,28 79,28 73,32 75,39 70,35 65,39 67,32 61,28 68,28"/>
+                    <polygon points="130,22 132,28 139,28 133,32 135,39 130,35 125,39 127,32 121,28 128,28"/>
+                    <polygon points="48,38 50,44 57,44 51,48 53,55 48,51 43,55 45,48 39,44 46,44"/>
+                    <polygon points="152,38 154,44 161,44 155,48 157,55 152,51 147,55 149,48 143,44 150,44"/>
+
+                    <polygon points="100,182 102.5,175 110,175 104,171 106,164 100,168 94,164 96,171 90,175 97.5,175"/>
+                    <polygon points="70,178 72,172 79,172 73,168 75,161 70,165 65,161 67,168 61,172 68,172"/>
+                    <polygon points="130,178 132,172 139,172 133,168 135,161 130,165 125,161 127,168 121,172 128,172"/>
+                    <polygon points="48,162 50,156 57,156 51,152 53,145 48,149 43,145 45,152 39,156 46,156"/>
+                    <polygon points="152,162 154,156 161,156 155,152 157,145 152,149 147,145 149,152 143,156 150,156"/>
                 </g>
 
-                <g fill="#df9b41">
-                    <polygon points="100,165 102.5,158 110,158 104,154 106,147 100,151 94,147 96,154 90,158 97.5,158"/>
-                    <polygon points="121,161 123,154 130,154 124,150 126,143 121,147 116,143 118,150 112,154 119,154"/>
-                    <polygon points="79,161 81,154 88,154 82,150 84,143 79,147 74,143 76,150 70,154 77,154"/>
-                </g>
+                <!-- Tovornjak in ščit -->
+                <path d="M35 107 H60 M40 117 H65 M30 127 H55" stroke="#0284c7" stroke-width="5" stroke-linecap="round"/>
+                <path d="M60 78 H125 V125 H60 Z" fill="#0284c7"/>
+                <path d="M125 85 H145 L165 105 V125 H125 Z" fill="#0ea5e9"/>
+                <path d="M132 92 H142 L155 105 H132 Z" fill="#ffffff"/>
 
-                <path d="M30 87 H65 M26 97 H60 M35 107 H65 M26 117 H55" stroke="#0284c7" stroke-width="5" stroke-linecap="round"/>
+                <!-- Ščit na tovornjaku -->
+                <path d="M92 72 L112 79 V105 C112 115 102 122 92 126 C82 122 72 115 72 105 V79 L92 72 Z" fill="#0ea5e9"/>
+                <path d="M92 75 L108 81 V104 C108 112 100 118 92 122 V75 Z" fill="#0284c7"/>
+                <path d="M84 98 L90 104 L102 90" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
 
-                <path d="M60 80 H115 V125 H60 Z" fill="#0284c7"/>
-                <path d="M115 85 H138 L158 102 V125 H115 Z" fill="#df9b41"/>
-                <path d="M125 92 H136 L148 103 H125 Z" fill="#ffffff"/>
-
-                <circle cx="65" cy="125" r="12" fill="#df9b41"/>
-                <circle cx="65" cy="125" r="6" fill="#ffffff"/>
-                
-                <circle cx="140" cy="125" r="12" fill="#df9b41"/>
-                <circle cx="140" cy="125" r="6" fill="#ffffff"/>
-
-                <path d="M65 125 Q100 132 140 125" stroke="#0284c7" stroke-width="4" fill="none"/>
+                <!-- Kolesa -->
+                <circle cx="75" cy="126" r="11" fill="#0f172a"/>
+                <circle cx="75" cy="126" r="5" fill="#ffffff"/>
+                <circle cx="145" cy="126" r="11" fill="#0f172a"/>
+                <circle cx="145" cy="126" r="5" fill="#ffffff"/>
             </svg>
 
             <h1>Pay<span>Freight</span></h1>
