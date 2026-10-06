@@ -38,7 +38,6 @@
             --border-color: #e8e2d8;
             --success: #15803d;
             --success-bg: #f0fdf4;
-            --solana-purple: #9945FF;
         }
 
         *, *::before, *::after {
@@ -67,12 +66,12 @@
             max-width: 840px !important;
             width: 100% !important;
             margin: 0 auto !important;
-            padding: 28px 32px;
+            padding: 32px 36px;
             background: var(--card-bg);
             border-radius: 20px;
             box-shadow: 0 12px 30px -5px rgba(184, 123, 40, 0.1), 0 0 1px 1px rgba(223, 155, 65, 0.12);
             border: 1px solid var(--border-color);
-            text-align: center;
+            text-align: left;
             overflow: hidden;
         }
 
@@ -80,8 +79,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 18px;
-            padding-bottom: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 14px;
             border-bottom: 1px solid var(--border-color);
             flex-wrap: wrap;
             gap: 10px;
@@ -187,25 +186,33 @@
             background: linear-gradient(135deg, var(--venetian-gold) 0%, var(--venetian-gold-dark) 100%);
         }
 
+        /* BRAND HEADER - LEVO ZGORNJA STRAN, KREDIBILNO IN UDELEŽENO */
+        .brand-header-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
         .brand-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 4px;
+            justify-content: flex-start;
+            gap: 14px;
+            margin-bottom: 6px;
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
+            width: 52px;
+            height: 52px;
             flex-shrink: 0;
         }
 
         h1 {
-            font-size: 2.1rem;
+            font-size: 2.6rem;
             margin: 0;
             color: var(--venetian-gold);
-            letter-spacing: -0.5px;
+            letter-spacing: -0.8px;
             line-height: 1;
             font-weight: 800;
         }
@@ -215,32 +222,32 @@
         }
 
         p.subtitle {
-            font-size: 0.88rem;
+            font-size: 1.05rem;
             color: var(--text-muted);
-            margin-top: 6px;
-            margin-bottom: 14px;
-            line-height: 1.3;
-            font-weight: 500;
+            margin-top: 4px;
+            margin-bottom: 16px;
+            line-height: 1.4;
+            font-weight: 600;
         }
 
         .copyright-banner {
-            font-size: 0.68rem;
+            font-size: 0.72rem;
             color: var(--text-muted);
             background: #f4efe6;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 6px 10px;
-            margin-bottom: 16px;
-            text-align: center;
+            padding: 8px 12px;
+            margin-bottom: 20px;
+            text-align: left;
         }
 
         .cta-main-container {
             display: flex;
             flex-direction: row;
-            gap: 12px;
+            gap: 14px;
             justify-content: center;
             align-items: stretch;
-            margin: 16px 0;
+            margin: 20px 0;
             flex-wrap: wrap;
         }
 
@@ -252,10 +259,11 @@
             justify-content: center;
             align-items: center;
             text-decoration: none;
-            padding: 14px 18px;
+            padding: 16px 20px;
             border-radius: 12px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
+            text-align: center;
         }
 
         .cta-pay-freight {
@@ -283,14 +291,14 @@
         }
 
         .cta-title {
-            font-size: 0.95rem;
+            font-size: 1.02rem;
             font-weight: 700;
             display: block;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
 
         .cta-subtext {
-            font-size: 0.68rem;
+            font-size: 0.72rem;
             font-weight: 600;
             opacity: 0.92;
             display: block;
@@ -302,13 +310,13 @@
             background: #faf6f0;
             border: 1px solid #ebdccb;
             border-radius: 12px;
-            padding: 14px 18px;
-            margin: 16px 0;
-            text-align: center;
+            padding: 16px 20px;
+            margin: 20px 0;
+            text-align: left;
         }
 
         .b2b-title {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-weight: 700;
             color: var(--venetian-gold-dark);
             text-transform: uppercase;
@@ -317,14 +325,14 @@
         }
 
         .b2b-desc {
-            font-size: 0.74rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
-            margin: 3px 0 10px 0;
+            margin: 4px 0 12px 0;
         }
 
         .b2b-grid {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
         }
@@ -335,7 +343,7 @@
             background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 10px 12px;
+            padding: 12px 14px;
             text-decoration: none;
             text-align: left;
             transition: all 0.2s ease;
@@ -346,28 +354,28 @@
         }
 
         .b2b-card-title {
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: var(--text-main);
         }
 
         .b2b-card-text {
-            font-size: 0.7rem;
+            font-size: 0.72rem;
             color: var(--text-muted);
             line-height: 1.3;
-            margin: 2px 0 0 0;
+            margin: 3px 0 0 0;
         }
 
         .payment-methods {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             gap: 6px;
-            margin: 14px 0 8px 0;
+            margin: 18px 0 10px 0;
         }
 
         .pay-tag {
-            font-size: 0.66rem;
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.6px;
             color: var(--text-muted);
@@ -377,23 +385,24 @@
         .logos-container {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             gap: 6px;
             background: #ffffff;
-            padding: 5px 12px;
+            padding: 6px 12px;
             border-radius: 20px;
             border: 1px solid var(--border-color);
             flex-wrap: wrap;
+            width: 100%;
         }
 
         .pay-badge {
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            font-size: 0.72rem;
+            font-size: 0.74rem;
             font-weight: 700;
             color: var(--text-main);
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 12px;
             background: #ffffff;
             cursor: pointer;
@@ -404,9 +413,9 @@
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            justify-content: center;
-            margin-top: 12px;
-            padding-top: 12px;
+            justify-content: flex-start;
+            margin-top: 16px;
+            padding-top: 14px;
             border-top: 1px solid var(--border-color);
         }
 
@@ -415,8 +424,8 @@
             background-color: #ffffff;
             border: 1px solid var(--border-color);
             color: var(--text-muted);
-            padding: 5px 12px;
-            font-size: 0.72rem;
+            padding: 6px 12px;
+            font-size: 0.74rem;
             font-weight: 600;
             border-radius: 6px;
             text-decoration: none;
@@ -429,9 +438,10 @@
         }
 
         footer {
-            margin-top: 12px;
-            font-size: 0.68rem;
+            margin-top: 16px;
+            font-size: 0.7rem;
             color: var(--text-muted);
+            text-align: left;
         }
     </style>
 </head>
@@ -460,42 +470,44 @@
             </div>
         </div>
 
-        <!-- HEADER -->
-        <div class="brand-header">
-            <svg class="logo-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="100" cy="100" r="85" stroke="#0284c7" stroke-width="8" fill="none"/>
-                
-                <g fill="#df9b41">
-                    <polygon points="100,28 102.5,35 110,35 104,39 106,46 100,42 94,46 96,39 90,35 97.5,35"/>
-                    <polygon points="121,32 123,38 130,38 124,42 126,49 121,45 116,49 118,42 112,38 119,38"/>
-                    <polygon points="79,32 81,38 88,38 82,42 84,49 79,45 74,49 76,42 70,38 77,38"/>
-                </g>
+        <!-- BRAND HEADER - LEVO ZGORAJ, VSEBINA MOČNA IN KREDIBILNA -->
+        <div class="brand-header-container">
+            <div class="brand-header">
+                <svg class="logo-icon" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="100" r="85" stroke="#0284c7" stroke-width="8" fill="none"/>
+                    
+                    <g fill="#df9b41">
+                        <polygon points="100,28 102.5,35 110,35 104,39 106,46 100,42 94,46 96,39 90,35 97.5,35"/>
+                        <polygon points="121,32 123,38 130,38 124,42 126,49 121,45 116,49 118,42 112,38 119,38"/>
+                        <polygon points="79,32 81,38 88,38 82,42 84,49 79,45 74,49 76,42 70,38 77,38"/>
+                    </g>
 
-                <g fill="#df9b41">
-                    <polygon points="100,165 102.5,158 110,158 104,154 106,147 100,151 94,147 96,154 90,158 97.5,158"/>
-                    <polygon points="121,161 123,154 130,154 124,150 126,143 121,147 116,143 118,150 112,154 119,154"/>
-                    <polygon points="79,161 81,154 88,154 82,150 84,143 79,147 74,143 76,150 70,154 77,154"/>
-                </g>
+                    <g fill="#df9b41">
+                        <polygon points="100,165 102.5,158 110,158 104,154 106,147 100,151 94,147 96,154 90,158 97.5,158"/>
+                        <polygon points="121,161 123,154 130,154 124,150 126,143 121,147 116,143 118,150 112,154 119,154"/>
+                        <polygon points="79,161 81,154 88,154 82,150 84,143 79,147 74,143 76,150 70,154 77,154"/>
+                    </g>
 
-                <path d="M30 87 H65 M26 97 H60 M35 107 H65 M26 117 H55" stroke="#0284c7" stroke-width="5" stroke-linecap="round"/>
+                    <path d="M30 87 H65 M26 97 H60 M35 107 H65 M26 117 H55" stroke="#0284c7" stroke-width="5" stroke-linecap="round"/>
 
-                <path d="M60 80 H115 V125 H60 Z" fill="#0284c7"/>
-                <path d="M115 85 H138 L158 102 V125 H115 Z" fill="#df9b41"/>
-                <path d="M125 92 H136 L148 103 H125 Z" fill="#ffffff"/>
+                    <path d="M60 80 H115 V125 H60 Z" fill="#0284c7"/>
+                    <path d="M115 85 H138 L158 102 V125 H115 Z" fill="#df9b41"/>
+                    <path d="M125 92 H136 L148 103 H125 Z" fill="#ffffff"/>
 
-                <circle cx="65" cy="125" r="12" fill="#df9b41"/>
-                <circle cx="65" cy="125" r="6" fill="#ffffff"/>
-                
-                <circle cx="140" cy="125" r="12" fill="#df9b41"/>
-                <circle cx="140" cy="125" r="6" fill="#ffffff"/>
+                    <circle cx="65" cy="125" r="12" fill="#df9b41"/>
+                    <circle cx="65" cy="125" r="6" fill="#ffffff"/>
+                    
+                    <circle cx="140" cy="125" r="12" fill="#df9b41"/>
+                    <circle cx="140" cy="125" r="6" fill="#ffffff"/>
 
-                <path d="M65 125 Q100 132 140 125" stroke="#0284c7" stroke-width="4" fill="none"/>
-            </svg>
+                    <path d="M65 125 Q100 132 140 125" stroke="#0284c7" stroke-width="4" fill="none"/>
+                </svg>
 
-            <h1>Pay<span>Freight</span></h1>
+                <h1>Pay<span>Freight</span></h1>
+            </div>
+
+            <p class="subtitle">Automated Global Freight Settlement Engine • USD ($) & EUR (€) Institutional Escrow</p>
         </div>
-
-        <p class="subtitle">Automated Global Freight Settlement Engine • USD ($) & EUR (€) Institutional Escrow</p>
         
         <div class="copyright-banner">
             🔒 Protected by PayFreight Infrastructure License • ISO 20022, US ACH/FedNow & UN/CEFACT e-CMR Standards
@@ -804,11 +816,11 @@
       </div>
     </div>
 
-    <!-- PRENOVLJENO MODALNO OKNO: FUND SAFETY & ESCROW (POPOLNA PODPORA ZA USD BANČNA NAKAZILA) -->
+    <!-- MODALNO OKNO: FUND SAFETY & ESCROW -->
     <div id="fundSafetyModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full overflow-hidden border-2 border-emerald-500 text-left max-h-[92vh] flex flex-col">
         
-        <!-- Institution Grade Header -->
+        <!-- Header -->
         <div class="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 p-5 px-6 text-white flex justify-between items-center shrink-0 shadow-md">
           <div>
             <div class="inline-flex items-center gap-2 bg-emerald-950/60 text-emerald-300 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/30 mb-1">
@@ -825,7 +837,6 @@
         <!-- Scrollable Content -->
         <div class="p-6 space-y-4 overflow-y-auto bg-slate-50/50">
           
-          <!-- KLJUČNI POUDARIK: STABILNOST VREDNOSTI IN DVOJNA PRETVORBA (USD / EUR BANČNA KARTICA) -->
           <div class="bg-amber-50 border-2 border-amber-400 rounded-xl p-4 shadow-sm relative overflow-hidden">
             <div class="absolute -right-6 -bottom-6 opacity-10 text-amber-900 font-black text-8xl pointer-events-none">USD/EUR</div>
             <div class="flex items-start gap-3">
@@ -844,10 +855,7 @@
             </div>
           </div>
 
-          <!-- 4 GLAVNE TOČKE POPRAVLJENE Z EKSPLICITNO PODPORO ZA USD BANČNA NAKAZILA -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-            
-            <!-- TOČKA 1 -->
             <div class="p-3.5 rounded-xl border border-emerald-200 bg-white shadow-sm space-y-1">
               <div class="flex items-center gap-2 text-emerald-800 font-extrabold text-xs">
                 <span class="bg-emerald-100 text-emerald-800 p-1 rounded">🔒</span>
@@ -858,7 +866,6 @@
               </p>
             </div>
 
-            <!-- TOČKA 2 -->
             <div class="p-3.5 rounded-xl border border-emerald-200 bg-white shadow-sm space-y-1">
               <div class="flex items-center gap-2 text-emerald-800 font-extrabold text-xs">
                 <span class="bg-emerald-100 text-emerald-800 p-1 rounded">📄</span>
@@ -869,7 +876,6 @@
               </p>
             </div>
 
-            <!-- TOČKA 3 -->
             <div class="p-3.5 rounded-xl border border-emerald-200 bg-white shadow-sm space-y-1">
               <div class="flex items-center gap-2 text-emerald-800 font-extrabold text-xs">
                 <span class="bg-emerald-100 text-emerald-800 p-1 rounded">🏦</span>
@@ -880,7 +886,6 @@
               </p>
             </div>
 
-            <!-- TOČKA 4 -->
             <div class="p-3.5 rounded-xl border border-emerald-200 bg-white shadow-sm space-y-1">
               <div class="flex items-center gap-2 text-emerald-800 font-extrabold text-xs">
                 <span class="bg-emerald-100 text-emerald-800 p-1 rounded">⚖️</span>
@@ -890,10 +895,8 @@
                 Operates through licensed, <strong class="text-gray-900">US & EU regulated banking partners</strong> adhering strictly to ISO 20022 financial standards, US banking rules (ABA/ACH), and UN/CEFACT e-CMR protocols.
               </p>
             </div>
-
           </div>
 
-          <!-- PROZORNOST BANČNEGA AUDITA -->
           <div class="bg-slate-100 rounded-xl p-3 border border-slate-200 text-center">
             <span class="text-[11px] font-bold text-slate-700 block">
               🔎 Real-time Auditable & Immutable Ledger
@@ -905,7 +908,6 @@
 
         </div>
 
-        <!-- Modal Footer -->
         <div class="bg-gray-100 p-3 px-6 flex justify-between items-center border-t border-gray-200 shrink-0">
           <span class="text-[11px] font-semibold text-emerald-800">
             ✅ Certified Safe for US & Global Transporters, Brokers & Shippers
@@ -949,10 +951,8 @@
       }
 
       function switchTab(tabName) {
-        // Hide all tabs
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
         
-        // Reset button styles
         const btnPdf = document.getElementById('tab-pdf-btn');
         const btnEx = document.getElementById('tab-exchange-btn');
         const btnMan = document.getElementById('tab-manual-btn');
@@ -961,7 +961,6 @@
           btn.className = "flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5";
         });
 
-        // Show selected tab & highlight button
         if (tabName === 'pdf') {
           document.getElementById('tab-pdf').classList.remove('hidden');
           btnPdf.className = "flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5 font-bold";
