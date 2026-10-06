@@ -60,7 +60,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             color: var(--text-main);
-            padding: 20px 12px;
+            padding: 30px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -68,15 +68,15 @@
             min-height: 100vh;
         }
 
-        /* STRUKTURNO ZOŽANA IN OMEJENA ŠIRINA ZABOJNIKA */
+        /* ROBUSTNA IN OPTIMALNA ŠIRINA ZABOJNIKA (840px) */
         .container {
-            max-width: 580px !important;
+            max-width: 840px !important;
             width: 100% !important;
             margin: 0 auto !important;
-            padding: 20px 22px;
+            padding: 28px 32px;
             background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(184, 123, 40, 0.08), 0 0 1px 1px rgba(223, 155, 65, 0.08);
+            border-radius: 20px;
+            box-shadow: 0 12px 30px -5px rgba(184, 123, 40, 0.1), 0 0 1px 1px rgba(223, 155, 65, 0.12);
             border: 1px solid var(--border-color);
             text-align: center;
             overflow: hidden;
@@ -87,11 +87,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
-            padding-bottom: 10px;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
             border-bottom: 1px solid var(--border-color);
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
         }
 
         .status-bar {
@@ -100,16 +100,16 @@
             gap: 6px;
             background: var(--success-bg);
             border: 1px solid #bbf7d0;
-            padding: 4px 10px;
+            padding: 5px 12px;
             border-radius: 16px;
-            font-size: 0.68rem;
+            font-size: 0.72rem;
             color: var(--success);
             font-weight: 600;
         }
 
         .status-dot {
-            width: 6px;
-            height: 6px;
+            width: 7px;
+            height: 7px;
             background-color: var(--success);
             border-radius: 50%;
             box-shadow: 0 0 4px var(--success);
@@ -118,17 +118,17 @@
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .btn-nav-fiat {
             background-color: #ffffff;
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 4px 8px;
-            font-size: 0.72rem;
+            padding: 6px 12px;
+            font-size: 0.75rem;
             font-weight: 600;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
@@ -142,10 +142,10 @@
             background: linear-gradient(135deg, var(--venetian-gold-light) 0%, var(--venetian-gold) 100%);
             border: 1px solid var(--venetian-gold-dark);
             color: #ffffff;
-            padding: 4px 8px;
-            font-size: 0.72rem;
+            padding: 6px 12px;
+            font-size: 0.75rem;
             font-weight: 600;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
@@ -159,18 +159,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            margin-bottom: 2px;
+            gap: 10px;
+            margin-bottom: 4px;
         }
 
         .logo-icon {
-            width: 30px;
-            height: 30px;
+            width: 36px;
+            height: 36px;
             flex-shrink: 0;
         }
 
         h1 {
-            font-size: 1.7rem;
+            font-size: 2.1rem;
             margin: 0;
             color: var(--venetian-gold);
             letter-spacing: -0.5px;
@@ -183,22 +183,22 @@
         }
 
         p.subtitle {
-            font-size: 0.78rem;
+            font-size: 0.88rem;
             color: var(--text-muted);
-            margin-top: 4px;
-            margin-bottom: 12px;
+            margin-top: 6px;
+            margin-bottom: 14px;
             line-height: 1.3;
             font-weight: 500;
         }
 
         .copyright-banner {
-            font-size: 0.63rem;
+            font-size: 0.68rem;
             color: var(--text-muted);
             background: #f4efe6;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 4px 6px;
-            margin-bottom: 12px;
+            border-radius: 8px;
+            padding: 6px 10px;
+            margin-bottom: 16px;
             text-align: center;
         }
         
@@ -206,24 +206,24 @@
         .cta-main-container {
             display: flex;
             flex-direction: row;
-            gap: 8px;
+            gap: 12px;
             justify-content: center;
             align-items: stretch;
-            margin: 10px 0;
+            margin: 16px 0;
             flex-wrap: wrap;
         }
 
         .cta-card {
             flex: 1;
-            min-width: 200px;
+            min-width: 260px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-decoration: none;
-            padding: 10px 12px;
-            border-radius: 8px;
-            transition: transform 0.2s ease;
+            padding: 14px 18px;
+            border-radius: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
         }
 
@@ -231,92 +231,101 @@
             background: linear-gradient(135deg, #e8b265 0%, #df9b41 50%, #c9852f 100%);
             color: #ffffff;
             border: 1px solid var(--venetian-gold-dark);
+            box-shadow: 0 4px 12px rgba(223, 155, 65, 0.2);
         }
 
         .cta-pay-freight:hover {
             transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(223, 155, 65, 0.3);
         }
 
         .cta-carrier-payout {
             background-color: var(--accent-blue);
             color: #ffffff;
             border: 1px solid var(--accent-blue-hover);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
         }
 
         .cta-carrier-payout:hover {
             transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3);
         }
 
         .cta-title {
-            font-size: 0.82rem;
+            font-size: 0.95rem;
             font-weight: 700;
             display: block;
-            margin-bottom: 2px;
+            margin-bottom: 3px;
         }
 
         .cta-subtext {
-            font-size: 0.62rem;
+            font-size: 0.68rem;
             font-weight: 600;
             opacity: 0.92;
             display: block;
             text-transform: uppercase;
+            letter-spacing: 0.4px;
         }
 
         /* B2B SEKCIJA */
         .b2b-protocol-section {
             background: #faf6f0;
             border: 1px solid #ebdccb;
-            border-radius: 8px;
-            padding: 10px;
-            margin: 12px 0;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin: 16px 0;
             text-align: center;
         }
 
         .b2b-title {
-            font-size: 0.74rem;
+            font-size: 0.8rem;
             font-weight: 700;
             color: var(--venetian-gold-dark);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.6px;
             display: block;
         }
 
         .b2b-desc {
-            font-size: 0.68rem;
+            font-size: 0.74rem;
             color: var(--text-muted);
-            margin: 2px 0 6px 0;
+            margin: 3px 0 10px 0;
         }
 
         .b2b-grid {
             display: flex;
-            gap: 6px;
+            gap: 10px;
             justify-content: center;
             flex-wrap: wrap;
         }
 
         .b2b-card {
             flex: 1;
-            min-width: 180px;
+            min-width: 220px;
             background: #ffffff;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 6px 8px;
+            border-radius: 8px;
+            padding: 10px 12px;
             text-decoration: none;
             text-align: left;
             transition: all 0.2s ease;
         }
 
+        .b2b-card:hover {
+            border-color: var(--venetian-gold);
+        }
+
         .b2b-card-title {
-            font-size: 0.74rem;
+            font-size: 0.78rem;
             font-weight: 700;
             color: var(--text-main);
         }
 
         .b2b-card-text {
-            font-size: 0.66rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
-            line-height: 1.2;
-            margin: 0;
+            line-height: 1.3;
+            margin: 2px 0 0 0;
         }
 
         /* PLAČILA */
@@ -324,12 +333,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            margin: 10px 0 6px 0;
+            gap: 6px;
+            margin: 14px 0 8px 0;
         }
 
         .pay-tag {
-            font-size: 0.62rem;
+            font-size: 0.66rem;
             text-transform: uppercase;
             letter-spacing: 0.6px;
             color: var(--text-muted);
@@ -340,9 +349,9 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 3px;
+            gap: 6px;
             background: #ffffff;
-            padding: 3px 6px;
+            padding: 5px 12px;
             border-radius: 20px;
             border: 1px solid var(--border-color);
             flex-wrap: wrap;
@@ -351,11 +360,11 @@
         .pay-badge {
             display: inline-flex;
             align-items: center;
-            gap: 3px;
-            font-size: 0.66rem;
+            gap: 4px;
+            font-size: 0.72rem;
             font-weight: 700;
             color: var(--text-main);
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 12px;
             background: #ffffff;
             cursor: pointer;
@@ -366,10 +375,10 @@
         .secondary-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 8px;
             justify-content: center;
-            margin-top: 8px;
-            padding-top: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
             border-top: 1px solid var(--border-color);
         }
 
@@ -378,16 +387,22 @@
             background-color: #ffffff;
             border: 1px solid var(--border-color);
             color: var(--text-muted);
-            padding: 3px 8px;
-            font-size: 0.68rem;
+            padding: 5px 12px;
+            font-size: 0.72rem;
             font-weight: 600;
-            border-radius: 5px;
+            border-radius: 6px;
             text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .cta-button-secondary:hover {
+            color: var(--text-main);
+            border-color: var(--venetian-gold-light);
         }
 
         footer {
-            margin-top: 8px;
-            font-size: 0.65rem;
+            margin-top: 12px;
+            font-size: 0.68rem;
             color: var(--text-muted);
         }
     </style>
@@ -509,158 +524,152 @@
         </footer>
     </div>
 
-    <!-- ESCROW MODAL DIALOG -->
-    <div id="escrowModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
-      <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-amber-200 text-left">
+    <!-- ESCROW MODAL DIALOG (RAZŠIRJEN NA 720px ZA PROSTORNOST) -->
+    <div id="escrowModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-amber-200 text-left">
         
         <!-- Modal Header -->
-        <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-3.5 px-5 text-white flex justify-between items-center">
+        <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-4 px-6 text-white flex justify-between items-center">
           <div>
-            <h3 class="text-base font-bold flex items-center gap-2">
+            <h3 class="text-lg font-bold flex items-center gap-2">
               🔒 Lock Escrow & Pay Freight
             </h3>
-            <p class="text-[11px] text-amber-100 mt-0.5">Create a secure smart escrow settlement for your freight order</p>
+            <p class="text-xs text-amber-100 mt-0.5">Create a secure smart escrow settlement for your freight order</p>
           </div>
           <button onclick="closeEscrowModal()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
         </div>
 
         <!-- TAB NAVIGATION -->
-        <div class="flex border-b border-gray-200 bg-gray-50 p-1.5 gap-1.5 text-[11px] font-semibold">
-          <button id="tab-pdf-btn" onclick="switchTab('pdf')" class="flex-1 py-1.5 px-2 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1">
+        <div class="flex border-b border-gray-200 bg-gray-50 p-2 gap-2 text-xs font-semibold">
+          <button id="tab-pdf-btn" onclick="switchTab('pdf')" class="flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5">
             📄 1. PDF Order
           </button>
-          <button id="tab-exchange-btn" onclick="switchTab('exchange')" class="flex-1 py-1.5 px-2 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1">
-            🔗 2. Freight Exchange ID
+          <button id="tab-exchange-btn" onclick="switchTab('exchange')" class="flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5">
+            🔗 2. Freight Exchange / Network ID
           </button>
-          <button id="tab-manual-btn" onclick="switchTab('manual')" class="flex-1 py-1.5 px-2 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1">
+          <button id="tab-manual-btn" onclick="switchTab('manual')" class="flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5">
             ✍️ 3. Full Manual Entry
           </button>
         </div>
 
         <!-- MODAL BODY -->
-        <div class="p-4 space-y-3">
+        <div class="p-5 space-y-4">
           
           <!-- TAB 1: PDF ORDER PARSER -->
           <div id="tab-pdf" class="tab-content">
-            <div class="border-2 border-dashed border-amber-300 rounded-xl p-5 text-center bg-amber-50/50 hover:bg-amber-50 transition cursor-pointer relative">
+            <div class="border-2 border-dashed border-amber-300 rounded-xl p-6 text-center bg-amber-50/50 hover:bg-amber-50 transition cursor-pointer relative">
               <input type="file" id="pdfFileInput" accept=".pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handlePdfUpload(this)">
-              <div class="text-2xl mb-1">📥</div>
-              <p class="font-bold text-gray-800 text-xs">Drag & Drop Transport Order PDF here</p>
-              <p class="text-[10px] text-gray-500 mt-0.5">Supports e-CMR, Freight Orders, Waybills (Auto-extracts IBAN, SWIFT & Freight details)</p>
+              <div class="text-3xl mb-2">📥</div>
+              <p class="font-bold text-gray-800 text-sm">Drag & Drop Transport Order PDF here</p>
+              <p class="text-xs text-gray-500 mt-1">Supports e-CMR, Freight Orders, Waybills (Auto-extracts IBAN, SWIFT & Freight details)</p>
             </div>
           </div>
 
-          <!-- TAB 2: FREIGHT EXCHANGE ID -->
-          <div id="tab-exchange" class="tab-content hidden space-y-2.5">
-            <div class="grid grid-cols-2 gap-2">
+          <!-- TAB 2: FREIGHT EXCHANGE / NETWORK ID (NEVTRALNO & GENERIČNO) -->
+          <div id="tab-exchange" class="tab-content hidden space-y-3">
+            <div class="grid grid-cols-2 gap-3">
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Freight Exchange Platform</label>
-                <select id="exchangeName" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
-                  <option value="TimoCom">TimoCom</option>
-                  <option value="CargoTrans">CargoTrans / Cargograph</option>
-                  <option value="TransEU">Trans.eu</option>
-                  <option value="Teleroute">Teleroute</option>
-                  <option value="Other">Other Exchange / Custom TMS</option>
-                </select>
+                <label class="block text-xs font-bold text-gray-700 mb-1">Freight Exchange / TMS Platform Name</label>
+                <input type="text" id="exchangeName" placeholder="e.g. Any Freight Network / Exchange" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
               </div>
 
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Carrier / Transporter ID</label>
-                <input type="text" id="exchangeCarrierId" placeholder="e.g. TIMO-884920 / CT-442" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Carrier / Transporter ID</label>
+                <input type="text" id="exchangeCarrierId" placeholder="e.g. FX-982341 / CARRIER-55" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
               </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-2">
+            <div class="grid grid-cols-2 gap-3">
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Cargo / Offer Ref ID</label>
+                <label class="block text-xs font-bold text-gray-700 mb-1">Cargo / Offer Ref ID</label>
                 <input type="text" id="exchangeCargoId" placeholder="e.g. OFFER-9921" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
               </div>
 
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Freight Price (€ / USDC)</label>
+                <label class="block text-xs font-bold text-gray-700 mb-1">Freight Price (€ / USDC)</label>
                 <input type="number" id="exchangeAmount" placeholder="1250.00" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
               </div>
             </div>
 
-            <button type="button" onclick="fetchCarrierFromExchange()" class="w-full bg-amber-100 hover:bg-amber-200 text-amber-800 text-[11px] font-bold py-1.5 rounded-lg border border-amber-300 flex items-center justify-center gap-1">
-              ⚡ Auto-Fetch Carrier Profile & Bank Data (IBAN/SWIFT)
+            <button type="button" onclick="fetchCarrierFromExchange()" class="w-full bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold py-2 rounded-lg border border-amber-300 flex items-center justify-center gap-1.5 transition">
+              ⚡ Auto-Fetch Carrier Profile & Bank Data via API
             </button>
-            <div id="exchangeStatus" class="text-[10px] text-gray-500 text-center hidden"></div>
+            <div id="exchangeStatus" class="text-xs text-gray-600 text-center hidden p-2 bg-amber-50 rounded-lg border border-amber-200"></div>
           </div>
 
           <!-- TAB 3: FULL MANUAL ENTRY -->
-          <div id="tab-manual" class="tab-content hidden space-y-2.5">
+          <div id="tab-manual" class="tab-content hidden space-y-3">
             <!-- Podjetje & Davčna -->
-            <div class="grid grid-cols-2 gap-2">
+            <div class="grid grid-cols-2 gap-3">
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Carrier Company Name *</label>
-                <input type="text" id="manualCarrierName" placeholder="e.g., Logistics Express d.o.o." class="w-full border border-gray-300 rounded-lg p-1.5 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Carrier Company Name *</label>
+                <input type="text" id="manualCarrierName" placeholder="e.g. TransLogistics Express d.o.o." class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
               </div>
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Tax / VAT Number *</label>
-                <input type="text" id="manualCarrierVat" placeholder="e.g., SI12345678" class="w-full border border-gray-300 rounded-lg p-1.5 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Tax / VAT Number *</label>
+                <input type="text" id="manualCarrierVat" placeholder="e.g. SI12345678 / DE98765432" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
               </div>
             </div>
 
             <!-- OBVEZNI BANČNI PODATKI ZA SEPA / BANK PAYOUT -->
-            <div class="p-2.5 bg-amber-50/70 border border-amber-200 rounded-lg space-y-2">
-              <span class="block text-[11px] font-extrabold text-amber-900 border-b border-amber-200/80 pb-1">
+            <div class="p-3 bg-amber-50/80 border border-amber-200 rounded-xl space-y-2.5">
+              <span class="block text-xs font-extrabold text-amber-900 border-b border-amber-200/80 pb-1 flex items-center gap-1.5">
                 🏦 Carrier Payout Bank Details (MANDATORY FOR SETTLEMENT)
               </span>
 
               <div>
-                <label class="block text-[10px] font-bold text-gray-700 mb-0.5">Carrier IBAN Account Number *</label>
-                <input type="text" id="manualCarrierIban" placeholder="e.g., SI56 0110 0000 1234 567" class="w-full border border-amber-300 rounded-lg p-1.5 text-xs font-mono font-bold bg-white focus:ring-2 focus:ring-amber-500 outline-none uppercase">
+                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Carrier IBAN Account Number *</label>
+                <input type="text" id="manualCarrierIban" placeholder="e.g. SI56 0110 0000 1234 567" class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white focus:ring-2 focus:ring-amber-500 outline-none uppercase">
               </div>
 
-              <div class="grid grid-cols-2 gap-2">
+              <div class="grid grid-cols-2 gap-3">
                 <div>
-                  <label class="block text-[10px] font-bold text-gray-700 mb-0.5">SWIFT / BIC Code *</label>
-                  <input type="text" id="manualCarrierSwift" placeholder="e.g., LJBASI2X" class="w-full border border-amber-300 rounded-lg p-1.5 text-xs font-mono font-bold bg-white focus:ring-2 focus:ring-amber-500 outline-none uppercase">
+                  <label class="block text-[11px] font-bold text-gray-700 mb-0.5">SWIFT / BIC Code *</label>
+                  <input type="text" id="manualCarrierSwift" placeholder="e.g. LJBASI2X" class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white focus:ring-2 focus:ring-amber-500 outline-none uppercase">
                 </div>
                 <div>
-                  <label class="block text-[10px] font-bold text-gray-700 mb-0.5">Bank Name *</label>
-                  <input type="text" id="manualBankName" placeholder="e.g., NLB d.d. / Revolut" class="w-full border border-amber-300 rounded-lg p-1.5 text-xs bg-white focus:ring-2 focus:ring-amber-500 outline-none">
+                  <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Bank Name *</label>
+                  <input type="text" id="manualBankName" placeholder="e.g. Commercial Bank d.d." class="w-full border border-amber-300 rounded-lg p-2 text-xs bg-white focus:ring-2 focus:ring-amber-500 outline-none">
                 </div>
               </div>
             </div>
 
             <!-- Lokacija & Kontakt -->
-            <div class="grid grid-cols-2 gap-2">
+            <div class="grid grid-cols-2 gap-3">
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Country & City *</label>
-                <input type="text" id="manualCarrierLocation" placeholder="e.g., Slovenia, Ljubljana" class="w-full border border-gray-300 rounded-lg p-1.5 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Country & City *</label>
+                <input type="text" id="manualCarrierLocation" placeholder="e.g. Slovenia, Ljubljana" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
               </div>
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Carrier Email or Web3 Wallet</label>
-                <input type="text" id="manualCarrierContact" placeholder="email@carrier.com or Solana Public Key" class="w-full border border-gray-300 rounded-lg p-1.5 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Carrier Email or Web3 Wallet</label>
+                <input type="text" id="manualCarrierContact" placeholder="email@carrier.com or Solana Public Key" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
               </div>
             </div>
 
             <!-- Order Ref & Cena -->
-            <div class="grid grid-cols-2 gap-2 pt-1 border-t border-gray-100">
+            <div class="grid grid-cols-2 gap-3 pt-1 border-t border-gray-100">
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Order Ref / ID *</label>
-                <input type="text" id="manualCargoId" placeholder="e.g., ORDER-2026-01" class="w-full border border-gray-300 rounded-lg p-1.5 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Order Ref / ID *</label>
+                <input type="text" id="manualCargoId" placeholder="e.g. ORDER-2026-01" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
               </div>
               <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Freight Price (€ / USDC) *</label>
-                <input type="number" id="manualAmount" placeholder="1250.00" class="w-full border border-gray-300 rounded-lg p-1.5 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Freight Price (€ / USDC) *</label>
+                <input type="number" id="manualAmount" placeholder="1250.00" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
               </div>
             </div>
           </div>
 
           <!-- PAYMENT SELECTION -->
           <div class="pt-2 border-t border-gray-100">
-            <label class="block text-[11px] font-bold text-gray-700 mb-1.5">Select Settlement Payment Gateway:</label>
-            <div class="grid grid-cols-2 gap-2">
-              <label class="flex items-center gap-1.5 border rounded-lg p-2 cursor-pointer hover:bg-amber-50 border-amber-300">
+            <label class="block text-xs font-bold text-gray-700 mb-2">Select Settlement Payment Gateway:</label>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="flex items-center gap-2 border rounded-xl p-2.5 cursor-pointer hover:bg-amber-50 border-amber-300 transition">
                 <input type="radio" name="paymentType" value="FIAT" checked class="text-amber-600 focus:ring-amber-500">
-                <span class="text-[11px] font-semibold">💳 Card / SEPA / Bank</span>
+                <span class="text-xs font-semibold">💳 Card / SEPA / Bank Transfer</span>
               </label>
-              <label class="flex items-center gap-1.5 border rounded-lg p-2 cursor-pointer hover:bg-amber-50 border-amber-300">
+              <label class="flex items-center gap-2 border rounded-xl p-2.5 cursor-pointer hover:bg-amber-50 border-amber-300 transition">
                 <input type="radio" name="paymentType" value="CRYPTO" class="text-amber-600 focus:ring-amber-500">
-                <span class="text-[11px] font-semibold">🔑 Web3 Wallet (USDC/EURC)</span>
+                <span class="text-xs font-semibold">🔑 Web3 Wallet (USDC / EURC)</span>
               </label>
             </div>
           </div>
@@ -668,9 +677,9 @@
         </div>
 
         <!-- MODAL FOOTER -->
-        <div class="bg-gray-50 p-2.5 px-4 flex justify-between items-center border-t border-gray-100">
+        <div class="bg-gray-50 p-3 px-6 flex justify-between items-center border-t border-gray-100">
           <button onclick="closeEscrowModal()" class="text-xs text-gray-500 hover:text-gray-800 font-semibold">Cancel</button>
-          <button onclick="submitEscrow()" class="bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-1.5 px-4 rounded-lg text-xs shadow hover:from-amber-600 hover:to-amber-700 transition">
+          <button onclick="submitEscrow()" class="bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-2 px-5 rounded-xl text-xs shadow hover:from-amber-600 hover:to-amber-700 transition">
             Lock Escrow & Confirm ➔
           </button>
         </div>
@@ -709,14 +718,14 @@
         ['pdf', 'exchange', 'manual'].forEach(t => {
           const btn = document.getElementById(`tab-${t}-btn`);
           if (btn) {
-            btn.className = "flex-1 py-1.5 px-2 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1";
+            btn.className = "flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5";
           }
         });
 
         document.getElementById(`tab-${tabName}`).classList.remove('hidden');
         const activeBtn = document.getElementById(`tab-${tabName}-btn`);
         if (activeBtn) {
-          activeBtn.className = "flex-1 py-1.5 px-2 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1";
+          activeBtn.className = "flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5";
         }
       }
 
@@ -727,7 +736,7 @@
       }
 
       function fetchCarrierFromExchange() {
-        const platform = document.getElementById('exchangeName').value;
+        const platform = document.getElementById('exchangeName').value || 'Freight Platform';
         const carrierId = document.getElementById('exchangeCarrierId').value;
         const statusEl = document.getElementById('exchangeStatus');
 
@@ -740,7 +749,7 @@
         statusEl.innerText = `Povezovanje z ${platform} API za pridobivanje podatkov prevoznika (ID: ${carrierId})...`;
 
         setTimeout(() => {
-          statusEl.innerText = `✅ Carrier Verified: TransLogistics Ltd | IBAN: SI56 0110 *** *** 567 | SWIFT: LJBASI2X | Bank: NLB d.d.`;
+          statusEl.innerText = `✅ Prevoznik preverjen: TransLogistics Ltd | IBAN: SI56 0110 *** *** 567 | SWIFT: LJBASI2X | Banka: NLB d.d.`;
           showToast("Podatki prevoznika in banke (IBAN/SWIFT) so bili uspešno pridobljeni!");
         }, 1200);
       }
@@ -762,7 +771,6 @@
           const bankName = document.getElementById('manualBankName').value.trim();
           const companyName = document.getElementById('manualCarrierName').value.trim();
 
-          // Obvezna preverba IBAN, SWIFT in banke za ročni vnos
           if (!iban || !swift || !bankName || !companyName) {
             showToast("⚠️ Napaka: IBAN, SWIFT, Ime banke in Ime podjetja prevoznika so obvezni!");
             return;
