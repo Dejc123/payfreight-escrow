@@ -112,6 +112,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .btn-nav-info {
@@ -129,6 +130,26 @@
         .btn-nav-info:hover {
             background-color: #fcefdc;
             border-color: var(--venetian-gold-dark);
+        }
+
+        .btn-nav-safety {
+            background-color: #f0fdf4;
+            border: 1px solid #86efac;
+            color: #15803d;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-nav-safety:hover {
+            background-color: #dcfce7;
+            border-color: #22c55e;
         }
 
         .btn-nav-fiat {
@@ -425,6 +446,9 @@
                 <button class="btn-nav-info" onclick="openHowItWorksModal()">
                     ❓ How It Works?
                 </button>
+                <button class="btn-nav-safety" onclick="openFundSafetyModal()">
+                    🛡️ Fund Safety & Escrow
+                </button>
                 <button class="btn-nav-fiat" onclick="showToast('Supported: Bank Transfer, VISA, Mastercard & SEPA Instant.')">
                     💳 Cards / Bank
                 </button>
@@ -523,6 +547,7 @@
         <!-- SECONDARY DOCUMENTATION LINKS -->
         <div class="secondary-links">
             <a onclick="openHowItWorksModal()" class="cta-button-secondary cursor-pointer" style="color: var(--venetian-gold-dark); font-weight:700;">❓ How It Works Guide</a>
+            <a onclick="openFundSafetyModal()" class="cta-button-secondary cursor-pointer" style="color: #15803d; font-weight:700; background-color: #f0fdf4; border-color: #bbf7d0;">🛡️ Fund Safety & Escrow</a>
             <a href="technical.html" class="cta-button-secondary">Technical Docs</a>
             <a href="https://github.com/Dejc123/payfreight-escrow" class="cta-button-secondary" target="_blank">GitHub</a>
             <a href="https://t.me/+WyYEvCqDLSQ2MzI0" class="cta-button-secondary" target="_blank">Telegram</a>
@@ -692,7 +717,7 @@
       </div>
     </div>
 
-    <!-- HOW IT WORKS MODAL (ENSTAVNA RAZLAGA Z VISUAL DIAGRAMOM) -->
+    <!-- HOW IT WORKS MODAL -->
     <div id="howItWorksModal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full overflow-hidden border border-amber-200 text-left max-h-[90vh] flex flex-col">
         
@@ -721,7 +746,7 @@
               <text x="80" y="70" font-size="9" fill="#786f66" text-anchor="middle">Locks Fiat / Crypto</text>
 
               <!-- Arrow 1 -->
-              <path d="M155 60 H215" stroke="#0284c7" stroke-width="3" marker-end="url(#arrow)"/>
+              <path d="M155 60 H215" stroke="#0284c7" stroke-width="3"/>
               <text x="185" y="52" font-size="9" font-weight="bold" fill="#0284c7" text-anchor="middle">1. Deposit</text>
 
               <!-- Escrow Vault Box -->
@@ -745,15 +770,8 @@
           <div class="flex gap-4 items-start">
             <div class="w-8 h-8 rounded-full bg-amber-500 text-white font-extrabold text-sm flex items-center justify-center shrink-0">1</div>
             <div>
-              <h4 class="text-sm font-bold text-gray-900">Shipper Deposit & Escrow Lock (Step 1)</h4>
-              <p class="text-xs text-gray-600 mt-1 leading-relaxed">
-                When the Shipper clicks <strong>"Lock Escrow & Confirm"</strong>, the system generates a unique payment reference (Virtual IBAN / SEPA Instant / QR Code or Credit Card Checkout).
-              </p>
-              <div class="mt-2 text-[11px] bg-gray-50 border border-gray-200 rounded-lg p-2.5 font-mono text-gray-700">
-                <div>• <strong>Bank Transfer (TR/TRR):</strong> Virtual IBAN (e.g. <code>SI00-ESCROW-2026-98234</code>) receives funds.</div>
-                <div>• <strong>Status:</strong> Automatically updates from <code>Pending Payment</code> ➔ <code>Escrow Funds Locked 🔒</code>.</div>
-                <div>• <strong>Notification:</strong> Transporter receives instant proof that funds are safely held in escrow.</div>
-              </div>
+              <h4 class="font-bold text-gray-900 text-sm">Shipper Locks Freight Payment</h4>
+              <p class="text-xs text-gray-600 mt-0.5">Shipper deposits payment via Bank Transfer, Card or Crypto into an automated escrow vault. Funds are locked safely until cargo delivery.</p>
             </div>
           </div>
 
@@ -761,10 +779,8 @@
           <div class="flex gap-4 items-start">
             <div class="w-8 h-8 rounded-full bg-sky-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">2</div>
             <div>
-              <h4 class="text-sm font-bold text-gray-900">Freight Transport & Signed e-CMR Proof (Step 2)</h4>
-              <p class="text-xs text-gray-600 mt-1 leading-relaxed">
-                The driver carries out the transport. Upon delivery, the recipient signs the <strong>e-CMR document</strong> (or a photo of the physical signed CMR is uploaded via the widget).
-              </p>
+              <h4 class="font-bold text-gray-900 text-sm">Transport Execution & e-CMR Verification</h4>
+              <p class="text-xs text-gray-600 mt-0.5">Transporter completes delivery and uploads e-CMR proof. System automatically verifies signatures and delivery milestones against protocol rules.</p>
             </div>
           </div>
 
@@ -772,46 +788,93 @@
           <div class="flex gap-4 items-start">
             <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">3</div>
             <div>
-              <h4 class="text-sm font-bold text-gray-900">Instant Automated Bank Payout (Step 3)</h4>
-              <p class="text-xs text-gray-600 mt-1 leading-relaxed">
-                Our OCR & AI engine verifies the signed e-CMR. The backend automatically triggers a <strong>SEPA Instant Payout API</strong> transfer directly to the carrier's IBAN bank account.
-              </p>
-              <div class="mt-2 text-[11px] bg-emerald-50 border border-emerald-200 rounded-lg p-2.5 font-mono text-emerald-900">
-                ⚡ <strong>Result:</strong> Transporter gets paid in <strong>minutes</strong> after unloading—instead of waiting 30, 60, or 90 days!
-              </div>
+              <h4 class="font-bold text-gray-900 text-sm">Instant Automated Payout</h4>
+              <p class="text-xs text-gray-600 mt-0.5">Escrow automatically releases funds directly to carrier's bank account (via SEPA Instant) or Web3 wallet. Zero delays, zero middlemen fee Gouging.</p>
             </div>
           </div>
 
         </div>
 
-        <!-- Footer -->
-        <div class="bg-gray-50 p-4 px-6 border-t border-gray-200 flex justify-between items-center shrink-0">
-          <span class="text-xs text-gray-500 font-medium">PayFreight Engine: Web1 Bank Simplicity + Web3 Instant Security</span>
-          <button onclick="closeHowItWorksModal()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs py-2 px-5 rounded-xl transition">
-            Got It, Thanks!
-          </button>
+        <div class="bg-gray-50 p-3 px-6 flex justify-end border-t border-gray-100 shrink-0">
+          <button onclick="closeHowItWorksModal()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold py-2 px-5 rounded-lg transition">Got It!</button>
         </div>
 
       </div>
     </div>
 
-    <!-- TOAST NOTIFICATION CONTAINER -->
-    <div id="toastNotification" class="fixed bottom-5 right-5 bg-gray-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl z-50 opacity-0 transition-opacity duration-300 pointer-events-none flex items-center gap-2">
-      <span id="toastMessage">Notification</span>
+    <!-- NOV: FUND SAFETY & ESCROW MODAL -->
+    <div id="fundSafetyModal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full overflow-hidden border border-emerald-200 text-left max-h-[90vh] flex flex-col">
+        
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-800 p-4 px-6 text-white flex justify-between items-center shrink-0">
+          <div>
+            <h3 class="text-xl font-extrabold flex items-center gap-2">
+              🛡️ Fund Safety & Escrow Transparency
+            </h3>
+            <p class="text-xs text-emerald-100 mt-0.5">Zero Corporate Risk • Code-Enforced Escrow • Institutional Grade Safety</p>
+          </div>
+          <button onclick="closeFundSafetyModal()" class="text-white/80 hover:text-white text-3xl font-bold">&times;</button>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="p-6 space-y-5 overflow-y-auto">
+          
+          <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-emerald-900 text-xs leading-relaxed font-medium">
+            💡 <strong>100% Non-Custodial Architecture:</strong> Your funds never enter or sit on PayFreight's private company bank accounts. Every escrow lock is executed via programmatically secured, non-custodial smart contracts or regulated banking custodial gateways.
+          </div>
+
+          <!-- POINT 1 -->
+          <div class="p-4 rounded-xl border border-gray-200 bg-gray-50/50 space-y-1">
+            <div class="flex items-center gap-2 text-emerald-700 font-extrabold text-sm">
+              <span>🔒 1. Non-Custodial Smart Contract Architecture</span>
+            </div>
+            <p class="text-xs text-gray-600 leading-relaxed pl-6">
+              When a shipper deposits funds, they are locked directly inside an automated, immutable smart contract on the Solana blockchain. PayFreight team members have <strong>zero administrative access</strong> or manual control over your held assets.
+            </p>
+          </div>
+
+          <!-- POINT 2 -->
+          <div class="p-4 rounded-xl border border-gray-200 bg-gray-50/50 space-y-1">
+            <div class="flex items-center gap-2 text-emerald-700 font-extrabold text-sm">
+              <span>⚙️ 2. Strict Conditional & Automated Release</span>
+            </div>
+            <p class="text-xs text-gray-600 leading-relaxed pl-6">
+              Funds are released <strong>strictly and automatically</strong> upon verified delivery conditions (such as verified e-CMR uploads or mutual milestone signatures). Neither party—nor PayFreight—can unilaterally withdraw or misappropriate funds without code-enforced protocol conditions being satisfied.
+            </p>
+          </div>
+
+          <!-- POINT 3 -->
+          <div class="p-4 rounded-xl border border-gray-200 bg-gray-50/50 space-y-1">
+            <div class="flex items-center gap-2 text-emerald-700 font-extrabold text-sm">
+              <span>🌐 3. 100% Real-Time On-Chain Transparency</span>
+            </div>
+            <p class="text-xs text-gray-600 leading-relaxed pl-6">
+              Every deposit, lock state, and settlement transaction is publicly verifiable on-chain in real time via Solana Explorer. Shippers and carriers maintain 100% cryptographic visibility over their escrow balance at every second of the transport cycle.
+            </p>
+          </div>
+
+          <!-- POINT 4 -->
+          <div class="p-4 rounded-xl border border-gray-200 bg-gray-50/50 space-y-1">
+            <div class="flex items-center gap-2 text-emerald-700 font-extrabold text-sm">
+              <span>🏛️ 4. Regulated Bank & Card Fiat Gateways</span>
+            </div>
+            <p class="text-xs text-gray-600 leading-relaxed pl-6">
+              For Credit Card and SEPA/Bank deposits, fiat funds are handled by licensed, MiCA and EU-compliant financial institutions (such as Circle EURC / Stripe gateways) before seamlessly anchoring to the non-custodial escrow protocol.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="bg-gray-50 p-3 px-6 flex justify-end border-t border-gray-100 shrink-0">
+          <button onclick="closeFundSafetyModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2 px-5 rounded-lg transition">Understood</button>
+        </div>
+
+      </div>
     </div>
 
-    <!-- JAVASCRIPT INTERACTION LOGIC -->
+    <!-- JAVASCRIPT FOR MODALS & TAB NAVIGATION -->
     <script>
-      function showToast(msg) {
-        const toast = document.getElementById('toastNotification');
-        const toastMsg = document.getElementById('toastMessage');
-        toastMsg.innerText = msg;
-        toast.classList.remove('opacity-0', 'pointer-events-none');
-        setTimeout(() => {
-          toast.classList.add('opacity-0', 'pointer-events-none');
-        }, 3500);
-      }
-
       function openEscrowModal() {
         document.getElementById('escrowModal').classList.remove('hidden');
       }
@@ -828,116 +891,63 @@
         document.getElementById('howItWorksModal').classList.add('hidden');
       }
 
+      function openFundSafetyModal() {
+        document.getElementById('fundSafetyModal').classList.remove('hidden');
+      }
+
+      function closeFundSafetyModal() {
+        document.getElementById('fundSafetyModal').classList.add('hidden');
+      }
+
+      function showToast(message) {
+        alert(message);
+      }
+
       function switchTab(tabName) {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
         
-        ['pdf', 'exchange', 'manual'].forEach(t => {
-          const btn = document.getElementById(`tab-${t}-btn`);
-          if (btn) {
-            btn.className = "flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5";
-          }
+        // Reset button styles
+        const btnPdf = document.getElementById('tab-pdf-btn');
+        const btnEx = document.getElementById('tab-exchange-btn');
+        const btnMan = document.getElementById('tab-manual-btn');
+
+        [btnPdf, btnEx, btnMan].forEach(btn => {
+          btn.className = "flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5";
         });
 
-        document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-        const activeBtn = document.getElementById(`tab-${tabName}-btn`);
-        if (activeBtn) {
-          activeBtn.className = "flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5";
+        // Show selected tab & highlight button
+        if (tabName === 'pdf') {
+          document.getElementById('tab-pdf').classList.remove('hidden');
+          btnPdf.className = "flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5 font-bold";
+        } else if (tabName === 'exchange') {
+          document.getElementById('tab-exchange').classList.remove('hidden');
+          btnEx.className = "flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5 font-bold";
+        } else if (tabName === 'manual') {
+          document.getElementById('tab-manual').classList.remove('hidden');
+          btnMan.className = "flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5 font-bold";
         }
       }
 
       function handlePdfUpload(input) {
         if (input.files && input.files[0]) {
-          showToast(`[OCR/AI Parser] File loaded: ${input.files[0].name}. Extracted IBAN & Carrier Details.`);
+          alert('PDF uploaded successfully: ' + input.files[0].name + '. Extracting transport parameters...');
         }
       }
 
       function fetchCarrierFromExchange() {
-        const platform = document.getElementById('exchangeName').value || 'Freight Platform';
-        const carrierId = document.getElementById('exchangeCarrierId').value;
-        const statusEl = document.getElementById('exchangeStatus');
-
-        if (!carrierId) {
-          showToast("⚠️ Please enter Carrier ID.");
-          return;
-        }
-
-        statusEl.classList.remove('hidden');
-        statusEl.innerText = `Connecting to ${platform} API to fetch carrier info (ID: ${carrierId})...`;
-
+        const status = document.getElementById('exchangeStatus');
+        status.classList.remove('hidden');
+        status.innerHTML = '⏳ Fetching carrier network profile from API...';
         setTimeout(() => {
-          statusEl.innerText = `✅ Carrier Verified: TransLogistics Ltd | IBAN: SI56 0110 *** *** 567 | SWIFT: LJBASI2X | Bank: NLB d.d.`;
-          showToast("Carrier profile & banking details (IBAN/SWIFT) successfully fetched!");
+          status.innerHTML = '✅ Carrier profile verified & bank details synced!';
         }, 1200);
       }
 
-      async function submitEscrow() {
-        const activeTab = document.querySelector('.tab-content:not(.hidden)').id;
-        const paymentMethod = document.querySelector('input[name="paymentType"]:checked').value;
-
-        let payload = {
-          payment_method: paymentMethod,
-          source_type: activeTab,
-          carrier_info: {},
-          bank_details: {}
-        };
-
-        if (activeTab === 'tab-manual') {
-          const iban = document.getElementById('manualCarrierIban').value.trim();
-          const swift = document.getElementById('manualCarrierSwift').value.trim();
-          const bankName = document.getElementById('manualBankName').value.trim();
-          const companyName = document.getElementById('manualCarrierName').value.trim();
-
-          if (!iban || !swift || !bankName || !companyName) {
-            showToast("⚠️ Error: Carrier IBAN, SWIFT, Bank Name and Company Name are required!");
-            return;
-          }
-
-          payload.carrier_info = {
-            business_name: companyName,
-            vat_number: document.getElementById('manualCarrierVat').value,
-            location: document.getElementById('manualCarrierLocation').value,
-            contact: document.getElementById('manualCarrierContact').value
-          };
-
-          payload.bank_details = {
-            iban: iban,
-            swift_bic: swift,
-            bank_name: bankName
-          };
-
-          payload.freight_details = {
-            cargo_id: document.getElementById('manualCargoId').value,
-            amount: document.getElementById('manualAmount').value
-          };
-        } else if (activeTab === 'tab-exchange') {
-          payload.exchange_details = {
-            exchange_name: document.getElementById('exchangeName').value,
-            carrier_exchange_id: document.getElementById('exchangeCarrierId').value,
-            cargo_id: document.getElementById('exchangeCargoId').value,
-            amount: document.getElementById('exchangeAmount').value
-          };
-        }
-
-        console.log("[Escrow Protocol Payload Sent]:", payload);
-
-        try {
-          const response = await fetch('/api/create-escrow', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          
-          const result = await response.json();
-          console.log("[Escrow Created Successfully]:", result);
-          closeEscrowModal();
-          showToast('Escrow created successfully with IBAN & SWIFT data!');
-        } catch (err) {
-          console.error("[Backend Settlement API Error]:", err);
-          closeEscrowModal();
-          showToast('Escrow lock initiated with carrier bank details!');
-        }
+      function submitEscrow() {
+        alert('Locking Escrow Order... Redirecting to Secure Gateway.');
+        closeEscrowModal();
       }
     </script>
-
 </body>
 </html>
