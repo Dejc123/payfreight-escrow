@@ -186,37 +186,40 @@
             background: linear-gradient(135deg, var(--venetian-gold) 0%, var(--venetian-gold-dark) 100%);
         }
 
-        /* BRAND HEADER - LOGOTIP IN PAYFREIGHT POVSEM NA VRHU OB BOKU */
+        /* BRAND HEADER - LARGE PREMIUM LOGO + WORDMARK ABOVE ISO STATUS BAR */
         .brand-header {
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            gap: 14px;
-            margin-bottom: 12px;
+            gap: 20px;
+            margin: 0 0 20px 0;
+            padding: 2px 0 4px 0;
             text-align: left;
         }
 
         .logo-icon {
-            width: 52px;
-            height: 52px;
-            flex-shrink: 0;
+            width: 104px;
+            height: 104px;
+            flex: 0 0 104px;
+            object-fit: contain;
+            display: block;
         }
 
-        /* PayFreight - odebeljeno, v barvah logotipa in 2 fonta večje (2.6rem) */
+        /* Large, bold PayFreight wordmark using the exact navy + cyan/teal palette of the logo */
         h1 {
-            font-size: 2.6rem;
+            font-size: 4rem;
             margin: 0;
-            background: linear-gradient(135deg, #0f172a 0%, #0284c7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-            line-height: 1.1;
-            font-weight: 800;
+            color: #102b4a;
+            letter-spacing: -2.2px;
+            line-height: 0.98;
+            font-weight: 900;
+            white-space: nowrap;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         h1 span {
-            color: #0ea5e9;
-            -webkit-text-fill-color: #0ea5e9;
+            color: #10a9bc;
+            -webkit-text-fill-color: #10a9bc;
         }
 
         p.subtitle {
@@ -439,31 +442,39 @@
             font-size: 0.68rem;
             color: var(--text-muted);
         }
+
+        @media (max-width: 700px) {
+            .brand-header {
+                gap: 12px;
+            }
+            .logo-icon {
+                width: 76px;
+                height: 76px;
+                flex-basis: 76px;
+            }
+            h1 {
+                font-size: 3rem;
+                letter-spacing: -1.4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-header {
+                gap: 10px;
+            }
+            .logo-icon {
+                width: 62px;
+                height: 62px;
+                flex-basis: 62px;
+            }
+            h1 {
+                font-size: 2.35rem;
+                letter-spacing: -1px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-<!-- TOP NAVIGATION BAR -->
-        <div class="top-nav">
-            <div class="status-bar">
-                <span class="status-dot"></span> ISO 20022, FedNow, ACH & e-CMR Compliant • Automated Global Escrow
-            </div>
-
-            <div class="nav-actions">
-                <button class="btn-nav-info" onclick="openHowItWorksModal()">
-                    ❓ How It Works?
-                </button>
-                <button class="btn-nav-safety" onclick="openFundSafetyModal()">
-                    🛡️ Fund Safety & Escrow
-                </button>
-                <button class="btn-nav-fiat" onclick="showToast('Supported: US FedNow, ACH, Wire, SEPA Instant, VISA & Mastercard.')">
-                    💵 USD / EUR Banking
-                </button>
-                <button class="btn-nav-wallet" onclick="showToast('Connecting Institutional Settlement Engine...')">
-                    🔑 Connect Wallet
-                </button>
-            </div>
-        </div>
 
         <!-- LOGOTIP IN PAYFREIGHT POVSEM NA VRHU OB BOKU -->
         <div class="brand-header">
