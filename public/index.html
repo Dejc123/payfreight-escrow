@@ -457,6 +457,11 @@
                 <button class="btn-nav-safety" onclick="openFundSafetyModal()">
                     🛡️ Fund Safety & Escrow
                 </button>
+                
+                <!-- Diskretna gumba zgoraj za sporazumno odpoved in spor -->
+                <button onclick="openMutualCancelModal()" class="text-[11px] text-gray-400 hover:text-gray-700 underline bg-transparent border-0 cursor-pointer px-1">Mutual Cancel</button>
+                <button onclick="openDisputeModal()" class="text-[11px] text-gray-400 hover:text-red-600 underline bg-transparent border-0 cursor-pointer px-1">Dispute Terms</button>
+
                 <button class="btn-nav-fiat" onclick="showToast('Supported: US FedNow, ACH, Wire, SEPA Instant, VISA & Mastercard.')">
                     💵 USD / EUR Banking
                 </button>
@@ -561,11 +566,10 @@
             </div>
         </div>
 
-        <!-- SECONDARY DOCUMENTATION LINKS - VKLJUČNO Z DISKRETNO POVEZAVO ZA PORAVNAVE -->
+        <!-- SECONDARY DOCUMENTATION LINKS -->
         <div class="secondary-links">
             <a onclick="openHowItWorksModal()" class="cta-button-secondary cursor-pointer" style="color: var(--venetian-gold-dark); font-weight:700;">❓ How It Works Guide</a>
             <a onclick="openFundSafetyModal()" class="cta-button-secondary cursor-pointer" style="color: #15803d; font-weight:800; background-color: #f0fdf4; border-color: #86efac;">🛡️ Fund Safety & Escrow</a>
-            <a onclick="openCancelModal()" class="cta-button-secondary cursor-pointer" style="color: #786f66; font-weight:600;">🔄 Mutual & Settlement Terms</a>
             <a href="technical.html" class="cta-button-secondary">Technical Docs</a>
             <a href="https://github.com/Dejc123/payfreight-escrow" class="cta-button-secondary" target="_blank">GitHub</a>
             <a href="https://t.me/+WyYEvCqDLSQ2MzI0" class="cta-button-secondary" target="_blank">Telegram</a>
@@ -891,34 +895,43 @@
       </div>
     </div>
 
-    <!-- DISKRETNO MODALNO OKNO ZA MUTUAL & SETTLEMENT TERMS -->
-    <div id="cancelModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-amber-200 text-left">
-        <div class="bg-gradient-to-r from-amber-600 to-amber-700 p-4 px-6 text-white flex justify-between items-center">
-          <div>
-            <h3 class="text-base font-bold flex items-center gap-2">🔄 Mutual & Settlement Terms Guide</h3>
-            <p class="text-xs text-amber-100 mt-0.5">Transparent guidelines for order adjustments and mutual cancellations</p>
-          </div>
-          <button onclick="closeCancelModal()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
+    <!-- MODAL ZA MUTUAL CANCELLATION -->
+    <div id="mutualCancelModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-gray-200 text-left">
+        <div class="bg-gray-800 p-4 text-white flex justify-between items-center">
+          <h3 class="text-sm font-bold">🤝 Mutual Cancellation Terms</h3>
+          <button onclick="closeMutualCancelModal()" class="text-white text-xl font-bold">&times;</button>
         </div>
-
-        <div class="p-5 space-y-3 text-xs text-gray-700">
-          <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-xl space-y-1">
-            <span class="font-bold text-amber-900 text-sm block">🤝 Mutual Cancellation Protocol</span>
-            <p class="leading-relaxed">
-              If transport needs to be called off and <strong class="text-gray-900">both Shipper and Carrier confirm mutual cancellation</strong> before dispatch, the smart contract executes an instant, fee-free refund of the full freight amount and both €250 / $250 commitment deposits.
-            </p>
-          </div>
-          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
-            <span class="font-bold text-slate-900 text-sm block">🛡️ Automated Execution</span>
-            <p class="leading-relaxed">
-              All adjustments are processed programmatically through secure banking rails and cryptographic state checks, guaranteeing zero administrative delays or biased interventions.
-            </p>
-          </div>
+        <div class="p-4 space-y-2 text-xs text-gray-700">
+          <p>If both <strong>Shipper and Carrier</strong> mutually agree to cancel the transport order before dispatch:</p>
+          <ul class="list-disc pl-4 space-y-1">
+            <li><strong>100% Refund:</strong> Full freight amount returned to Shipper.</li>
+            <li><strong>Deposit Return:</strong> Both €250 / $250 commitment deposits are fully refunded instantly.</li>
+            <li><strong>Zero Penalties:</strong> No middleman fees or administrative overhead.</li>
+          </ul>
         </div>
+        <div class="bg-gray-50 p-3 flex justify-end">
+          <button onclick="closeMutualCancelModal()" class="bg-gray-800 text-white text-xs font-bold py-1.5 px-4 rounded">Close</button>
+        </div>
+      </div>
+    </div>
 
-        <div class="bg-gray-50 p-3 px-6 flex justify-end border-t border-gray-100">
-          <button onclick="closeCancelModal()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-2 px-5 rounded-lg transition">Got It</button>
+    <!-- MODAL ZA DISPUTE TERMS -->
+    <div id="disputeModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-red-200 text-left">
+        <div class="bg-red-700 p-4 text-white flex justify-between items-center">
+          <h3 class="text-sm font-bold">⚖️ Settlement & Dispute Protocol</h3>
+          <button onclick="closeDisputeModal()" class="text-white text-xl font-bold">&times;</button>
+        </div>
+        <div class="p-4 space-y-2 text-xs text-gray-700">
+          <p>In case of unresponsiveness, last-minute ghosting, or unilateral breach:</p>
+          <ul class="list-disc pl-4 space-y-1">
+            <li><strong>Automatic Compensation:</strong> The €250 / $250 commitment deposit routes to the affected party.</li>
+            <li><strong>Programmatic Mediation:</strong> Protocol verifies timestamps and e-CMR delivery logs automatically.</li>
+          </ul>
+        </div>
+        <div class="bg-gray-50 p-3 flex justify-end">
+          <button onclick="closeDisputeModal()" class="bg-red-700 text-white text-xs font-bold py-1.5 px-4 rounded">Close</button>
         </div>
       </div>
     </div>
@@ -946,11 +959,18 @@
         document.getElementById('fundSafetyModal').classList.add('hidden');
       }
 
-      function openCancelModal() {
-        document.getElementById('cancelModal').classList.remove('hidden');
+      function openMutualCancelModal() {
+        document.getElementById('mutualCancelModal').classList.remove('hidden');
       }
-      function closeCancelModal() {
-        document.getElementById('cancelModal').classList.add('hidden');
+      function closeMutualCancelModal() {
+        document.getElementById('mutualCancelModal').classList.add('hidden');
+      }
+
+      function openDisputeModal() {
+        document.getElementById('disputeModal').classList.remove('hidden');
+      }
+      function closeDisputeModal() {
+        document.getElementById('disputeModal').classList.add('hidden');
       }
 
       function showToast(message) {
@@ -1002,4 +1022,3 @@
     </script>
 </body>
 </html>
-        
