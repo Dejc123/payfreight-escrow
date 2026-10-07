@@ -443,7 +443,6 @@
     <div class="container">
         <!-- TOP NAVIGATION BAR -->
         <div class="top-nav">
-            <!-- STATUSNA PASICA ZGORAJ - VZBUJA MOČNO ZAUPANJE & ADOPTION -->
             <div class="status-bar">
                 <span class="status-dot"></span> 
                 <span>ISO 20022, FedNow, ACH & e-CMR Compliant</span>
@@ -469,8 +468,6 @@
 
         <!-- GLAVNI HERO DEL -->
         <div class="flex flex-col items-center text-center mb-6">
-            
-            <!-- SKUPNI BLOK: LOGOTIP + PAYFREIGHT NAPIS -->
             <div class="flex items-center justify-center gap-5 mb-3 flex-wrap">
                 <!-- Znak / Krog -->
                 <svg class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -501,13 +498,11 @@
                     <circle cx="145" cy="126" r="5" fill="#ffffff"/>
                 </svg>
 
-                <!-- Velik, mogočen napis PayFreight -->
                 <h1 class="text-5xl sm:text-6xl font-black tracking-tight text-[#0b192c] m-0" style="font-family: system-ui, -apple-system, sans-serif;">
                     Pay<span class="text-[#00b4d8]">Freight</span>
                 </h1>
             </div>
 
-            <!-- Standardi v pasici pod naslovom -->
             <div class="inline-flex items-center gap-3 text-xs sm:text-sm text-[#786f66] font-semibold mt-2">
                 <span class="text-[#df9b41]">——</span> 
                 <span>ISO 20022</span> &bull; <span>FedNow</span> &bull; <span>ACH</span> &bull; <span>e-CMR</span> 
@@ -566,10 +561,11 @@
             </div>
         </div>
 
-        <!-- SECONDARY DOCUMENTATION LINKS -->
+        <!-- SECONDARY DOCUMENTATION LINKS - VKLJUČNO Z DISKRETNO POVEZAVO ZA PORAVNAVE -->
         <div class="secondary-links">
             <a onclick="openHowItWorksModal()" class="cta-button-secondary cursor-pointer" style="color: var(--venetian-gold-dark); font-weight:700;">❓ How It Works Guide</a>
             <a onclick="openFundSafetyModal()" class="cta-button-secondary cursor-pointer" style="color: #15803d; font-weight:800; background-color: #f0fdf4; border-color: #86efac;">🛡️ Fund Safety & Escrow</a>
+            <a onclick="openCancelModal()" class="cta-button-secondary cursor-pointer" style="color: #786f66; font-weight:600;">🔄 Mutual & Settlement Terms</a>
             <a href="technical.html" class="cta-button-secondary">Technical Docs</a>
             <a href="https://github.com/Dejc123/payfreight-escrow" class="cta-button-secondary" target="_blank">GitHub</a>
             <a href="https://t.me/+WyYEvCqDLSQ2MzI0" class="cta-button-secondary" target="_blank">Telegram</a>
@@ -584,7 +580,6 @@
     <div id="escrowModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-amber-200 text-left">
         
-        <!-- Modal Header -->
         <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-4 px-6 text-white flex justify-between items-center">
           <div>
             <h3 class="text-lg font-bold flex items-center gap-2">
@@ -595,7 +590,6 @@
           <button onclick="closeEscrowModal()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
         </div>
 
-        <!-- TAB NAVIGATION -->
         <div class="flex border-b border-gray-200 bg-gray-50 p-2 gap-2 text-xs font-semibold">
           <button id="tab-pdf-btn" onclick="switchTab('pdf')" class="flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5">
             📄 1. PDF Order
@@ -608,10 +602,7 @@
           </button>
         </div>
 
-        <!-- MODAL BODY -->
         <div class="p-5 space-y-4">
-          
-          <!-- TAB 1: PDF ORDER PARSER -->
           <div id="tab-pdf" class="tab-content">
             <div class="border-2 border-dashed border-amber-300 rounded-xl p-6 text-center bg-amber-50/50 hover:bg-amber-50 transition cursor-pointer relative">
               <input type="file" id="pdfFileInput" accept=".pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handlePdfUpload(this)">
@@ -621,14 +612,12 @@
             </div>
           </div>
 
-          <!-- TAB 2: FREIGHT EXCHANGE / NETWORK ID -->
           <div id="tab-exchange" class="tab-content hidden space-y-3">
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Freight Exchange / TMS Platform</label>
                 <input type="text" id="exchangeName" placeholder="e.g. DAT, Truckstop, Timocom, Trans.eu" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
               </div>
-
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Carrier / Transporter ID</label>
                 <input type="text" id="exchangeCarrierId" placeholder="e.g. MC-982341 / DOT-12345 / CARRIER-55" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
@@ -640,7 +629,6 @@
                 <label class="block text-xs font-bold text-gray-700 mb-1">Cargo / Load Ref ID</label>
                 <input type="text" id="exchangeCargoId" placeholder="e.g. LOAD-9921" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
               </div>
-
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Freight Price ($ USD / € EUR)</label>
                 <input type="number" id="exchangeAmount" placeholder="1550.00" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
@@ -653,16 +641,15 @@
             <div id="exchangeStatus" class="text-xs text-gray-600 text-center hidden p-2 bg-amber-50 rounded-lg border border-amber-200"></div>
           </div>
 
-          <!-- TAB 3: FULL MANUAL ENTRY -->
           <div id="tab-manual" class="tab-content hidden space-y-3">
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Carrier Company Name *</label>
-                <input type="text" id="manualCarrierName" placeholder="e.g. US Freight Express Inc. / TransLogistics" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                <input type="text" id="manualCarrierName" placeholder="e.g. US Freight Express Inc." class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
               </div>
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Tax / VAT / EIN / MC Number *</label>
-                <input type="text" id="manualCarrierVat" placeholder="e.g. EIN 12-3456789 / MC-982341 / VAT SI12345678" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                <input type="text" id="manualCarrierVat" placeholder="e.g. EIN 12-3456789" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
               </div>
             </div>
 
@@ -670,20 +657,18 @@
               <span class="block text-xs font-extrabold text-amber-900 border-b border-amber-200/80 pb-1 flex items-center gap-1.5">
                 🏦 Carrier Payout Bank Details (US ACH Routing / EU IBAN)
               </span>
-
               <div>
                 <label class="block text-[11px] font-bold text-gray-700 mb-0.5">IBAN Account (EUR) or US Account Number (USD) *</label>
-                <input type="text" id="manualCarrierIban" placeholder="e.g. US Account No. 9876543210 or SI56 0110 0000 1234 567" class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white focus:ring-2 focus:ring-amber-500 outline-none uppercase">
+                <input type="text" id="manualCarrierIban" placeholder="e.g. US Account No. 9876543210 or SI56..." class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white outline-none uppercase">
               </div>
-
               <div class="grid grid-cols-2 gap-3">
                 <div>
-                  <label class="block text-[11px] font-bold text-gray-700 mb-0.5">SWIFT / BIC / ABA Routing (9-digits) *</label>
-                  <input type="text" id="manualCarrierSwift" placeholder="e.g. ABA Routing 021000021 or SWIFT LJBASI2X" class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white focus:ring-2 focus:ring-amber-500 outline-none uppercase">
+                  <label class="block text-[11px] font-bold text-gray-700 mb-0.5">SWIFT / ABA Routing (9-digits) *</label>
+                  <input type="text" id="manualCarrierSwift" placeholder="e.g. ABA Routing 021000021" class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white outline-none uppercase">
                 </div>
                 <div>
                   <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Bank Name & Country *</label>
-                  <input type="text" id="manualBankName" placeholder="e.g. JPMorgan Chase (USA) / Commercial Bank (EU)" class="w-full border border-amber-300 rounded-lg p-2 text-xs bg-white focus:ring-2 focus:ring-amber-500 outline-none">
+                  <input type="text" id="manualBankName" placeholder="e.g. JPMorgan Chase (USA)" class="w-full border border-amber-300 rounded-lg p-2 text-xs bg-white outline-none">
                 </div>
               </div>
             </div>
@@ -691,104 +676,82 @@
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Country & City *</label>
-                <input type="text" id="manualCarrierLocation" placeholder="e.g. USA, Chicago / Slovenia, Ljubljana" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                <input type="text" id="manualCarrierLocation" placeholder="e.g. USA, Chicago" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Carrier Email or Settlement Wallet</label>
-                <input type="text" id="manualCarrierContact" placeholder="email@carrier.com or Settlement Key" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Carrier Email or Wallet</label>
+                <input type="text" id="manualCarrierContact" placeholder="email@carrier.com" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none">
               </div>
             </div>
 
             <div class="grid grid-cols-2 gap-3 pt-1 border-t border-gray-100">
               <div>
                 <label class="block text-xs font-bold text-gray-700 mb-1">Order Ref / ID *</label>
-                <input type="text" id="manualCargoId" placeholder="e.g. ORDER-2026-01" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                <input type="text" id="manualCargoId" placeholder="e.g. ORDER-2026-01" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Freight Price ($ USD or € EUR) *</label>
-                <input type="number" id="manualAmount" placeholder="1850.00" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                <label class="block text-xs font-bold text-gray-700 mb-1">Freight Price ($ USD / € EUR) *</label>
+                <input type="number" id="manualAmount" placeholder="1850.00" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none">
               </div>
             </div>
           </div>
 
-          <!-- PAYMENT SELECTION -->
           <div class="pt-2 border-t border-gray-100">
             <label class="block text-xs font-bold text-gray-700 mb-2">Select Settlement Payment Currency & Gateway:</label>
             <div class="grid grid-cols-2 gap-3">
               <label class="flex items-center gap-2 border rounded-xl p-2.5 cursor-pointer hover:bg-amber-50 border-amber-300 transition">
-                <input type="radio" name="paymentType" value="FIAT" checked class="text-amber-600 focus:ring-amber-500">
-                <span class="text-xs font-semibold">💳 USD / EUR Bank Transfer (FedNow / ACH / Wire / SEPA)</span>
+                <input type="radio" name="paymentType" value="FIAT" checked class="text-amber-600">
+                <span class="text-xs font-semibold">💳 USD / EUR Bank Transfer (FedNow/ACH/SEPA)</span>
               </label>
               <label class="flex items-center gap-2 border rounded-xl p-2.5 cursor-pointer hover:bg-amber-50 border-amber-300 transition">
-                <input type="radio" name="paymentType" value="CRYPTO" class="text-amber-600 focus:ring-amber-500">
-                <span class="text-xs font-semibold">🔑 Fixed Value Stablecoins (USDC / USDT / EURC)</span>
+                <input type="radio" name="paymentType" value="CRYPTO" class="text-amber-600">
+                <span class="text-xs font-semibold">🔑 Fixed Value Stablecoins (USDC/USDT/EURC)</span>
               </label>
             </div>
           </div>
-
         </div>
 
-        <!-- MODAL FOOTER -->
         <div class="bg-gray-50 p-3 px-6 flex justify-between items-center border-t border-gray-100">
           <button onclick="closeEscrowModal()" class="text-xs text-gray-500 hover:text-gray-800 font-semibold">Cancel</button>
-          <button onclick="submitEscrow()" class="bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-2 px-5 rounded-xl text-xs shadow hover:from-amber-600 hover:to-amber-700 transition">
+          <button onclick="submitEscrow()" class="bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-2 px-5 rounded-xl text-xs shadow hover:from-amber-600 transition">
             Lock Escrow & Confirm ➔
           </button>
         </div>
-
       </div>
     </div>
 
     <!-- HOW IT WORKS MODAL -->
     <div id="howItWorksModal" class="fixed inset-0 bg-black/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full overflow-hidden border border-amber-200 text-left max-h-[90vh] flex flex-col">
-        
-        <!-- Header -->
         <div class="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 p-4 px-6 text-white flex justify-between items-center shrink-0">
           <div>
-            <h3 class="text-xl font-extrabold flex items-center gap-2">
-              💡 How PayFreight Escrow Engine Works
-            </h3>
+            <h3 class="text-xl font-extrabold flex items-center gap-2">💡 How PayFreight Escrow Engine Works</h3>
             <p class="text-xs text-amber-100 mt-0.5">Simple, Bank-grade & Instant Settlement Logic for Global Freight</p>
           </div>
           <button onclick="closeHowItWorksModal()" class="text-white/80 hover:text-white text-3xl font-bold">&times;</button>
         </div>
 
-        <!-- Scrollable Content -->
         <div class="p-6 space-y-6 overflow-y-auto">
-          
-          <!-- FLOWCHART DIAGRAM -->
           <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-4 text-center">
             <span class="text-xs font-bold uppercase tracking-wider text-amber-800 block mb-3">⚡ Global Settlement Architecture (USD & EUR)</span>
-            
             <svg class="w-full max-w-lg mx-auto" viewBox="0 0 600 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <!-- Shipper Box -->
               <rect x="10" y="25" width="140" height="70" rx="10" fill="#ffffff" stroke="#df9b41" stroke-width="2"/>
               <text x="80" y="52" font-size="12" font-weight="bold" fill="#27221d" text-anchor="middle">🏢 Shipper / Broker</text>
               <text x="80" y="70" font-size="9" fill="#786f66" text-anchor="middle">Locks USD / EUR / Fiat</text>
-
-              <!-- Arrow 1 -->
               <path d="M155 60 H215" stroke="#0284c7" stroke-width="3"/>
               <text x="185" y="52" font-size="9" font-weight="bold" fill="#0284c7" text-anchor="middle">1. Deposit</text>
-
-              <!-- Escrow Vault Box -->
               <rect x="220" y="15" width="160" height="90" rx="12" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
               <text x="300" y="45" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">🔒 PayFreight Escrow</text>
               <text x="300" y="63" font-size="9" fill="#e0f2fe" text-anchor="middle">Automated Bank Vault</text>
               <text x="300" y="80" font-size="8" font-weight="bold" fill="#fef08a" text-anchor="middle">FUNDS SECURED (1:1 USD/EUR)</text>
-
-              <!-- Arrow 2 -->
               <path d="M385 60 H445" stroke="#15803d" stroke-width="3"/>
               <text x="415" y="52" font-size="9" font-weight="bold" fill="#15803d" text-anchor="middle">2. e-CMR / POD</text>
-
-              <!-- Carrier Box -->
               <rect x="450" y="25" width="140" height="70" rx="10" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
               <text x="520" y="52" font-size="12" font-weight="bold" fill="#27221d" text-anchor="middle">🚛 Transporter</text>
               <text x="520" y="70" font-size="9" fill="#15803d" text-anchor="middle">Instant ACH / SEPA Payout</text>
             </svg>
           </div>
 
-          <!-- STEP 1 -->
           <div class="flex gap-4 items-start">
             <div class="w-8 h-8 rounded-full bg-amber-500 text-white font-extrabold text-sm flex items-center justify-center shrink-0">1</div>
             <div>
@@ -797,7 +760,6 @@
             </div>
           </div>
 
-          <!-- STEP 2 -->
           <div class="flex gap-4 items-start">
             <div class="w-8 h-8 rounded-full bg-sky-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">2</div>
             <div>
@@ -806,7 +768,6 @@
             </div>
           </div>
 
-          <!-- STEP 3 -->
           <div class="flex gap-4 items-start">
             <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">3</div>
             <div>
@@ -814,45 +775,35 @@
               <p class="text-xs text-gray-600 mt-0.5">Escrow automatically releases funds directly to carrier's bank account (via ACH/FedNow in US Dollars or SEPA Instant in Euros) or Settlement wallet. Zero delays, zero middleman fee gouging.</p>
             </div>
           </div>
-
         </div>
 
         <div class="bg-gray-50 p-3 px-6 flex justify-end border-t border-gray-100 shrink-0">
           <button onclick="closeHowItWorksModal()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold py-2 px-5 rounded-lg transition">Got It!</button>
         </div>
-
       </div>
     </div>
 
-    <!-- FUND SAFETY & ESCROW MODAL -->
+    <!-- FUND SAFETY & ESCROW MODAL (Z VKLJUČENO TOČKO 5) -->
     <div id="fundSafetyModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full overflow-hidden border-2 border-emerald-500 text-left max-h-[92vh] flex flex-col">
-        
-        <!-- Institution Grade Header -->
         <div class="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 p-5 px-6 text-white flex justify-between items-center shrink-0 shadow-md">
           <div>
             <div class="inline-flex items-center gap-2 bg-emerald-950/60 text-emerald-300 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-500/30 mb-1">
               🏛️ GLOBAL INSTITUTIONAL ESCROW GUARANTEE
             </div>
-            <h3 class="text-xl font-black tracking-tight flex items-center gap-2 text-white">
-              🛡️ Fund Safety & Value Guarantee
-            </h3>
+            <h3 class="text-xl font-black tracking-tight flex items-center gap-2 text-white">🛡️ Fund Safety & Value Guarantee</h3>
             <p class="text-xs text-emerald-100 mt-0.5 font-medium">100% Fixed Value Protection • Regulated US & EU Banking Gateways • Zero Volatility</p>
           </div>
           <button onclick="closeFundSafetyModal()" class="text-white/80 hover:text-white text-3xl font-bold">&times;</button>
         </div>
 
-        <!-- Scrollable Content -->
         <div class="p-6 space-y-4 overflow-y-auto bg-slate-50/50">
-          
           <div class="bg-amber-50 border-2 border-amber-400 rounded-xl p-4 shadow-sm relative overflow-hidden">
             <div class="absolute -right-6 -bottom-6 opacity-10 text-amber-900 font-black text-8xl pointer-events-none">USD/EUR</div>
             <div class="flex items-start gap-3">
               <span class="text-2xl mt-0.5">💵💶</span>
               <div class="space-y-1">
-                <h4 class="text-sm font-black text-amber-950 uppercase tracking-wide">
-                  100% Value Guarantee – Zero Volatility & Exchange Risk
-                </h4>
+                <h4 class="text-sm font-black text-amber-950 uppercase tracking-wide">100% Value Guarantee – Zero Volatility & Exchange Risk</h4>
                 <p class="text-xs text-amber-900 leading-relaxed font-medium">
                   <strong>Locked in Fiat Value ($ USD / € EUR):</strong> All freight escrow funds are strictly locked in 1:1 fiat-backed value (USD/EUR via regulated USDC/USDT/EURC). 
                 </p>
@@ -905,42 +856,70 @@
             </div>
           </div>
 
-          <!-- TOČKA 5: INTEGRIRANA VSEBINA ZA CANCELATION & DISPUTE PROTOCOL -->
+          <!-- TOČKA 5: POGOJENI KREDIBILNI PREDLOG Z MEDIACIJO IN SPORAZUMNO ODPOVEDJO -->
           <div class="p-3.5 rounded-xl border border-amber-300 bg-amber-50/60 shadow-sm space-y-1.5">
             <div class="flex items-center gap-2 text-amber-900 font-extrabold text-xs">
               <span class="bg-amber-200 text-amber-900 p-1 rounded">🔄</span>
-              <span>5. Mutual €250 / $250 Same-Day Cancellation & Dispute Protection</span>
+              <span>5. €250 / $250 Escrow Protection: Mutual vs. Standard Settlement Adjustments</span>
             </div>
             <p class="text-[11px] text-gray-700 leading-relaxed">
-              To prevent last-minute supply chain disruptions and ghosting, both Shipper and Carrier lock a mutual <strong class="text-gray-900">€250 / $250 commitment deposit</strong> into the smart contract escrow upon booking.
+              To ensure commitment and eliminate last-minute disruptions, both Shipper and Carrier lock a mutual <strong class="text-gray-900">€250 / $250 commitment deposit</strong> upon booking.
             </p>
-            <ul class="text-[11px] text-gray-600 space-y-1 list-disc pl-4">
-              <li><strong>Successful Delivery or Mutual Cancellation:</strong> 100% of the commitment deposit is fully refunded to both parties instantly.</li>
-              <li><strong>Unilateral Last-Minute Cancellation / Default:</strong> The deposit automatically routes to the affected party as immediate compensation via the protocol settlement engine.</li>
+            <ul class="text-[11px] text-gray-600 space-y-1.5 list-disc pl-4">
+              <li>
+                <strong>🤝 Mutual Cancellation (Both Agree):</strong> If both parties agree to cancel prior to dispatch, <strong class="text-gray-900">100% of the locked freight funds AND both €250 / $250 commitment deposits are fully refunded</strong> instantly with zero fees.
+              </li>
+              <li>
+                <strong>📦 Successful Delivery:</strong> Full freight payout routes directly to the Carrier, and 100% of the €250 / $250 commitment deposits return to both parties.
+              </li>
+              <li>
+                <strong>⚡ Default / Unresolved Adjustment:</strong> In case of unilateral breach or non-performance without agreement, the commitment deposit allocates to the affected party as immediate protocol compensation.
+              </li>
             </ul>
           </div>
 
           <div class="bg-slate-100 rounded-xl p-3 border border-slate-200 text-center">
-            <span class="text-[11px] font-bold text-slate-700 block">
-              🔎 Real-time Auditable & Immutable Ledger
-            </span>
-            <span class="text-[10px] text-slate-500">
-              Every deposit transaction (USD or EUR) generates an auditable cryptographic proof linkable to global transport orders.
-            </span>
+            <span class="text-[11px] font-bold text-slate-700 block">🔎 Real-time Auditable & Immutable Ledger</span>
+            <span class="text-[10px] text-slate-500">Every deposit transaction (USD or EUR) generates an auditable cryptographic proof linkable to global transport orders.</span>
           </div>
-
         </div>
 
-        <!-- Modal Footer -->
         <div class="bg-gray-100 p-3 px-6 flex justify-between items-center border-t border-gray-200 shrink-0">
-          <span class="text-[11px] font-semibold text-emerald-800">
-            ✅ Certified Safe for US & Global Transporters, Brokers & Shippers
-          </span>
-          <button onclick="closeFundSafetyModal()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold py-2 px-6 rounded-lg shadow transition">
-            Understood & Confirmed
-          </button>
+          <span class="text-[11px] font-semibold text-emerald-800">✅ Certified Safe for US & Global Transporters, Brokers & Shippers</span>
+          <button onclick="closeFundSafetyModal()" class="bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold py-2 px-6 rounded-lg shadow transition">Understood & Confirmed</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISKRETNO MODALNO OKNO ZA MUTUAL & SETTLEMENT TERMS -->
+    <div id="cancelModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden border border-amber-200 text-left">
+        <div class="bg-gradient-to-r from-amber-600 to-amber-700 p-4 px-6 text-white flex justify-between items-center">
+          <div>
+            <h3 class="text-base font-bold flex items-center gap-2">🔄 Mutual & Settlement Terms Guide</h3>
+            <p class="text-xs text-amber-100 mt-0.5">Transparent guidelines for order adjustments and mutual cancellations</p>
+          </div>
+          <button onclick="closeCancelModal()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
         </div>
 
+        <div class="p-5 space-y-3 text-xs text-gray-700">
+          <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-xl space-y-1">
+            <span class="font-bold text-amber-900 text-sm block">🤝 Mutual Cancellation Protocol</span>
+            <p class="leading-relaxed">
+              If transport needs to be called off and <strong class="text-gray-900">both Shipper and Carrier confirm mutual cancellation</strong> before dispatch, the smart contract executes an instant, fee-free refund of the full freight amount and both €250 / $250 commitment deposits.
+            </p>
+          </div>
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1">
+            <span class="font-bold text-slate-900 text-sm block">🛡️ Automated Execution</span>
+            <p class="leading-relaxed">
+              All adjustments are processed programmatically through secure banking rails and cryptographic state checks, guaranteeing zero administrative delays or biased interventions.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 p-3 px-6 flex justify-end border-t border-gray-100">
+          <button onclick="closeCancelModal()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-2 px-5 rounded-lg transition">Got It</button>
+        </div>
       </div>
     </div>
 
@@ -949,7 +928,6 @@
       function openEscrowModal() {
         document.getElementById('escrowModal').classList.remove('hidden');
       }
-
       function closeEscrowModal() {
         document.getElementById('escrowModal').classList.add('hidden');
       }
@@ -957,7 +935,6 @@
       function openHowItWorksModal() {
         document.getElementById('howItWorksModal').classList.remove('hidden');
       }
-
       function closeHowItWorksModal() {
         document.getElementById('howItWorksModal').classList.add('hidden');
       }
@@ -965,9 +942,15 @@
       function openFundSafetyModal() {
         document.getElementById('fundSafetyModal').classList.remove('hidden');
       }
-
       function closeFundSafetyModal() {
         document.getElementById('fundSafetyModal').classList.add('hidden');
+      }
+
+      function openCancelModal() {
+        document.getElementById('cancelModal').classList.remove('hidden');
+      }
+      function closeCancelModal() {
+        document.getElementById('cancelModal').classList.add('hidden');
       }
 
       function showToast(message) {
