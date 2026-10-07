@@ -1,15 +1,64 @@
-# PayFreight Protocol – Official Instructions & Compliance Guide (2026 Edition)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayFreight Protocol - Instructions & Compliance Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #27221d;
+            background-color: #fcfbf9;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #e8e2d8;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        h1 { color: #0284c7; border-bottom: 2px solid #e8e2d8; padding-bottom: 10px; }
+        h2 { color: #15803d; margin-top: 30px; }
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            background-color: #27221d;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .back-btn:hover { background-color: #403831; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
 
-## 1. Introduction & Scope
-The PayFreight Protocol is a global, bank-grade settlement and institutional escrow engine built for United States (ACH/FedNow) and European (SEPA Instant) freight corridors. It integrates ISO 20022 messaging standards and UN/CEFACT e-CMR protocols to eliminate counterparty risk and payment defaults.
+    <a href="index.html" class="back-btn">← Back to PayFreight App</a>
 
-## 2. Core Operational Rules (The 5-Point Safeguard)
-1. **Non-Custodial Smart Vaults:** All funds are locked in 1:1 fiat-backed stability (USD/EUR). PayFreight operators hold zero manual authority over locked escrow balances.
-2. **Commitment Fee Architecture (€250 / $250):** Both Shipper and Carrier lock a mutual commitment deposit upon booking to eliminate ghosting and last-minute disruptions on loading day.
-3. **Immediate Principal Liquidity Protection:** In the event of a transport cancellation, the main freight principal is **instantly returned to the Shipper**, ensuring capital is never trapped during disputes, allowing the shipper to hire a replacement carrier immediately.
-4. **Automated e-CMR / POD Verification:** Release of final payout is triggered programmatically via verified electronic consignment notes (e-CMR) or proof of delivery signatures.
-5. **Multi-Language Regulatory Compliance:** Protocol documentation and notices are structured to support multi-jurisdictional standards across 25+ European and North American operational regions.
+    <h1>PayFreight Protocol – Official Instructions & Compliance Guide</h1>
+    <p><em>2026 Edition | Institutional Escrow & Settlement Engine</em></p>
 
-## 3. Dispute Resolution & Fault Attribution Workflow
-* **Mutual Cancellation:** If both parties agree via email token confirmation before dispatch, 100% of freight principal and both €250/$250 deposits are refunded with zero fees.
-* **Unilateral Fault Attribution:** When a party triggers the cancellation form due to loading-day failure, the counterpart receives a tokenized notification. Unresponsiveness exceeding 24 hours triggers automated protocol resolution.
+    <h2>1. Introduction & Scope</h2>
+    <p>The PayFreight Protocol is a global, bank-grade settlement and institutional escrow engine built for United States (ACH/FedNow) and European (SEPA Instant) freight corridors. It integrates ISO 20022 messaging standards and UN/CEFACT e-CMR protocols to eliminate counterparty risk and payment defaults.</p>
+
+    <h2>2. Core Operational Rules (The 5-Point Safeguard)</h2>
+    <ul>
+        <li><strong>Non-Custodial Smart Vaults:</strong> All funds are locked in 1:1 fiat-backed stability (USD/EUR). PayFreight operators hold zero manual authority over locked escrow balances.</li>
+        <li><strong>Commitment Fee Architecture (€250 / $250):</strong> Both Shipper and Carrier lock a mutual commitment deposit upon booking to eliminate ghosting and last-minute disruptions on loading day.</li>
+        <li><strong>Immediate Principal Liquidity Protection:</strong> In the event of a transport cancellation, the main freight principal is <strong>instantly returned to the Shipper</strong>, ensuring capital is never trapped during disputes, allowing the shipper to hire a replacement carrier immediately.</li>
+        <li><strong>Automated e-CMR / POD Verification:</strong> Release of final payout is triggered programmatically via verified electronic consignment notes (e-CMR) or proof of delivery signatures.</li>
+        <li><strong>Multi-Language Regulatory Compliance:</strong> Protocol documentation and notices are structured to support multi-jurisdictional standards across 25+ European and North American operational regions.</li>
+    </ul>
+
+    <h2>3. Dispute Resolution & Fault Attribution Workflow</h2>
+    <ul>
+        <li><strong>Mutual Cancellation:</strong> If both parties agree via email token confirmation before dispatch, 100% of freight principal and both €250/$250 deposits are refunded with zero fees.</li>
+        <li><strong>Unilateral Fault Attribution:</strong> When a party triggers the cancellation form due to loading-day failure, the counterpart receives a tokenized notification. Unresponsiveness exceeding 24 hours triggers automated protocol resolution.</li>
+    </ul>
+
+</body>
+</html>
