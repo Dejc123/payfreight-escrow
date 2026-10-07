@@ -302,6 +302,34 @@
             letter-spacing: 0.4px;
         }
 
+        /* SREDINSKA SEKCIJA ZA NEVTRALNA GUMBA */
+        .cancellation-buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 12px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn-neutral-action {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 7px 14px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+
+        .btn-neutral-action:hover {
+            background-color: #faf6f0;
+            border-color: var(--venetian-gold-light);
+            transform: translateY(-1px);
+        }
+
         .b2b-protocol-section {
             background: #faf6f0;
             border: 1px solid #ebdccb;
@@ -458,10 +486,6 @@
                     🛡️ Fund Safety & Escrow
                 </button>
                 
-                <!-- Diskretna gumba zgoraj za sporazumno odpoved in spor -->
-                <button onclick="openMutualCancelModal()" class="text-[11px] text-gray-400 hover:text-gray-700 underline bg-transparent border-0 cursor-pointer px-1">Mutual Cancel</button>
-                <button onclick="openDisputeModal()" class="text-[11px] text-gray-400 hover:text-red-600 underline bg-transparent border-0 cursor-pointer px-1">Dispute Terms</button>
-
                 <button class="btn-nav-fiat" onclick="showToast('Supported: US FedNow, ACH, Wire, SEPA Instant, VISA & Mastercard.')">
                     💵 USD / EUR Banking
                 </button>
@@ -534,6 +558,16 @@
             </a>
         </div>
 
+        <!-- SREDINSKA NEVTRALNA GUMBA -->
+        <div class="cancellation-buttons-container">
+            <button onclick="openMutualCancelModal()" class="btn-neutral-action">
+                🤝 Mutual Cancellation Terms
+            </button>
+            <button onclick="openCancelFormModal()" class="btn-neutral-action" style="border-color: var(--venetian-gold-light); color: var(--venetian-gold-dark);">
+                📋 Cancel Freight / Truck Form
+            </button>
+        </div>
+
         <!-- B2B & ENTERPRISE INTEGRATION SECTION -->
         <div class="b2b-protocol-section">
             <span class="b2b-title">🌐 Global Open Infrastructure for Freight Networks</span>
@@ -583,7 +617,6 @@
     <!-- ESCROW MODAL DIALOG -->
     <div id="escrowModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-amber-200 text-left">
-        
         <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-4 px-6 text-white flex justify-between items-center">
           <div>
             <h3 class="text-lg font-bold flex items-center gap-2">
@@ -787,7 +820,7 @@
       </div>
     </div>
 
-    <!-- FUND SAFETY & ESCROW MODAL (Z VKLJUČENO TOČKO 5) -->
+    <!-- FUND SAFETY & ESCROW MODAL -->
     <div id="fundSafetyModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full overflow-hidden border-2 border-emerald-500 text-left max-h-[92vh] flex flex-col">
         <div class="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 p-5 px-6 text-white flex justify-between items-center shrink-0 shadow-md">
@@ -860,7 +893,7 @@
             </div>
           </div>
 
-          <!-- TOČKA 5: POGOJENI KREDIBILNI PREDLOG Z MEDIACIJO IN SPORAZUMNO ODPOVEDJO -->
+          <!-- TOČKA 5 -->
           <div class="p-3.5 rounded-xl border border-amber-300 bg-amber-50/60 shadow-sm space-y-1.5">
             <div class="flex items-center gap-2 text-amber-900 font-extrabold text-xs">
               <span class="bg-amber-200 text-amber-900 p-1 rounded">🔄</span>
@@ -916,27 +949,63 @@
       </div>
     </div>
 
-    <!-- MODAL ZA DISPUTE TERMS -->
-    <div id="disputeModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-red-200 text-left">
-        <div class="bg-red-700 p-4 text-white flex justify-between items-center">
-          <h3 class="text-sm font-bold">⚖️ Settlement & Dispute Protocol</h3>
-          <button onclick="closeDisputeModal()" class="text-white text-xl font-bold">&times;</button>
+    <!-- MODAL ZA KANCELACIJSKO FORMO (CANCEL FREIGHT / TRUCK FORM) -->
+    <div id="cancelFormModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-amber-300 text-left">
+        <div class="bg-amber-600 p-4 text-white flex justify-between items-center">
+          <h3 class="text-sm font-bold flex items-center gap-1.5">📋 Cancel Freight / Truck Form</h3>
+          <button onclick="closeCancelFormModal()" class="text-white text-xl font-bold">&times;</button>
         </div>
-        <div class="p-4 space-y-2 text-xs text-gray-700">
-          <p>In case of unresponsiveness, last-minute ghosting, or unilateral breach:</p>
-          <ul class="list-disc pl-4 space-y-1">
-            <li><strong>Automatic Compensation:</strong> The €250 / $250 commitment deposit routes to the affected party.</li>
-            <li><strong>Programmatic Mediation:</strong> Protocol verifies timestamps and e-CMR delivery logs automatically.</li>
-          </ul>
+        <div class="p-5 space-y-3 text-xs text-gray-700">
+          <p class="text-gray-600">Submit details to trigger cancellation and notify the other party for mutual review:</p>
+          
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold mb-1 text-gray-700">Order ID *</label>
+              <input type="text" id="cancelOrderId" placeholder="e.g. ORD-9921" class="w-full border rounded-lg p-2 text-xs outline-none focus:ring-1 focus:ring-amber-500">
+            </div>
+            <div>
+              <label class="block font-bold mb-1 text-gray-700">Load ID *</label>
+              <input type="text" id="cancelLoadId" placeholder="e.g. LOAD-4412" class="w-full border rounded-lg p-2 text-xs outline-none focus:ring-1 focus:ring-amber-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold mb-1 text-gray-700">Carrier ID / MC Number *</label>
+            <input type="text" id="cancelCarrierId" placeholder="e.g. MC-982341" class="w-full border rounded-lg p-2 text-xs outline-none focus:ring-1 focus:ring-amber-500">
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block font-bold mb-1 text-gray-700">Your Email *</label>
+              <input type="email" id="cancelYourEmail" placeholder="you@company.com" class="w-full border rounded-lg p-2 text-xs outline-none focus:ring-1 focus:ring-amber-500">
+            </div>
+            <div>
+              <label class="block font-bold mb-1 text-gray-700">Counterpart Email *</label>
+              <input type="email" id="cancelOtherEmail" placeholder="partner@company.com" class="w-full border rounded-lg p-2 text-xs outline-none focus:ring-1 focus:ring-amber-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="block font-bold mb-1 text-gray-700">Specify Fault / Reason on Loading Day *</label>
+            <select id="cancelFaultReason" class="w-full border rounded-lg p-2 text-xs bg-white outline-none focus:ring-1 focus:ring-amber-500 font-medium text-gray-800">
+              <option value="shipper_failed">Shipper failed to provide cargo on loading day</option>
+              <option value="carrier_failed">Carrier failed to provide truck/transport on loading day</option>
+              <option value="mutual_agreement">Mutual agreement to call off transport</option>
+            </select>
+          </div>
         </div>
-        <div class="bg-gray-50 p-3 flex justify-end">
-          <button onclick="closeDisputeModal()" class="bg-red-700 text-white text-xs font-bold py-1.5 px-4 rounded">Close</button>
+
+        <div class="bg-gray-50 p-3 px-5 flex justify-between items-center border-t">
+          <button onclick="closeCancelFormModal()" class="text-xs text-gray-500 font-semibold hover:text-gray-800">Cancel</button>
+          <button onclick="submitCancelForm()" class="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold py-2 px-4 rounded-lg shadow transition">
+            Submit Cancellation & Notify ➔
+          </button>
         </div>
       </div>
     </div>
 
-    <!-- JAVASCRIPT FOR MODALS & TAB NAVIGATION -->
+    <!-- JAVASCRIPT -->
     <script>
       function openEscrowModal() {
         document.getElementById('escrowModal').classList.remove('hidden');
@@ -966,11 +1035,11 @@
         document.getElementById('mutualCancelModal').classList.add('hidden');
       }
 
-      function openDisputeModal() {
-        document.getElementById('disputeModal').classList.remove('hidden');
+      function openCancelFormModal() {
+        document.getElementById('cancelFormModal').classList.remove('hidden');
       }
-      function closeDisputeModal() {
-        document.getElementById('disputeModal').classList.add('hidden');
+      function closeCancelFormModal() {
+        document.getElementById('cancelFormModal').classList.add('hidden');
       }
 
       function showToast(message) {
@@ -1018,6 +1087,16 @@
       function submitEscrow() {
         alert('Locking Escrow Order... Redirecting to Secure Gateway.');
         closeEscrowModal();
+      }
+
+      function submitCancelForm() {
+        const orderId = document.getElementById('cancelOrderId').value;
+        if (!orderId) {
+          alert('Prosim vnesi vsaj Order ID.');
+          return;
+        }
+        alert('Stornacija oddana! Obvestilo (email) je bilo poslano obema stranema v potrditev.');
+        closeCancelFormModal();
       }
     </script>
 </body>
