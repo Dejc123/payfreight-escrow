@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayFreight - Confidential Pitch Strategy</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #fcfbf9; color: #27221d; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; }
+        .protected-content { display: none; }
+        #auth-box { background: #fff; padding: 30px; border: 1px solid #e8e2d8; border-radius: 12px; text-align: center; margin-top: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        input[type="password"] { padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; width: 60%; margin-right: 10px; }
+        button { padding: 10px 20px; background: #0284c7; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        button:hover { background: #0369a1; }
+        h1 { color: #0284c7; }
+        h2 { color: #15803d; margin-top: 30px; }
+        .badge { background: #fee2e2; color: #dc2626; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <!-- AUTHENTICATION GATE -->
+    <div id="auth-box">
+        <h2>🔒 Confidential Access</h2>
+        <p>This document contains proprietary go-to-market strategies for evaluation purposes only.</p>
+        <input type="password" id="passcode" placeholder="Enter judge/confidential passcode...">
+        <button onclick="unlockContent()">Access Pitch</button>
+        <p id="error-msg" style="color: red; margin-top: 10px; display: none;">Incorrect passcode. Try again.</p>
+    </div>
+
+    <!-- CONFIDENTIAL CONTENT (HIDDEN UNTIL UNLOCKED) -->
+    <div id="secret-content" class="protected-content">
+        <span class="badge">CONFIDENTIAL - SOLANA PITCH 2026</span>
+        <h1>PayFreight Protocol – Go-To-Market & Growth Plan</h1>
+        
+        <h2>1. Executive Summary: The "Zero-CAC" Defensibility</h2>
+        <p>Traditional Web3 supply chain projects fail because they spend millions trying to acquire users from scratch. PayFreight bypasses this bottleneck entirely through an existing proprietary channel (<strong>cargotrans.net</strong>), instantly unlocking <strong>7,000 active European and international logistics stakeholders</strong> from day one.</p>
+
+        <h2>2. Core Growth Pillars (The Trojan Horse Strategy)</h2>
+        <ul>
+            <li><strong>Phase 1: Direct-to-Database Activation:</strong> Deploying the automated backend mailer to the existing 7,000-user database with the <em>PayFreight Guaranty</em> badge.</li>
+            <li><strong>Phase 2: The Trust Badge Network Effect:</strong> Shippers exclusively choose carriers with the PayFreight badge to eliminate ghosting and secure capital.</li>
+            <li><strong>Phase 3: Automated Safeguard Retention:</strong> Utilizing built-in timeout and reminder engines to handle disputes programmatically with zero manual support overhead.</li>
+        </ul>
+
+        <h2>3. Why This Destroys Competition</h2>
+        <p>While competitors face high Customer Acquisition Costs ($500+ per enterprise shipper) and heavy capital lock risks, PayFreight operates at <strong>near-zero CAC</strong>, leveraging existing supply lines for instant institutional escrow adoption.</p>
+    </div>
+
+    <script>
+        function unlockContent() {
+            const pass = document.getElementById('passcode').value;
+            // Tukaj nastavi svoje skrivno geslo za sodnike
+            if (pass === 'solana2026') {
+                document.getElementById('auth-box').style.display = 'none';
+                document.getElementById('secret-content').style.display = 'block';
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
