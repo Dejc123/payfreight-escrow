@@ -1108,13 +1108,13 @@
         closeEscrowModal();
       }
 
-      function submitCancelForm() {
+ function submitCancelForm() {
         const orderId = document.getElementById('cancelOrderId').value;
         if (!orderId) {
-          alert('Prosim vnesi vsaj Order ID.');
+          alert('Please enter at least the Order ID.');
           return;
         }
-        alert('Stornacija oddana! Obvestilo (email) je bilo poslano obema stranema v potrditev.');
+        alert('Cancellation submitted! An email notification has been sent to both parties for review.');
         closeCancelFormModal();
       }
     </script>
