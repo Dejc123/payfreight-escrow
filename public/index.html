@@ -194,47 +194,6 @@
             background: linear-gradient(135deg, var(--venetian-gold) 0%, var(--venetian-gold-dark) 100%);
         }
 
-        .brand-header {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 14px;
-            margin-bottom: 12px;
-            text-align: left;
-        }
-
-        .logo-icon {
-            width: 52px;
-            height: 52px;
-            flex-shrink: 0;
-        }
-
-        h1 {
-            font-size: 2.6rem;
-            margin: 0;
-            background: linear-gradient(135deg, #0f172a 0%, #0284c7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-            line-height: 1.1;
-            font-weight: 800;
-        }
-
-        h1 span {
-            color: #0ea5e9;
-            -webkit-text-fill-color: #0ea5e9;
-        }
-
-        p.subtitle {
-            font-size: 0.88rem;
-            color: var(--text-muted);
-            margin-top: 6px;
-            margin-bottom: 14px;
-            line-height: 1.3;
-            font-weight: 500;
-            text-align: left;
-        }
-
         .copyright-banner {
             font-size: 0.68rem;
             color: var(--text-muted);
@@ -264,10 +223,11 @@
             justify-content: center;
             align-items: center;
             text-decoration: none;
-            padding: 14px 18px;
+            padding: 16px 20px;
             border-radius: 12px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
+            text-align: center;
         }
 
         .cta-pay-freight {
@@ -295,19 +255,29 @@
         }
 
         .cta-title {
-            font-size: 0.95rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 800;
             display: block;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
 
         .cta-subtext {
-            font-size: 0.68rem;
+            font-size: 0.72rem;
             font-weight: 600;
-            opacity: 0.92;
+            opacity: 0.95;
             display: block;
             text-transform: uppercase;
             letter-spacing: 0.4px;
+        }
+
+        .cta-guide-hint {
+            font-size: 0.65rem;
+            margin-top: 6px;
+            background: rgba(0, 0, 0, 0.12);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+            display: inline-block;
         }
 
         .cancellation-buttons-container {
@@ -475,7 +445,6 @@
     </style>
 </head>
 <body>
-
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TBR48DBC"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -490,27 +459,26 @@
                 <span style="color: #cbd5e1; margin: 0 4px;">•</span>
                 <span style="font-weight: 700; color: #0369a1;">🛡️ €250 / $250 Same-Day Escrow Protection</span>
             </div>
-            <!-- Ostala vsebina naprej... -->
 
-<div class="nav-actions">
-    <a href="payfreight-protocol.html" class="inline-flex items-center gap-1.5 bg-[#fdf8f0] hover:bg-[#faebd7] text-amber-900 text-xs font-semibold px-3.5 py-2 rounded-md border border-amber-200/80 shadow-sm transition">
-        <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-        <span>Protocol & Escrow</span>
-    </a>
-    
-    <button class="btn-nav-info" onclick="openHowItWorksModal()">
-        ❓ How It Works?
-    </button>
-    <button class="btn-nav-safety" onclick="openFundSafetyModal()">
-        🛡️ Fund Safety & Escrow
-    </button>
-    <button class="btn-nav-fiat" onclick="showToast('Supported: US FedNow, ACH, Wire, SEPA Instant, VISA & Mastercard.')">
-        💵 USD / EUR Banking
-    </button>
-    <button class="btn-nav-wallet" onclick="showToast('Connecting Institutional Settlement Engine...')">
-        🔑 Connect Wallet
-    </button>
-</div>
+            <div class="nav-actions">
+                <a href="payfreight-protocol.html" class="inline-flex items-center gap-1.5 bg-[#fdf8f0] hover:bg-[#faebd7] text-amber-900 text-xs font-semibold px-3.5 py-2 rounded-md border border-amber-200/80 shadow-sm transition">
+                    <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    <span>Protocol & Escrow</span>
+                </a>
+                
+                <button class="btn-nav-info" onclick="openHowItWorksModal()">
+                    ❓ How It Works?
+                </button>
+                <button class="btn-nav-safety" onclick="openFundSafetyModal()">
+                    🛡️ Fund Safety & Escrow
+                </button>
+                <button class="btn-nav-fiat" onclick="showToast('Supported: US FedNow, ACH, Wire, SEPA Instant, VISA & Mastercard.')">
+                    💵 USD / EUR Banking
+                </button>
+                <button class="btn-nav-wallet" onclick="showToast('Connecting Institutional Settlement Engine...')">
+                    🔑 Connect Wallet
+                </button>
+            </div>
         </div>
 
         <!-- GLAVNI HERO DEL -->
@@ -563,16 +531,18 @@
             🔒 Protected by PayFreight Infrastructure License • ISO 20022, US ACH/FedNow & UN/CEFACT e-CMR Standards
         </div>
 
-        <!-- MAIN ACTION BUTTONS -->
+        <!-- MAIN ACTION BUTTONS WITH CLEAR ROLE SELECTION & NEXT STEP GUIDANCE -->
         <div class="cta-main-container">
             <a onclick="openEscrowModal()" class="cta-card cta-pay-freight">
-                <span class="cta-title">🔒 Lock Escrow & Pay Freight</span>
-                <span class="cta-subtext">For Shippers & Freight Brokers ($ USD / € EUR)</span>
+                <span class="cta-title">📦 I have a load / I am a Shipper</span>
+                <span class="cta-subtext">Lock Escrow & Pay Freight ($ USD / € EUR)</span>
+                <span class="cta-guide-hint">Next: Upload rate confirmation or enter load details to secure funds</span>
             </a>
 
             <a href="widget.html?action=upload_cmr&v=2" class="cta-card cta-carrier-payout">
-                <span class="cta-title">📄 Submit e-CMR / POD & Receive Payout</span>
-                <span class="cta-subtext">For Carriers & Transporters (Direct Bank Payout)</span>
+                <span class="cta-title">🚛 I have a truck / I am a Carrier</span>
+                <span class="cta-subtext">Submit e-CMR / POD & Receive Payout</span>
+                <span class="cta-guide-hint">Next: Upload signed proof of delivery for instant bank payout</span>
             </a>
         </div>
 
@@ -647,7 +617,7 @@
         </div>
 
         <div class="flex border-b border-gray-200 bg-gray-50 p-2 gap-2 text-xs font-semibold">
-          <button id="tab-pdf-btn" onclick="switchTab('pdf')" class="flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5">
+          <button id="tab-pdf-btn" onclick="switchTab('pdf')" class="flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5 font-bold">
             📄 1. PDF Order
           </button>
           <button id="tab-exchange-btn" onclick="switchTab('exchange')" class="flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5">
@@ -912,7 +882,6 @@
             </div>
           </div>
 
-          <!-- TOČKA 5 -->
           <div class="p-3.5 rounded-xl border border-amber-300 bg-amber-50/60 shadow-sm space-y-1.5">
             <div class="flex items-center gap-2 text-amber-900 font-extrabold text-xs">
               <span class="bg-amber-200 text-amber-900 p-1 rounded">🔄</span>
@@ -1108,7 +1077,7 @@
         closeEscrowModal();
       }
 
- function submitCancelForm() {
+      function submitCancelForm() {
         const orderId = document.getElementById('cancelOrderId').value;
         if (!orderId) {
           alert('Please enter at least the Order ID.');
