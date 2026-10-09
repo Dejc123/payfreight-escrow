@@ -316,6 +316,15 @@
 
         <!-- ACTION BOX: DEPOSIT OR REJECT -->
         <div class="action-box">
+            <!-- 45-MINUTNI ODŠTEVALNIK ČASA (TTL) -->
+            <div class="bg-amber-100/80 border border-amber-300 rounded-xl p-3 mb-4 text-center">
+                <div class="flex items-center justify-center gap-2 text-xs font-bold text-amber-900">
+                    <span>⏳ Acceptance Window (45 Min TTL):</span>
+                    <span id="countdownTimer" class="bg-amber-500 text-white px-2.5 py-0.5 rounded font-mono font-extrabold text-sm shadow-sm">45:00</span>
+                </div>
+                <p class="text-[11px] text-amber-800 mt-1">If deposit is not placed within this window, link expires and 100% of freight escrow returns to the shipper instantly.</p>
+            </div>
+
             <div class="text-xs font-bold text-amber-900 mb-3" id="cutoffStatusText">
                 ⚖️ Your Action Required Before Dispatch (Cancellation Window Active)
             </div>
@@ -340,8 +349,39 @@
         </footer>
     </div>
 
-    <!-- JAVASCRIPT LOGIKA ZA URL PARAMETRE IN ČASOVNO OMEJITEV -->
+    <!-- JAVASCRIPT LOGIKA ZA 45-MINUTNI TTL, URL PARAMETRE IN ČASOVNE OMEJITVE -->
     <script>
+      // 45-MINUTNI ODŠTEVALNIK ČASA (TTL)
+      let timeLeft = 45 * 60; // 45 minut v sekundah
+      const timerElement = document.getElementById('countdownTimer');
+
+      const countdownInterval = setInterval(() => {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        
+        timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          timerElement.textContent = "EXPIRED";
+          timerElement.className = "bg-red-600 text-white px-2.5 py-0.5 rounded font-mono font-extrabold text-sm shadow-sm";
+          
+          alert("Transport acceptance window (45 min) expired! Escrow funds and shipper deposit automatically returned.");
+          
+          document.getElementById('btnAccept').disabled = true;
+          document.getElementById('btnAccept').style.opacity = "0.5";
+          document.getElementById('btnAccept').style.cursor = "not-allowed";
+          
+          document.getElementById('btnReject').disabled = true;
+          document.getElementById('btnReject').style.opacity = "0.5";
+          document.getElementById('btnReject').style.cursor = "not-allowed";
+          
+          document.getElementById('cutoffStatusText').innerText = "❌ Time Expired – Link Invalid & Funds Returned to Shipper";
+        } else {
+          timeLeft--;
+        }
+      }, 1000);
+
       window.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         
@@ -351,7 +391,6 @@
         const amount = urlParams.get('amount') || '1,850.00';
         const currency = urlParams.get('currency') || 'EUR';
         
-        // Možnost podajanja datuma naročila prek URL-ja (npr. ?date=2026-06-06) ali privzeto današnji dan
         const orderDateStr = urlParams.get('date') || new Date().toISOString().split('T')[0];
 
         document.getElementById('displayOrderId').innerText = orderId;
@@ -359,25 +398,22 @@
         document.getElementById('displayRoute').innerText = route;
         document.getElementById('displayAmount').innerText = `${currency === 'USD' ? '$' : '€'} ${amount} ${currency}`;
 
-        // Preverjanje časovnega okna (ista koledarska do polnoči)
         const orderDate = new Date(orderDateStr);
         const today = new Date();
         
-        // Zbrišemo ure za primerjavo datuma (da gledamo samo koledarski dan)
         orderDate.setHours(0,0,0,0);
         today.setHours(0,0,0,0);
 
         const isSameDay = (today.getTime() === orderDate.getTime());
 
         if (!isSameDay && today > orderDate) {
-          // Pretekli rok - preklic ni več možen
           const btnReject = document.getElementById('btnReject');
           btnReject.disabled = true;
           btnReject.style.opacity = "0.5";
           btnReject.style.cursor = "not-allowed";
           btnReject.innerHTML = "❌ Cancellation Window Expired (Next Day Locked)";
           
-          document.getElementById('cutoffStatusText.innerText') = "⚠️ Cancellation Window Closed (Passed Midnight Cutoff)";
+          document.getElementById('cutoffStatusText').innerText = "⚠️ Cancellation Window Closed (Passed Midnight Cutoff)";
           document.getElementById('cutoffSubtext').innerText = "The allowed same-day cancellation window has expired. Transport commitment is locked.";
         }
       });
