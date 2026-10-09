@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -206,13 +205,21 @@
             text-align: center;
         }
 
-        /* PHASE BANNER / DIVIDERS */
-        .phase-header {
+        /* ELEGANT CARDS & PHASE WRAPPERS */
+        .phase-block {
+            background: #faf6f0;
+            border: 1px solid #ebdccb;
+            border-radius: 16px;
+            padding: 16px;
+            margin: 14px 0;
+            text-align: left;
+        }
+
+        .phase-header-inline {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin: 20px 0 10px 0;
-            text-align: left;
+            justify-content: space-between;
+            margin-bottom: 10px;
         }
 
         .phase-badge {
@@ -243,17 +250,10 @@
             border: 1px solid #cbd5e1;
         }
 
-        .phase-line {
-            height: 1px;
-            background: var(--border-color);
-            flex-grow: 1;
-        }
-
-        .cta-main-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin: 10px 0;
+        .phase-desc {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 500;
         }
 
         .cta-card {
@@ -262,7 +262,7 @@
             justify-content: center;
             align-items: center;
             text-decoration: none;
-            padding: 16px 20px;
+            padding: 18px 24px;
             border-radius: 12px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
@@ -274,35 +274,35 @@
             background: linear-gradient(135deg, #e8b265 0%, #df9b41 50%, #c9852f 100%);
             color: #ffffff;
             border: 1px solid var(--venetian-gold-dark);
-            box-shadow: 0 4px 12px rgba(223, 155, 65, 0.2);
+            box-shadow: 0 4px 14px rgba(223, 155, 65, 0.22);
         }
 
         .cta-pay-freight:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(223, 155, 65, 0.3);
+            box-shadow: 0 6px 18px rgba(223, 155, 65, 0.35);
         }
 
         .cta-carrier-payout {
-            background-color: var(--accent-blue);
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
             color: #ffffff;
-            border: 1px solid var(--accent-blue-hover);
-            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+            border: 1px solid #0369a1;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.22);
         }
 
         .cta-carrier-payout:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3);
+            box-shadow: 0 6px 18px rgba(2, 132, 199, 0.35);
         }
 
         .cta-title {
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: 800;
             display: block;
             margin-bottom: 4px;
         }
 
         .cta-subtext {
-            font-size: 0.72rem;
+            font-size: 0.75rem;
             font-weight: 600;
             opacity: 0.95;
             display: block;
@@ -311,10 +311,10 @@
         }
 
         .cta-guide-hint {
-            font-size: 0.65rem;
+            font-size: 0.68rem;
             margin-top: 6px;
             background: rgba(0, 0, 0, 0.12);
-            padding: 3px 8px;
+            padding: 3px 10px;
             border-radius: 6px;
             font-weight: 500;
             display: inline-block;
@@ -324,7 +324,7 @@
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin: 6px 0;
+            margin: 4px 0;
             flex-wrap: wrap;
         }
 
@@ -574,12 +574,11 @@
         <!-- ======================================================== -->
         <!-- FAZA 1: BEFORE TRANSPORT / BOOKING                       -->
         <!-- ======================================================== -->
-        <div class="phase-header">
-            <span class="phase-badge phase-badge-gold">Before Transport / Booking</span>
-            <div class="phase-line"></div>
-        </div>
-
-        <div class="cta-main-container">
+        <div class="phase-block">
+            <div class="phase-header-inline">
+                <span class="phase-badge phase-badge-gold">Before Transport / Booking</span>
+                <span class="phase-desc">Shipper Escrow & Order Lock</span>
+            </div>
             <a onclick="openEscrowModal()" class="cta-card cta-pay-freight">
                 <span class="cta-title">📦 I have a load / I am a Shipper</span>
                 <span class="cta-subtext">Lock Escrow & Pay Freight ($ USD / € EUR)</span>
@@ -590,29 +589,29 @@
         <!-- ======================================================== -->
         <!-- FAZA 2: DURING TRANSPORT (DISPUTES / CANCELLATION)        -->
         <!-- ======================================================== -->
-        <div class="phase-header">
-            <span class="phase-badge phase-badge-neutral">During Transport (Actions & Support)</span>
-            <div class="phase-line"></div>
-        </div>
-
-        <div class="cancellation-buttons-container">
-            <button onclick="openMutualCancelModal()" class="btn-neutral-action">
-                🤝 Mutual Cancellation Terms
-            </button>
-            <button onclick="openCancelFormModal()" class="btn-neutral-action" style="border-color: var(--venetian-gold-light); color: var(--venetian-gold-dark);">
-                📋 Cancel Freight / Truck Form
-            </button>
+        <div class="phase-block" style="background: #ffffff; border-color: var(--border-color);">
+            <div class="phase-header-inline" style="margin-bottom: 8px;">
+                <span class="phase-badge phase-badge-neutral">During Transport</span>
+                <span class="phase-desc">Transit Actions & Support</span>
+            </div>
+            <div class="cancellation-buttons-container">
+                <button onclick="openMutualCancelModal()" class="btn-neutral-action">
+                    🤝 Mutual Cancellation Terms
+                </button>
+                <button onclick="openCancelFormModal()" class="btn-neutral-action" style="border-color: var(--venetian-gold-light); color: var(--venetian-gold-dark);">
+                    📋 Cancel Freight / Truck Form
+                </button>
+            </div>
         </div>
 
         <!-- ======================================================== -->
         <!-- FAZA 3: AFTER TRANSPORT DONE                             -->
         <!-- ======================================================== -->
-        <div class="phase-header">
-            <span class="phase-badge phase-badge-blue">After Transport Done</span>
-            <div class="phase-line"></div>
-        </div>
-
-        <div class="cta-main-container">
+        <div class="phase-block" style="background: #f0f9ff; border-color: #bae6fd;">
+            <div class="phase-header-inline">
+                <span class="phase-badge phase-badge-blue">After Transport Done</span>
+                <span class="phase-desc">Carrier e-CMR & Direct Bank Payout</span>
+            </div>
             <a href="widget.html?action=upload_cmr&v=2" class="cta-card cta-carrier-payout">
                 <span class="cta-title">🚛 I have a truck / I am a Carrier</span>
                 <span class="cta-subtext">Submit e-CMR / POD & Receive Payout</span>
@@ -758,7 +757,7 @@
                 </div>
                 <div>
                   <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Bank Name & Country *</label>
-                  <input type="text" id="manualBankName" placeholder="e.g. JPMorgan Chase (USA)" class="w-full border border-amber-300 rounded-lg p-2 text-xs bg-white outline-none">
+                  <input type="text" id="manualBankName" placeholder="e.g. JPMorgan Chase (USA)" class="w-full border border-gray-300 rounded-lg p-2 text-xs bg-white outline-none">
                 </div>
               </div>
             </div>
