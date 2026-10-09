@@ -62,7 +62,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             color: var(--text-main);
-            padding: 30px 16px;
+            padding: 20px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -71,10 +71,10 @@
         }
 
         .container {
-            max-width: 840px !important;
+            max-width: 800px !important;
             width: 100% !important;
             margin: 0 auto !important;
-            padding: 28px 32px;
+            padding: 22px 28px;
             background: var(--card-bg);
             border-radius: 20px;
             box-shadow: 0 12px 30px -5px rgba(184, 123, 40, 0.1), 0 0 1px 1px rgba(223, 155, 65, 0.12);
@@ -87,11 +87,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 18px;
-            padding-bottom: 12px;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
             border-bottom: 1px solid var(--border-color);
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
 
         .status-bar {
@@ -100,9 +100,9 @@
             gap: 6px;
             background: var(--success-bg);
             border: 1px solid #bbf7d0;
-            padding: 5px 12px;
+            padding: 4px 10px;
             border-radius: 16px;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             color: var(--success);
             font-weight: 600;
         }
@@ -118,7 +118,7 @@
         .nav-actions {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
 
@@ -126,8 +126,8 @@
             background-color: #fff8ee;
             border: 1px solid var(--venetian-gold-light);
             color: var(--venetian-gold-dark);
-            padding: 6px 12px;
-            font-size: 0.75rem;
+            padding: 5px 10px;
+            font-size: 0.72rem;
             font-weight: 700;
             border-radius: 8px;
             cursor: pointer;
@@ -143,15 +143,15 @@
             background-color: #f0fdf4;
             border: 1.5px solid #16a34a;
             color: #15803d;
-            padding: 6px 12px;
-            font-size: 0.75rem;
+            padding: 5px 10px;
+            font-size: 0.72rem;
             font-weight: 800;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             box-shadow: 0 2px 6px rgba(22, 163, 74, 0.15);
         }
 
@@ -165,8 +165,8 @@
             background-color: #ffffff;
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 6px 12px;
-            font-size: 0.75rem;
+            padding: 5px 10px;
+            font-size: 0.72rem;
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
@@ -182,8 +182,8 @@
             background: linear-gradient(135deg, var(--venetian-gold-light) 0%, var(--venetian-gold) 100%);
             border: 1px solid var(--venetian-gold-dark);
             color: #ffffff;
-            padding: 6px 12px;
-            font-size: 0.75rem;
+            padding: 5px 10px;
+            font-size: 0.72rem;
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
@@ -195,23 +195,23 @@
         }
 
         .copyright-banner {
-            font-size: 0.68rem;
+            font-size: 0.66rem;
             color: var(--text-muted);
             background: #f4efe6;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 6px 10px;
-            margin-bottom: 16px;
+            padding: 5px 10px;
+            margin-bottom: 12px;
             text-align: center;
         }
 
-        /* ELEGANT CARDS & PHASE WRAPPERS */
+        /* KOMPAKTNI ELEGANTNI BLOKI FAZ */
         .phase-block {
             background: #faf6f0;
             border: 1px solid #ebdccb;
-            border-radius: 16px;
-            padding: 16px;
-            margin: 14px 0;
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin: 10px 0;
             text-align: left;
         }
 
@@ -219,15 +219,15 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .phase-badge {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
-            padding: 4px 10px;
+            letter-spacing: 0.7px;
+            padding: 3px 8px;
             border-radius: 6px;
             white-space: nowrap;
         }
@@ -251,23 +251,25 @@
         }
 
         .phase-desc {
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
             font-weight: 500;
         }
 
+        /* 65% ŠIRINA ZA RES "SEXY" IN KOMPAKTNE GUMBE */
         .cta-card {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-decoration: none;
-            padding: 18px 24px;
+            padding: 14px 20px;
             border-radius: 12px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
             text-align: center;
-            width: 100%;
+            width: 65%;
+            margin: 0 auto;
         }
 
         .cta-pay-freight {
@@ -295,27 +297,27 @@
         }
 
         .cta-title {
-            font-size: 1.05rem;
+            font-size: 0.95rem;
             font-weight: 800;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .cta-subtext {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             opacity: 0.95;
             display: block;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.3px;
         }
 
         .cta-guide-hint {
-            font-size: 0.68rem;
-            margin-top: 6px;
+            font-size: 0.64rem;
+            margin-top: 4px;
             background: rgba(0, 0, 0, 0.12);
-            padding: 3px 10px;
-            border-radius: 6px;
+            padding: 2px 8px;
+            border-radius: 5px;
             font-weight: 500;
             display: inline-block;
         }
@@ -323,8 +325,8 @@
         .cancellation-buttons-container {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin: 4px 0;
+            gap: 8px;
+            margin: 2px 0;
             flex-wrap: wrap;
         }
 
@@ -332,13 +334,13 @@
             background-color: #ffffff;
             border: 1px solid var(--border-color);
             color: var(--text-main);
-            padding: 7px 14px;
-            font-size: 0.74rem;
+            padding: 5px 12px;
+            font-size: 0.72rem;
             font-weight: 600;
-            border-radius: 9px;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
         }
 
         .btn-neutral-action:hover {
@@ -351,40 +353,40 @@
             background: #faf6f0;
             border: 1px solid #ebdccb;
             border-radius: 12px;
-            padding: 14px 18px;
-            margin: 16px 0;
+            padding: 12px 16px;
+            margin: 14px 0;
             text-align: center;
         }
 
         .b2b-title {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 700;
             color: var(--venetian-gold-dark);
             text-transform: uppercase;
-            letter-spacing: 0.6px;
+            letter-spacing: 0.5px;
             display: block;
         }
 
         .b2b-desc {
-            font-size: 0.74rem;
+            font-size: 0.72rem;
             color: var(--text-muted);
-            margin: 3px 0 10px 0;
+            margin: 2px 0 8px 0;
         }
 
         .b2b-grid {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
             flex-wrap: wrap;
         }
 
         .b2b-card {
             flex: 1;
-            min-width: 220px;
+            min-width: 200px;
             background: #ffffff;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 10px 12px;
+            padding: 8px 10px;
             text-decoration: none;
             text-align: left;
             transition: all 0.2s ease;
@@ -395,15 +397,15 @@
         }
 
         .b2b-card-title {
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 700;
             color: var(--text-main);
         }
 
         .b2b-card-text {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: var(--text-muted);
-            line-height: 1.3;
+            line-height: 1.25;
             margin: 2px 0 0 0;
         }
 
@@ -411,14 +413,14 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
-            margin: 14px 0 8px 0;
+            gap: 5px;
+            margin: 10px 0 6px 0;
         }
 
         .pay-tag {
-            font-size: 0.66rem;
+            font-size: 0.64rem;
             text-transform: uppercase;
-            letter-spacing: 0.6px;
+            letter-spacing: 0.5px;
             color: var(--text-muted);
             font-weight: 700;
         }
@@ -427,9 +429,9 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 5px;
             background: #ffffff;
-            padding: 5px 12px;
+            padding: 4px 10px;
             border-radius: 20px;
             border: 1px solid var(--border-color);
             flex-wrap: wrap;
@@ -439,11 +441,11 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            font-size: 0.72rem;
+            font-size: 0.7rem;
             font-weight: 700;
             color: var(--text-main);
-            padding: 3px 8px;
-            border-radius: 12px;
+            padding: 2px 6px;
+            border-radius: 10px;
             background: #ffffff;
             cursor: pointer;
             white-space: nowrap;
@@ -452,10 +454,10 @@
         .secondary-links {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 6px;
             justify-content: center;
-            margin-top: 12px;
-            padding-top: 12px;
+            margin-top: 10px;
+            padding-top: 10px;
             border-top: 1px solid var(--border-color);
         }
 
@@ -464,8 +466,8 @@
             background-color: #ffffff;
             border: 1px solid var(--border-color);
             color: var(--text-muted);
-            padding: 5px 12px;
-            font-size: 0.72rem;
+            padding: 4px 10px;
+            font-size: 0.7rem;
             font-weight: 600;
             border-radius: 6px;
             text-decoration: none;
@@ -478,8 +480,8 @@
         }
 
         footer {
-            margin-top: 12px;
-            font-size: 0.68rem;
+            margin-top: 10px;
+            font-size: 0.66rem;
             color: var(--text-muted);
         }
     </style>
@@ -501,8 +503,8 @@
             </div>
 
             <div class="nav-actions">
-                <a href="payfreight-protocol.html" class="inline-flex items-center gap-1.5 bg-[#fdf8f0] hover:bg-[#faebd7] text-amber-900 text-xs font-semibold px-3.5 py-2 rounded-md border border-amber-200/80 shadow-sm transition">
-                    <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                <a href="payfreight-protocol.html" class="inline-flex items-center gap-1.5 bg-[#fdf8f0] hover:bg-[#faebd7] text-amber-900 text-xs font-semibold px-3 py-1.5 rounded-md border border-amber-200/80 shadow-sm transition">
+                    <svg class="w-3.5 h-3.5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                     <span>Protocol & Escrow</span>
                 </a>
                 
@@ -522,10 +524,10 @@
         </div>
 
         <!-- GLAVNI HERO DEL -->
-        <div class="flex flex-col items-center text-center mb-4">
-            <div class="flex items-center justify-center gap-5 mb-3 flex-wrap">
+        <div class="flex flex-col items-center text-center mb-3">
+            <div class="flex items-center justify-center gap-4 mb-2 flex-wrap">
                 <!-- Znak / Krog -->
-                <svg class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-16 h-16 sm:w-20 sm:h-20 flex-shrink-0" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="100" cy="100" r="90" stroke="#0f172a" stroke-width="10" fill="#ffffff"/>
                     <circle cx="100" cy="100" r="76" stroke="#0284c7" stroke-width="2" stroke-dasharray="4 6" fill="none"/>
                     <g fill="#0f172a">
@@ -553,19 +555,19 @@
                     <circle cx="145" cy="126" r="5" fill="#ffffff"/>
                 </svg>
 
-                <h1 class="text-5xl sm:text-6xl font-black tracking-tight text-[#0b192c] m-0" style="font-family: system-ui, -apple-system, sans-serif;">
+                <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-[#0b192c] m-0" style="font-family: system-ui, -apple-system, sans-serif;">
                     Pay<span class="text-[#00b4d8]">Freight</span>
                 </h1>
             </div>
 
-            <div class="inline-flex items-center gap-3 text-xs sm:text-sm text-[#786f66] font-semibold mt-2">
+            <div class="inline-flex items-center gap-3 text-xs text-[#786f66] font-semibold mt-1">
                 <span class="text-[#df9b41]">——</span> 
                 <span>ISO 20022</span> &bull; <span>FedNow</span> &bull; <span>ACH</span> &bull; <span>e-CMR</span> 
                 <span class="text-[#df9b41]">——</span>
             </div>
         </div>
 
-        <p class="subtitle" style="margin-bottom: 12px;">Automated Global Freight Settlement Engine • USD ($) & EUR (€) Institutional Escrow</p>
+        <p class="subtitle" style="margin-bottom: 10px; font-size: 0.78rem;">Automated Global Freight Settlement Engine • USD ($) & EUR (€) Institutional Escrow</p>
         
         <div class="copyright-banner">
             🔒 Protected by PayFreight Infrastructure License • ISO 20022, US ACH/FedNow & UN/CEFACT e-CMR Standards
@@ -590,7 +592,7 @@
         <!-- FAZA 2: DURING TRANSPORT (DISPUTES / CANCELLATION)        -->
         <!-- ======================================================== -->
         <div class="phase-block" style="background: #ffffff; border-color: var(--border-color);">
-            <div class="phase-header-inline" style="margin-bottom: 8px;">
+            <div class="phase-header-inline" style="margin-bottom: 6px;">
                 <span class="phase-badge phase-badge-neutral">During Transport</span>
                 <span class="phase-desc">Transit Actions & Support</span>
             </div>
@@ -620,7 +622,7 @@
         </div>
 
         <!-- B2B & ENTERPRISE INTEGRATION SECTION -->
-        <div class="b2b-protocol-section" style="margin-top: 20px;">
+        <div class="b2b-protocol-section" style="margin-top: 14px;">
             <span class="b2b-title">🌐 Global Open Infrastructure for Freight Networks</span>
             <p class="b2b-desc">Built for US & European Freight Exchanges, TMS, ERPs, and Global Supply Chains.</p>
 
@@ -757,7 +759,7 @@
                 </div>
                 <div>
                   <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Bank Name & Country *</label>
-                  <input type="text" id="manualBankName" placeholder="e.g. JPMorgan Chase (USA)" class="w-full border border-gray-300 rounded-lg p-2 text-xs bg-white outline-none">
+                  <input type="text" id="manualBankName" placeholder="e.g. JPMorgan Chase (USA)" class="w-full border border-amber-300 rounded-lg p-2 text-xs bg-white outline-none">
                 </div>
               </div>
             </div>
