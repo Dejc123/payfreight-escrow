@@ -1045,7 +1045,7 @@
       </div>
     </div>
 
-    <!-- JAVASCRIPT -->
+<!-- JAVASCRIPT -->
     <script>
       function openEscrowModal() {
         document.getElementById('escrowModal').classList.remove('hidden');
@@ -1124,8 +1124,20 @@
         }, 1200);
       }
 
+      // Updated submitEscrow function with TTL order registration for the timeout worker
       function submitEscrow() {
-        alert('Locking Escrow Order... Redirecting to Secure Gateway.');
+        // Create order object with timestamp and initial status for the TTL worker
+        const newOrder = {
+          orderId: document.getElementById('manualCargoId')?.value || "ORD-2026-9921",
+          amount: parseFloat(document.getElementById('manualAmount')?.value) || 1850.00,
+          createdAt: new Date().getTime(), // Current timestamp in milliseconds
+          status: "pending_carrier"
+        };
+
+        // Save to localStorage for timeout tracking and carrier portal sync
+        localStorage.setItem('payfreight_active_order', JSON.stringify(newOrder));
+
+        alert('Locking Escrow Order & Initializing 45-min TTL Worker... Redirecting to Secure Gateway.');
         closeEscrowModal();
       }
 
