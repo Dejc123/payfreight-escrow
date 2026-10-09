@@ -11,6 +11,9 @@ const cors = require('cors');
 const path = require('path');
 const nodemailer = require('nodemailer');
 
+// Import the modular carrier portal component
+const PayFreightCarrierPortal = require('./carrier-portal');
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -30,6 +33,20 @@ const transporter = nodemailer.createTransport({
 });
 
 const escrowTransactions = [];
+
+// Route to render the carrier portal dynamically with pre-filled parameters
+app.get('/api/carrier-portal', (req, res) => {
+    const { shipperId, cargoId, shipperEmail } = req.query;
+
+    const portal = new PayFreightCarrierPortal();
+    const carrierPageHtml = portal.renderForm({
+        shipperId: shipperId || 'N/A',
+        cargoId: cargoId || 'N/A',
+        shipperEmail: shipperEmail || 'N/A'
+    });
+
+    res.send(carrierPageHtml);
+});
 
 app.post('/api/payfreight/confirm', async (req, res) => {
     const { externalId, participantId, recipientEmail } = req.body;
@@ -65,7 +82,7 @@ app.post('/api/payfreight/confirm', async (req, res) => {
     }
 
     res.json({
-        success: true,
+        success: status = true,
         message: 'PayFreight escrow protocol successfully initialized!',
         transaction
     });
