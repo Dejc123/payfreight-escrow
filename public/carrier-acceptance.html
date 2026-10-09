@@ -305,29 +305,33 @@
                 </div>
             </div>
 
-            <div class="bg-white border border-amber-200 rounded-xl p-3 text-xs text-gray-700">
-                <strong>ℹ️ Notice for Carrier:</strong> The shipper has successfully locked the full freight amount in the institutional escrow vault. To finalize and secure this transport job, both parties contribute a mutual <strong>€250 / $250 commitment deposit</strong>.
+            <div class="bg-white border border-amber-200 rounded-xl p-3 text-xs text-gray-700 space-y-1.5">
+                <p><strong>ℹ️ Escrow & Cancellation Policy:</strong></p>
+                <ul class="list-disc pl-4 space-y-1 text-[11px] text-gray-600">
+                    <li><strong>Full Refund on Cancel:</strong> If cancelled within the allowed window, 100% of the shipper's freight escrow AND both commitment deposits are instantly refunded.</li>
+                    <li><strong>Timezone Cutoff Rule:</strong> Cancellation is strictly permitted <strong>only on the same calendar day until midnight (00:00 local time</strong> of the booking region: Europe CET/CEST or US EST/PST). Starting the next day, cancellation is locked.</li>
+                </ul>
             </div>
         </div>
 
         <!-- ACTION BOX: DEPOSIT OR REJECT -->
         <div class="action-box">
-            <div class="text-xs font-bold text-amber-900 mb-3">
-                ⚖️ Your Action Required Before Dispatch
+            <div class="text-xs font-bold text-amber-900 mb-3" id="cutoffStatusText">
+                ⚖️ Your Action Required Before Dispatch (Cancellation Window Active)
             </div>
 
             <!-- Gumb za potrditev in vplačilo kavcije -->
-            <button onclick="confirmCarrierDeposit()" class="btn-accept-deposit">
+            <button onclick="confirmCarrierDeposit()" id="btnAccept" class="btn-accept-deposit">
                 <span>🔒 Deposit €250 / $250 & Confirm Transport</span>
             </button>
 
             <!-- Gumb za takojšen preklic naročila brez posledic -->
-            <button onclick="rejectLoadWithoutPenalty()" class="btn-reject-load">
-                <span>❌ Reject Load / Cancel Without Penalty</span>
+            <button onclick="rejectLoadWithoutPenalty()" id="btnReject" class="btn-reject-load">
+                <span>❌ Reject Load / Cancel Without Penalty (Refund Shipper)</span>
             </button>
 
-            <p class="text-[11px] text-gray-500 mt-2">
-                * If you reject prior to locking, the order is cancelled immediately with zero penalties.
+            <p class="text-[11px] text-gray-500 mt-2" id="cutoffSubtext">
+                * Cancellation available until midnight (00:00 local time) on the booking date.
             </p>
         </div>
 
@@ -336,9 +340,8 @@
         </footer>
     </div>
 
-    <!-- JAVASCRIPT LOGIKA ZA URL PARAMETRE -->
+    <!-- JAVASCRIPT LOGIKA ZA URL PARAMETRE IN ČASOVNO OMEJITEV -->
     <script>
-      // Avtomatsko branje podatkov iz URL-ja (če jih je špediter poslal naprej)
       window.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         
@@ -347,11 +350,36 @@
         const route = urlParams.get('route') || 'Munich (DE) → Milan (IT)';
         const amount = urlParams.get('amount') || '1,850.00';
         const currency = urlParams.get('currency') || 'EUR';
+        
+        // Možnost podajanja datuma naročila prek URL-ja (npr. ?date=2026-06-06) ali privzeto današnji dan
+        const orderDateStr = urlParams.get('date') || new Date().toISOString().split('T')[0];
 
         document.getElementById('displayOrderId').innerText = orderId;
         document.getElementById('displayShipper').innerText = shipper;
         document.getElementById('displayRoute').innerText = route;
         document.getElementById('displayAmount').innerText = `${currency === 'USD' ? '$' : '€'} ${amount} ${currency}`;
+
+        // Preverjanje časovnega okna (ista koledarska do polnoči)
+        const orderDate = new Date(orderDateStr);
+        const today = new Date();
+        
+        // Zbrišemo ure za primerjavo datuma (da gledamo samo koledarski dan)
+        orderDate.setHours(0,0,0,0);
+        today.setHours(0,0,0,0);
+
+        const isSameDay = (today.getTime() === orderDate.getTime());
+
+        if (!isSameDay && today > orderDate) {
+          // Pretekli rok - preklic ni več možen
+          const btnReject = document.getElementById('btnReject');
+          btnReject.disabled = true;
+          btnReject.style.opacity = "0.5";
+          btnReject.style.cursor = "not-allowed";
+          btnReject.innerHTML = "❌ Cancellation Window Expired (Next Day Locked)";
+          
+          document.getElementById('cutoffStatusText.innerText') = "⚠️ Cancellation Window Closed (Passed Midnight Cutoff)";
+          document.getElementById('cutoffSubtext').innerText = "The allowed same-day cancellation window has expired. Transport commitment is locked.";
+        }
       });
 
       function confirmCarrierDeposit() {
@@ -360,8 +388,8 @@
       }
 
       function rejectLoadWithoutPenalty() {
-        if (confirm('Are you sure you want to reject this load? The transport order will be cancelled instantly with zero penalties and the shipper will be notified.')) {
-          alert('Load rejected successfully. Returning to main protocol portal.');
+        if (confirm('Are you sure you want to reject this load? 100% of the shipper’s freight escrow AND both commitment deposits will be instantly refunded with zero penalties.')) {
+          alert('Load cancelled successfully. Shipper freight funds and deposits refunded.');
           window.location.href = 'index.html?status=load_rejected';
         }
       }
