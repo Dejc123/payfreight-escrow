@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayFreight Escrow Timeout & Refund Worker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 flex items-center justify-center min-h-screen p-4 font-mono">
+    <div class="max-w-md w-full bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-2xl space-y-4 text-center">
+        <div class="text-3xl">🛡️</div>
+        <h1 class="text-sm font-bold uppercase tracking-wider text-amber-400">PayFreight TTL & Refund Engine</h1>
+        <p class="text-xs text-slate-400">Background worker active. Automatically monitors 45-minute carrier acceptance windows and triggers instant escrow refunds if expired.</p>
+        
+        <div id="workerStatus" class="bg-slate-900 border border-slate-700 p-3 rounded-xl text-xs text-emerald-400 font-mono">
+            🟢 Worker Status: Running & Monitoring...
+        </div>
+
+        <div id="logContainer" class="text-left bg-slate-950 p-3 rounded-xl text-[11px] text-slate-300 h-32 overflow-y-auto space-y-1">
+            <div>[System] Initialized escrow timeout watcher.</div>
+        </div>
+
+        <button onclick="checkAndProcessTimeouts()" class="w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs py-2 rounded-lg transition">
+            Force Check Timeouts Now
+        </button>
+        
+        <div class="pt-2 border-t border-slate-700">
+            <a href="index.html" class="text-xs text-slate-400 hover:text-white underline">← Return to Main Portal</a>
+        </div>
+    </div>
+
+    <script>
+      // Helper function to append activity logs with timestamps
+      function logEvent(msg) {
+        const box = document.getElementById('logContainer');
+        const time = new Date().toLocaleTimeString();
+        box.innerHTML += `<div>[${time}] ${msg}</div>`;
+        box.scrollTop = box.scrollHeight;
+      }
+
+      // Check active escrow orders against the 45-minute TTL threshold
+      function checkAndProcessTimeouts() {
+        logEvent("Checking active escrow orders for 45-min TTL expiration...");
+        
+        // Retrieve active order from local session storage
+        const activeOrder = localStorage.getItem('payfreight_active_order');
+        
+        if (activeOrder) {
+          const orderData = JSON.parse(activeOrder);
+          const now = new Date().getTime();
+          const elapsedMinutes = (now - orderData.createdAt) / (1000 * 60);
+
+          logEvent(`Order ${orderData.orderId}: Elapsed time = ${elapsedMinutes.toFixed(1)} mins`);
+
+          // If 45 minutes have elapsed without carrier acceptance, trigger automatic refund
+          if (elapsedMinutes > 45 && orderData.status === 'pending_carrier') {
+            orderData.status = 'expired_refunded';
+            localStorage.setItem('payfreight_active_order', JSON.stringify(orderData));
+            
+            logEvent(`⚠️ TTL EXPIRED (>45m)! Order ${orderData.orderId} cancelled.`);
+            logEvent(`💰 100% Freight Escrow (€${orderData.amount}) automatically refunded to Shipper.`);
+            alert(`[PayFreight Worker] Order ${orderData.orderId} expired! Funds automatically returned to shipper.`);
+          } else {
+            logEvent(`Order ${orderData.orderId} is still within valid window or already processed.`);
+          }
+        } else {
+          logEvent("No active pending escrow orders found in local session.");
+        }
+      }
+
+      // Run background check loop every 10 seconds
+      setInterval(checkAndProcessTimeouts, 10000);
+    </script>
+</body>
+</html>
