@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -205,19 +206,57 @@
             text-align: center;
         }
 
+        /* PHASE BANNER / DIVIDERS */
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0 10px 0;
+            text-align: left;
+        }
+
+        .phase-badge {
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .phase-badge-gold {
+            background: #fef3c7;
+            color: #b45309;
+            border: 1px solid #fcd34d;
+        }
+
+        .phase-badge-blue {
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+
+        .phase-badge-neutral {
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #cbd5e1;
+        }
+
+        .phase-line {
+            height: 1px;
+            background: var(--border-color);
+            flex-grow: 1;
+        }
+
         .cta-main-container {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             gap: 12px;
-            justify-content: center;
-            align-items: stretch;
-            margin: 16px 0;
-            flex-wrap: wrap;
+            margin: 10px 0;
         }
 
         .cta-card {
-            flex: 1;
-            min-width: 260px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -228,6 +267,7 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
             text-align: center;
+            width: 100%;
         }
 
         .cta-pay-freight {
@@ -284,7 +324,7 @@
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin: 12px 0;
+            margin: 6px 0;
             flex-wrap: wrap;
         }
 
@@ -482,7 +522,7 @@
         </div>
 
         <!-- GLAVNI HERO DEL -->
-        <div class="flex flex-col items-center text-center mb-6">
+        <div class="flex flex-col items-center text-center mb-4">
             <div class="flex items-center justify-center gap-5 mb-3 flex-wrap">
                 <!-- Znak / Krog -->
                 <svg class="w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -525,28 +565,36 @@
             </div>
         </div>
 
-        <p class="subtitle">Automated Global Freight Settlement Engine • USD ($) & EUR (€) Institutional Escrow</p>
+        <p class="subtitle" style="margin-bottom: 12px;">Automated Global Freight Settlement Engine • USD ($) & EUR (€) Institutional Escrow</p>
         
         <div class="copyright-banner">
             🔒 Protected by PayFreight Infrastructure License • ISO 20022, US ACH/FedNow & UN/CEFACT e-CMR Standards
         </div>
 
-        <!-- MAIN ACTION BUTTONS WITH CLEAR ROLE SELECTION & NEXT STEP GUIDANCE -->
+        <!-- ======================================================== -->
+        <!-- FAZA 1: BEFORE TRANSPORT / BOOKING                       -->
+        <!-- ======================================================== -->
+        <div class="phase-header">
+            <span class="phase-badge phase-badge-gold">Before Transport / Booking</span>
+            <div class="phase-line"></div>
+        </div>
+
         <div class="cta-main-container">
             <a onclick="openEscrowModal()" class="cta-card cta-pay-freight">
                 <span class="cta-title">📦 I have a load / I am a Shipper</span>
                 <span class="cta-subtext">Lock Escrow & Pay Freight ($ USD / € EUR)</span>
                 <span class="cta-guide-hint">Next: Upload rate confirmation or enter load details to secure funds</span>
             </a>
-
-            <a href="widget.html?action=upload_cmr&v=2" class="cta-card cta-carrier-payout">
-                <span class="cta-title">🚛 I have a truck / I am a Carrier</span>
-                <span class="cta-subtext">Submit e-CMR / POD & Receive Payout</span>
-                <span class="cta-guide-hint">Next: Upload signed proof of delivery for instant bank payout</span>
-            </a>
         </div>
 
-        <!-- SREDINSKA NEVTRALNA GUMBA -->
+        <!-- ======================================================== -->
+        <!-- FAZA 2: DURING TRANSPORT (DISPUTES / CANCELLATION)        -->
+        <!-- ======================================================== -->
+        <div class="phase-header">
+            <span class="phase-badge phase-badge-neutral">During Transport (Actions & Support)</span>
+            <div class="phase-line"></div>
+        </div>
+
         <div class="cancellation-buttons-container">
             <button onclick="openMutualCancelModal()" class="btn-neutral-action">
                 🤝 Mutual Cancellation Terms
@@ -556,8 +604,24 @@
             </button>
         </div>
 
+        <!-- ======================================================== -->
+        <!-- FAZA 3: AFTER TRANSPORT DONE                             -->
+        <!-- ======================================================== -->
+        <div class="phase-header">
+            <span class="phase-badge phase-badge-blue">After Transport Done</span>
+            <div class="phase-line"></div>
+        </div>
+
+        <div class="cta-main-container">
+            <a href="widget.html?action=upload_cmr&v=2" class="cta-card cta-carrier-payout">
+                <span class="cta-title">🚛 I have a truck / I am a Carrier</span>
+                <span class="cta-subtext">Submit e-CMR / POD & Receive Payout</span>
+                <span class="cta-guide-hint">Next: Upload signed proof of delivery for instant bank payout</span>
+            </a>
+        </div>
+
         <!-- B2B & ENTERPRISE INTEGRATION SECTION -->
-        <div class="b2b-protocol-section">
+        <div class="b2b-protocol-section" style="margin-top: 20px;">
             <span class="b2b-title">🌐 Global Open Infrastructure for Freight Networks</span>
             <p class="b2b-desc">Built for US & European Freight Exchanges, TMS, ERPs, and Global Supply Chains.</p>
 
