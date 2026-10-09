@@ -71,7 +71,7 @@
         }
 
         .container {
-            max-width: 800px !important;
+            max-width: 840px !important;
             width: 100% !important;
             margin: 0 auto !important;
             padding: 22px 28px;
@@ -205,13 +205,13 @@
             text-align: center;
         }
 
-        /* KOMPAKTNI ELEGANTNI BLOKI FAZ */
+        /* FAZNI BLOK */
         .phase-block {
             background: #faf6f0;
             border: 1px solid #ebdccb;
             border-radius: 14px;
-            padding: 12px 16px;
-            margin: 10px 0;
+            padding: 14px 18px;
+            margin: 12px 0;
             text-align: left;
         }
 
@@ -219,7 +219,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .phase-badge {
@@ -256,20 +256,31 @@
             font-weight: 500;
         }
 
-        /* 65% ŠIRINA ZA RES "SEXY" IN KOMPAKTNE GUMBE */
+        /* SIDE-BY-SIDE GRID ZA GUMBA */
+        .cta-side-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 640px) {
+            .cta-side-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .cta-card {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-decoration: none;
-            padding: 14px 20px;
+            padding: 14px 16px;
             border-radius: 12px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
             text-align: center;
-            width: 65%;
-            margin: 0 auto;
+            width: 100%;
         }
 
         .cta-pay-freight {
@@ -297,14 +308,14 @@
         }
 
         .cta-title {
-            font-size: 0.95rem;
+            font-size: 0.92rem;
             font-weight: 800;
             display: block;
             margin-bottom: 2px;
         }
 
         .cta-subtext {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 600;
             opacity: 0.95;
             display: block;
@@ -313,10 +324,10 @@
         }
 
         .cta-guide-hint {
-            font-size: 0.64rem;
+            font-size: 0.62rem;
             margin-top: 4px;
             background: rgba(0, 0, 0, 0.12);
-            padding: 2px 8px;
+            padding: 2px 6px;
             border-radius: 5px;
             font-weight: 500;
             display: inline-block;
@@ -573,24 +584,31 @@
             🔒 Protected by PayFreight Infrastructure License • ISO 20022, US ACH/FedNow & UN/CEFACT e-CMR Standards
         </div>
 
-        <!-- ======================================================== -->
-        <!-- FAZA 1: BEFORE TRANSPORT / BOOKING                       -->
-        <!-- ======================================================== -->
+        <!-- GLAVNI FAZNI BLOK: GUMBA EDEN ZRAVEN DRUGEGA -->
         <div class="phase-block">
             <div class="phase-header-inline">
-                <span class="phase-badge phase-badge-gold">Before Transport / Booking</span>
-                <span class="phase-desc">Shipper Escrow & Order Lock</span>
+                <span class="phase-badge phase-badge-gold">Workflow Actions</span>
+                <span class="phase-desc">Shipper Escrow (Left) & Carrier Payout (Right)</span>
             </div>
-            <a onclick="openEscrowModal()" class="cta-card cta-pay-freight">
-                <span class="cta-title">📦 I have a load / I am a Shipper</span>
-                <span class="cta-subtext">Lock Escrow & Pay Freight ($ USD / € EUR)</span>
-                <span class="cta-guide-hint">Next: Upload rate confirmation or enter load details to secure funds</span>
-            </a>
+            
+            <div class="cta-side-grid">
+                <!-- Shipper Card -->
+                <a onclick="openEscrowModal()" class="cta-card cta-pay-freight">
+                    <span class="cta-title">📦 I have a load / Shipper</span>
+                    <span class="cta-subtext">Lock Escrow & Pay Freight</span>
+                    <span class="cta-guide-hint">Upload rate confirmation to secure funds</span>
+                </a>
+
+                <!-- Carrier Card -->
+                <a href="widget.html?action=upload_cmr&v=2" class="cta-card cta-carrier-payout">
+                    <span class="cta-title">🚛 I have a truck / Carrier</span>
+                    <span class="cta-subtext">Submit e-CMR & Payout</span>
+                    <span class="cta-guide-hint">Upload POD for instant bank payout</span>
+                </a>
+            </div>
         </div>
 
-        <!-- ======================================================== -->
-        <!-- FAZA 2: DURING TRANSPORT (DISPUTES / CANCELLATION)        -->
-        <!-- ======================================================== -->
+        <!-- DURING TRANSPORT (ACTIONS & SUPPORT) -->
         <div class="phase-block" style="background: #ffffff; border-color: var(--border-color);">
             <div class="phase-header-inline" style="margin-bottom: 6px;">
                 <span class="phase-badge phase-badge-neutral">During Transport</span>
@@ -604,21 +622,6 @@
                     📋 Cancel Freight / Truck Form
                 </button>
             </div>
-        </div>
-
-        <!-- ======================================================== -->
-        <!-- FAZA 3: AFTER TRANSPORT DONE                             -->
-        <!-- ======================================================== -->
-        <div class="phase-block" style="background: #f0f9ff; border-color: #bae6fd;">
-            <div class="phase-header-inline">
-                <span class="phase-badge phase-badge-blue">After Transport Done</span>
-                <span class="phase-desc">Carrier e-CMR & Direct Bank Payout</span>
-            </div>
-            <a href="widget.html?action=upload_cmr&v=2" class="cta-card cta-carrier-payout">
-                <span class="cta-title">🚛 I have a truck / I am a Carrier</span>
-                <span class="cta-subtext">Submit e-CMR / POD & Receive Payout</span>
-                <span class="cta-guide-hint">Next: Upload signed proof of delivery for instant bank payout</span>
-            </a>
         </div>
 
         <!-- B2B & ENTERPRISE INTEGRATION SECTION -->
@@ -817,59 +820,52 @@
         <div class="bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 p-4 px-6 text-white flex justify-between items-center shrink-0">
           <div>
             <h3 class="text-xl font-extrabold flex items-center gap-2">💡 How PayFreight Escrow Engine Works</h3>
-            <p class="text-xs text-amber-100 mt-0.5">Simple, Bank-grade & Instant Settlement Logic for Global Freight</p>
+            <p class="text-xs text-amber-100 mt-0.5">Simple, Bank-Grade & Instant Settlement Logic for Global Freight</p>
           </div>
           <button onclick="closeHowItWorksModal()" class="text-white/80 hover:text-white text-3xl font-bold">&times;</button>
         </div>
 
-        <div class="p-6 space-y-6 overflow-y-auto">
+        <div class="p-6 space-y-5 overflow-y-auto">
           <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-4 text-center">
-            <span class="text-xs font-bold uppercase tracking-wider text-amber-800 block mb-3">⚡ Global Settlement Architecture (USD & EUR)</span>
-            <svg class="w-full max-w-lg mx-auto" viewBox="0 0 600 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="10" y="25" width="140" height="70" rx="10" fill="#ffffff" stroke="#df9b41" stroke-width="2"/>
-              <text x="80" y="52" font-size="12" font-weight="bold" fill="#27221d" text-anchor="middle">🏢 Shipper / Broker</text>
-              <text x="80" y="70" font-size="9" fill="#786f66" text-anchor="middle">Locks USD / EUR / Fiat</text>
-              <path d="M155 60 H215" stroke="#0284c7" stroke-width="3"/>
-              <text x="185" y="52" font-size="9" font-weight="bold" fill="#0284c7" text-anchor="middle">1. Deposit</text>
-              <rect x="220" y="15" width="160" height="90" rx="12" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
-              <text x="300" y="45" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">🔒 PayFreight Escrow</text>
-              <text x="300" y="63" font-size="9" fill="#e0f2fe" text-anchor="middle">Automated Bank Vault</text>
-              <text x="300" y="80" font-size="8" font-weight="bold" fill="#fef08a" text-anchor="middle">FUNDS SECURED (1:1 USD/EUR)</text>
-              <path d="M385 60 H445" stroke="#15803d" stroke-width="3"/>
-              <text x="415" y="52" font-size="9" font-weight="bold" fill="#15803d" text-anchor="middle">2. e-CMR / POD</text>
-              <rect x="450" y="25" width="140" height="70" rx="10" fill="#ffffff" stroke="#15803d" stroke-width="2"/>
-              <text x="520" y="52" font-size="12" font-weight="bold" fill="#27221d" text-anchor="middle">🚛 Transporter</text>
-              <text x="520" y="70" font-size="9" fill="#15803d" text-anchor="middle">Instant ACH / SEPA Payout</text>
-            </svg>
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-800 block mb-2">⚡ 4 Simple Steps to Secure Global Freight Settlement</span>
+            <p class="text-xs text-gray-600">Zero hidden fees, zero volatility, and fully automated escrow protection.</p>
           </div>
 
           <div class="flex gap-4 items-start">
             <div class="w-8 h-8 rounded-full bg-amber-500 text-white font-extrabold text-sm flex items-center justify-center shrink-0">1</div>
             <div>
-              <h4 class="font-bold text-gray-900 text-sm">Shipper Locks Freight Payment</h4>
-              <p class="text-xs text-gray-600 mt-0.5">Shipper deposits payment via USD or EUR Bank Transfer (FedNow, ACH, Wire, SEPA Instant), Card or Crypto. Funds are locked safely in 1:1 USD or EUR value until cargo delivery.</p>
+              <h4 class="font-bold text-gray-900 text-sm">Shipper Locks Freight Funds & Commitment</h4>
+              <p class="text-xs text-gray-600 mt-0.5">The shipper enters load details and securely locks the total freight amount + a €250 / $250 mutual commitment deposit in the escrow vault. The system instantly generates a secure, unlisted link for the carrier.</p>
             </div>
           </div>
 
           <div class="flex gap-4 items-start">
-            <div class="w-8 h-8 rounded-full bg-sky-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">2</div>
+            <div class="w-8 h-8 rounded-full bg-amber-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">2</div>
             <div>
-              <h4 class="font-bold text-gray-900 text-sm">Transport Execution & e-CMR / POD Verification</h4>
-              <p class="text-xs text-gray-600 mt-0.5">Transporter completes delivery and uploads e-CMR or Proof of Delivery (POD). System automatically verifies signatures and delivery milestones against protocol rules.</p>
+              <h4 class="font-bold text-gray-900 text-sm">Carrier Review & Midnight Cancellation Window</h4>
+              <p class="text-xs text-gray-600 mt-0.5">The carrier opens the secure link, reviews the load, and stakes their €250 / $250 commitment deposit. Both parties retain the right to cancel <strong>strictly on the same calendar day until midnight (00:00 local time)</strong> with zero penalties—triggering an instant 100% refund of all funds and deposits back to the shipper!</p>
             </div>
           </div>
 
           <div class="flex gap-4 items-start">
-            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">3</div>
+            <div class="w-8 h-8 rounded-full bg-sky-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">3</div>
+            <div>
+              <h4 class="font-bold text-gray-900 text-sm">Transport Execution & e-CMR Verification</h4>
+              <p class="text-xs text-gray-600 mt-0.5">Once the cancellation window passes and the load is active, the transport is executed. Upon delivery, the carrier uploads the signed e-CMR / Proof of Delivery (POD).</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4 items-start">
+            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">4</div>
             <div>
               <h4 class="font-bold text-gray-900 text-sm">Instant Automated Bank Payout</h4>
-              <p class="text-xs text-gray-600 mt-0.5">Escrow automatically releases funds directly to carrier's bank account (via ACH/FedNow in US Dollars or SEPA Instant in Euros) or Settlement wallet. Zero delays, zero middleman fee gouging.</p>
+              <p class="text-xs text-gray-600 mt-0.5">The escrow engine automatically verifies delivery signatures and releases funds directly to the carrier's bank account (via ACH/FedNow for USD or SEPA Instant for EUR) within seconds. Clean, fast, and trustless!</p>
             </div>
           </div>
         </div>
 
         <div class="bg-gray-50 p-3 px-6 flex justify-end border-t border-gray-100 shrink-0">
-          <button onclick="closeHowItWorksModal()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold py-2 px-5 rounded-lg transition">Got It!</button>
+          <button onclick="closeHowItWorksModal()" class="bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold py-2 px-5 rounded-lg transition">Crystal Clear!</button>
         </div>
       </div>
     </div>
@@ -950,27 +946,19 @@
           <div class="p-3.5 rounded-xl border border-amber-300 bg-amber-50/60 shadow-sm space-y-1.5">
             <div class="flex items-center gap-2 text-amber-900 font-extrabold text-xs">
               <span class="bg-amber-200 text-amber-900 p-1 rounded">🔄</span>
-              <span>5. €250 / $250 Escrow Protection: Mutual vs. Standard Settlement Adjustments</span>
+              <span>5. €250 / $250 Escrow Protection & Midnight Cutoff Rule</span>
             </div>
             <p class="text-[11px] text-gray-700 leading-relaxed">
-              To ensure commitment and eliminate last-minute disruptions, both Shipper and Carrier lock a mutual <strong class="text-gray-900">€250 / $250 commitment deposit</strong> upon booking.
+              Both Shipper and Carrier lock a mutual <strong class="text-gray-900">€250 / $250 commitment deposit</strong> upon booking.
             </p>
             <ul class="text-[11px] text-gray-600 space-y-1.5 list-disc pl-4">
               <li>
-                <strong>🤝 Mutual Cancellation (Both Agree):</strong> If both parties agree to cancel prior to dispatch, <strong class="text-gray-900">100% of the locked freight funds AND both €250 / $250 commitment deposits are fully refunded</strong> instantly with zero fees.
+                <strong>🤝 Same-Day Midnight Cancellation:</strong> Both parties can cancel <em>strictly until midnight (00:00 local time)</em> on the booking date, resulting in a 100% instant refund of freight escrow and both deposits.
               </li>
               <li>
                 <strong>📦 Successful Delivery:</strong> Full freight payout routes directly to the Carrier, and 100% of the €250 / $250 commitment deposits return to both parties.
               </li>
-              <li>
-                <strong>⚡ Default / Unresolved Adjustment:</strong> In case of unilateral breach or non-performance without agreement, the commitment deposit allocates to the affected party as immediate protocol compensation.
-              </li>
             </ul>
-          </div>
-
-          <div class="bg-slate-100 rounded-xl p-3 border border-slate-200 text-center">
-            <span class="text-[11px] font-bold text-slate-700 block">🔎 Real-time Auditable & Immutable Ledger</span>
-            <span class="text-[10px] text-slate-500">Every deposit transaction (USD or EUR) generates an auditable cryptographic proof linkable to global transport orders.</span>
           </div>
         </div>
 
@@ -989,11 +977,10 @@
           <button onclick="closeMutualCancelModal()" class="text-white text-xl font-bold">&times;</button>
         </div>
         <div class="p-4 space-y-2 text-xs text-gray-700">
-          <p>If both <strong>Shipper and Carrier</strong> mutually agree to cancel the transport order before dispatch:</p>
+          <p>If both <strong>Shipper and Carrier</strong> mutually agree to cancel the transport order before dispatch (within the valid midnight window):</p>
           <ul class="list-disc pl-4 space-y-1">
             <li><strong>100% Refund:</strong> Full freight amount returned to Shipper.</li>
             <li><strong>Deposit Return:</strong> Both €250 / $250 commitment deposits are fully refunded instantly.</li>
-            <li><strong>Zero Penalties:</strong> No middleman fees or administrative overhead.</li>
           </ul>
         </div>
         <div class="bg-gray-50 p-3 flex justify-end">
@@ -1002,7 +989,7 @@
       </div>
     </div>
 
-    <!-- MODAL ZA KANCELACIJSKO FORMO (CANCEL FREIGHT / TRUCK FORM) -->
+    <!-- MODAL ZA KANCELACIJSKO FORMO -->
     <div id="cancelFormModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-amber-300 text-left">
         <div class="bg-amber-600 p-4 text-white flex justify-between items-center">
@@ -1010,7 +997,7 @@
           <button onclick="closeCancelFormModal()" class="text-white text-xl font-bold">&times;</button>
         </div>
         <div class="p-5 space-y-3 text-xs text-gray-700">
-          <p class="text-gray-600">Submit details to trigger cancellation and notify the other party for mutual review:</p>
+          <p class="text-gray-600">Submit details to trigger cancellation within the allowed same-day midnight window:</p>
           
           <div class="grid grid-cols-2 gap-3">
             <div>
@@ -1040,10 +1027,10 @@
           </div>
 
           <div>
-            <label class="block font-bold mb-1 text-gray-700">Specify Fault / Reason on Loading Day *</label>
+            <label class="block font-bold mb-1 text-gray-700">Specify Fault / Reason *</label>
             <select id="cancelFaultReason" class="w-full border rounded-lg p-2 text-xs bg-white outline-none focus:ring-1 focus:ring-amber-500 font-medium text-gray-800">
-              <option value="shipper_failed">Shipper failed to provide cargo on loading day</option>
-              <option value="carrier_failed">Carrier failed to provide truck/transport on loading day</option>
+              <option value="shipper_failed">Shipper failed to provide cargo</option>
+              <option value="carrier_failed">Carrier failed to provide truck</option>
               <option value="mutual_agreement">Mutual agreement to call off transport</option>
             </select>
           </div>
@@ -1148,7 +1135,7 @@
           alert('Please enter at least the Order ID.');
           return;
         }
-        alert('Cancellation submitted! An email notification has been sent to both parties for review.');
+        alert('Cancellation submitted within midnight window! Full refunds processed.');
         closeCancelFormModal();
       }
     </script>
