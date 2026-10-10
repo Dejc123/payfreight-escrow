@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayFreight Protocol - Public Roadmap & MVP Architecture</title>
+    <!--
+        ============================================================================
+        PAYFREIGHT PROTOCOL – PUBLIC ROADMAP & MVP ARCHITECTURE
+        ============================================================================
+        Copyright (c) 2026 PayFreight Protocol. All rights reserved.
+        Proprietary and Confidential. Unauthorized copying, distribution, or use 
+        of this file via any medium is strictly prohibited.
+        ============================================================================
+        Description:
+        This document serves as the official public roadmap and structural blueprint 
+        for the PayFreight institutional escrow protocol. It outlines core operational 
+        readiness, multi-CMR handling workflows (including neutral CMR options, 
+        Lieferschein verification, and pallet exchange slips), mandatory Google 
+        Authenticator (2FA) security, and dashboard expansions for European logistics.
+        ============================================================================
+    -->
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; color: #27221d; background: #fdfbf7; line-height: 1.6; }
+        header { border-bottom: 2px solid #e8e2d8; padding-bottom: 20px; margin-bottom: 30px; }
+        h1 { color: #0284c7; margin: 0 0 10px 0; }
+        .subtitle { color: #786f66; font-size: 15px; }
+        h2 { color: #0f172a; margin-top: 35px; border-left: 4px solid #df9b41; padding-left: 12px; }
+        ul { background: #ffffff; padding: 20px 30px; border-radius: 12px; border: 1px solid #e8e2d8; list-style-type: none; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        li { margin-bottom: 14px; position: relative; padding-left: 30px; }
+        li::before { content: "🚧"; position: absolute; left: 0; top: 0; }
+        li.done::before { content: "✅"; }
+        .tag { display: inline-block; background: #f1f5f9; color: #0f172a; font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 6px; }
+        .footer { margin-top: 50px; font-size: 11px; color: #999; text-align: center; border-top: 1px solid #e8e2d8; padding-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>PayFreight Protocol</h1>
+        <div class="subtitle">Institutional B2B Escrow & Settlement Engine for European Logistics | Public MVP Roadmap</div>
+    </header>
+
+    <p>Welcome to the official public architecture specification and execution roadmap for the PayFreight Protocol. Designed to eliminate carrier non-payment risks and streamline cross-border freight settlements across 20+ European markets.</p>
+
+    <h2>Phase 1: Core MVP & Infrastructure <span class="tag">Active 48h Sprint</span></h2>
+    <ul>
+        <li class="done">Domain verification & enterprise email infrastructure via Resend (`payfreight.io`).</li>
+        <li class="done">Backend mailer engine with automated transactional triggers (`escrow@`, `disputes@`).</li>
+        <li class="done">45-Minute TTL anti-exploit security warning integrated into the modal UX.</li>
+        <li>Live mainnet transaction simulation & secure tokenized link verification.</li>
+    </ul>
+
+    <h2>Phase 2: Advanced Document Compliance & Multi-CMR Engine <span class="tag">Next Up</span></h2>
+    <ul>
+        <li><strong>Shipper Document Configuration:</strong> Shippers can define required document quantities during load creation (e.g., standard CMR count).</li>
+        <li><strong>Neutral CMR Options:</strong> Optional toggle for specialized routing where secondary/neutral CMRs are generated to obscure origin/shipper identities from the end receiver.</li>
+        <li><strong>Lieferschein (Delivery Note) & Pallet Slips:</strong> Optional checkboxes for mandatory proof-of-delivery notes and pallet exchange certificates (EPAL) required before payout release.</li>
+        <li><strong>Carrier Multi-Upload Workflow:</strong> Dynamic interface with <strong>[+] Add Another CMR</strong> functionality allowing carriers to batch-upload up to 6+ documents securely.</li>
+    </ul>
+
+    <h2>Phase 3: Secure Auth, 2FA & Institutional Dashboard <span class="tag">Post-Launch</span></h2>
+    <ul>
+        <li>Frictionless gated user environment with Social & Email login options.</li>
+        <li><strong>Google Authenticator (2FA):</strong> Mandatory or optional time-based one-time password (TOTP) verification for robust account security against hackers and financial fraud.</li>
+        <li>Comprehensive Shipper & Carrier Dashboards (My Transports, Freight in Progress, History).</li>
+        <li>In-app Mutual Cancellation & Dispute / Fault Attribution mediation tools.</li>
+        <li>Multi-language localization expansion for key European transport corridors.</li>
+    </ul>
+
+    <div class="footer">
+        Copyright © 2026 PayFreight Protocol. All rights reserved. Proprietary & Confidential.
+    </div>
+
+</body>
+</html>
