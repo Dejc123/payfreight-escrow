@@ -540,9 +540,25 @@
     <!-- Main container: Logo on the left, Text on the right -->
     <div class="flex items-center justify-center gap-4 sm:gap-6 flex-wrap sm:flex-nowrap mb-3">
         
-        <!-- Official Logo Image -->
-        <div class="flex-shrink-0">
-            <img src="LOGO_PayFreight.jpg" alt="PayFreight Logo" class="w-20 h-auto sm:w-28 object-contain">
+        <!-- Official Logo SVG (Inline) -->
+        <div class="flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24">
+            <svg viewBox="0 0 200 160" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                <!-- Truck Chassis & Body Lines -->
+                <path d="M20 95 C 20 95, 45 65, 80 65 L 115 65 L 125 45 L 170 45 L 180 80 L 180 115 L 160 115 M 125 115 L 75 115" stroke="#00a8cc" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <!-- Circuit / Web3 Lines on Truck Body -->
+                <path d="M 30 85 L 60 85 M 40 70 L 70 70 M 25 100 L 55 100" stroke="#0f2b48" stroke-width="4" stroke-linecap="round"/>
+                <circle cx="60" cy="85" r="4" fill="#0f2b48"/>
+                <circle cx="70" cy="70" r="4" fill="#0f2b48"/>
+                <circle cx="55" cy="100" r="4" fill="#0f2b48"/>
+                <!-- Cabin Window -->
+                <path d="M 132 55 L 162 55 L 170 80 L 132 80 Z" stroke="#00a8cc" stroke-width="4" fill="none" stroke-linejoin="round"/>
+                <!-- Wheels -->
+                <circle cx="55" cy="115" r="14" stroke="#0f2b48" stroke-width="6" fill="#ffffff"/>
+                <circle cx="142" cy="115" r="14" stroke="#0f2b48" stroke-width="6" fill="#ffffff"/>
+                <!-- Solana Badge / Glow Emblem in Center -->
+                <rect x="75" y="70" width="38" height="28" rx="6" fill="#0f2b48"/>
+                <path d="M 83 78 L 105 78 M 85 84 L 103 84 M 83 90 L 105 90" stroke="#14F195" stroke-width="3" stroke-linecap="round"/>
+            </svg>
         </div>
 
         <!-- Title and Subtitle -->
@@ -561,6 +577,8 @@
     <p class="text-slate-600 text-sm sm:text-base max-w-lg font-medium leading-relaxed m-0">
         Solana-powered escrow &amp; instant freight settlement protocol.
     </p>
+
+</div>
 
 </div>
 
