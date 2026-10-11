@@ -178,19 +178,19 @@
             border-color: var(--venetian-gold-light);
         }
 
-        .btn-nav-wallet {
+        .btn-nav-account {
             background: linear-gradient(135deg, var(--venetian-gold-light) 0%, var(--venetian-gold) 100%);
             border: 1px solid var(--venetian-gold-dark);
             color: #ffffff;
-            padding: 5px 10px;
+            padding: 5px 12px;
             font-size: 0.72rem;
-            font-weight: 600;
+            font-weight: 700;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .btn-nav-wallet:hover {
+        .btn-nav-account:hover {
             background: linear-gradient(135deg, var(--venetian-gold) 0%, var(--venetian-gold-dark) 100%);
         }
 
@@ -238,12 +238,6 @@
             border: 1px solid #fcd34d;
         }
 
-        .phase-badge-blue {
-            background: #e0f2fe;
-            color: #0369a1;
-            border: 1px solid #bae6fd;
-        }
-
         .phase-badge-neutral {
             background: #f1f5f9;
             color: #475569;
@@ -256,7 +250,6 @@
             font-weight: 500;
         }
 
-        /* SIDE-BY-SIDE GRID ZA GUMBA */
         .cta-side-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -483,6 +476,7 @@
             border-radius: 6px;
             text-decoration: none;
             transition: all 0.2s ease;
+            cursor: pointer;
         }
 
         .cta-button-secondary:hover {
@@ -528,53 +522,47 @@
                 <button class="btn-nav-fiat" onclick="showToast('Supported: US FedNow, ACH, Wire, SEPA Instant, VISA & Mastercard.')">
                     💵 USD / EUR Banking
                 </button>
-                <button class="btn-nav-wallet" onclick="showToast('Connecting Institutional Settlement Engine...')">
-                    🔑 Connect Wallet
+                <!-- ZAMENJANO: Connect Wallet je postal klasični Login / Account -->
+                <button class="btn-nav-account" onclick="openLoginModal()">
+                    🔐 Sign In / Account
                 </button>
             </div>
         </div>
 
+        <!-- GLAVNI HERO DEL -->
+        <div class="flex flex-col items-center text-center mb-3">
+            <div class="flex items-center justify-center gap-4 mb-2 flex-wrap">
+                <!-- PAYFREIGHT LOGO (POVEČAN) -->
+                <div class="flex-shrink-0 w-48 sm:w-64">
+                    <img
+                        src="https://raw.githubusercontent.com/Dejc123/payfreight-escrow/main/images/LOGO.jpg"
+                        alt="PayFreight"
+                        class="block w-full h-auto object-contain"
+                    />
+                </div>
 
-<!-- GLAVNI HERO DEL -->
-<div class="flex flex-col items-center text-center mb-3">
+                <!-- PAYFREIGHT NASLOV -->
+                <h1
+                    class="text-4xl sm:text-5xl font-black tracking-tight text-[#0b192c] m-0"
+                    style="font-family: system-ui, -apple-system, sans-serif; font-weight: 900;"
+                >
+                    Pay<span class="text-[#00b4d8]">Freight</span>
+                </h1>
+            </div>
 
-    <div class="flex items-center justify-center gap-4 mb-2 flex-wrap">
-
-<!-- PAYFREIGHT LOGO (POVEČAN) -->
-<div class="flex-shrink-0 w-48 sm:w-64">
-    <img
-        src="https://raw.githubusercontent.com/Dejc123/payfreight-escrow/main/images/LOGO.jpg"
-        alt="PayFreight"
-        class="block w-full h-auto object-contain"
-    />
-</div>
-
-        <!-- PAYFREIGHT NASLOV -->
-        <h1
-            class="text-4xl sm:text-5xl font-black tracking-tight text-[#0b192c] m-0"
-            style="font-family: system-ui, -apple-system, sans-serif; font-weight: 900;"
-        >
-            Pay<span class="text-[#00b4d8]">Freight</span>
-        </h1>
-
-    </div>
-
-    <!-- PODNASLOV -->
-    <div class="inline-flex items-center justify-center gap-3 text-xs text-[#786f66] font-semibold mt-1 flex-wrap">
-        <span class="text-[#df9b41]">——</span>
-        <span>ISO 20022</span>
-        &bull;
-        <span>FedNow</span>
-        &bull;
-        <span>ACH</span>
-        &bull;
-        <span>e-CMR</span>
-        <span class="text-[#df9b41]">——</span>
-    </div>
-
-
-</div>
-
+            <!-- PODNASLOV -->
+            <div class="inline-flex items-center justify-center gap-3 text-xs text-[#786f66] font-semibold mt-1 flex-wrap">
+                <span class="text-[#df9b41]">——</span>
+                <span>ISO 20022</span>
+                &bull;
+                <span>FedNow</span>
+                &bull;
+                <span>ACH</span>
+                &bull;
+                <span>e-CMR</span>
+                <span class="text-[#df9b41]">——</span>
+            </div>
+        </div>
 
         <p class="subtitle" style="margin-bottom: 10px; font-size: 0.78rem;">Automated Global Freight Settlement Engine • USD ($) & EUR (€) Institutional Escrow</p>
         
@@ -656,18 +644,82 @@
 
         <!-- SECONDARY DOCUMENTATION LINKS -->
         <div class="secondary-links">
-            <a onclick="openHowItWorksModal()" class="cta-button-secondary cursor-pointer" style="color: var(--venetian-gold-dark); font-weight:700;">❓ How It Works Guide</a>
-            <a onclick="openFundSafetyModal()" class="cta-button-secondary cursor-pointer" style="color: #15803d; font-weight:800; background-color: #f0fdf4; border-color: #86efac;">🛡️ Fund Safety & Escrow</a>
+            <a onclick="openHowItWorksModal()" class="cta-button-secondary" style="color: var(--venetian-gold-dark); font-weight:700;">❓ How It Works Guide</a>
+            <a onclick="openFundSafetyModal()" class="cta-button-secondary" style="color: #15803d; font-weight:800; background-color: #f0fdf4; border-color: #86efac;">🛡️ Fund Safety & Escrow</a>
             <a href="technical.html" class="cta-button-secondary">Technical Docs</a>
             <a href="instructions.html" class="cta-button-secondary" style="color: #0284c7; font-weight:700;">📖 Protocol Guide</a>
             <a href="https://github.com/Dejc123/payfreight-escrow" class="cta-button-secondary" target="_blank">GitHub</a>
             <a href="https://t.me/+WyYEvCqDLSQ2MzI0" class="cta-button-secondary" target="_blank">Telegram</a>
-            <a href="roadmap.html">View Public Roadmap</a>
+            <a href="roadmap.html" class="cta-button-secondary">View Public Roadmap</a>
         </div>
         
         <footer>
             <p>&copy; 2026 PayFreight Protocol. All rights reserved.</p>
         </footer>
+    </div>
+
+    <!-- ================= MODALI ================= -->
+
+    <!-- LOGIN & ACCOUNT MODAL (NOVO: Username, Password, Social Logins) -->
+    <div id="loginModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-amber-200 text-left">
+            <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-4 px-6 text-white flex justify-between items-center">
+                <div>
+                    <h3 class="text-base font-bold flex items-center gap-2">🔐 PayFreight Portal Sign In</h3>
+                    <p class="text-xs text-amber-100 mt-0.5">Secure B2B Access for Shippers & Carriers</p>
+                </div>
+                <button onclick="closeLoginModal()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
+            </div>
+
+            <div class="p-6 space-y-4">
+                <!-- Tradicionalna prijava -->
+                <form onsubmit="handleLoginSubmit(event)" class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Username or Email</label>
+                        <input type="text" id="loginUser" required placeholder="name@company.com" class="w-full border border-gray-300 rounded-lg p-2.5 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1">Password</label>
+                        <input type="password" id="loginPass" required placeholder="••••••••" class="w-full border border-gray-300 rounded-lg p-2.5 text-xs outline-none focus:ring-2 focus:ring-amber-500">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold py-2.5 rounded-xl text-xs shadow transition">
+                        Sign In ➔
+                    </button>
+                </form>
+
+                <div class="flex items-center justify-between text-xs pt-1">
+                    <a href="#" onclick="alert('Password reset link sent to email.'); return false;" class="text-amber-700 hover:underline font-medium">Forgot password?</a>
+                    <a href="#" onclick="alert('Registration flow initiated.'); return false;" class="text-sky-700 hover:underline font-bold">Create new account</a>
+                </div>
+
+                <div class="relative flex py-2 items-center">
+                    <div class="flex-grow border-t border-gray-200"></div>
+                    <span class="flex-shrink mx-3 text-[11px] text-gray-400 font-semibold uppercase">Or continue with</span>
+                    <div class="flex-grow border-t border-gray-200"></div>
+                </div>
+
+                <!-- Social Logini z logotipi / ikonami -->
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="socialLogin('Google')" class="flex items-center justify-center gap-1.5 py-2 px-3 border border-gray-300 rounded-xl hover:bg-gray-50 text-xs font-semibold text-gray-700 transition">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.15C3.17 21.32 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.6H1.18C.43 8.12 0 9.82 0 12s.43 3.88 1.18 5.4l4.09-3.16z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.17 2.68 1.18 6.6l4.09 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+                        Google
+                    </button>
+                    <button onclick="socialLogin('LinkedIn')" class="flex items-center justify-center gap-1.5 py-2 px-3 border border-gray-300 rounded-xl hover:bg-gray-50 text-xs font-semibold text-gray-700 transition">
+                        <svg class="w-4 h-4 text-[#0a66c2]" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9h2.79v8.37H6.46v-8.37M7.85 6.34a1.63 1.63 0 1 0 0 3.26 1.63 1.63 0 0 0 0-3.26z"/></svg>
+                        LinkedIn
+                    </button>
+                    <button onclick="socialLogin('Facebook')" class="flex items-center justify-center gap-1.5 py-2 px-3 border border-gray-300 rounded-xl hover:bg-gray-50 text-xs font-semibold text-gray-700 transition">
+                        <svg class="w-4 h-4 text-[#1877f2]" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20v-7h-2.5v-3H12V9.5a3.5 3.5 0 0 1 3.5-3.5h2.5v3h-2c-.55 0-1 .45-1 1v2h3l-.5 3h-2.5V22a10 10 0 0 0 2-20z"/></svg>
+                        Facebook
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 p-3 px-6 flex justify-end border-t border-gray-100">
+                <button onclick="closeLoginModal()" class="text-xs text-gray-500 hover:text-gray-800 font-semibold">Close</button>
+            </div>
+        </div>
     </div>
 
     <!-- ESCROW MODAL DIALOG -->
@@ -825,7 +877,6 @@
         </div>
 
         <div class="p-6 space-y-5 overflow-y-auto">
-          <!-- "ZA TELEBANE" WARNING & ANTI-EXPLOIT 45-MIN TTL HIGHLIGHT -->
           <div class="bg-red-50 border-2 border-red-400 rounded-xl p-4 shadow-sm text-left">
             <div class="flex items-center gap-2 text-red-900 font-black text-xs uppercase tracking-wider mb-1">
               <span>🚨 What if the Carrier is Unresponsive or Ghosting You? (Anti-Exploit Rule)</span>
@@ -1058,8 +1109,27 @@
       </div>
     </div>
 
-<!-- JAVASCRIPT -->
+    <!-- JAVASCRIPT -->
     <script>
+      // Login Modal Funkcije
+      function openLoginModal() {
+        document.getElementById('loginModal').classList.remove('hidden');
+      }
+      function closeLoginModal() {
+        document.getElementById('loginModal').classList.add('hidden');
+      }
+      function handleLoginSubmit(e) {
+        e.preventDefault();
+        const user = document.getElementById('loginUser').value;
+        alert('Welcome back, ' + user + '! Authenticating session...');
+        closeLoginModal();
+      }
+      function socialLogin(provider) {
+        alert('Redirecting to secure ' + provider + ' authentication...');
+        closeLoginModal();
+      }
+
+      // Ostale modalne funkcije
       function openEscrowModal() {
         document.getElementById('escrowModal').classList.remove('hidden');
       }
@@ -1137,19 +1207,15 @@
         }, 1200);
       }
 
-      // Updated submitEscrow function with TTL order registration for the timeout worker
       function submitEscrow() {
-        // Create order object with timestamp and initial status for the TTL worker
         const newOrder = {
           orderId: document.getElementById('manualCargoId')?.value || "ORD-2026-9921",
           amount: parseFloat(document.getElementById('manualAmount')?.value) || 1850.00,
-          createdAt: new Date().getTime(), // Current timestamp in milliseconds
+          createdAt: new Date().getTime(),
           status: "pending_carrier"
         };
 
-        // Save to localStorage for timeout tracking and carrier portal sync
         localStorage.setItem('payfreight_active_order', JSON.stringify(newOrder));
-
         alert('Locking Escrow Order & Initializing 45-min TTL Worker... Redirecting to Secure Gateway.');
         closeEscrowModal();
       }
