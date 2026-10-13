@@ -34,6 +34,15 @@ const transporter = nodemailer.createTransport({
 
 const escrowTransactions = [];
 
+// Explicit route for the Pre-Sale page (payfreight.io/presale.html and payfreight.io/presale)
+app.get('/presale.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'presale.html'));
+});
+
+app.get('/presale', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'presale.html'));
+});
+
 // Route to render the carrier portal dynamically with pre-filled parameters
 app.get('/api/carrier-portal', (req, res) => {
     const { shipperId, cargoId, shipperEmail } = req.query;
@@ -82,7 +91,7 @@ app.post('/api/payfreight/confirm', async (req, res) => {
     }
 
     res.json({
-        success: status = true,
+        success: true,
         message: 'PayFreight escrow protocol successfully initialized!',
         transaction
     });
