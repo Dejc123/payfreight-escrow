@@ -29,9 +29,6 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #FDFBF7; }
     </style>
-
-    <!-- PAYPAL HOSTED BUTTONS SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=BAAZe4h9W-VinpTTKJKNYuR6Gh3Um6LFCMPfHMlXVmLyFnZTo7DOJ4ezF4MeD3a0e2Xg8d62kdqadr-Zqo&components=hosted-buttons&disable-funding=venmo&currency=EUR"></script>
 </head>
 <body class="text-slate-800 antialiased selection:bg-neonemerald selection:text-white">
 
@@ -192,15 +189,10 @@
                         </ul>
                     </div>
                     
-                    <!-- PAYPAL BUTTON 1: STARTER BUNDLE (€300) -->
-                    <div class="w-full">
-                        <div id="paypal-container-NME9MWY2P7PQC"></div>
-                        <script>
-                          paypal.HostedButtons({
-                            hostedButtonId: "NME9MWY2P7PQC",
-                          }).render("#paypal-container-NME9MWY2P7PQC")
-                        </script>
-                    </div>
+                    <!-- DIIREKTNA PAYPAL CHECKOUT POVEZAVA -->
+                    <a href="https://www.paypal.com/ncp/payment/NME9MWY2P7PQC" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 rounded-xl transition block shadow-sm">
+                        Checkout Starter Bundle (€300)
+                    </a>
                 </div>
 
                 <!-- TIER 2: Pro Founder (MOST POPULAR) -->
@@ -225,15 +217,10 @@
                         </ul>
                     </div>
                     
-                    <!-- PAYPAL BUTTON 2: PRO FOUNDER (€1.500) -->
-                    <div class="w-full">
-                        <div id="paypal-container-B65S3PJ3SBXXC"></div>
-                        <script>
-                          paypal.HostedButtons({
-                            hostedButtonId: "B65S3PJ3SBXXC",
-                          }).render("#paypal-container-B65S3PJ3SBXXC")
-                        </script>
-                    </div>
+                    <!-- DIREKTNA PAYPAL CHECKOUT POVEZAVA -->
+                    <a href="https://www.paypal.com/ncp/payment/B65S3PJ3SBXXC" target="_blank" rel="noopener noreferrer" class="w-full text-center bg-gradient-to-r from-neonemerald to-teal-600 hover:opacity-95 text-white font-extrabold py-3.5 rounded-xl transition block shadow-lg shadow-emerald-500/20">
+                        Checkout Pro Package (€1,500)
+                    </a>
                 </div>
 
                 <!-- TIER 3: Enterprise Strategic -->
