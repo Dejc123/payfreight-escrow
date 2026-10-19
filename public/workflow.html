@@ -3,82 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayFreight - How Paper CMR Becomes Digital e-CMR on Solana</title>
+    <title>PayFreight - How Paper CMR Becomes Digital e-CMR</title>
     <style>
         :root {
-            --primary-color: #14f195; /* Solana Green Accent */
-            --secondary-color: #9945ff; /* Solana Purple Accent */
-            --bg-dark: #0f172a;
-            --card-bg: #1e293b;
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
+            --primary-color: #0284c7; /* Professional Logistics Blue */
+            --primary-hover: #0369a1;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --badge-bg: #f1f5f9;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
             margin: 0;
             padding: 40px 20px;
+            line-height: 1.5;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--primary-color);
         }
 
         .header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
 
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             margin-bottom: 10px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-main);
+            font-weight: 700;
         }
 
         .header p {
             color: var(--text-muted);
-            font-size: 1.15rem;
-            max-width: 700px;
+            font-size: 1rem;
+            max-width: 650px;
             margin: 0 auto;
-            line-height: 1.5;
         }
 
         .workflow {
             display: flex;
             flex-direction: column;
-            gap: 25px;
-            position: relative;
+            gap: 20px;
         }
 
         .step-card {
             background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 30px;
-            border: 1px solid #334155;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
             display: flex;
             align-items: flex-start;
-            gap: 20px;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-
-        .step-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--primary-color);
+            gap: 16px;
         }
 
         .step-number {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: #000;
-            font-weight: bold;
-            font-size: 1.2rem;
-            width: 45px;
-            height: 45px;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -88,64 +96,77 @@
 
         .step-content h2 {
             margin-top: 0;
-            font-size: 1.35rem;
-            color: var(--text-light);
+            font-size: 1.15rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .step-content p {
             color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0 0 12px 0;
         }
 
         .badge-list {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .badge {
-            background-color: #0f172a;
-            color: var(--primary-color);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            border: 1px solid #334155;
+            background-color: var(--badge-bg);
+            color: var(--text-main);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
         }
 
         .tech-note {
-            margin-top: 40px;
-            background-color: rgba(153, 69, 255, 0.1);
-            border-left: 4px solid var(--secondary-color);
+            margin-top: 35px;
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary-color);
             padding: 20px;
-            border-radius: 0 8px 8px 0;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .tech-note h3 {
             margin-top: 0;
-            color: var(--secondary-color);
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
         }
 
         .tech-note p {
             color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 10px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 8px;
         }
 
         .tech-note code {
-            background-color: #0f172a;
+            background-color: var(--badge-bg);
             padding: 2px 6px;
             border-radius: 4px;
             color: var(--primary-color);
+            font-family: monospace;
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <a href="/" class="back-link">← Back to Dashboard</a>
+
     <div class="header">
         <h1>How PayFreight Works</h1>
-        <p>Bridging traditional paper logistics with Solana Web3 smart contracts: Transforming physical CMR documents into verified digital e-CMRs.</p>
+        <p>Bridging traditional paper logistics with secure escrow smart contracts: Transforming physical CMR documents into verified digital e-CMRs.</p>
     </div>
 
     <div class="workflow">
@@ -154,7 +175,7 @@
             <div class="step-number">1</div>
             <div class="step-content">
                 <h2>1. Paper CMR Digitisation (Off-Chain / Backend)</h2>
-                <p>When goods are loaded or delivered, the driver captures a photo of the traditional paper CMR document using the mobile app. The PayFreight backend service (Node.js/Rust) processes the image using Google Cloud Vision OCR to extract text (consignor, recipient, weight, goods details) into a structured JSON dataset.</p>
+                <p>When goods are loaded or delivered, the driver captures a photo of the traditional paper CMR document using the mobile app. The PayFreight backend service processes the image using Google Cloud Vision OCR to extract text into a structured dataset.</p>
                 <div class="badge-list">
                     <span class="badge">Document Scanning</span>
                     <span class="badge">Google Cloud Vision OCR</span>
@@ -168,7 +189,7 @@
             <div class="step-number">2</div>
             <div class="step-content">
                 <h2>2. Cryptographic e-CMR Creation (Digital Fingerprint)</h2>
-                <p>To convert the digitized document into a tamper-proof e-CMR, the system generates a unique <strong>SHA-256 hash</strong> of the dataset. This cryptographic hash acts as the immutable digital fingerprint of the physical CMR document, securing its authenticity on-chain.</p>
+                <p>To convert the digitized document into a tamper-proof e-CMR, the system generates a unique <strong>SHA-256 hash</strong> of the dataset. This cryptographic hash acts as the immutable digital fingerprint of the physical CMR document.</p>
                 <div class="badge-list">
                     <span class="badge">SHA-256 Hash Generation</span>
                     <span class="badge">Digital Fingerprint</span>
@@ -181,10 +202,10 @@
         <div class="step-card">
             <div class="step-number">3</div>
             <div class="step-content">
-                <h2>3. Smart Contract Verification & Escrow Release (On-Chain / Solana)</h2>
-                <p>The generated <code>cmr_hash</code> is submitted to the Solana smart contract (via <code>verify_and_release.rs</code>). The contract checks if the hash matches the initial deal registration and confirms that an Electronic Proof of Delivery (e-POD) signature has been submitted. Once verified, escrowed funds are automatically released to the carrier.</p>
+                <h2>3. Smart Contract Verification & Escrow Release</h2>
+                <p>The generated <code>cmr_hash</code> is submitted to the escrow protocol (via <code>verify_and_release.rs</code>). The contract checks if the hash matches the initial deal registration and confirms delivery verification. Once verified, escrowed funds are automatically released to the carrier.</p>
                 <div class="badge-list">
-                    <span class="badge">Solana Smart Contract</span>
+                    <span class="badge">Escrow Smart Contract</span>
                     <span class="badge">e-POD Verification</span>
                     <span class="badge">Automated Payout</span>
                 </div>
@@ -199,6 +220,9 @@
         2. <code>require!(escrow.is_delivered == true)</code> — Confirms that the consignee has verified the delivery (e-POD).</p>
     </div>
 </div>
+
+</body>
+</html>
 
 </body>
 </html>
