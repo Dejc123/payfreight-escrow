@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayFreight - Paper CMR to Digital e-CMR Conversion</title>
+    <title>PayFreight - Fast Freight Settlement via Paper CMR Digitization</title>
     <style>
         :root {
             --primary-color: #0284c7; /* Professional Logistics Blue */
@@ -165,8 +165,8 @@
     <a href="/" class="back-link">← Back to Dashboard</a>
 
     <div class="header">
-        <h1>Paper CMR → e-CMR Conversion</h1>
-        <p>Transforming physical transport documents into verified digital e-CMRs secured by smart contract escrow.</p>
+        <h1>How Paper CMR Becomes Instant Payout</h1>
+        <p>From a quick photo at the loading dock to verified proof of delivery and automated freight settlement.</p>
     </div>
 
     <div class="workflow">
@@ -174,12 +174,12 @@
         <div class="step-card">
             <div class="step-number">1</div>
             <div class="step-content">
-                <h2>1. Paper CMR Digitisation (Off-Chain / Backend)</h2>
-                <p>When goods are loaded or delivered, the driver captures a photo of the traditional paper CMR document using the mobile app. The PayFreight backend service processes the image using Google Cloud Vision OCR to extract text into a structured dataset.</p>
+                <h2>1. Snap Paper CMR at Delivery</h2>
+                <p>Upon unloading, the driver captures a photo of the signed paper CMR with a smartphone. The system automatically reads shipment details, stamps delivery time, and creates a clean digital Proof of Delivery (e-POD).</p>
                 <div class="badge-list">
-                    <span class="badge">Document Scanning</span>
-                    <span class="badge">Google Cloud Vision OCR</span>
-                    <span class="badge">Structured JSON Output</span>
+                    <span class="badge">Mobile Photo Capture</span>
+                    <span class="badge">Zero Paperwork Delay</span>
+                    <span class="badge">Instant e-POD</span>
                 </div>
             </div>
         </div>
@@ -188,12 +188,12 @@
         <div class="step-card">
             <div class="step-number">2</div>
             <div class="step-content">
-                <h2>2. Cryptographic e-CMR Creation (Digital Fingerprint)</h2>
-                <p>To convert the digitized document into a tamper-proof e-CMR, the system generates a unique <strong>SHA-256 hash</strong> of the dataset. This cryptographic hash acts as the immutable digital fingerprint of the physical CMR document.</p>
+                <h2>2. Instant Document Verification</h2>
+                <p>The system instantly validates shipment details against the original order. Shippers and dispatchers get immediate visibility, preventing document tampering, duplicate billing, or missing paperwork disputes.</p>
                 <div class="badge-list">
-                    <span class="badge">SHA-256 Hash Generation</span>
-                    <span class="badge">Digital Fingerprint</span>
-                    <span class="badge">e-CMR Identity</span>
+                    <span class="badge">Tamper-Proof Verification</span>
+                    <span class="badge">Real-Time Dispatch Alert</span>
+                    <span class="badge">Dispute Protection</span>
                 </div>
             </div>
         </div>
@@ -202,22 +202,20 @@
         <div class="step-card">
             <div class="step-number">3</div>
             <div class="step-content">
-                <h2>3. Smart Contract Verification & Escrow Release</h2>
-                <p>The generated <code>cmr_hash</code> is submitted to the escrow protocol (via <code>verify_and_release.rs</code>). The contract checks if the hash matches the initial deal registration and confirms delivery verification. Once verified, escrowed funds are automatically released to the carrier.</p>
+                <h2>3. Automated Carrier Payout</h2>
+                <p>As soon as delivery proof is confirmed, escrowed freight funds are instantly released to the carrier. No more waiting 30 to 60 days for invoice maturity or mailing physical CMR copies across Europe.</p>
                 <div class="badge-list">
-                    <span class="badge">Escrow Smart Contract</span>
-                    <span class="badge">e-POD Verification</span>
-                    <span class="badge">Automated Payout</span>
+                    <span class="badge">Same-Day Payout</span>
+                    <span class="badge">Secured Escrow Funds</span>
+                    <span class="badge">Guaranteed Payment</span>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="tech-note">
-        <h3>Technical Summary for Developers:</h3>
-        <p>The Rust smart contract instruction <code>verify_and_release.rs</code> enforces two strict conditions on-chain:</p>
-        <p>1. <code>require!(escrow.cmr_hash == submitted_cmr_hash)</code> — Ensures the submitted document matches the original e-CMR.<br>
-        2. <code>require!(escrow.is_delivered == true)</code> — Confirms that the consignee has verified the delivery (e-POD).</p>
+        <h3>Technical Overview (For Developers & API Integrations):</h3>
+        <p>In the background, Google Cloud Vision OCR parses the paper document, generates an immutable <code>SHA-256</code> hash fingerprint, and submits it to the Solana smart contract (<code>verify_and_release.rs</code>) to execute gasless, automated settlement upon <code>is_delivered == true</code>.</p>
     </div>
 </div>
 
