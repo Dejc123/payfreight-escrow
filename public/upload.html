@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayFreight - Upload CMR & Confirm Delivery</title>
+    <title>PayFreight - Proof of Delivery & Escrow Release</title>
     <style>
         :root {
-            --primary-color: #14f195;
-            --secondary-color: #9945ff;
-            --bg-dark: #0f172a;
-            --card-bg: #1e293b;
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
-            --error-color: #ff453a;
+            --primary-color: #0284c7; /* Professional Logistics Blue */
+            --primary-hover: #0369a1;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --success-color: #16a34a;
+            --error-color: #dc2626;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
             margin: 0;
-            padding: 40px 20px;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,226 +30,349 @@
             box-sizing: border-box;
         }
 
-        .upload-card {
-            background-color: var(--card-bg);
-            border: 1px solid #334155;
-            border-radius: 12px;
-            padding: 35px;
+        .container {
             max-width: 550px;
             width: 100%;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--primary-color);
+        }
+
+        .upload-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .header h1 {
-            font-size: 1.8rem;
-            margin-bottom: 8px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+            color: var(--text-main);
         }
 
         .header p {
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             margin: 0;
         }
 
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: #f1f5f9;
+            padding: 4px;
+            border-radius: 6px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 9px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+
+        .tab-btn.active {
+            background: #ffffff;
+            color: var(--primary-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .form-group label {
             display: block;
             font-size: 0.85rem;
-            color: var(--text-muted);
+            color: var(--text-main);
             margin-bottom: 6px;
             font-weight: 600;
         }
 
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%;
-            padding: 12px;
-            background-color: #0f172a;
-            border: 1px solid #334155;
-            color: #fff;
+            padding: 10px 12px;
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 0.95rem;
-            transition: border-color 0.2s ease;
         }
 
-        .form-group input:focus {
+        .form-group input:focus, .form-group select:focus {
             outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
+        }
+
+        .action-box {
+            border: 2px dashed var(--border-color);
+            border-radius: 6px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 15px;
+            background-color: #fafafa;
+            transition: 0.2s;
+        }
+
+        .action-box:hover {
+            background-color: #f1f5f9;
             border-color: var(--primary-color);
         }
 
-        .drop-zone {
-            border: 2px dashed var(--primary-color);
-            border-radius: 8px;
-            padding: 30px 20px;
-            text-align: center;
-            cursor: pointer;
-            margin-top: 25px;
-            background-color: rgba(20, 241, 149, 0.02);
-            transition: background-color 0.2s ease, border-color 0.2s ease;
-        }
-
-        .drop-zone:hover, .drop-zone.dragover {
-            background-color: rgba(20, 241, 149, 0.08);
-            border-color: var(--secondary-color);
-        }
-
-        .drop-zone p {
+        .action-box p {
             margin: 0;
-            color: var(--text-light);
-            font-size: 0.95rem;
+            color: var(--text-main);
+            font-size: 0.9rem;
         }
 
-        .drop-zone p span {
+        .action-box span {
             color: var(--primary-color);
-            font-weight: bold;
+            font-weight: 600;
             text-decoration: underline;
         }
 
         .file-name {
             display: block;
-            margin-top: 10px;
+            margin-top: 8px;
             font-size: 0.85rem;
-            color: var(--primary-color);
+            color: var(--success-color);
             font-weight: 600;
             word-break: break-all;
         }
 
         .btn-submit {
             width: 100%;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            color: #000;
+            background-color: var(--primary-color);
+            color: #ffffff;
             border: none;
-            padding: 14px;
-            font-weight: bold;
-            font-size: 1rem;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
             border-radius: 6px;
             cursor: pointer;
-            margin-top: 25px;
-            transition: opacity 0.2s ease, transform 0.1s ease;
+            margin-top: 20px;
+            transition: background-color 0.2s;
         }
 
         .btn-submit:hover {
-            opacity: 0.95;
-            transform: translateY(-1px);
+            background-color: var(--primary-hover);
         }
 
         .btn-submit:disabled {
-            opacity: 0.5;
+            opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
         }
 
         .status-box {
-            margin-top: 25px;
-            padding: 15px;
+            margin-top: 20px;
+            padding: 12px;
             border-radius: 6px;
-            font-family: 'Courier New', Courier, monospace;
             font-size: 0.85rem;
             display: none;
-            line-height: 1.5;
+            line-height: 1.4;
             word-break: break-all;
         }
 
-        .status-loading {
-            background-color: rgba(148, 163, 184, 0.1);
-            border: 1px solid var(--text-muted);
-            color: var(--text-light);
-        }
-
-        .status-success {
-            background-color: rgba(20, 241, 149, 0.15);
-            border: 1px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .status-error {
-            background-color: rgba(255, 69, 58, 0.15);
-            border: 1px solid var(--error-color);
-            color: var(--error-color);
-        }
+        .status-loading { background: #f1f5f9; border: 1px solid var(--border-color); color: var(--text-main); }
+        .status-success { background: #dcfce7; border: 1px solid #bbf7d0; color: #166534; }
+        .status-error { background: #fee2e2; border: 1px solid #fecaca; color: #991b1b; }
     </style>
 </head>
 <body>
 
-<div class="upload-card">
-    <div class="header">
-        <h1>PayFreight Proof of Delivery</h1>
-        <p>Scan paper CMR for automated verification & instant payout release</p>
+<div class="container">
+    <a href="/" class="back-link">← Back to Dashboard</a>
+
+    <div class="upload-card">
+        <div class="header">
+            <h1>Proof of Delivery Verification</h1>
+            <p>Upload signed transport document to release secure escrow</p>
+        </div>
+
+        <form id="deliveryForm">
+            <div class="form-group">
+                <label for="escrowId">Freight Order / Escrow ID</label>
+                <input type="text" id="escrowId" placeholder="e.g. PF-172938475" required>
+            </div>
+
+            <div class="form-group">
+                <label for="carrierId">Carrier Email or VAT / Registration ID</label>
+                <input type="text" id="carrierId" placeholder="carrier@transport.com" required>
+            </div>
+
+            <div class="tabs">
+                <button type="button" class="tab-btn active" onclick="switchTab('photo', event)">📷 Take Photo</button>
+                <button type="button" class="tab-btn" onclick="switchTab('upload', event)">📁 Upload File</button>
+                <button type="button" class="tab-btn" onclick="switchTab('ecmr', event)">🔗 e-CMR Hub</button>
+            </div>
+
+            <div id="tab-photo" class="tab-content active">
+                <div class="action-box" onclick="document.getElementById('cameraInput').click()">
+                    <p>Tap to <span>Capture CMR Document</span> with camera</p>
+                    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;">
+                    <span id="cameraFileName" class="file-name"></span>
+                </div>
+            </div>
+
+            <div id="tab-upload" class="tab-content">
+                <div class="action-box" onclick="document.getElementById('fileInput').click()">
+                    <p>Drag & drop CMR document or <span>Browse files</span></p>
+                    <input type="file" id="fileInput" accept="image/*,.pdf" style="display: none;">
+                    <span id="uploadFileName" class="file-name"></span>
+                </div>
+            </div>
+
+            <div id="tab-ecmr" class="tab-content">
+                <div class="form-group" style="margin-top: 10px;">
+                    <label for="ecmrProvider">Select e-CMR Provider</label>
+                    <select id="ecmrProvider">
+                        <option value="transfollow">TransFollow</option>
+                        <option value="ecmreu">e-CMR.eu</option>
+                        <option value="cargox">CargoX Protocol</option>
+                        <option value="other">Other API Provider</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="externalEcmrKey">External e-CMR ID / Tracking Number</label>
+                    <input type="text" id="externalEcmrKey" placeholder="Enter remote e-CMR ID">
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-submit">Verify & Release Payment</button>
+        </form>
+
+        <div id="statusBox" class="status-box"></div>
     </div>
-
-    <form id="uploadForm">
-        <div class="form-group">
-            <label for="escrowId">Freight Order / Escrow ID</label>
-            <input type="text" id="escrowId" placeholder="e.g. PF-172938475" required>
-        </div>
-
-        <div class="form-group">
-            <label for="carrierId">Carrier Email or VAT / Registration ID</label>
-            <input type="text" id="carrierId" placeholder="e.g. carrier@transport.com or SI12345678" required>
-        </div>
-
-        <div class="form-group">
-            <label for="shipperId">Shipper Email or Order Ref</label>
-            <input type="text" id="shipperId" placeholder="e.g. shipper@logistics.com" required>
-        </div>
-
-        <div class="drop-zone" id="dropZone">
-            <p>Drag & drop signed CMR photo here or <span>browse file</span></p>
-            <input type="file" id="fileInput" accept="image/*" style="display: none;" required>
-            <span id="fileName" class="file-name"></span>
-        </div>
-
-        <button type="submit" id="submitBtn" class="btn-submit">Verify CMR & Release Payment</button>
-    </form>
-
-    <div id="statusBox" class="status-box"></div>
 </div>
 
 <script>
-    const dropZone = document.getElementById('dropZone');
+    let activeMethod = 'photo';
+
+    function switchTab(method, event) {
+        event.preventDefault();
+        activeMethod = method;
+        
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+        event.target.classList.add('active');
+        document.getElementById(`tab-${method}`).classList.add('active');
+    }
+
+    const cameraInput = document.getElementById('cameraInput');
     const fileInput = document.getElementById('fileInput');
-    const fileNameDisplay = document.getElementById('fileName');
-    const uploadForm = document.getElementById('uploadForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const statusBox = document.getElementById('statusBox');
-
-    dropZone.addEventListener('click', () => fileInput.click());
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-        dropZone.addEventListener(eventName, (e) => {
-            e.preventDefault();
-            dropZone.classList.add('dragover');
-        }, false);
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-        dropZone.addEventListener(eventName, (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('dragover');
-        }, false);
-    });
-
-    dropZone.addEventListener('drop', (e) => {
-        const dt = e.dataTransfer;
-        const files = dt.files;
-        if (files.length > 0) {
-            fileInput.files = files;
-            updateFileName();
+    
+    cameraInput.addEventListener('change', () => {
+        if (cameraInput.files.length > 0) {
+            document.getElementById('cameraFileName').textContent = `Captured: ${cameraInput.files[0].name}`;
         }
     });
 
-    fileInput.addEventListener('change', updateFileName);
+    fileInput.addEventListener('change', () => {
+        if (fileInput.files.length > 0) {
+            document.getElementById('uploadFileName').textContent = `Selected: ${fileInput.files[0].name}`;
+        }
+    });
 
-    function updateFileName() {
-        if
+    document.getElementById('deliveryForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const escrowId = document.getElementById('escrowId').value.trim();
+        const carrierId = document.getElementById('carrierId').value.trim();
+        let selectedFile = null;
+
+        if (activeMethod === 'photo') selectedFile = cameraInput.files[0];
+        if (activeMethod === 'upload') selectedFile = fileInput.files[0];
+
+        if (activeMethod !== 'ecmr' && !selectedFile) {
+            alert('Please capture or select a CMR document.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('escrowId', escrowId);
+        formData.append('carrierId', carrierId);
+        formData.append('shipperId', 'platform_verified');
+
+        if (selectedFile) {
+            formData.append('cmr_file', selectedFile);
+        } else {
+            formData.append('ecmrProvider', document.getElementById('ecmrProvider').value);
+            formData.append('externalEcmrKey', document.getElementById('externalEcmrKey').value);
+        }
+
+        const submitBtn = document.getElementById('submitBtn');
+        const statusBox = document.getElementById('statusBox');
+
+        submitBtn.disabled = true;
+        statusBox.style.display = 'block';
+        statusBox.className = 'status-box status-loading';
+        statusBox.innerHTML = 'Processing delivery verification and releasing escrow...';
+
+        try {
+            const response = await fetch('/api/payfreight/upload-cmr', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                statusBox.className = 'status-box status-success';
+                statusBox.innerHTML = `
+                    <strong>PAYMENT RELEASED SUCCESSFULLY</strong><br><br>
+                    <strong>Order ID:</strong> ${result.data.transactionId}<br>
+                    <strong>Status:</strong> ${result.data.status}<br>
+                    <strong>Proof Hash:</strong> ${result.data.cmrHash}
+                `;
+            } else {
+                statusBox.className = 'status-box status-error';
+                statusBox.innerHTML = `<strong>ERROR:</strong> ${result.message}`;
+            }
+        } catch (err) {
+            statusBox.className = 'status-box status-error';
+            statusBox.innerHTML = `<strong>SYSTEM ERROR:</strong> ${err.message}`;
+        } finally {
+            submitBtn.disabled = false;
+        }
+    });
+</script>
+
+</body>
+</html>
