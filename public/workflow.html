@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayFreight - How e-CMR & Smart Contract Verification Works</title>
+    <title>PayFreight - How Paper CMR Becomes Digital e-CMR on Solana</title>
     <style>
         :root {
             --primary-color: #14f195; /* Solana Green Accent */
@@ -42,7 +42,10 @@
 
         .header p {
             color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: 1.15rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.5;
         }
 
         .workflow {
@@ -85,7 +88,7 @@
 
         .step-content h2 {
             margin-top: 0;
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             color: var(--text-light);
         }
 
@@ -123,6 +126,12 @@
             color: var(--secondary-color);
         }
 
+        .tech-note p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
         .tech-note code {
             background-color: #0f172a;
             padding: 2px 6px;
@@ -135,8 +144,8 @@
 
 <div class="container">
     <div class="header">
-        <h1>PayFreight Process Workflow</h1>
-        <p>From paper CMR digitisation to automated escrow payout on Solana</p>
+        <h1>How PayFreight Works</h1>
+        <p>Bridging traditional paper logistics with Solana Web3 smart contracts: Transforming physical CMR documents into verified digital e-CMRs.</p>
     </div>
 
     <div class="workflow">
@@ -144,12 +153,12 @@
         <div class="step-card">
             <div class="step-number">1</div>
             <div class="step-content">
-                <h2>1. Paper CMR to Digital (Off-Chain / Backend)</h2>
-                <p>When the driver completes delivery, they capture a photo of the paper CMR. The backend service parses the image using Google Cloud Vision OCR, formats the data into structured JSON, and generates a unique SHA-256 cryptographic fingerprint.</p>
+                <h2>1. Paper CMR Digitisation (Off-Chain / Backend)</h2>
+                <p>When goods are loaded or delivered, the driver captures a photo of the traditional paper CMR document using the mobile app. The PayFreight backend service (Node.js/Rust) processes the image using Google Cloud Vision OCR to extract text (consignor, recipient, weight, goods details) into a structured JSON dataset.</p>
                 <div class="badge-list">
-                    <span class="badge">Document Capture</span>
+                    <span class="badge">Document Scanning</span>
                     <span class="badge">Google Cloud Vision OCR</span>
-                    <span class="badge">SHA-256 Hash</span>
+                    <span class="badge">Structured JSON Output</span>
                 </div>
             </div>
         </div>
@@ -158,12 +167,12 @@
         <div class="step-card">
             <div class="step-number">2</div>
             <div class="step-content">
-                <h2>2. Smart Contract Verification (On-Chain / Solana)</h2>
-                <p>The document hash is passed to the Solana smart contract. The contract verifies that the hash matches the initial booking record and confirms the consignee's digital e-POD signature before automatically releasing escrowed funds to the carrier.</p>
+                <h2>2. Cryptographic e-CMR Creation (Digital Fingerprint)</h2>
+                <p>To convert the digitized document into a tamper-proof e-CMR, the system generates a unique <strong>SHA-256 hash</strong> of the dataset. This cryptographic hash acts as the immutable digital fingerprint of the physical CMR document, securing its authenticity on-chain.</p>
                 <div class="badge-list">
-                    <span class="badge">Solana Smart Contract</span>
-                    <span class="badge">e-POD Signature</span>
-                    <span class="badge">Automated Escrow Release</span>
+                    <span class="badge">SHA-256 Hash Generation</span>
+                    <span class="badge">Digital Fingerprint</span>
+                    <span class="badge">e-CMR Identity</span>
                 </div>
             </div>
         </div>
@@ -172,18 +181,22 @@
         <div class="step-card">
             <div class="step-number">3</div>
             <div class="step-content">
-                <h2>3. Smart Contract Execution (Solana Anchor / Rust)</h2>
-                <p>The entire verification and payout logic is executed via secure, high-throughput Rust smart contract instructions on Solana.</p>
+                <h2>3. Smart Contract Verification & Escrow Release (On-Chain / Solana)</h2>
+                <p>The generated <code>cmr_hash</code> is submitted to the Solana smart contract (via <code>verify_and_release.rs</code>). The contract checks if the hash matches the initial deal registration and confirms that an Electronic Proof of Delivery (e-POD) signature has been submitted. Once verified, escrowed funds are automatically released to the carrier.</p>
                 <div class="badge-list">
-                    <span class="badge">programs/payfreight/src/instructions/verify_and_release.rs</span>
+                    <span class="badge">Solana Smart Contract</span>
+                    <span class="badge">e-POD Verification</span>
+                    <span class="badge">Automated Payout</span>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="tech-note">
-        <h3>Technical Overview for Developers:</h3>
-        <p>Verification and settlement are handled on-chain by the <code>verify_and_release.rs</code> instruction built with the Solana Anchor framework, guaranteeing near-instant finality, minimal transaction fees, and complete trustless automation.</p>
+        <h3>Technical Summary for Developers:</h3>
+        <p>The Rust smart contract instruction <code>verify_and_release.rs</code> enforces two strict conditions on-chain:</p>
+        <p>1. <code>require!(escrow.cmr_hash == submitted_cmr_hash)</code> — Ensures the submitted document matches the original e-CMR.<br>
+        2. <code>require!(escrow.is_delivered == true)</code> — Confirms that the consignee has verified the delivery (e-POD).</p>
     </div>
 </div>
 
