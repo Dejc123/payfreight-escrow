@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayFreight - Upload CMR & Confirm Delivery</title>
+    <style>
+        :root {
+            --primary-color: #14f195;
+            --secondary-color: #9945ff;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --error-color: #ff453a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .upload-card {
+            background-color: var(--card-bg);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 35px;
+            max-width: 550px;
+            width: 100%;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            color: #fff;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--primary-color);
+            border-radius: 8px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 25px;
+            background-color: rgba(20, 241, 149, 0.02);
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .drop-zone:hover, .drop-zone.dragover {
+            background-color: rgba(20, 241, 149, 0.08);
+            border-color: var(--secondary-color);
+        }
+
+        .drop-zone p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .drop-zone p span {
+            color: var(--primary-color);
+            font-weight: bold;
+            text-decoration: underline;
+        }
+
+        .file-name {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            color: #000;
+            border: none;
+            padding: 14px;
+            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: opacity 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-submit:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-box {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.85rem;
+            display: none;
+            line-height: 1.5;
+            word-break: break-all;
+        }
+
+        .status-loading {
+            background-color: rgba(148, 163, 184, 0.1);
+            border: 1px solid var(--text-muted);
+            color: var(--text-light);
+        }
+
+        .status-success {
+            background-color: rgba(20, 241, 149, 0.15);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .status-error {
+            background-color: rgba(255, 69, 58, 0.15);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="upload-card">
+    <div class="header">
+        <h1>PayFreight Proof of Delivery</h1>
+        <p>Scan paper CMR for automated verification & instant payout release</p>
+    </div>
+
+    <form id="uploadForm">
+        <div class="form-group">
+            <label for="escrowId">Freight Order / Escrow ID</label>
+            <input type="text" id="escrowId" placeholder="e.g. PF-172938475" required>
+        </div>
+
+        <div class="form-group">
+            <label for="carrierId">Carrier Email or VAT / Registration ID</label>
+            <input type="text" id="carrierId" placeholder="e.g. carrier@transport.com or SI12345678" required>
+        </div>
+
+        <div class="form-group">
+            <label for="shipperId">Shipper Email or Order Ref</label>
+            <input type="text" id="shipperId" placeholder="e.g. shipper@logistics.com" required>
+        </div>
+
+        <div class="drop-zone" id="dropZone">
+            <p>Drag & drop signed CMR photo here or <span>browse file</span></p>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;" required>
+            <span id="fileName" class="file-name"></span>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-submit">Verify CMR & Release Payment</button>
+    </form>
+
+    <div id="statusBox" class="status-box"></div>
+</div>
+
+<script>
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileNameDisplay = document.getElementById('fileName');
+    const uploadForm = document.getElementById('uploadForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusBox = document.getElementById('statusBox');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+        }, false);
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            updateFileName();
+        }
+    });
+
+    fileInput.addEventListener('change', updateFileName);
+
+    function updateFileName() {
+        if
