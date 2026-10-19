@@ -1,142 +1,208 @@
-<!-- SUPER SEXY VIZUALNA PRETVORBA -->
-    <div class="sexy-workflow-visual">
-        <div class="visual-header">
-            <h3>Digitize. Verify. Get Paid Instantly.</h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayFreight - Fast Freight Settlement via Paper CMR Digitization</title>
+    <style>
+        :root {
+            --primary-color: #0284c7; /* Professional Logistics Blue */
+            --primary-hover: #0369a1;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #cbd5e1;
+            --badge-bg: #f1f5f9;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--primary-color);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .workflow {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .step-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 24px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .step-number {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-content h2 {
+            margin-top: 0;
+            font-size: 1.15rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .step-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0 0 12px 0;
+        }
+
+        .badge-list {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: var(--badge-bg);
+            color: var(--text-main);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+        }
+
+        .visual-banner {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .visual-banner img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="/" class="back-link">← Back to Dashboard</a>
+
+    <div class="header">
+        <h1>How Paper CMR Becomes Instant Payout</h1>
+        <p>From a quick photo at the loading dock to verified proof of delivery and automated freight settlement.</p>
+    </div>
+
+    <div class="workflow">
+        <!-- STEP 1 -->
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h2>1. Snap Paper CMR at Delivery</h2>
+                <p>Upon unloading, the driver captures a photo of the signed paper CMR with a smartphone. The system automatically reads shipment details, stamps delivery time, and creates a clean digital Proof of Delivery (e-POD).</p>
+                <div class="badge-list">
+                    <span class="badge">Mobile Photo Capture</span>
+                    <span class="badge">Zero Paperwork Delay</span>
+                    <span class="badge">Instant e-POD</span>
+                </div>
+            </div>
         </div>
-        
-        <div class="visual-container">
-            <!-- Left Side: Traditional Paper -->
-            <div class="visual-side side-paper">
-                <div class="visual-icon">📄</div>
-                <p>Traditional Paper CMR</p>
-                <div class="badge-status badge-red">Slow & Messy</div>
+
+        <!-- STEP 2 -->
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h2>2. Instant Document Verification</h2>
+                <p>The system instantly validates shipment details against the original order. Shippers and dispatchers get immediate visibility, preventing document tampering, duplicate billing, or missing paperwork disputes.</p>
+                <div class="badge-list">
+                    <span class="badge">Tamper-Proof Verification</span>
+                    <span class="badge">Real-Time Dispatch Alert</span>
+                    <span class="badge">Dispute Protection</span>
+                </div>
             </div>
-            
-            <!-- Center Arrow with Animation -->
-            <div class="visual-divider">
-                <div class="arrow-icon">→</div>
-                <div class="tech-tags">OCR • HASHING • e-CMR</div>
-            </div>
-            
-            <!-- Right Side: Digital Money -->
-            <div class="visual-side side-digital">
-                <div class="visual-icon">💰</div>
-                <p>Same-Day Digital Payout</p>
-                <div class="badge-status badge-green">Fast & Secure</div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h2>3. Automated Carrier Payout</h2>
+                <p>As soon as delivery proof is confirmed, escrowed freight funds are instantly released to the carrier. No more waiting 30 to 60 days for invoice maturity or mailing physical CMR copies across Europe.</p>
+                <div class="badge-list">
+                    <span class="badge">Same-Day Payout</span>
+                    <span class="badge">Secured Escrow Funds</span>
+                    <span class="badge">Guaranteed Payment</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- DODATNI CSS ZA VIZUALIZACIJO -->
-    <style>
-        .sexy-workflow-visual {
-            margin-top: 50px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-color);
-        }
+    <!-- VIZUALNI BANNER -->
+    <div class="visual-banner">
+        <img src="cmr-ecmr.jpg" alt="Paper CMR to Digital e-CMR Conversion">
+    </div>
+</div>
 
-        .visual-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .visual-header h3 {
-            font-size: 1.4rem;
-            color: var(--text-main);
-            margin: 0;
-            font-weight: 700;
-        }
-
-        .visual-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .visual-side {
-            flex: 1;
-            background-color: var(--bg-light);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.2s ease;
-        }
-
-        .visual-side:hover {
-            transform: translateY(-5px);
-        }
-
-        .visual-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-
-        .visual-side p {
-            margin: 0 0 10px 0;
-            font-weight: 600;
-            color: var(--text-main);
-            font-size: 1rem;
-        }
-
-        .badge-status {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .badge-red {
-            background-color: #fef2f2;
-            color: #991b1b;
-            border: 1px solid #fecaca;
-        }
-
-        .badge-green {
-            background-color: #ecfdf5;
-            color: #065f46;
-            border: 1px solid #a7f3d0;
-        }
-
-        .visual-divider {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
-        }
-
-        .arrow-icon {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            animation: pulse-arrow 1.5s infinite;
-        }
-
-        .tech-tags {
-            font-family: monospace;
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-        }
-
-        @keyframes pulse-arrow {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); opacity: 0.7; }
-            100% { transform: scale(1); }
-        }
-
-        @media (max-width: 640px) {
-            .visual-container {
-                flex-direction: column;
-            }
-            .visual-divider {
-                transform: rotate(90deg);
-                margin: 20px 0;
-            }
-        }
-    </style>
+</body>
+</html>
