@@ -139,43 +139,6 @@
             box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
         }
 
-        .action-box {
-            border: 2px dashed var(--border-color);
-            border-radius: 6px;
-            padding: 20px 15px;
-            text-align: center;
-            cursor: pointer;
-            margin-top: 10px;
-            background-color: #fafafa;
-            transition: 0.2s;
-        }
-
-        .action-box:hover {
-            background-color: #f1f5f9;
-            border-color: var(--primary-color);
-        }
-
-        .action-box p {
-            margin: 0;
-            color: var(--text-main);
-            font-size: 0.9rem;
-        }
-
-        .action-box span {
-            color: var(--primary-color);
-            font-weight: 600;
-            text-decoration: underline;
-        }
-
-        .file-name {
-            display: block;
-            margin-top: 6px;
-            font-size: 0.85rem;
-            color: var(--success-color);
-            font-weight: 600;
-            word-break: break-all;
-        }
-
         .btn-add-more {
             background-color: #f1f5f9;
             color: var(--primary-color);
@@ -199,22 +162,59 @@
             align-items: center;
             gap: 10px;
             margin-top: 10px;
+            background: #f8fafc;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
         }
 
-        .cmr-row input[type="file"] {
+        /* Custom English File Upload Styling */
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
             flex: 1;
+        }
+
+        .file-upload-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .btn-file-custom {
+            display: inline-block;
+            background: #ffffff;
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 4px;
             font-size: 0.85rem;
-            padding: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .file-name-display {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            flex: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .btn-remove {
             background: #fee2e2;
             color: var(--error-color);
             border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
+            padding: 6px 10px;
+            border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 0.85rem;
         }
 
         .btn-remove:hover {
@@ -287,26 +287,34 @@
                 <button type="button" class="tab-btn" onclick="switchTab('ecmr', event)">🔗 e-CMR Hub</button>
             </div>
 
-            <!-- TAB 1: PHOTO CAPTURE (Multi-CMR supported) -->
+            <!-- TAB 1: PHOTO CAPTURE -->
             <div id="tab-photo" class="tab-content active">
                 <div class="form-group">
                     <label>Captured CMR Documents (Up to 10 for LTL loads)</label>
                     <div id="photoListContainer">
                         <div class="cmr-row">
-                            <input type="file" name="cmr_photos" accept="image/*" capture="environment" required>
+                            <div class="file-upload-wrapper">
+                                <span class="btn-file-custom">Choose Photo</span>
+                                <input type="file" name="cmr_photos" accept="image/*" capture="environment" onchange="updateFileName(this)" required>
+                            </div>
+                            <span class="file-name-display">No file chosen</span>
                         </div>
                     </div>
                     <button type="button" class="btn-add-more" onclick="addPhotoRow()">+ Add Another CMR Document</button>
                 </div>
             </div>
 
-            <!-- TAB 2: FILE UPLOAD (Multi-CMR supported) -->
+            <!-- TAB 2: FILE UPLOAD -->
             <div id="tab-upload" class="tab-content">
                 <div class="form-group">
                     <label>Selected CMR Documents / PDFs</label>
                     <div id="fileListContainer">
                         <div class="cmr-row">
-                            <input type="file" name="cmr_files" accept="image/*,.pdf" required>
+                            <div class="file-upload-wrapper">
+                                <span class="btn-file-custom">Browse File</span>
+                                <input type="file" name="cmr_files" accept="image/*,.pdf" onchange="updateFileName(this)" required>
+                            </div>
+                            <span class="file-name-display">No file chosen</span>
                         </div>
                     </div>
                     <button type="button" class="btn-add-more" onclick="addFileRow()">+ Add Another CMR Document</button>
@@ -351,6 +359,20 @@
         document.getElementById(`tab-${method}`).classList.add('active');
     }
 
+    // Function to update displayed file name in English
+    function updateFileName(input) {
+        const displaySpan = input.parentElement.parentElement.querySelector('.file-name-display');
+        if (input.files && input.files[0]) {
+            displaySpan.textContent = input.files[0].name;
+            displaySpan.style.color = 'var(--success-color)';
+            displaySpan.style.fontWeight = '600';
+        } else {
+            displaySpan.textContent = 'No file chosen';
+            displaySpan.style.color = 'var(--text-muted)';
+            displaySpan.style.fontWeight = 'normal';
+        }
+    }
+
     // Function to add new photo input row
     function addPhotoRow() {
         const container = document.getElementById('photoListContainer');
@@ -361,7 +383,11 @@
         const row = document.createElement('div');
         row.className = 'cmr-row';
         row.innerHTML = `
-            <input type="file" name="cmr_photos" accept="image/*" capture="environment">
+            <div class="file-upload-wrapper">
+                <span class="btn-file-custom">Choose Photo</span>
+                <input type="file" name="cmr_photos" accept="image/*" capture="environment" onchange="updateFileName(this)">
+            </div>
+            <span class="file-name-display">No file chosen</span>
             <button type="button" class="btn-remove" onclick="this.parentElement.remove()">✕</button>
         `;
         container.appendChild(row);
@@ -377,7 +403,11 @@
         const row = document.createElement('div');
         row.className = 'cmr-row';
         row.innerHTML = `
-            <input type="file" name="cmr_files" accept="image/*,.pdf">
+            <div class="file-upload-wrapper">
+                <span class="btn-file-custom">Browse File</span>
+                <input type="file" name="cmr_files" accept="image/*,.pdf" onchange="updateFileName(this)">
+            </div>
+            <span class="file-name-display">No file chosen</span>
             <button type="button" class="btn-remove" onclick="this.parentElement.remove()">✕</button>
         `;
         container.appendChild(row);
@@ -461,6 +491,9 @@
         }
     });
 </script>
+
+</body>
+</html>
 
 </body>
 </html>
