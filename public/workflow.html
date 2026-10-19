@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayFreight - How e-CMR & Smart Contract Verification Works</title>
+    <style>
+        :root {
+            --primary-color: #14f195; /* Solana Green Accent */
+            --secondary-color: #9945ff; /* Solana Purple Accent */
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .workflow {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            position: relative;
+        }
+
+        .step-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary-color);
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #000;
+            font-weight: bold;
+            font-size: 1.2rem;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-content h2 {
+            margin-top: 0;
+            font-size: 1.4rem;
+            color: var(--text-light);
+        }
+
+        .step-content p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .badge-list {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background-color: #0f172a;
+            color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid #334155;
+        }
+
+        .tech-note {
+            margin-top: 40px;
+            background-color: rgba(153, 69, 255, 0.1);
+            border-left: 4px solid var(--secondary-color);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tech-note h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+        }
+
+        .tech-note code {
+            background-color: #0f172a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>PayFreight Process Workflow</h1>
+        <p>From paper CMR digitisation to automated escrow payout on Solana</p>
+    </div>
+
+    <div class="workflow">
+        <!-- STEP 1 -->
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h2>1. Paper CMR to Digital (Off-Chain / Backend)</h2>
+                <p>When the driver completes delivery, they capture a photo of the paper CMR. The backend service parses the image using Google Cloud Vision OCR, formats the data into structured JSON, and generates a unique SHA-256 cryptographic fingerprint.</p>
+                <div class="badge-list">
+                    <span class="badge">Document Capture</span>
+                    <span class="badge">Google Cloud Vision OCR</span>
+                    <span class="badge">SHA-256 Hash</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h2>2. Smart Contract Verification (On-Chain / Solana)</h2>
+                <p>The document hash is passed to the Solana smart contract. The contract verifies that the hash matches the initial booking record and confirms the consignee's digital e-POD signature before automatically releasing escrowed funds to the carrier.</p>
+                <div class="badge-list">
+                    <span class="badge">Solana Smart Contract</span>
+                    <span class="badge">e-POD Signature</span>
+                    <span class="badge">Automated Escrow Release</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h2>3. Smart Contract Execution (Solana Anchor / Rust)</h2>
+                <p>The entire verification and payout logic is executed via secure, high-throughput Rust smart contract instructions on Solana.</p>
+                <div class="badge-list">
+                    <span class="badge">programs/payfreight/src/instructions/verify_and_release.rs</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tech-note">
+        <h3>Technical Overview for Developers:</h3>
+        <p>Verification and settlement are handled on-chain by the <code>verify_and_release.rs</code> instruction built with the Solana Anchor framework, guaranteeing near-instant finality, minimal transaction fees, and complete trustless automation.</p>
+    </div>
+</div>
+
+</body>
+</html>
