@@ -31,7 +31,7 @@
         }
 
         .container {
-            max-width: 550px;
+            max-width: 600px;
             width: 100%;
         }
 
@@ -142,10 +142,10 @@
         .action-box {
             border: 2px dashed var(--border-color);
             border-radius: 6px;
-            padding: 25px 15px;
+            padding: 20px 15px;
             text-align: center;
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 10px;
             background-color: #fafafa;
             transition: 0.2s;
         }
@@ -169,11 +169,56 @@
 
         .file-name {
             display: block;
-            margin-top: 8px;
+            margin-top: 6px;
             font-size: 0.85rem;
             color: var(--success-color);
             font-weight: 600;
             word-break: break-all;
+        }
+
+        .btn-add-more {
+            background-color: #f1f5f9;
+            color: var(--primary-color);
+            border: 1px dashed var(--primary-color);
+            width: 100%;
+            padding: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background 0.2s;
+        }
+
+        .btn-add-more:hover {
+            background-color: #e0f2fe;
+        }
+
+        .cmr-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .cmr-row input[type="file"] {
+            flex: 1;
+            font-size: 0.85rem;
+            padding: 6px;
+        }
+
+        .btn-remove {
+            background: #fee2e2;
+            color: var(--error-color);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-remove:hover {
+            background: #fecaca;
         }
 
         .btn-submit {
@@ -222,7 +267,7 @@
     <div class="upload-card">
         <div class="header">
             <h1>Proof of Delivery Verification</h1>
-            <p>Upload signed transport document to release secure escrow</p>
+            <p>Upload signed transport document(s) to release secure escrow</p>
         </div>
 
         <form id="deliveryForm">
@@ -237,27 +282,38 @@
             </div>
 
             <div class="tabs">
-                <button type="button" class="tab-btn active" onclick="switchTab('photo', event)">📷 Take Photo</button>
-                <button type="button" class="tab-btn" onclick="switchTab('upload', event)">📁 Upload File</button>
+                <button type="button" class="tab-btn active" onclick="switchTab('photo', event)">📷 Take Photos</button>
+                <button type="button" class="tab-btn" onclick="switchTab('upload', event)">📁 Upload Files</button>
                 <button type="button" class="tab-btn" onclick="switchTab('ecmr', event)">🔗 e-CMR Hub</button>
             </div>
 
+            <!-- TAB 1: PHOTO CAPTURE (Multi-CMR supported) -->
             <div id="tab-photo" class="tab-content active">
-                <div class="action-box" onclick="document.getElementById('cameraInput').click()">
-                    <p>Tap to <span>Capture CMR Document</span> with camera</p>
-                    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;">
-                    <span id="cameraFileName" class="file-name"></span>
+                <div class="form-group">
+                    <label>Captured CMR Documents (Up to 10 for LTL loads)</label>
+                    <div id="photoListContainer">
+                        <div class="cmr-row">
+                            <input type="file" name="cmr_photos" accept="image/*" capture="environment" required>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add-more" onclick="addPhotoRow()">+ Add Another CMR Document</button>
                 </div>
             </div>
 
+            <!-- TAB 2: FILE UPLOAD (Multi-CMR supported) -->
             <div id="tab-upload" class="tab-content">
-                <div class="action-box" onclick="document.getElementById('fileInput').click()">
-                    <p>Drag & drop CMR document or <span>Browse files</span></p>
-                    <input type="file" id="fileInput" accept="image/*,.pdf" style="display: none;">
-                    <span id="uploadFileName" class="file-name"></span>
+                <div class="form-group">
+                    <label>Selected CMR Documents / PDFs</label>
+                    <div id="fileListContainer">
+                        <div class="cmr-row">
+                            <input type="file" name="cmr_files" accept="image/*,.pdf" required>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add-more" onclick="addFileRow()">+ Add Another CMR Document</button>
                 </div>
             </div>
 
+            <!-- TAB 3: e-CMR HUB -->
             <div id="tab-ecmr" class="tab-content">
                 <div class="form-group" style="margin-top: 10px;">
                     <label for="ecmrProvider">Select e-CMR Provider</label>
@@ -295,43 +351,75 @@
         document.getElementById(`tab-${method}`).classList.add('active');
     }
 
-    const cameraInput = document.getElementById('cameraInput');
-    const fileInput = document.getElementById('fileInput');
-    
-    cameraInput.addEventListener('change', () => {
-        if (cameraInput.files.length > 0) {
-            document.getElementById('cameraFileName').textContent = `Captured: ${cameraInput.files[0].name}`;
+    // Function to add new photo input row
+    function addPhotoRow() {
+        const container = document.getElementById('photoListContainer');
+        if (container.children.length >= 10) {
+            alert('Maximum 10 CMR documents allowed per batch.');
+            return;
         }
-    });
+        const row = document.createElement('div');
+        row.className = 'cmr-row';
+        row.innerHTML = `
+            <input type="file" name="cmr_photos" accept="image/*" capture="environment">
+            <button type="button" class="btn-remove" onclick="this.parentElement.remove()">✕</button>
+        `;
+        container.appendChild(row);
+    }
 
-    fileInput.addEventListener('change', () => {
-        if (fileInput.files.length > 0) {
-            document.getElementById('uploadFileName').textContent = `Selected: ${fileInput.files[0].name}`;
+    // Function to add new file input row
+    function addFileRow() {
+        const container = document.getElementById('fileListContainer');
+        if (container.children.length >= 10) {
+            alert('Maximum 10 CMR documents allowed per batch.');
+            return;
         }
-    });
+        const row = document.createElement('div');
+        row.className = 'cmr-row';
+        row.innerHTML = `
+            <input type="file" name="cmr_files" accept="image/*,.pdf">
+            <button type="button" class="btn-remove" onclick="this.parentElement.remove()">✕</button>
+        `;
+        container.appendChild(row);
+    }
 
     document.getElementById('deliveryForm').addEventListener('submit', async (e) => {
         e.preventDefault();
 
         const escrowId = document.getElementById('escrowId').value.trim();
         const carrierId = document.getElementById('carrierId').value.trim();
-        let selectedFile = null;
-
-        if (activeMethod === 'photo') selectedFile = cameraInput.files[0];
-        if (activeMethod === 'upload') selectedFile = fileInput.files[0];
-
-        if (activeMethod !== 'ecmr' && !selectedFile) {
-            alert('Please capture or select a CMR document.');
-            return;
-        }
-
+        
         const formData = new FormData();
         formData.append('escrowId', escrowId);
         formData.append('carrierId', carrierId);
         formData.append('shipperId', 'platform_verified');
 
-        if (selectedFile) {
-            formData.append('cmr_file', selectedFile);
+        if (activeMethod === 'photo') {
+            const inputs = document.querySelectorAll('input[name="cmr_photos"]');
+            let count = 0;
+            inputs.forEach(input => {
+                if (input.files[0]) {
+                    formData.append('cmr_files', input.files[0]);
+                    count++;
+                }
+            });
+            if (count === 0) {
+                alert('Please capture at least one CMR document.');
+                return;
+            }
+        } else if (activeMethod === 'upload') {
+            const inputs = document.querySelectorAll('input[name="cmr_files"]');
+            let count = 0;
+            inputs.forEach(input => {
+                if (input.files[0]) {
+                    formData.append('cmr_files', input.files[0]);
+                    count++;
+                }
+            });
+            if (count === 0) {
+                alert('Please select at least one CMR document.');
+                return;
+            }
         } else {
             formData.append('ecmrProvider', document.getElementById('ecmrProvider').value);
             formData.append('externalEcmrKey', document.getElementById('externalEcmrKey').value);
