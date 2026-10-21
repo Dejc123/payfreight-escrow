@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayFreight.io - Global Logistics Settlement Architecture</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #111827;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --accent: #3b82f6; /* Professional Fintech Blue */
+            --accent-glow: rgba(59, 130, 246, 0.15);
+            --success: #10b981;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 60px 20px;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            margin: 0 0 10px 0;
+            color: #ffffff;
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+        }
+
+        .intro {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .step-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 24px;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: border-color 0.2s ease;
+        }
+
+        .step-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+        }
+
+        .step-number {
+            display: inline-block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin: 0 0 12px 0;
+            color: #ffffff;
+        }
+
+        p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .markets-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .market-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .market-box strong {
+            color: var(--text-main);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            padding-top: 25px;
+        }
+
+        .tech-badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--accent-glow);
+            color: var(--accent);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>PayFreight.io</h1>
+        <div class="subtitle">Global Logistics Settlement Architecture (USA & Europe)</div>
+    </header>
+
+    <div class="intro">
+        Forget sluggish banking networks, legacy intermediaries, and outdated payment terms. PayFreight introduces a unified global backbone for freight settlements—combining American market speed with European regulatory security, powered by <span class="highlight">Solana</span> and <span class="highlight">Circle</span>.
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step-card">
+        <span class="step-number">Step 01 / Capital On-Ramp</span>
+        <h3>Multi-Region Local Funding</h3>
+        <p>Shippers settle freight charges locally using the financial rails they already trust. In the background, fully regulated institutional reserves back the equivalent digital value instantly.</p>
+        
+        <div class="markets-grid">
+            <div class="market-box">
+                <strong>🇺🇸 USA Market (USD)</strong>
+                Local funding via US ACH, Wire transfer, or corporate cards.
+            </div>
+            <div class="market-box">
+                <strong>🇪🇺 Europe Market (EUR)</strong>
+                Local funding via SEPA or SEPA Instant bank transfers.
+            </div>
+        </div>
+        <div style="margin-top: 12px;">
+            <p><strong>The Storage:</strong> Regulated issuers like <span class="highlight">Circle</span> hold the fiat reserves and instantly mint an exact 1:1 digital representation (<span class="highlight">USDC</span> or <span class="highlight">EURC</span>) on-chain.</p>
+        </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-card">
+        <span class="step-number">Step 02 / On-Chain Escrow</span>
+        <h3>Zero-Risk Global Vault</h3>
+        <p>The newly minted stablecoins are instantly routed into a cryptographic, immutable smart contract (<span class="highlight">Solana Escrow Program</span>).</p>
+        <p style="margin-top: 8px;">This eliminates traditional factoring delays in the US and international cross-border friction in Europe. The carrier has cryptographic proof that funds are locked, verified, and untouchable by the shipper.</p>
+        <div class="tech-badge">Powered by Solana (Sub-second finality & fractions of a cent in fees)</div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-card">
+        <span class="step-number">Step 03 / Milestone Execution</span>
+        <h3>Automated Settlement Trigger</h3>
+        <p>As cargo moves and digital proofs (such as e-CMR or verified IoT delivery data) are registered on the network, the smart contract evaluates fulfillment parameters instantly without manual intervention.</p>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step-card">
+        <span class="step-number">Step 04 / Capital Off-Ramp</span>
+        <h3>Direct Local Payouts</h3>
+        <p>Upon successful delivery confirmation, the escrow vault releases funds directly to the carrier's digital wallet, which seamlessly converts back to local fiat currency and deposits straight into their business bank account.</p>
+
+        <div class="markets-grid" style="margin-top: 15px;">
+            <div class="market-box">
+                <strong>🇺🇸 USA Payout</strong>
+                Converted via Circle API and routed directly to US business accounts via ACH / Wire.
+            </div>
+            <div class="market-box">
+                <strong>🇪🇺 Europe Payout</strong>
+                Converted via Circle API and deposited straight into local corporate accounts via SEPA / IBAN.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        PayFreight.io &mdash; Scaling global logistics infrastructure with Solana & Circle.
+    </footer>
+</div>
+
+</body>
+</html>
