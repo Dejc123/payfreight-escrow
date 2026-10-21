@@ -1,0 +1,77 @@
+<!--
+Tole je odlična, čista in vizualno dovršena koda za plačilni vmesnik! Točno vidim, kako je sestavljena – podatki se trenutno berejo kar iz URL povezave (urlParams), gumb za simulacijo pa lokalno spreminja status.
+Da bova to povezala z našim novim Node.js strežnikom, ki sva ga postavila v mapo backend (server.js), morava funkcijo simulateBankConfirmation() spremeniti tako, da ob kliku dejansko pošlje zahtevek na tvoj lokalni strežnik (http://localhost:3000/api/create-payment) namesto da samo lažno simulira.
+
+Kako to urediva?
+V spodnjem bloku kode je popravljena skripta za tvojo gateway.html datoteko. Zamenjaj spodnji del <script> v svoji kodi s tem: in ta del kot koda ki jo moram dodati v gateway:
+
+-->
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const amount = urlParams.get('amount') || '1400';
+    const currency = urlParams.get('currency') || 'EUR';
+    const carrier = urlParams.get('carrier') || 'DO_12345';
+    const ref = urlParams.get('ref') || 'load: 546';
+
+    document.getElementById('display-amount').innerText = (currency === 'USD' ? '$ ' : '€ ') + parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 2}) + ' ' + currency;
+    document.getElementById('display-carrier').innerText = carrier;
+    document.getElementById('display-ref').innerText = ref;
+
+    function copyText(elementId) {
+        const text = document.getElementById(elementId).innerText;
+        navigator.clipboard.writeText(text);
+        alert("Copied: " + text);
+    }
+
+    // Povezava s tvojim Node.js backend strežnikom
+    async function simulateBankConfirmation() {
+        const statusBox = document.getElementById('status-container');
+        const statusText = document.getElementById('status-text');
+        const badge = document.querySelector('.status-badge');
+
+        statusText.innerText = "Connecting to Node.js backend & Circle API...";
+        statusBox.style.background = "#eff6ff";
+        statusBox.style.borderColor = "#bfdbfe";
+
+        try {
+            // Pošljemo podatke na naš lokalni strežnik na vratih 3000
+            const response = await fetch('http://localhost:3000/api/create-payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    amount: amount,
+                    currency: currency,
+                    carrier: carrier,
+                    reference: ref
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                statusText.innerHTML = "<strong>✅ Circle API Request Successful!</strong><br>Deposit instruction generated & Escrow locked.";
+                statusBox.style.background = "#ecfdf5";
+                statusBox.style.borderColor = "#a7f3d0";
+                statusBox.style.color = "#065f46";
+                
+                badge.innerText = "Locked in Escrow";
+                badge.style.background = "#ecfdf5";
+                badge.style.color = "#065f46";
+
+                document.querySelector('.status-dot').style.backgroundColor = "#10b981";
+            } else {
+                throw new Error(result.error || 'Server responded with an error');
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+            statusText.innerHTML = "<strong>❌ Connection Error</strong><br>Is your Node.js backend running?";
+            statusBox.style.background = "#fef2f2";
+            statusBox.style.borderColor = "#fecaca";
+            statusBox.style.color = "#991b1b";
+        }
+    }
+</script>
