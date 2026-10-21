@@ -903,11 +903,64 @@
           </div>
         </div>
 
-        <div class="bg-gray-50 p-3 px-6 flex justify-between items-center border-t border-gray-100">
-          <button onclick="closeEscrowModal()" class="text-xs text-gray-500 hover:text-gray-800 font-semibold">Cancel</button>
-          <button onclick="submitEscrow()" class="bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-2 px-5 rounded-xl text-xs shadow hover:from-amber-600 transition">
-            Lock Escrow & Confirm ➔
-          </button>
+    
+
+            <div class="bg-gray-50 p-3 px-6 flex justify-between items-center border-t border-gray-100">
+    <button onclick="closeEscrowModal()" class="text-xs text-gray-500 hover:text-gray-800 font-semibold">Cancel</button>
+    <button onclick="
+        const carrier = document.getElementById('manualCarrierName').value || 'US Freight Express';
+        const amount = document.getElementById('manualAmount').value || '1400';
+        const ref = document.getElementById('manualCargoId').value || 'ORDER-2026-01';
+        window.location.href = `gateway.html?amount=${amount}&currency=EUR&carrier=${encodeURIComponent(carrier)}&ref=${encodeURIComponent(ref)}`;
+    " class="bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-2 px-5 rounded-xl text-xs shadow hover:from-amber-600 transition">
+        Lock Escrow & Confirm ➔
+    </button>
+</div>
+
+<!-- 
+  [MAINNET LAUNCH PREPARATION - INDEX_ADD]
+  Here is the prepared script for backend integration, which will be activated upon production launch:
+  
+<script>
+    async function submitEscrow() {
+        const carrierName = document.getElementById('manualCarrierName').value;
+        const iban = document.getElementById('manualCarrierIban').value;
+        const reference = document.getElementById('manualCargoId').value;
+        const amount = document.getElementById('manualAmount').value;
+        
+        const paymentType = document.querySelector('input[name="paymentType"]:checked')?.value || 'FIAT';
+
+        if (!carrierName || !amount || !reference || !iban) {
+            alert("Please fill in all mandatory fields.");
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/create-payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    amount: amount,
+                    currency: paymentType === 'FIAT' ? 'EUR' : 'USDC',
+                    carrier: carrierName,
+                    reference: reference
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                window.location.href = `gateway.html?amount=${amount}&currency=EUR&carrier=${encodeURIComponent(carrierName)}&ref=${encodeURIComponent(reference)}`;
+            } else {
+                alert("Server error: " + (result.error || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error("Connection error:", error);
+        }
+    }
+</script>
+-->
+            
         </div>
       </div>
     </div>
