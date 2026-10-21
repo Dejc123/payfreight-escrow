@@ -769,152 +769,179 @@
         </div>
     </div>
 
-    <!-- ESCROW MODAL DIALOG -->
-    <div id="escrowModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-amber-200 text-left">
-        <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-4 px-6 text-white flex justify-between items-center">
+<!-- ESCROW MODAL DIALOG -->
+<div id="escrowModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden border border-amber-200 text-left">
+    <div class="bg-gradient-to-r from-amber-500 to-amber-600 p-4 px-6 text-white flex justify-between items-center">
+      <div>
+        <h3 class="text-lg font-bold flex items-center gap-2">
+          🔒 Lock Escrow & Pay Freight
+        </h3>
+        <p class="text-xs text-amber-100 mt-0.5">Create a secure smart escrow settlement ($ USD or € EUR)</p>
+      </div>
+      <button onclick="closeEscrowModal()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
+    </div>
+
+    <div class="flex border-b border-gray-200 bg-gray-50 p-2 gap-2 text-xs font-semibold">
+      <button id="tab-pdf-btn" onclick="switchTab('pdf')" class="flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5 font-bold">
+        📄 1. PDF Order
+      </button>
+      <button id="tab-exchange-btn" onclick="switchTab('exchange')" class="flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5">
+        🔗 2. Freight Exchange / Network ID
+      </button>
+      <button id="tab-manual-btn" onclick="switchTab('manual')" class="flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5">
+        ✍️ 3. Full Manual Entry
+      </button>
+    </div>
+
+    <div class="p-5 space-y-4">
+      <!-- Tab 1: PDF Order -->
+      <div id="tab-pdf" class="tab-content">
+        <div class="border-2 border-dashed border-amber-300 rounded-xl p-6 text-center bg-amber-50/50 hover:bg-amber-50 transition cursor-pointer relative">
+          <input type="file" id="pdfFileInput" accept=".pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handlePdfUpload(this)">
+          <div class="text-3xl mb-2">📥</div>
+          <p class="font-bold text-gray-800 text-sm">Drag & Drop Transport Order PDF here</p>
+          <p class="text-xs text-gray-500 mt-1">Supports US Rate Confirmations, e-CMR & Freight Orders (Auto-extracts IBAN, US Account No, ABA Routing, SWIFT & Price)</p>
+        </div>
+      </div>
+
+      <!-- Tab 2: Freight Exchange -->
+      <div id="tab-exchange" class="tab-content hidden space-y-3">
+        <div class="grid grid-cols-2 gap-3">
           <div>
-            <h3 class="text-lg font-bold flex items-center gap-2">
-              🔒 Lock Escrow & Pay Freight
-            </h3>
-            <p class="text-xs text-amber-100 mt-0.5">Create a secure smart escrow settlement ($ USD or € EUR)</p>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Freight Exchange / TMS Platform</label>
+            <input type="text" id="exchangeName" placeholder="e.g. DAT, Truckstop, Timocom, Trans.eu" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
           </div>
-          <button onclick="closeEscrowModal()" class="text-white/80 hover:text-white text-2xl font-bold">&times;</button>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Carrier / Transporter ID</label>
+            <input type="text" id="exchangeCarrierId" placeholder="e.g. MC-982341 / DOT-12345 / CARRIER-55" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
+          </div>
         </div>
 
-        <div class="flex border-b border-gray-200 bg-gray-50 p-2 gap-2 text-xs font-semibold">
-          <button id="tab-pdf-btn" onclick="switchTab('pdf')" class="flex-1 py-2 px-3 rounded-lg border border-amber-500 bg-white text-amber-700 shadow-sm flex items-center justify-center gap-1.5 font-bold">
-            📄 1. PDF Order
-          </button>
-          <button id="tab-exchange-btn" onclick="switchTab('exchange')" class="flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5">
-            🔗 2. Freight Exchange / Network ID
-          </button>
-          <button id="tab-manual-btn" onclick="switchTab('manual')" class="flex-1 py-2 px-3 rounded-lg border border-transparent text-gray-600 hover:bg-gray-100 flex items-center justify-center gap-1.5">
-            ✍️ 3. Full Manual Entry
-          </button>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Cargo / Load Ref ID</label>
+            <input type="text" id="exchangeCargoId" placeholder="e.g. LOAD-9921" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Freight Price ($ USD / € EUR)</label>
+            <input type="number" id="exchangeAmount" placeholder="1550.00" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
+          </div>
         </div>
 
-        <div class="p-5 space-y-4">
-          <div id="tab-pdf" class="tab-content">
-            <div class="border-2 border-dashed border-amber-300 rounded-xl p-6 text-center bg-amber-50/50 hover:bg-amber-50 transition cursor-pointer relative">
-              <input type="file" id="pdfFileInput" accept=".pdf" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="handlePdfUpload(this)">
-              <div class="text-3xl mb-2">📥</div>
-              <p class="font-bold text-gray-800 text-sm">Drag & Drop Transport Order PDF here</p>
-              <p class="text-xs text-gray-500 mt-1">Supports US Rate Confirmations, e-CMR & Freight Orders (Auto-extracts IBAN, US Account No, ABA Routing, SWIFT & Price)</p>
-            </div>
+        <button type="button" onclick="fetchCarrierFromExchange()" class="w-full bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold py-2 rounded-lg border border-amber-300 flex items-center justify-center gap-1.5 transition">
+          ⚡ Auto-Fetch Carrier Profile & Bank Data via API
+        </button>
+        <div id="exchangeStatus" class="text-xs text-gray-600 text-center hidden p-2 bg-amber-50 rounded-lg border border-amber-200"></div>
+      </div>
+
+      <!-- Tab 3: Manual Entry -->
+      <div id="tab-manual" class="tab-content hidden space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Carrier Company Name *</label>
+            <input type="text" id="manualCarrierName" placeholder="e.g. US Freight Express Inc." class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
           </div>
-
-          <div id="tab-exchange" class="tab-content hidden space-y-3">
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Freight Exchange / TMS Platform</label>
-                <input type="text" id="exchangeName" placeholder="e.g. DAT, Truckstop, Timocom, Trans.eu" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Carrier / Transporter ID</label>
-                <input type="text" id="exchangeCarrierId" placeholder="e.g. MC-982341 / DOT-12345 / CARRIER-55" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Cargo / Load Ref ID</label>
-                <input type="text" id="exchangeCargoId" placeholder="e.g. LOAD-9921" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Freight Price ($ USD / € EUR)</label>
-                <input type="number" id="exchangeAmount" placeholder="1550.00" class="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-amber-500 outline-none">
-              </div>
-            </div>
-
-            <button type="button" onclick="fetchCarrierFromExchange()" class="w-full bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs font-bold py-2 rounded-lg border border-amber-300 flex items-center justify-center gap-1.5 transition">
-              ⚡ Auto-Fetch Carrier Profile & Bank Data via API
-            </button>
-            <div id="exchangeStatus" class="text-xs text-gray-600 text-center hidden p-2 bg-amber-50 rounded-lg border border-amber-200"></div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Tax / VAT / EIN / MC Number *</label>
+            <input type="text" id="manualCarrierVat" placeholder="e.g. EIN 12-3456789" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
           </div>
+        </div>
 
-          <div id="tab-manual" class="tab-content hidden space-y-3">
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Carrier Company Name *</label>
-                <input type="text" id="manualCarrierName" placeholder="e.g. US Freight Express Inc." class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Tax / VAT / EIN / MC Number *</label>
-                <input type="text" id="manualCarrierVat" placeholder="e.g. EIN 12-3456789" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none focus:ring-2 focus:ring-amber-500">
-              </div>
-            </div>
-
-            <div class="p-3 bg-amber-50/80 border border-amber-200 rounded-xl space-y-2.5">
-              <span class="block text-xs font-extrabold text-amber-900 border-b border-amber-200/80 pb-1 flex items-center gap-1.5">
-                🏦 Carrier Payout Bank Details (US ACH Routing / EU IBAN)
-              </span>
-              <div>
-                <label class="block text-[11px] font-bold text-gray-700 mb-0.5">IBAN Account (EUR) or US Account Number (USD) *</label>
-                <input type="text" id="manualCarrierIban" placeholder="e.g. US Account No. 9876543210 or SI56..." class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white outline-none uppercase">
-              </div>
-              <div class="grid grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-[11px] font-bold text-gray-700 mb-0.5">SWIFT / ABA Routing (9-digits) *</label>
-                  <input type="text" id="manualCarrierSwift" placeholder="e.g. ABA Routing 021000021" class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white outline-none uppercase">
-                </div>
-                <div>
-                  <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Bank Name & Country *</label>
-                  <input type="text" id="manualBankName" placeholder="e.g. JPMorgan Chase (USA)" class="w-full border border-amber-300 rounded-lg p-2 text-xs bg-white outline-none">
-                </div>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Country & City *</label>
-                <input type="text" id="manualCarrierLocation" placeholder="e.g. USA, Chicago" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Carrier Email or Wallet</label>
-                <input type="text" id="manualCarrierContact" placeholder="email@carrier.com" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none">
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3 pt-1 border-t border-gray-100">
-              <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Order Ref / ID *</label>
-                <input type="text" id="manualCargoId" placeholder="e.g. ORDER-2026-01" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none">
-              </div>
-              <div>
-                <label class="block text-xs font-bold text-gray-700 mb-1">Freight Price ($ USD / € EUR) *</label>
-                <input type="number" id="manualAmount" placeholder="1850.00" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none">
-              </div>
-            </div>
+        <div class="p-3 bg-amber-50/80 border border-amber-200 rounded-xl space-y-2.5">
+          <span class="block text-xs font-extrabold text-amber-900 border-b border-amber-200/80 pb-1 flex items-center gap-1.5">
+            🏦 Carrier Payout Bank Details (US ACH Routing / EU IBAN)
+          </span>
+          <div>
+            <label class="block text-[11px] font-bold text-gray-700 mb-0.5">IBAN Account (EUR) or US Account Number (USD) *</label>
+            <input type="text" id="manualCarrierIban" placeholder="e.g. US Account No. 9876543210 or SI56..." class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white outline-none uppercase">
           </div>
-
-          <div class="pt-2 border-t border-gray-100">
-            <label class="block text-xs font-bold text-gray-700 mb-2">Select Settlement Payment Currency & Gateway:</label>
-            <div class="grid grid-cols-2 gap-3">
-              <label class="flex items-center gap-2 border rounded-xl p-2.5 cursor-pointer hover:bg-amber-50 border-amber-300 transition">
-                <input type="radio" name="paymentType" value="FIAT" checked class="text-amber-600">
-                <span class="text-xs font-semibold">💳 USD / EUR Bank Transfer (FedNow/ACH/SEPA)</span>
-              </label>
-              <label class="flex items-center gap-2 border rounded-xl p-2.5 cursor-pointer hover:bg-amber-50 border-amber-300 transition">
-                <input type="radio" name="paymentType" value="CRYPTO" class="text-amber-600">
-                <span class="text-xs font-semibold">🔑 Fixed Value Stablecoins (USDC/USDT/EURC)</span>
-              </label>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-0.5">SWIFT / ABA Routing (9-digits) *</label>
+              <input type="text" id="manualCarrierSwift" placeholder="e.g. ABA Routing 021000021" class="w-full border border-amber-300 rounded-lg p-2 text-xs font-mono font-bold bg-white outline-none uppercase">
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-700 mb-0.5">Bank Name & Country *</label>
+              <input type="text" id="manualBankName" placeholder="e.g. JPMorgan Chase (USA)" class="w-full border border-amber-300 rounded-lg p-2 text-xs bg-white outline-none">
             </div>
           </div>
         </div>
 
-    
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Country & City *</label>
+            <input type="text" id="manualCarrierLocation" placeholder="e.g. USA, Chicago" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Carrier Email or Wallet</label>
+            <input type="text" id="manualCarrierContact" placeholder="email@carrier.com" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none">
+          </div>
+        </div>
 
-            <div class="bg-gray-50 p-3 px-6 flex justify-between items-center border-t border-gray-100">
-    <button onclick="closeEscrowModal()" class="text-xs text-gray-500 hover:text-gray-800 font-semibold">Cancel</button>
-    <button onclick="
-        const carrier = document.getElementById('manualCarrierName').value || 'US Freight Express';
-        const amount = document.getElementById('manualAmount').value || '1400';
-        const ref = document.getElementById('manualCargoId').value || 'ORDER-2026-01';
-        window.location.href = `gateway.html?amount=${amount}&currency=EUR&carrier=${encodeURIComponent(carrier)}&ref=${encodeURIComponent(ref)}`;
-    " class="bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-2 px-5 rounded-xl text-xs shadow hover:from-amber-600 transition">
+        <div class="grid grid-cols-2 gap-3 pt-1 border-t border-gray-100">
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Order Ref / ID *</label>
+            <input type="text" id="manualCargoId" placeholder="e.g. ORDER-2026-01" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-700 mb-1">Freight Price ($ USD / € EUR) *</label>
+            <input type="number" id="manualAmount" placeholder="1850.00" class="w-full border border-gray-300 rounded-lg p-2 text-xs outline-none">
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 border-t border-gray-100">
+        <label class="block text-xs font-bold text-gray-700 mb-2">Select Settlement Payment Currency & Gateway:</label>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="flex items-center gap-2 border rounded-xl p-2.5 cursor-pointer hover:bg-amber-50 border-amber-300 transition">
+            <input type="radio" name="paymentType" value="FIAT" checked class="text-amber-600">
+            <span class="text-xs font-semibold">💳 USD / EUR Bank Transfer (FedNow/ACH/SEPA)</span>
+          </label>
+          <label class="flex items-center gap-2 border rounded-xl p-2.5 cursor-pointer hover:bg-amber-50 border-amber-300 transition">
+            <input type="radio" name="paymentType" value="CRYPTO" class="text-amber-600">
+            <span class="text-xs font-semibold">🔑 Fixed Value Stablecoins (USDC/USDT/EURC)</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer z gumbom, ki pokrije vse opcije in takoj preusmeri brez zastojev -->
+    <div class="bg-gray-50 p-3 px-6 flex justify-between items-center border-t border-gray-100">
+      <button onclick="closeEscrowModal()" class="text-xs text-gray-500 hover:text-gray-800 font-semibold">Cancel</button>
+      <button onclick="
+        let carrier = 'US Freight Express';
+        let amount = '1400';
+        let ref = 'ORDER-2026-01';
+
+        // Preveri kateri zavihek je izpolnjen in povleče prave podatke
+        const manualName = document.getElementById('manualCarrierName').value;
+        const manualAmt = document.getElementById('manualAmount').value;
+        const manualRef = document.getElementById('manualCargoId').value;
+
+        const exName = document.getElementById('exchangeName').value;
+        const exCarrierId = document.getElementById('exchangeCarrierId').value;
+        const exAmt = document.getElementById('exchangeAmount').value;
+        const exRef = document.getElementById('exchangeCargoId').value;
+
+        if (manualName) carrier = manualName;
+        else if (exName || exCarrierId) carrier = exName ? `${exName} (${exCarrierId})` : exCarrierId;
+
+        if (manualAmt) amount = manualAmt;
+        else if (exAmt) amount = exAmt;
+
+        if (manualRef) ref = manualRef;
+        else if (exRef) ref = exRef;
+
+        const currency = document.querySelector('input[name=\'paymentType\']:checked')?.value === 'CRYPTO' ? 'USDC' : 'EUR';
+
+        window.location.href = `gateway.html?amount=${amount}&currency=${currency}&carrier=${encodeURIComponent(carrier)}&ref=${encodeURIComponent(ref)}`;
+      " class="bg-gradient-to-r from-amber-500 to-amber-600 text-white font-bold py-2 px-5 rounded-xl text-xs shadow hover:from-amber-600 transition">
         Lock Escrow & Confirm ➔
-    </button>
+      </button>
+    </div>
+  </div>
+</div>
 </div>
 
 <!-- 
