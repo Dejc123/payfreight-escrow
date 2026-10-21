@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayFreight.io - Instant Settlements Architecture</title>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%);
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent: #2563eb;
+            --accent-soft: #dbeafe;
+            --accent-hover: #1d4ed8;
+            --shadow: 0 4px 20px -2px rgba(37, 99, 235, 0.08);
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px 80px 20px;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            padding: 8px 16px;
+            background: var(--accent-soft);
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-back:hover {
+            background: #bfdbfe;
+            color: var(--accent-hover);
+        }
+
+        header {
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin: 0 0 10px 0;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+        }
+
+        .intro {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .step-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .step-card:hover {
+            border-color: #93c5fd;
+            transform: translateY(-2px);
+        }
+
+        .step-number {
+            display: inline-block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            margin: 0 0 12px 0;
+            color: var(--text-main);
+        }
+
+        p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .markets-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .market-box {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .market-box strong {
+            color: var(--text-main);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .tech-badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--accent-soft);
+            color: var(--accent);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            padding-top: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Back Button -->
+    <a href="index.html" class="nav-back">
+        &larr; Back to Main Page
+    </a>
+
+    <header>
+        <h1>PayFreight.io</h1>
+        <div class="subtitle">Instant Settlements Architecture (USA & Europe)</div>
+    </header>
+
+    <div class="intro">
+        PayFreight delivers a streamlined global framework for modern freight settlements, bridging international supply chains with institutional-grade financial infrastructure powered by <span class="highlight">Solana</span> and <span class="highlight">Circle</span>.
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step-card">
+        <span class="step-number">Step 01 / Capital On-Ramp</span>
+        <h3>Multi-Region Local Funding</h3>
+        <p>Shippers settle freight charges locally using the financial channels they already trust. Fully regulated institutional reserves back the equivalent digital value in real time.</p>
+        
+        <div class="markets-grid">
+            <div class="market-box">
+                <strong>🇺🇸 USA Market (USD)</strong>
+                Local funding via US ACH, Wire transfer, or corporate cards.
+            </div>
+            <div class="market-box">
+                <strong>🇪🇺 Europe Market (EUR)</strong>
+                Local funding via SEPA or SEPA Instant bank transfers.
+            </div>
+        </div>
+        <div style="margin-top: 14px;">
+            <p><strong>The Storage:</strong> Regulated issuers like <span class="highlight">Circle</span> hold the fiat reserves and instantly mint an exact 1:1 digital representation (<span class="highlight">USDC</span> or <span class="highlight">EURC</span>) on-chain.</p>
+        </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-card">
+        <span class="step-number">Step 02 / On-Chain Escrow</span>
+        <h3>Zero-Risk Global Vault</h3>
+        <p>The newly minted stablecoins are instantly routed into an immutable smart contract (<span class="highlight">Solana Escrow Program</span>).</p>
+        <p style="margin-top: 8px;">This ensures complete financial transparency and security across international borders. The carrier has cryptographic verification that funds are secured and dedicated exclusively to the shipment.</p>
+        <div class="tech-badge">Powered by Solana &mdash; Sub-second finality & fractions of a cent in fees</div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-card">
+        <span class="step-number">Step 03 / Milestone Execution</span>
+        <h3>Automated Settlement Trigger</h3>
+        <p>As cargo moves and digital proofs (such as e-CMR or verified IoT delivery data) are registered on-chain, the smart contract evaluates fulfillment parameters automatically.</p>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step-card">
+        <span class="step-number">Step 04 / Capital Off-Ramp</span>
+        <h3>Direct Local Payouts</h3>
+        <p>Upon successful delivery confirmation, the escrow vault releases funds, which seamlessly convert back to local fiat currency and deposit directly into the carrier's corporate bank account.</p>
+
+        <div class="markets-grid" style="margin-top: 15px;">
+            <div class="market-box">
+                <strong>🇺🇸 USA Payout</strong>
+                Converted via Circle API and routed directly to US business accounts via ACH / Wire.
+            </div>
+            <div class="market-box">
+                <strong>🇪🇺 Europe Payout</strong>
+                Converted via Circle API and deposited straight into corporate accounts via SEPA / IBAN.
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        PayFreight.io &mdash; Scaling global logistics infrastructure with Solana & Circle.
+    </footer>
+</div>
+
+</body>
+</html>
