@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PayFreight.io - Secure Gateway</title>
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(180deg, #f0f7ff 0%, #ffffff 100%);
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --accent: #2563eb;
+            --accent-soft: #dbeafe;
+            --accent-hover: #1d4ed8;
+            --shadow: 0 4px 20px -2px rgba(37, 99, 235, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.35;
+        }
+
+        .gateway-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            padding: 20px 24px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+            margin-bottom: 14px;
+        }
+
+        .logo {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .status-badge {
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .amount-container {
+            text-align: center;
+            background: var(--accent-soft);
+            border: 1px solid #bfdbfe;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 14px;
+        }
+
+        .amount-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .amount-val {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin-top: 2px;
+        }
+
+        .explanation-box {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .explanation-title {
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-group {
+            margin-bottom: 12px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dashed var(--border);
+            font-size: 0.88rem;
+        }
+
+        .info-row span:first-child {
+            color: var(--text-muted);
+        }
+
+        .info-row span:last-child {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .field-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .copy-box {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 0.88rem;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .btn-copy {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent);
+            transition: all 0.2s;
+        }
+
+        .btn-copy:hover {
+            background: var(--accent-soft);
+            border-color: #bfdbfe;
+        }
+
+        .status-box {
+            margin-top: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            margin-right: 6px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        .btn-confirm {
+            width: 100%;
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            padding: 11px;
+            border-radius: 8px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background 0.2s ease;
+        }
+
+        .btn-confirm:hover {
+            background: var(--accent-hover);
+        }
+
+        .footer-note {
+            text-align: center;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="gateway-card">
+    <div class="header">
+        <a href="index.html" class="logo">PayFreight.io</a>
+        <div class="status-badge">Awaiting Payment</div>
+    </div>
+
+    <div class="amount-container">
+        <div class="amount-label">Required Deposit Amount</div>
+        <div class="amount-val" id="display-amount">€ 1,400.00 EUR</div>
+    </div>
+
+    <div class="explanation-box">
+        <div class="explanation-title">
+            ℹ️ How this payment works
+        </div>
+        Execute a bank transfer (SEPA/ACH). Once received, funds lock automatically into the <strong>Solana Escrow Vault</strong> and notify the carrier.
+    </div>
+
+    <div class="info-group">
+        <div class="info-row">
+            <span>Freight Reference</span>
+            <span id="display-ref">trans.eu / load: 546</span>
+        </div>
+        <div class="info-row">
+            <span>Carrier Account ID</span>
+            <span id="display-carrier">DO_12345</span>
+        </div>
+        <div class="info-row">
+            <span>Settlement Layer</span>
+            <span>Circle Fiat & Solana Escrow</span>
+        </div>
+    </div>
+
+    <div>
+        <span class="field-label">Payment Reference Number</span>
+        <div class="copy-box">
+            <span id="deposit-ref">PF-ESCROW-546-EU</span>
+            <button class="btn-copy" onclick="copyText('deposit-ref')">Copy</button>
+        </div>
+    </div>
+
+    <div>
+        <span class="field-label">Deposit IBAN Account</span>
+        <div class="copy-box">
+            <span id="deposit-iban">DE89 3704 0044 0532 0130 00</span>
+            <button class="btn-copy" onclick="copyText('deposit-iban')">Copy</button>
+        </div>
+    </div>
+
+    <div class="status-box" id="status-container">
+        <span class="status-dot"></span>
+        <span id="status-text">Monitoring bank network for transfer...</span>
+    </div>
+
+    <button class="btn-confirm" onclick="simulateBankConfirmation()">
+        Simulate Bank Deposit & Trigger Escrow (MVP Test)
+    </button>
+
+    <div class="footer-note">
+        Institutional security backed by Circle (EURC/USDC) & Solana On-Chain Escrow.
+    </div>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const amount = urlParams.get('amount') || '1400';
+    const currency = urlParams.get('currency') || 'EUR';
+    const carrier = urlParams.get('carrier') || 'DO_12345';
+    const ref = urlParams.get('ref') || 'load: 546';
+
+    document.getElementById('display-amount').innerText = (currency === 'USD' ? '$ ' : '€ ') + parseFloat(amount).toLocaleString('en-US', {minimumFractionDigits: 2}) + ' ' + currency;
+    document.getElementById('display-carrier').innerText = carrier;
+    document.getElementById('display-ref').innerText = ref;
+
+    function copyText(elementId) {
+        const text = document.getElementById(elementId).innerText;
+        navigator.clipboard.writeText(text);
+        alert("Copied: " + text);
+    }
+
+    async function simulateBankConfirmation() {
+        const statusBox = document.getElementById('status-container');
+        const statusText = document.getElementById('status-text');
+        const badge = document.querySelector('.status-badge');
+
+        statusText.innerText = "Connecting to Node.js backend & Circle API...";
+        statusBox.style.background = "#eff6ff";
+        statusBox.style.borderColor = "#bfdbfe";
+
+        try {
+            const response = await fetch('http://localhost:3000/api/create-payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    amount: amount,
+                    currency: currency,
+                    carrier: carrier,
+                    reference: ref
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                statusText.innerHTML = "<strong>✅ Circle API Request Successful!</strong><br>Deposit instruction generated & Escrow locked.";
+                statusBox.style.background = "#ecfdf5";
+                statusBox.style.borderColor = "#a7f3d0";
+                statusBox.style.color = "#065f46";
+                
+                badge.innerText = "Locked in Escrow";
+                badge.style.background = "#ecfdf5";
+                badge.style.color = "#065f46";
+
+                document.querySelector('.status-dot').style.backgroundColor = "#10b981";
+            } else {
+                throw new Error(result.error || 'Server responded with an error');
+            }
+
+        } catch (error) {
+            console.error("Error:", error);
+            statusText.innerHTML = "<strong>❌ Connection Error</strong><br>Is your Node.js backend running on localhost:3000?";
+            statusBox.style.background = "#fef2f2";
+            statusBox.style.borderColor = "#fecaca";
+            statusBox.style.color = "#991b1b";
+        }
+    }
+</script>
+
+</body>
+</html>
