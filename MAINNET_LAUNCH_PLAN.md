@@ -7,6 +7,11 @@ Mid-term operational roadmap for transitioning PayFreight from local/devnet envi
 - [ ] Connect backend server (`server.js` and `settlementService.ts`) to the local validator.
 - [ ] Successful test cycle: Create Escrow -> Submit e-CMR data (`ecmr_handler.rs`) -> Release Funds.
 
+### Architecture & Gateway Integration Breakdown
+To ensure a secure bridge between traditional fiat payments and on-chain escrow, the MVP utilizes a decoupled gateway architecture:
+- **Frontend Gateway (`gateway.html`):** Renders the secure deposit interface, capturing transaction parameters (amount, currency, carrier reference) and securely communicating with the backend via `fetch()` requests.
+- **Backend Bridge (`backend/server.js`):** An Express & Axios Node.js server that securely reads environment variables (`.env`) and handles communication with the Circle API (`/v1/businessAccount/deposits/bank/instructions`). This prevents exposing API keys on the client side and resolves static routing via `express.static`.
+
 ## Phase 2: Security Review & Community Validation (Bypassing Expensive Initial Audits)
 - [ ] **Peer-Review:** Code review by trusted peer developers.
 - [ ] **Automated Scanners:** Run accessible static analysis tools on Rust/Anchor smart contracts.
