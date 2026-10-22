@@ -1024,5 +1024,52 @@
             executePhantomPurchase();
         }
     </script>
+
+    <!-- DINAMIČNI ODŠTEVALNIK ZA VEČ FAZ SEED RUNDA -->
+    <script>
+        // Definiraj vse faze z njihovimi končnimi datumi in naslovi
+        const seedPhases = [
+            { name: "Seed Phase 1", date: new Date("December 16, 2026 00:00:00").getTime() },
+            { name: "Seed Phase 2", date: new Date("January 16, 2027 00:00:00").getTime() },
+            { name: "Seed Phase 3", date: new Date("February 16, 2027 00:00:00").getTime() }
+        ];
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            
+            // Poišči prvi datum v prihodnosti, ki še ni potekel
+            let activePhase = seedPhases.find(phase => phase.date > now);
+
+            const daysElem = document.getElementById("days");
+            const hoursElem = document.getElementById("hours");
+            const minutesElem = document.getElementById("minutes");
+            const secondsElem = document.getElementById("seconds");
+
+            // Če so vsi krogi že mimo
+            if (!activePhase) {
+                if (daysElem) daysElem.innerText = "00";
+                if (hoursElem) hoursElem.innerText = "00";
+                if (minutesElem) minutesElem.innerText = "00";
+                if (secondsElem) secondsElem.innerText = "00";
+                return;
+            }
+
+            const distance = activePhase.date - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            if (daysElem) daysElem.innerText = String(days).padStart(2, '0');
+            if (hoursElem) hoursElem.innerText = String(hours).padStart(2, '0');
+            if (minutesElem) minutesElem.innerText = String(minutes).padStart(2, '0');
+            if (secondsElem) secondsElem.innerText = String(seconds).padStart(2, '0');
+        }
+
+        // Zaženi takoj ob nalaganju in posodabljaj vsako sekundo
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
 </body>
 </html>
