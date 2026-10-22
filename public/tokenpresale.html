@@ -967,5 +967,120 @@
             executePhantomPurchase();
         }
     </script>
+
+<!-- SOLANA & PHANTOM WALLET INTEGRACIJA -->
+    <script>
+        const SOLANA_RECEIVER_WALLET = "D6SsbsM2qdd9sdojwi9e7vzRmHYw7RfuoxWJDBB7yiPN";
+        let phantomProvider = null;
+        let userPhantomAddress = null;
+
+        async function connectPhantom() {
+            if (window.phantom?.solana?.isPhantom) {
+                try {
+                    phantomProvider = window.phantom.solana;
+                    const resp = await phantomProvider.connect();
+                    userPhantomAddress = resp.publicKey.toString();
+
+                    const shortAddr = userPhantomAddress.substring(0, 4) + "..." + userPhantomAddress.substring(userPhantomAddress.length - 4);
+                    
+                    // Posodobi gumb v navigaciji, da se spremeni v "Disconnect"
+                    const btnText = document.getElementById('mainWalletText') || document.getElementById('walletBtnText');
+                    const mainBtn = document.getElementById('mainWalletBtn');
+
+                    if (btnText) btnText.innerText = `Disconnect (${shortAddr})`;
+                    if (mainBtn) {
+                        mainBtn.classList.remove('bg-purple-600');
+                        mainBtn.classList.add('bg-rose-600'); // Rdeča barva za odjavo
+                        mainBtn.setAttribute("onclick", "disconnectPhantom()"); // Klik sedaj sproži odjavo
+                    }
+
+                    alert("Phantom denarnica povezana: " + userPhantomAddress);
+                    return true;
+                } catch (err) {
+                    console.error("Phantom Error:", err);
+                    alert("Povezava z denarnico je bila zavrnjena.");
+                    return false;
+                }
+            } else {
+                alert("Phantom denarnica ni nameščena! Odpiram spletno stran za namestitev.");
+                window.open("https://phantom.app/", "_blank");
+                return false;
+            }
+        }
+
+        // Funkcija za odjavo iz Phantom denarnice
+        async function disconnectPhantom() {
+            try {
+                if (phantomProvider && phantomProvider.disconnect) {
+                    await phantomProvider.disconnect();
+                }
+            } catch (err) {
+                console.error("Napaka pri odjavi iz Phantoma:", err);
+            }
+
+            // Počisti spremenljivke v aplikaciji
+            userPhantomAddress = null;
+            phantomProvider = null;
+
+            // Ponastavi gumb v navigaciji nazaj na začetno stanje
+            const btnText = document.getElementById('mainWalletText') || document.getElementById('walletBtnText');
+            const mainBtn = document.getElementById('mainWalletBtn');
+            
+            if (btnText) btnText.innerText = "Connect Phantom";
+            if (mainBtn) {
+                mainBtn.classList.remove('bg-rose-600');
+                mainBtn.classList.add('bg-purple-600');
+                mainBtn.setAttribute("onclick", "connectPhantom()"); // Klik ponovno omogoči povezavo
+            }
+
+            alert("Uspešno ste se odjavili iz denarnice.");
+        }
+
+        async function executePhantomPurchase() {
+            if (!userPhantomAddress) {
+                const connected = await connectPhantom();
+                if (!connected) return;
+            }
+
+            const usdValue = parseFloat(document.getElementById('investmentRange')?.value) || parseFloat(document.getElementById('customInput')?.value) || 100;
+            const solAmount = usdValue / 150;
+
+            if (confirm(`Potrdi nakup $PFRT žetonov za ~${solAmount.toFixed(3)} SOL ($${usdValue} USD)?`)) {
+                try {
+                    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
+                    const lamports = Math.round(solAmount * solanaWeb3.LAMPORTS_PER_SOL);
+
+                    const transaction = new solanaWeb3.Transaction().add(
+                        solanaWeb3.SystemProgram.transfer({
+                            fromPubkey: phantomProvider.publicKey,
+                            toPubkey: new solanaWeb3.PublicKey(SOLANA_RECEIVER_WALLET),
+                            lamports: lamports,
+                        })
+                    );
+
+                    let { blockhash } = await connection.getLatestBlockhash();
+                    transaction.recentBlockhash = blockhash;
+                    transaction.feePayer = phantomProvider.publicKey;
+
+                    const { signature } = await phantomProvider.signAndSendTransaction(transaction);
+                    alert("Transakcija poslana na Solana Mainnet! Signature: " + signature);
+
+                    await connection.confirmTransaction(signature);
+                    alert("Nakup uspešno potrjen! Vaša alokacija žetonov $PFRT je zabeležena.");
+
+                } catch (err) {
+                    console.error("Solana TX Error:", err);
+                    alert("Transakcija ni bila uspešna ali pa je bila preklicana.");
+                }
+            }
+        }
+
+        function triggerPurchaseFlow() {
+            executePhantomPurchase();
+        }
+    </script>
+</body>
+</html>
+    
 </body>
 </html>
