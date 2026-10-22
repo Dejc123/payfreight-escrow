@@ -41,10 +41,9 @@
                 <span class="text-xl font-bold tracking-tight">Payfreight<span class="text-brand-500">.io</span> <span class="text-xs px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 border border-brand-500/20 ml-2">INSTITUTIONAL</span></span>
             </div>
             <div class="flex items-center space-x-4">
-                <a href="#pitchdeck" class="text-sm font-medium text-slate-300 hover:text-white transition">Pitch Deck</a>
-                <a href="#tokenomics" class="text-sm font-medium text-slate-300 hover:text-white transition">Tokenomics</a>
+                <a href="https://payfreight.io" target="_blank" class="text-sm font-medium text-slate-300 hover:text-white transition">Visit Payfreight.io</a>
                 <button onclick="document.getElementById('institutionalModal').classList.remove('hidden')" class="bg-brand-500 hover:bg-brand-600 text-black font-semibold text-sm px-5 py-2.5 rounded-lg transition shadow-lg shadow-brand-500/20">
-                    Request SAFT / Data Room
+                    Request Data Room Access
                 </button>
             </div>
         </div>
@@ -69,8 +68,8 @@
                         <span>Schedule VC Briefing</span>
                         <i class="fa-solid font-bold fa-arrow-right"></i>
                     </button>
-                    <a href="#tokenomics" class="bg-brand-card hover:bg-slate-800 text-white font-semibold px-8 py-4 rounded-xl border border-brand-border transition flex items-center space-x-2">
-                        <span>View Capital Structure</span>
+                    <a href="https://payfreight.io" target="_blank" class="bg-brand-card hover:bg-slate-800 text-white font-semibold px-8 py-4 rounded-xl border border-brand-border transition flex items-center space-x-2">
+                        <span>Visit Payfreight.io</span>
                     </a>
                 </div>
             </div>
@@ -100,58 +99,6 @@
                     <div class="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2">Protocol Architecture</div>
                     <div class="text-3xl font-extrabold text-white">RWA + Escrow</div>
                     <div class="text-xs text-slate-500 mt-2">Automated Settlement Layer</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Capital Structure & Investment Terms -->
-    <section id="tokenomics" class="py-20 bg-slate-950 border-t border-brand-border/40">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center max-w-2xl mx-auto mb-16">
-                <h2 class="text-3xl font-bold mb-4">Investment Tranches & Tokenomics</h2>
-                <p class="text-slate-400">Structured for institutional compliance, long-term alignment, and audited smart contract safety.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Seed Round -->
-                <div class="bg-brand-card p-8 rounded-2xl border-2 border-brand-500 relative">
-                    <div class="absolute -top-3 right-6 bg-brand-500 text-black text-xs font-bold px-3 py-1 rounded-full uppercase">Current Round</div>
-                    <h3 class="text-xl font-bold text-white mb-2">Institutional Seed</h3>
-                    <div class="text-3xl font-extrabold text-brand-500 mb-4">$0.02 <span class="text-xs text-slate-400 font-normal">/ token</span></div>
-                    <ul class="space-y-3 text-sm text-slate-300 mb-8">
-                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-3"></i>Target Raise: $500,000</li>
-                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-3"></i>Vesting: 6-mo cliff, 12-mo linear</li>
-                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-3"></i>Min Ticket: $5,000</li>
-                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-3"></i>SAFT Agreement Available</li>
-                    </ul>
-                    <button onclick="document.getElementById('institutionalModal').classList.remove('hidden')" class="w-full bg-brand-500 hover:bg-brand-600 text-black font-bold py-3 rounded-xl transition">Request Term Sheet</button>
-                </div>
-
-                <!-- Strategic Round -->
-                <div class="bg-brand-card p-8 rounded-2xl border border-brand-border">
-                    <h3 class="text-xl font-bold text-white mb-2">Strategic Expansion</h3>
-                    <div class="text-3xl font-extrabold text-white mb-4">$0.05 <span class="text-xs text-slate-400 font-normal">/ token</span></div>
-                    <ul class="space-y-3 text-sm text-slate-300 mb-8">
-                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-3"></i>Target Raise: $2,000,000</li>
-                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-3"></i>Vesting: 3-mo cliff, 6-mo linear</li>
-                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-3"></i>Min Ticket: $10,000</li>
-                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-3"></i>Strategic Partner Onboarding</li>
-                    </ul>
-                    <button onclick="document.getElementById('institutionalModal').classList.remove('hidden')" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl transition">Join Waitlist</button>
-                </div>
-
-                <!-- Growth Round -->
-                <div class="bg-brand-card p-8 rounded-2xl border border-brand-border">
-                    <h3 class="text-xl font-bold text-white mb-2">Growth & Public TGE</h3>
-                    <div class="text-3xl font-extrabold text-white mb-4">$0.08 <span class="text-xs text-slate-400 font-normal">/ token</span></div>
-                    <ul class="space-y-3 text-sm text-slate-300 mb-8">
-                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-3"></i>Target Raise: $4,500,000</li>
-                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-3"></i>Vesting: 100% Unlocked at TGE</li>
-                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-3"></i>Liquidity Pool Allocation</li>
-                        <li class="flex items-center"><i class="fa-solid fa-check text-brand-500 mr-3"></i>Exchange Listing Phase</li>
-                    </ul>
-                    <button disabled class="w-full bg-slate-800 text-slate-500 font-bold py-3 rounded-xl cursor-not-allowed">Upcoming</button>
                 </div>
             </div>
         </div>
