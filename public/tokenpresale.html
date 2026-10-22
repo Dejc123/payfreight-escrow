@@ -900,5 +900,66 @@
             calculateTokens();
         };
     </script>
+
+    <!-- Solana Web3 SDK -->
+<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+
+<script>
+    const SOLANA_RECEIVER_WALLET = "D6SsbsM2qdd9sdojwi9e7vzRmHYw7RfuoxWJDBB7yiPN";
+    let phantomProvider = null;
+    let userPhantomAddress = null;
+
+    async function connectPhantom() {
+        if (window.phantom?.solana?.isPhantom) {
+            try {
+                phantomProvider = window.phantom.solana;
+                const resp = await phantomProvider.connect();
+                userPhantomAddress = resp.publicKey.toString();
+                alert("Phantom povezan: " + userPhantomAddress);
+                return true;
+            } catch (err) {
+                alert("Povezava zavrnjena.");
+                return false;
+            }
+        } else {
+            alert("Phantom ni nameščen!");
+            window.open("https://phantom.app/", "_blank");
+            return false;
+        }
+    }
+
+    async function executePhantomPurchase() {
+        if (!userPhantomAddress) {
+            const connected = await connectPhantom();
+            if (!connected) return;
+        }
+        const usdValue = parseFloat(document.getElementById('usdInput')?.value) || 100;
+        const solAmount = usdValue / 150;
+
+        if (confirm(`Potrdi nakup za ~${solAmount.toFixed(3)} SOL ($${usdValue} USD)?`)) {
+            try {
+                const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
+                const lamports = Math.round(solAmount * solanaWeb3.LAMPORTS_PER_SOL);
+
+                const transaction = new solanaWeb3.Transaction().add(
+                    solanaWeb3.SystemProgram.transfer({
+                        fromPubkey: phantomProvider.publicKey,
+                        toPubkey: new solanaWeb3.PublicKey(SOLANA_RECEIVER_WALLET),
+                        lamports: lamports,
+                    })
+                );
+
+                let { blockhash } = await connection.getLatestBlockhash();
+                transaction.recentBlockhash = blockhash;
+                transaction.feePayer = phantomProvider.publicKey;
+
+                const { signature } = await phantomProvider.signAndSendTransaction(transaction);
+                alert("Transakcija poslana! Signature: " + signature);
+            } catch (err) {
+                alert("Transakcija neuspešna.");
+            }
+        }
+    }
+</script>
 </body>
 </html>
