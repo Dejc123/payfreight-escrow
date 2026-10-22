@@ -807,65 +807,94 @@
         </div>
     </div>
 
-  <!-- JAVASCRIPT INTERACTION LOGIC -->
+<!-- JAVASCRIPT INTERACTION LOGIC (KALKULATOR IN MODALI) -->
     <script>
-        // Interactive Calculator Functions
         function updateCalculator() {
-            const rangeVal = document.getElementById('investmentRange').value;
-            document.getElementById('investmentValue').innerText = '$' + parseInt(rangeVal).toLocaleString();
-            document.getElementById('customInput').value = rangeVal;
+            const rangeElem = document.getElementById('investmentRange');
+            const valElem = document.getElementById('investmentValue');
+            const customElem = document.getElementById('customInput');
+            
+            if (!rangeElem || !valElem) return;
+            
+            const rangeVal = rangeElem.value;
+            valElem.innerText = '$' + parseInt(rangeVal).toLocaleString();
+            if (customElem) customElem.value = rangeVal;
             calculateTokens();
         }
 
         function syncCustomInput() {
-            const inputVal = document.getElementById('customInput').value || 0;
-            document.getElementById('investmentRange').value = inputVal;
-            document.getElementById('investmentValue').innerText = '$' + parseInt(inputVal).toLocaleString();
+            const customElem = document.getElementById('customInput');
+            const rangeElem = document.getElementById('investmentRange');
+            const valElem = document.getElementById('investmentValue');
+            
+            if (!customElem || !rangeElem) return;
+            
+            const inputVal = customElem.value || 0;
+            rangeElem.value = inputVal;
+            if (valElem) valElem.innerText = '$' + parseInt(inputVal).toLocaleString();
             calculateTokens();
         }
 
         function selectRoundForCalc(price, roundName) {
-            document.getElementById('calcRoundSelect').value = price;
+            const roundSelect = document.getElementById('calcRoundSelect');
+            if (roundSelect) roundSelect.value = price;
             calculateTokens();
             scrollToCalculator();
         }
 
         function calculateTokens() {
-            const price = parseFloat(document.getElementById('calcRoundSelect').value);
-            const usdAmount = parseFloat(document.getElementById('investmentRange').value) || 0;
+            const roundSelect = document.getElementById('calcRoundSelect');
+            const rangeElem = document.getElementById('investmentRange');
+            
+            if (!roundSelect || !rangeElem) return;
+
+            const price = parseFloat(roundSelect.value);
+            const usdAmount = parseFloat(rangeElem.value) || 0;
             
             const tokenAmount = Math.floor(usdAmount / price);
-            const listingVal = tokenAmount * 0.09; // Projected $0.09 listing price
-            const roiPercent = Math.round(((listingVal - usdAmount) / usdAmount) * 100);
-            const roiMultiple = (listingVal / usdAmount).toFixed(1);
+            const listingVal = tokenAmount * 0.09;
+            const roiPercent = usdAmount > 0 ? Math.round(((listingVal - usdAmount) / usdAmount) * 100) : 0;
+            const roiMultiple = usdAmount > 0 ? (listingVal / usdAmount).toFixed(1) : '0';
 
-            document.getElementById('calcTokenOutput').innerText = tokenAmount.toLocaleString() + ' $PFRT';
-            document.getElementById('calcListingVal').innerText = '$' + Math.floor(listingVal).toLocaleString();
-            document.getElementById('calcRoiOutput').innerText = '+' + roiPercent + '% (' + roiMultiple + 'x)';
+            const tokenOutput = document.getElementById('calcTokenOutput');
+            const listingValElem = document.getElementById('calcListingVal');
+            const roiOutput = document.getElementById('calcRoiOutput');
+
+            if (tokenOutput) tokenOutput.innerText = tokenAmount.toLocaleString() + ' $PFRT';
+            if (listingValElem) listingValElem.innerText = '$' + Math.floor(listingVal).toLocaleString();
+            if (roiOutput) roiOutput.innerText = '+' + roiPercent + '% (' + roiMultiple + 'x)';
         }
 
         function scrollToCalculator() {
-            document.getElementById('calculator').scrollIntoView({ behavior: 'smooth' });
+            const calcSection = document.getElementById('calculator');
+            if (calcSection) calcSection.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Private Modal
         function openPrivateModal() {
-            document.getElementById('privateModal').classList.remove('hidden');
+            const modal = document.getElementById('privateModal');
+            if (modal) modal.classList.remove('hidden');
         }
 
         function closePrivateModal() {
-            document.getElementById('privateModal').classList.add('hidden');
+            const modal = document.getElementById('privateModal');
+            if (modal) modal.classList.add('hidden');
         }
 
         function handlePrivateSubmit(e) {
             e.preventDefault();
-            document.getElementById('privateForm').classList.add('hidden');
-            document.getElementById('formFeedback').classList.remove('hidden');
+            const form = document.getElementById('privateForm');
+            const feedback = document.getElementById('formFeedback');
+            
+            if (form) form.classList.add('hidden');
+            if (feedback) feedback.classList.remove('hidden');
+            
             setTimeout(() => {
                 closePrivateModal();
-                document.getElementById('privateForm').reset();
-                document.getElementById('privateForm').classList.remove('hidden');
-                document.getElementById('formFeedback').classList.add('hidden');
+                if (form) {
+                    form.reset();
+                    form.classList.remove('hidden');
+                }
+                if (feedback) feedback.classList.add('hidden');
             }, 2500);
         }
 
@@ -880,16 +909,15 @@
             document.body.removeChild(element);
         }
 
-        // Initialize Calculator on Load
-        window.onload = function() {
+        document.addEventListener("DOMContentLoaded", function() {
             calculateTokens();
-        };
+        });
     </script>
 
     <!-- Solana Web3 SDK -->
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 
-    <!-- SOLANA & PHANTOM WALLET INTEGRATION -->
+    <!-- SOLANA & PHANTOM WALLET INTEGRACIJA (POVEZAVA + ODJAVA) -->
     <script>
         const SOLANA_RECEIVER_WALLET = "D6SsbsM2qdd9sdojwi9e7vzRmHYw7RfuoxWJDBB7yiPN";
         let phantomProvider = null;
@@ -904,97 +932,14 @@
 
                     const shortAddr = userPhantomAddress.substring(0, 4) + "..." + userPhantomAddress.substring(userPhantomAddress.length - 4);
                     
-                    // Posodobi gumb v navigaciji (če obstaja z ID-jem mainWalletBtn in mainWalletText)
-                    const btnText = document.getElementById('mainWalletText') || document.getElementById('walletBtnText');
-                    if (btnText) btnText.innerText = `Phantom: ${shortAddr}`;
-
-                    alert("Phantom denarnica povezana: " + userPhantomAddress);
-                    return true;
-                } catch (err) {
-                    console.error("Phantom Error:", err);
-                    alert("Povezava z denarnico je bila zavrnjena.");
-                    return false;
-                }
-            } else {
-                alert("Phantom denarnica ni nameščena! Odpiram spletno stran za namestitev.");
-                window.open("https://phantom.app/", "_blank");
-                return false;
-            }
-        }
-
-        async function executePhantomPurchase() {
-            if (!userPhantomAddress) {
-                const connected = await connectPhantom();
-                if (!connected) return;
-            }
-
-            const usdValue = parseFloat(document.getElementById('investmentRange')?.value) || parseFloat(document.getElementById('customInput')?.value) || 100;
-            // Okvirna pretvorba USD v SOL (1 SOL ~ $150)
-            const solAmount = usdValue / 150;
-
-            if (confirm(`Potrdi nakup $PFRT žetonov za ~${solAmount.toFixed(3)} SOL ($${usdValue} USD)?`)) {
-                try {
-                    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
-                    const lamports = Math.round(solAmount * solanaWeb3.LAMPORTS_PER_SOL);
-
-                    const transaction = new solanaWeb3.Transaction().add(
-                        solanaWeb3.SystemProgram.transfer({
-                            fromPubkey: phantomProvider.publicKey,
-                            toPubkey: new solanaWeb3.PublicKey(SOLANA_RECEIVER_WALLET),
-                            lamports: lamports,
-                        })
-                    );
-
-                    let { blockhash } = await connection.getLatestBlockhash();
-                    transaction.recentBlockhash = blockhash;
-                    transaction.feePayer = phantomProvider.publicKey;
-
-                    const { signature } = await phantomProvider.signAndSendTransaction(transaction);
-                    alert("Transakcija poslana na Solana Mainnet! Signature: " + signature);
-
-                    await connection.confirmTransaction(signature);
-                    alert("Nakup uspešno potrjen! Vaša alokacija žetonov $PFRT je zabeležena.");
-
-                } catch (err) {
-                    console.error("Solana TX Error:", err);
-                    alert("Transakcija ni bila uspešna ali pa je bila preklicana.");
-                }
-            }
-        }
-
-        // Poveži funkcijo za nakup na gumb v kalkulatorju
-        function triggerPurchaseFlow() {
-            executePhantomPurchase();
-        }
-    </script>
-
-<!-- Solana Web3 SDK (Nujno za delovanje transakcij in povezave) -->
-    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
-
-    <!-- SOLANA & PHANTOM WALLET INTEGRACIJA -->
-    <script>
-        const SOLANA_RECEIVER_WALLET = "D6SsbsM2qdd9sdojwi9e7vzRmHYw7RfuoxWJDBB7yiPN";
-        let phantomProvider = null;
-        let userPhantomAddress = null;
-
-        async function connectPhantom() {
-            if (window.phantom?.solana?.isPhantom) {
-                try {
-                    phantomProvider = window.phantom.solana;
-                    const resp = await phantomProvider.connect();
-                    userPhantomAddress = resp.publicKey.toString();
-
-                    const shortAddr = userPhantomAddress.substring(0, 4) + "..." + userPhantomAddress.substring(userPhantomAddress.length - 4);
-                    
-                    // Posodobi gumb v navigaciji, da se spremeni v "Disconnect"
                     const btnText = document.getElementById('mainWalletText') || document.getElementById('walletBtnText');
                     const mainBtn = document.getElementById('mainWalletBtn');
 
                     if (btnText) btnText.innerText = `Disconnect (${shortAddr})`;
                     if (mainBtn) {
-                        mainBtn.classList.remove('bg-purple-600');
-                        mainBtn.classList.add('bg-rose-600'); // Rdeča barva za odjavo
-                        mainBtn.setAttribute("onclick", "disconnectPhantom()"); // Klik sedaj sproži odjavo
+                        mainBtn.classList.remove('bg-purple-600', 'bg-emerald-600');
+                        mainBtn.classList.add('bg-rose-600');
+                        mainBtn.setAttribute("onclick", "disconnectPhantom()");
                     }
 
                     alert("Phantom denarnica povezana: " + userPhantomAddress);
@@ -1011,7 +956,6 @@
             }
         }
 
-        // Funkcija za odjavo iz Phantom denarnice
         async function disconnectPhantom() {
             try {
                 if (phantomProvider && phantomProvider.disconnect) {
@@ -1021,11 +965,9 @@
                 console.error("Napaka pri odjavi iz Phantoma:", err);
             }
 
-            // Počisti spremenljivke v aplikaciji
             userPhantomAddress = null;
             phantomProvider = null;
 
-            // Ponastavi gumb v navigaciji nazaj na začetno stanje
             const btnText = document.getElementById('mainWalletText') || document.getElementById('walletBtnText');
             const mainBtn = document.getElementById('mainWalletBtn');
             
@@ -1033,7 +975,7 @@
             if (mainBtn) {
                 mainBtn.classList.remove('bg-rose-600');
                 mainBtn.classList.add('bg-purple-600');
-                mainBtn.setAttribute("onclick", "connectPhantom()"); // Klik ponovno omogoči povezavo
+                mainBtn.setAttribute("onclick", "connectPhantom()");
             }
 
             alert("Uspešno ste se odjavili iz denarnice.");
@@ -1084,5 +1026,3 @@
     </script>
 </body>
 </html>
-    
-
