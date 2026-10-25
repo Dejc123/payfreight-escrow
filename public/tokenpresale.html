@@ -979,14 +979,14 @@
 <!-- Solana Web3 SDK -->
 <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 
-<!-- SOLANA & PHANTOM WALLET INTEGRACIJA (POVEZAVA + ODJAVA + MOBILNI DEEP-LINK + PRENOS ZNESKA) -->
+<!-- SOLANA & PHANTOM WALLET INTEGRACIJA (MOBILNI PRENOS ZNESKA + TRANSAKCIJA) -->
 <script>
     const SOLANA_RECEIVER_WALLET = "D6SsbsM2qdd9sdojwi9e7vzRmHYw7RfuoxWJDBB7yiPN";
     let phantomProvider = null;
     let userPhantomAddress = null;
     let userWallet = null;
 
-    // Funkcija za povezavo prek glavnega gumba (zgoraj desno)
+    // Glavna funkcija za povezavo in nakup
     async function connectPhantom() {
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
@@ -994,23 +994,23 @@
         const usdValue = parseFloat(document.getElementById('investmentRange')?.value) || parseFloat(document.getElementById('customInput')?.value) || 100;
         const solAmount = (usdValue / 150).toFixed(4);
 
-        // Shranimo v lokalni pomnilnik za mobilno aplikacijo
-        localStorage.setItem('pending_pfrt_investment', usdValue);
+        // Shranimo v lokalni pomnilnik
+        localStorage.setItem('pending_pfrt_usd', usdValue);
+        localStorage.setItem('pending_pfrt_sol', solAmount);
 
-        // ČE JE MOBILNA NAPRAVA: Dodamo znesek v Phantom Universal Deep Link
+        // ČE JE MOBILNA NAPRAVA: Uporabimo Phantom Universal Link za brskalnik z enim klikom
         if (isMobile) {
             const currentUrl = window.location.href.split('#')[0];
             const encodedUrl = encodeURIComponent(currentUrl);
-            const encodedOrigin = encodeURIComponent(window.location.origin);
             
-            // Deep link s parametri zneska in porekla
-            const phantomDeepLink = `https://phantom.app/ul/browse/${encodedUrl}?amount=${solAmount}&ref=${encodedOrigin}`;
+            // Ko Phantom odpre stran, bo prebral vrednosti iz localStorage ali pa ga preusmerimo z določenim parametrem
+            const phantomDeepLink = `https://phantom.app/ul/browse/${encodedUrl}?ref=${encodeURIComponent(window.location.origin)}`;
             
             window.location.href = phantomDeepLink;
             return;
         }
 
-        // ČE JE STACIONARNI RAČUNALNIK: Uporabi vgrajeno ekstenzijo v brskalniku
+        // ČE JE STACIONARNI RAČUNALNIK
         if (window.phantom?.solana?.isPhantom) {
             try {
                 phantomProvider = window.phantom.solana;
@@ -1031,7 +1031,7 @@
                 }
 
                 alert("Phantom denarnica povezana: " + userPhantomAddress);
-                checkPendingPurchase();
+                executePendingPurchase();
                 return true;
             } catch (err) {
                 console.error("Phantom Error:", err);
@@ -1052,13 +1052,14 @@
                 await phantomProvider.disconnect();
             }
         } catch (err) {
-            console.error("Napaka pri odjavi iz Phantoma:", err);
+            console.error("Napaka pri odjavi:", err);
         }
 
         userPhantomAddress = null;
         userWallet = null;
         phantomProvider = null;
-        localStorage.removeItem('pending_pfrt_investment');
+        localStorage.removeItem('pending_pfrt_usd');
+        localStorage.removeItem('pending_pfrt_sol');
 
         const btnText = document.getElementById('mainWalletText') || document.getElementById('walletBtnText');
         const mainBtn = document.getElementById('mainWalletBtn');
@@ -1073,24 +1074,42 @@
         alert("Uspešno ste se odjavili iz denarnice.");
     }
 
-    // Samodejno preverjanje in izvedba, če je bil znesek shranjen
-    function checkPendingPurchase() {
-        const pendingUsd = localStorage.getItem('pending_pfrt_investment');
-        if (pendingUsd && userPhantomAddress) {
-            localStorage.removeItem('pending_pfrt_investment');
-            executePhantomPackage(parseFloat(pendingUsd));
+    // Izvedba shranjenega nakupa, ko je denarnica povezana v Phantom brskalniku
+    function executePendingPurchase() {
+        const usdValue = localStorage.getItem('pending_pfrt_usd');
+        if (usdValue && userPhantomAddress) {
+            localStorage.removeItem('pending_pfrt_usd');
+            localStorage.removeItem('pending_pfrt_sol');
+            executePhantomPackage(parseFloat(usdValue));
         }
     }
 
-    // Izvedba nakupa preko Solana mreže
+    // Glavna funkcija za izvedbo transakcije
     async function executePhantomPackage(forcedUsd = null) {
+        // Preverimo, če je provider na voljo v Phantom brskalniku na mobitelu
+        if (!phantomProvider && window.phantom?.solana?.isPhantom) {
+            phantomProvider = window.phantom.solana;
+        }
+
         if (!userPhantomAddress) {
-            const connected = await connectPhantom();
-            if (!connected) return;
+            if (window.phantom?.solana?.isPhantom) {
+                try {
+                    const resp = await window.phantom.solana.connect();
+                    phantomProvider = window.phantom.solana;
+                    userPhantomAddress = resp.publicKey.toString();
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+            
+            if (!userPhantomAddress) {
+                connectPhantom();
+                return;
+            }
         }
 
         const usdValue = forcedUsd || parseFloat(document.getElementById('investmentRange')?.value) || parseFloat(document.getElementById('customInput')?.value) || 100;
-        const solAmount = usdValue / 150; // Primerjalni tečaj
+        const solAmount = usdValue / 150;
 
         if (confirm(`Potrdi nakup $PFRT žetonov za ~${solAmount.toFixed(3)} SOL ($${usdValue} USD)?`)) {
             try {
@@ -1126,71 +1145,31 @@
         executePhantomPackage();
     }
 
-    // Povezava preko modalnega okna (izbira denarnic)
+    // Povezava preko modalnega okna
     async function connectSpecificWallet(walletType) {
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
-        const usdValue = parseFloat(document.getElementById('investmentRange')?.value) || parseFloat(document.getElementById('customInput')?.value) || 100;
-        const solAmount = (usdValue / 150).toFixed(4);
-        localStorage.setItem('pending_pfrt_investment', usdValue);
-
-        if (walletType === 'walletconnect' || (isMobile && walletType === 'phantom')) {
-            const currentUrl = window.location.href.split('#')[0];
-            window.location.href = `https://phantom.app/ul/browse/${encodeURIComponent(currentUrl)}?amount=${solAmount}&ref=${encodeURIComponent(window.location.origin)}`;
-            return;
-        }
-
-        let targetProvider = null;
-
-        if (walletType === 'phantom') {
-            if (window.phantom?.solana?.isPhantom) targetProvider = window.phantom.solana;
-            else if (window.solana?.isPhantom) targetProvider = window.solana;
-        } else if (walletType === 'solflare') {
-            if (window.solflare?.isSolflare) targetProvider = window.solflare;
-        }
-
-        if (!targetProvider) {
-            if (isMobile) {
-                const currentUrl = window.location.href.split('#')[0];
-                window.location.href = `https://phantom.app/ul/browse/${encodeURIComponent(currentUrl)}?amount=${solAmount}&ref=${encodeURIComponent(window.location.origin)}`;
-                return;
-            }
-            alert(`Nameščena denarnica (${walletType}) ni bila najdena. Prosim namestite jo.`);
-            window.open("https://phantom.app/", "_blank");
-            return;
-        }
-
-        try {
-            const resp = await targetProvider.connect();
-            phantomProvider = targetProvider;
-            userPhantomAddress = resp.publicKey.toString();
-            userWallet = userPhantomAddress;
-            
-            const shortAddr = userWallet.slice(0, 4) + '...' + userWallet.slice(-4);
-            
-            const btnText = document.getElementById('walletBtnText') || document.getElementById('mainWalletText');
-            if (btnText) btnText.innerText = shortAddr;
-            
-            if (typeof toggleWalletModal === 'function') {
-                toggleWalletModal();
-            }
-            alert("Denarnica uspešno povezana: " + shortAddr);
-            checkPendingPurchase();
-        } catch (err) {
-            console.error("Connection failed:", err);
-            alert("Povezava z denarnico je bila zavrnjena.");
-        }
+        connectPhantom();
     }
 
-    // Samodejni prenos stanja ob ponovnem nalaganju v Phantom brskalniku
+    // Samodejni prenos in zaznava, ko se stran odpre znotraj Phantom mobilnega brskalnika
     window.addEventListener('load', () => {
-        setTimeout(() => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const amountParam = urlParams.get('amount');
-            if (amountParam && window.phantom?.solana?.isPhantom) {
-                connectPhantom();
+        setTimeout(async () => {
+            if (window.phantom?.solana?.isPhantom) {
+                try {
+                    const resp = await window.phantom.solana.connect({ onlyIfTrusted: true });
+                    phantomProvider = window.phantom.solana;
+                    userPhantomAddress = resp.publicKey.toString();
+                    
+                    const shortAddr = userPhantomAddress.substring(0, 4) + "..." + userPhantomAddress.substring(userPhantomAddress.length - 4);
+                    const btnText = document.getElementById('walletBtnText') || document.getElementById('mainWalletText');
+                    if (btnText) btnText.innerText = shortAddr;
+
+                    // Če je ostal znesek v spominu, ga takoj ponudi v potrditev nakupa
+                    executePendingPurchase();
+                } catch (e) {
+                    // Uporabnik še ni potrdil samodejne povezave
+                }
             }
-        }, 500);
+        }, 600);
     });
 </script>
 
