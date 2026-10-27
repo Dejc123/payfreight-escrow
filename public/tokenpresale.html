@@ -6,7 +6,7 @@
     <meta name="robots" content="noindex,nofollow">
     <title>Payfreight.io | Web3 Investor & Token Presale Portal</title>
     
-    <!-- Solana Web3 SDK (Nujno za delovanje transakcij) -->
+    <!-- Solana Web3 SDK -->
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
     
     <!-- Tailwind CSS -->
@@ -29,10 +29,10 @@
                             50: '#eefbff',
                             100: '#d5f5ff',
                             400: '#38bdf8',
-                            500: '#00f0ff', // Neon Cyan
+                            500: '#00f0ff',
                             600: '#0284c7',
                             700: '#0369a1',
-                            violet: '#8b5cf6', // Neon Violet Accent
+                            violet: '#8b5cf6',
                             darkBg: '#080b14',
                             cardBg: '#0f172a',
                             borderDark: '#1e293b'
@@ -55,7 +55,6 @@
             overflow-x: hidden;
         }
 
-        /* Glassmorphism background styles */
         .glass-card {
             background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
@@ -68,7 +67,6 @@
             box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
         }
 
-        /* Custom gradient texts */
         .text-gradient-cyan {
             background: linear-gradient(135deg, #00f0ff 0%, #7000ff 100%);
             -webkit-background-clip: text;
@@ -81,7 +79,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Glowing accents */
         .glow-point {
             position: absolute;
             border-radius: 50%;
@@ -90,7 +87,6 @@
             pointer-events: none;
         }
 
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -114,26 +110,27 @@
     <div class="glow-point bg-blue-600/15 w-[600px] h-[600px] bottom-10 left-10"></div>
 
     <!-- HEADER / NAVIGATION -->
-    <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80 px-4 lg:px-8 py-4">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <!-- Brand Logo (s povezavo na PayFreight.io) -->
-            <a href="https://payfreight.io" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 p-0.5 shadow-neon-cyan transition-transform group-hover:scale-105 overflow-hidden">
+    <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80 px-3 sm:px-6 lg:px-8 py-3.5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+            
+            <!-- Brand Logo (Levo) -->
+            <a href="https://payfreight.io" class="flex items-center gap-2.5 group flex-shrink-0">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-600 p-0.5 shadow-neon-cyan transition-transform group-hover:scale-105 flex-shrink-0 overflow-hidden">
                     <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center overflow-hidden">
-                        <img src="https://www.payfreight.io/images/logo.jpg" alt="PayFreight Logo" class="w-full h-full object-cover">
+                        <img src="https://www.payfreight.io/images/logo.jpg" alt="PayFreight Logo" class="w-full h-full object-contain bg-slate-950">
                     </div>
                 </div>
                 <div>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xl font-extrabold tracking-tight text-white">PAYFREIGHT</span>
-                        <span class="text-xs px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 font-mono border border-cyan-500/20">INVESTOR PORTAL</span>
+                    <div class="flex items-center gap-1.5 sm:gap-2">
+                        <span class="text-base sm:text-xl font-extrabold tracking-tight text-white leading-none">PAYFREIGHT</span>
+                        <span class="hidden sm:inline-block text-[10px] px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-400 font-mono border border-cyan-500/20">PORTAL</span>
                     </div>
-                    <p class="text-[10px] text-slate-400 tracking-wider">DECENTRALIZED FREIGHT SETTLEMENT</p>
+                    <p class="hidden sm:block text-[9px] text-slate-400 tracking-wider mt-0.5">DECENTRALIZED FREIGHT SETTLEMENT</p>
                 </div>
             </a>
 
             <!-- Desktop Nav Links -->
-            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+            <nav class="hidden md:flex items-center space-x-6 lg:space-x-8 text-sm font-medium text-slate-300">
                 <a href="#thesis" class="hover:text-cyan-400 transition-colors">Thesis</a>
                 <a href="#presale" class="hover:text-cyan-400 transition-colors">Presale Rounds</a>
                 <a href="#calculator" class="hover:text-cyan-400 transition-colors">ROI Calculator</a>
@@ -141,20 +138,20 @@
                 <a href="#roadmap" class="hover:text-cyan-400 transition-colors">Roadmap</a>
             </nav>
 
-            <!-- Action Buttons + Mini Logo čisto desno -->
-            <div class="flex items-center gap-3">
-                <button onclick="openPrivateModal()" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-800 text-slate-200 text-xs font-semibold transition-all">
+            <!-- Action Buttons + Mini Logo (Desno) -->
+            <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                <button onclick="openPrivateModal()" class="hidden md:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-800 text-slate-200 text-xs font-semibold transition-all">
                     <i class="fa-solid fa-lock text-yellow-400"></i>
                     <span>Private Pitch</span>
                 </button>
-                <button id="walletBtn" onclick="toggleWalletModal()" class="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs shadow-neon-cyan transition-all transform active:scale-95">
+                <button id="walletBtn" onclick="toggleWalletModal()" class="flex items-center gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold text-xs shadow-neon-cyan transition-all transform active:scale-95 whitespace-nowrap">
                     <i class="fa-solid fa-wallet"></i>
                     <span id="walletBtnText">Connect Wallet</span>
                 </button>
                 
-                <!-- Pomanjšan logotip čisto desno -->
-                <div class="w-8 h-8 rounded-lg overflow-hidden border border-slate-700/80 bg-slate-900 flex-shrink-0 ml-1">
-                    <img src="https://www.payfreight.io/images/logo.jpg" alt="PayFreight Mini Logo" class="w-full h-full object-cover">
+                <!-- Desni logotip (Enotna velikost in obdelavakot levi) -->
+                <div class="w-8 h-8 rounded-lg overflow-hidden border border-slate-700/80 bg-slate-950 flex-shrink-0 hidden sm:block">
+                    <img src="https://www.payfreight.io/images/logo.jpg" alt="PayFreight Mini Logo" class="w-full h-full object-contain">
                 </div>
             </div>
         </div>
@@ -162,13 +159,13 @@
 
     <!-- MAIN CONTENT -->
     <main class="flex-grow">
-        <section id="thesis" class="py-20 px-6 max-w-7xl mx-auto">
+        <section id="thesis" class="py-16 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto">
             <div class="text-center max-w-3xl mx-auto space-y-6">
                 <span class="px-3 py-1 rounded-full bg-cyan-500/10 text-cyan-400 font-mono text-xs border border-cyan-500/20">WEB3 LOGISTICS SETTLEMENT</span>
-                <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white">
+                <h1 class="text-3xl sm:text-6xl font-black tracking-tight text-white">
                     Automating Global B2B Freight Escrow on <span class="text-gradient-cyan">Solana</span>
                 </h1>
-                <p class="text-slate-400 text-lg leading-relaxed">
+                <p class="text-slate-400 text-base sm:text-lg leading-relaxed">
                     Eliminating payment friction, currency volatility, and delayed settlements across European and international transport corridors through verifiable smart contracts and RWA tokenization bundles.
                 </p>
             </div>
@@ -176,11 +173,11 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="border-t border-slate-800/80 glass-card py-8 px-6 text-center text-xs text-slate-500">
+    <footer class="border-t border-slate-800/80 glass-card py-6 sm:py-8 px-4 sm:px-6 text-center text-xs text-slate-500">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
             <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded overflow-hidden">
-                    <img src="https://www.payfreight.io/images/logo.jpg" alt="Logo" class="w-full h-full object-cover">
+                <div class="w-6 h-6 rounded overflow-hidden bg-slate-950">
+                    <img src="https://www.payfreight.io/images/logo.jpg" alt="Logo" class="w-full h-full object-contain">
                 </div>
                 <span class="text-slate-300 font-bold">PayFreight.io Protocol © 2026</span>
             </div>
@@ -189,6 +186,7 @@
             </div>
         </div>
     </footer>
+
 
 </body>
 </html>
