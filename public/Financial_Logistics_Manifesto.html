@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payfreight | Universal Plug & Play Escrow for Logistics</title>
+    <meta name="description" content="Payfreight is an independent Plug & Play financial layer for logistics. Eliminating payment defaults and 60+ day payment terms with instant payout upon delivery.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --primary-light: #e0f2fe;
+            --accent: #10b981;
+            --accent-dark: #059669;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --gold: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header / Nav */
+        header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 85px;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 48px;
+            width: auto;
+            border-radius: 6px;
+            object-fit: contain;
+        }
+
+        .logo-badge {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-size: 0.75rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--text-main);
+        }
+
+        .btn-cta {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(2, 132, 199, 0.6);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 170px 0 100px;
+            position: relative;
+            background: radial-gradient(circle at 50% 20%, rgba(2, 132, 199, 0.15) 0%, rgba(15, 23, 42, 0) 70%);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(2, 132, 199, 0.1);
+            border: 1px solid rgba(2, 132, 199, 0.3);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            line-height: 1.15;
+            font-weight: 900;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, #38bdf8 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+            max-width: 620px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hero Card / Dashboard Preview */
+        .hero-dashboard-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .status-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        .metric-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .metric-box {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .metric-box .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .metric-box .value {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        /* Banner - Plug & Play Everywhere */
+        .agnostic-banner {
+            background: linear-gradient(90deg, rgba(2, 132, 199, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px 30px;
+            margin-top: -30px;
+            margin-bottom: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .agnostic-banner h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .agnostic-banner p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .platform-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .platform-tag {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Process Flow Section */
+        .section {
+            padding: 90px 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 750px;
+            margin: 0 auto 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .flow-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .flow-step {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            transition: transform 0.3s;
+        }
+
+        .flow-step:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .flow-step h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .flow-step p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* Technical Architecture Section */
+        .tech-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            margin-top: 20px;
+        }
+
+        .tech-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .tech-node {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .tech-node i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .tech-arrow {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* Calculator Section */
+        .calc-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 1) 0%, rgba(15, 23, 42, 1) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .calc-input-group {
+            margin-bottom: 25px;
+        }
+
+        .calc-input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .calc-input-group input[type="range"] {
+            width: 100%;
+            accent-color: var(--primary);
+        }
+
+        .calc-value-display {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .calc-results {
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+        }
+
+        .result-item .title {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .result-item .value-large {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--accent);
+        }
+
+        /* Comparison Table */
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: rgba(15, 23, 42, 0.9);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .check-icon {
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        .cross-icon {
+            color: #ef4444;
+            font-size: 1.2rem;
+        }
+
+        /* Story Section */
+        .story-box {
+            background: rgba(30, 41, 59, 0.6);
+            border-left: 4px solid var(--gold);
+            padding: 35px;
+            border-radius: 0 12px 12px 0;
+            margin-top: 30px;
+        }
+
+        .story-box h3 {
+            color: var(--gold);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 60px 0 30px;
+            background: #090d16;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            color: white;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-grid, .calc-card, .agnostic-banner {
+                grid-template-columns: 1fr;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .flow-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .flow-grid {
+                grid-template-columns: 1fr;
+            }
+            .tech-diagram {
+                flex-direction: column;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            nav ul {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navigation -->
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo-wrapper">
+                <img src="https://raw.githubusercontent.com/Dejc123/payfreight-escrow/main/images/LOGO.jpg" alt="Payfreight Logo" class="logo-img">
+                <span class="logo-badge">PLUG & PLAY ESCROW</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#technology">Infrastructure</a></li>
+                    <li><a href="#calculator">Savings</a></li>
+                    <li><a href="#comparison">Comparison</a></li>
+                    <li><a href="#story">Background</a></li>
+                </ul>
+            </nav>
+            <a href="#contact" class="btn-cta">Connect Payfreight</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div>
+                    <div class="hero-tag">
+                        <i class="fa-solid fa-plug"></i> Eliminating Payment Defaults Across Logistics
+                    </div>
+                    <h1>The Universal Financial Layer for Freight. <br><span class="highlight">Payment Locked Before Loading.</span></h1>
+                    <p>Payfreight solves the biggest systemic pain for carriers and shippers. Operating as an independent <strong>Plug & Play Escrow</strong> – regardless of whether the load was agreed upon via any freight exchange or direct deal.</p>
+                    <div class="hero-btns">
+                        <a href="#calculator" class="btn-cta">Calculate Savings</a>
+                        <a href="#how-it-works" class="btn-secondary">Explore Process</a>
+                    </div>
+                </div>
+
+                <!-- Interactive Widget / Live Demo Card -->
+                <div class="hero-dashboard-card">
+                    <div class="dashboard-header">
+                        <div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">Transaction #PF-2026-99</div>
+                            <div style="font-weight: 700; font-size: 1.1rem;">Route: Ljubljana ➔ Hamburg</div>
+                        </div>
+                        <div class="status-badge">
+                            <div class="status-dot"></div> Escrow Locked
+                        </div>
+                    </div>
+
+                    <div class="metric-row">
+                        <div class="metric-box">
+                            <div class="label">Freight Value</div>
+                            <div class="value">€2,100.00</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="label">Security Status</div>
+                            <div class="value" style="color: var(--accent);">GUARANTEED</div>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(15, 23, 42, 0.4); padding: 15px; border-radius: 8px; font-size: 0.85rem; border: 1px dashed var(--border-color); margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>Deal Origin: Any Board / Direct Deal</span>
+                            <span style="color: var(--accent);"><i class="fa-solid fa-link"></i> Connected</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Cargo Status: In Transit</span>
+                            <span style="color: var(--primary);"><i class="fa-solid fa-truck-fast"></i> En Route</span>
+                        </div>
+                    </div>
+
+                    <button style="width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <i class="fa-solid fa-bolt"></i> Instant SEPA Payout Upon POD Delivery
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agnostic Banner -->
+    <div class="container">
+        <div class="agnostic-banner">
+            <div>
+                <h3><i class="fa-solid fa-cubes-stacked" style="color: var(--primary); margin-right: 8px;"></i> WORKS ANYWHERE AT ANY TIME (Agnostic Solution)</h3>
+                <p>Payfreight is not a closed system. It is an independent financial mechanism that can be used for any closed freight deal.</p>
+            </div>
+            <div class="platform-tags">
+                <span class="platform-tag">Direct Deals</span>
+                <span class="platform-tag">All Freight Exchanges</span>
+                <span class="platform-tag">Email / Phone</span>
+                <span class="platform-tag">Borza 4.0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Process Flow Section -->
+    <section id="how-it-works" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Hassle-Free Path to Payment in 4 Steps</h2>
+                <p>Eliminating defaults, delays, and debt collection calls. No bank approvals or loans required.</p>
+            </div>
+
+            <div class="flow-grid">
+                <div class="flow-step">
+                    <div class="step-number">1</div>
+                    <h3>Deal Agreement</h3>
+                    <p>Shipper and carrier agree on a load anywhere (on any exchange or directly) and enter the amount into the Payfreight interface.</p>
+                </div>
+
+                <div class="flow-step">
+                    <div class="step-number">2</div>
+                    <h3>SEPA Deposit (Lock)</h3>
+                    <p>Shipper transfers euros to a secure SEPA Escrow account. Carrier receives instant confirmation: "Funds locked, loading approved."</p>
+                </div>
+
+                <div class="flow-step">
+                    <div class="step-number">3</div>
+                    <h3>Delivery & POD</h3>
+                    <p>Carrier delivers the cargo and uploads the confirmed CMR / e-CMR or proof of delivery via smartphone or web.</p>
+                </div>
+
+                <div class="flow-step">
+                    <div class="step-number">4</div>
+                    <h3>Instant Bank Payout</h3>
+                    <p>The system automatically verifies the document and executes an Instant SEPA transfer directly to the carrier's bank account.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Architecture -->
+    <section id="technology" class="section" style="background: rgba(15, 23, 42, 0.5);">
+        <div class="container">
+            <div class="section-header">
+                <h2>Advanced Blockchain Engine, Pure EUR Experience</h2>
+                <p>Shippers and carriers operate exclusively in euros (EUR). No dealing with crypto wallets or technical complexities.</p>
+            </div>
+
+            <div class="tech-box">
+                <div class="tech-diagram">
+                    <div class="tech-node">
+                        <i class="fa-solid fa-building-columns"></i>
+                        <h4>Shipper's EUR</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Standard SEPA Transfer</p>
+                    </div>
+
+                    <div class="tech-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+                    <div class="tech-node" style="border-color: var(--primary);">
+                        <i class="fa-solid fa-cloud-bolt" style="color: #38bdf8;"></i>
+                        <h4>On-Ramp & Circle API</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Automatic EURC Conversion</p>
+                    </div>
+
+                    <div class="tech-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+                    <div class="tech-node" style="border-color: var(--accent);">
+                        <i class="fa-solid fa-lock" style="color: var(--accent);"></i>
+                        <h4>Solana Escrow Contract</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Unbreachable Smart Lock</p>
+                    </div>
+
+                    <div class="tech-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+                    <div class="tech-node">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                        <h4>Carrier's Bank Account</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Instant SEPA Payout in EUR</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; color: var(--text-muted); font-size: 0.95rem; max-width: 800px; margin: 20px auto 0;">
+                    <i class="fa-solid fa-shield-halved" style="color: var(--accent);"></i> 
+                    Full legal and financial compliance with EU MiCA regulations. The platform does not hold customer funds directly, but automates flows via licensed banking partners and smart contracts.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Calculator -->
+    <section id="calculator" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>How Much Money Are You Losing to Payment Delays?</h2>
+                <p>Calculate trapped liquidity tied up in 60-, 90-, or 120-day payment terms.</p>
+            </div>
+
+            <div class="calc-card">
+                <div>
+                    <div class="calc-input-group">
+                        <label for="monthly-volume">Monthly Freight Volume (€):</label>
+                        <input type="range" id="monthly-volume" min="5000" max="300000" step="5000" value="60000">
+                        <div class="calc-value-display" id="volume-val">€60,000</div>
+                    </div>
+
+                    <div class="calc-input-group">
+                        <label for="payment-days">Average Current Payment Term (days):</label>
+                        <input type="range" id="payment-days" min="30" max="120" step="15" value="60">
+                        <div class="calc-value-display" id="days-val">60 days</div>
+                    </div>
+                </div>
+
+                <div class="calc-results">
+                    <div class="result-item">
+                        <div class="title">Trapped Liquidity (Currently Unpaid):</div>
+                        <div class="value-large" id="locked-cash" style="color: var(--gold);">€120,000</div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="title">Time to Payout with Payfreight:</div>
+                        <div class="value-large" style="color: var(--accent);">0 Days (Instant Upon Delivery)</div>
+                    </div>
+
+                    <div style="font-size: 0.85rem; color: var(--text-muted);">
+                        *With instant liquidity, you eliminate debt collection fees, bridge loans, and secure better terms on fuel and tire purchases.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Table Section -->
+    <section id="comparison" class="section" style="background: rgba(15, 23, 42, 0.3);">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Payfreight is in a League of Its Own</h2>
+                <p>A comparison between traditional exchanges, banks, and our Plug & Play financial layer.</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Criteria</th>
+                            <th>Traditional Exchanges</th>
+                            <th>Factoring / Banks</th>
+                            <th style="color: var(--accent);">Payfreight Plug & Play</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Universal Usability</strong></td>
+                            <td><i class="fa-solid fa-xmark cross-icon"></i> Platform-bound only</td>
+                            <td><i class="fa-solid fa-xmark cross-icon"></i> Complex approval process</td>
+                            <td><i class="fa-solid fa-check check-icon"></i> Works ANYWHERE (Agnostic)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Payment Guarantee</strong></td>
+                            <td><i class="fa-solid fa-xmark cross-icon"></i> No guarantee</td>
+                            <td><i class="fa-solid fa-check check-icon"></i> Partial (with limits)</td>
+                            <td><i class="fa-solid fa-check check-icon"></i> 100% Escrow Lock</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Time to Cash</strong></td>
+                            <td>60 - 120 days</td>
+                            <td>3 - 10 days</td>
+                            <td style="color: var(--accent); font-weight: 700;">Instant upon delivery</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Administration</strong></td>
+                            <td>High</td>
+                            <td>Extremely high</td>
+                            <td>Minimal (Digital POD)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story / Founder Context Section -->
+    <section id="story" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Built From Real Operational Freight Pain</h2>
+                <p>25 years of experience, 21 trucks, and the realization that changed everything.</p>
+            </div>
+
+            <div class="story-box">
+                <h3><i class="fa-solid fa-quote-left"></i> The Story Behind Payfreight</h3>
+                <p style="font-size: 1.05rem; color: #e2e8f0; font-style: italic; margin-bottom: 15px;">
+                    "When you manage a family fleet of 21 trucks (curtainsiders and glass transporters), you experience every hardship firsthand: 120-day payment delays, debt collections, and economic crises that shut down businesses. We built one of the very first online freight exchanges back in 2001. But after two decades in the field, one truth remains clear: carriers don't just need another freight board – THEY NEED A DIRECT GUARANTEE OF INSTANT PAYMENT UPON DELIVERY. Payfreight is the solution I wished I had 20 years ago."
+                </p>
+                <div style="font-weight: 700; color: var(--gold); text-align: right;">
+                    — Payfreight Team
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">
+                        <img src="https://raw.githubusercontent.com/Dejc123/payfreight-escrow/main/images/LOGO.jpg" alt="Payfreight Logo" style="height: 35px; border-radius: 4px;">
+                        Payfreight
+                    </div>
+                    <p>Universal financial layer for the logistics sector. Combining the speed of smart contracts with the safety and simplicity of traditional SEPA banking.</p>
+                </div>
+
+                <div>
+                    <h4 style="color: white; margin-bottom: 15px;">Menu</h4>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 8px;"><a href="#how-it-works" style="color: var(--text-muted); text-decoration: none;">How It Works</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#technology" style="color: var(--text-muted); text-decoration: none;">Infrastructure</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#calculator" style="color: var(--text-muted); text-decoration: none;">Calculator</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 style="color: white; margin-bottom: 15px;">Ecosystem</h4>
+                    <p style="margin-bottom: 8px;"><i class="fa-solid fa-globe"></i> carloads.eu</p>
+                    <p style="margin-bottom: 8px;"><i class="fa-solid fa-shield"></i> payfreight.eu</p>
+                    <p><i class="fa-solid fa-envelope"></i> info@payfreight.eu</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 25px;">
+                &copy; 2026 Payfreight Escrow. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Calculator Script -->
+    <script>
+        const volumeInput = document.getElementById('monthly-volume');
+        const daysInput = document.getElementById('payment-days');
+        const volumeVal = document.getElementById('volume-val');
+        const daysVal = document.getElementById('days-val');
+        const lockedCash = document.getElementById('locked-cash');
+
+        function updateCalc() {
+            const vol = parseInt(volumeInput.value);
+            const days = parseInt(daysInput.value);
+
+            volumeVal.innerText = '€' + vol.toLocaleString('en-US');
+            daysVal.innerText = days + ' days';
+
+            const locked = Math.round((vol / 30) * days);
+            lockedCash.innerText = '€' + locked.toLocaleString('en-US');
+        }
+
+        volumeInput.addEventListener('input', updateCalc);
+        daysInput.addEventListener('input', updateCalc);
+
+        updateCalc();
+    </script>
+</body>
+</html>
