@@ -35,10 +35,12 @@
     <nav class="border-b border-brand-border/60 bg-brand-dark/80 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl overflow-hidden bg-brand-card flex items-center justify-center border border-brand-border shadow-lg shadow-brand-500/20">
-                    <img src="https://www.payfreight.io/images/logo.jpg" alt="PayFreight Logo" class="w-full h-full object-cover">
-                </div>
-                <span class="text-xl font-bold tracking-tight">Payfreight<span class="text-brand-500">.io</span> <span class="text-xs px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 border border-brand-500/20 ml-2">INSTITUTIONAL</span></span>
+                <a href="https://payfreight.io" target="_blank" class="flex items-center space-x-3 group">
+                    <div class="w-10 h-10 rounded-xl overflow-hidden bg-brand-card flex items-center justify-center border border-brand-border shadow-lg shadow-brand-500/20 group-hover:border-brand-500 transition">
+                        <img src="https://www.payfreight.io/images/logo.jpg" alt="PayFreight Logo" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-xl font-bold tracking-tight">Payfreight<span class="text-brand-500">.io</span> <span class="text-xs px-2 py-0.5 rounded bg-brand-500/10 text-brand-500 border border-brand-500/20 ml-2">INSTITUTIONAL</span></span>
+                </a>
             </div>
             <div class="flex items-center space-x-4">
                 <a href="https://payfreight.io" target="_blank" class="text-sm font-medium text-slate-300 hover:text-white transition">Visit Payfreight.io</a>
@@ -60,17 +62,55 @@
                     <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-brand-500/10 text-brand-500 text-xs font-semibold border border-brand-500/20">
                         <span>SEEDED PRIVATE ROUND OPEN</span>
                     </div>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
-                        Decentralized Freight Settlement & Liquidity Protocol.
-                    </h1>
+
+                    <!-- MASIVEN INTERAKTIVNI HERO GUMB/KARTA NAMESTO NAVADNEGA H1 -->
+                    <a href="Financial_Logistics_Manifesto.html" target="_blank" class="group relative block p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-brand-card via-slate-900 to-brand-card border border-brand-500/30 hover:border-brand-500 transition-all duration-300 shadow-2xl shadow-brand-500/10 hover:shadow-brand-500/30 hover:-translate-y-1">
+                        <div class="absolute -top-3 right-6 bg-brand-500 text-black text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-md flex items-center gap-1">
+                            <i class="fa-solid fa-scroll"></i> Strategic Paper
+                        </div>
+                        <div class="flex items-start justify-between gap-4">
+                            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white group-hover:text-brand-500 transition-colors">
+                                Decentralized Freight Settlement & Liquidity Protocol.
+                            </h1>
+                            <div class="w-12 h-12 rounded-full bg-brand-500/10 border border-brand-500/30 flex items-center justify-center shrink-0 group-hover:bg-brand-500 group-hover:text-black text-brand-500 transition-all duration-300">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center gap-2 text-xs font-bold text-brand-500 tracking-wider uppercase">
+                            <span>Read The Financial Logistics Manifesto</span>
+                            <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+                        </div>
+                    </a>
+
                     <p class="text-base sm:text-lg text-slate-400 leading-relaxed">
                         Payfreight.io solves the $2.1T global logistics cash-flow bottleneck. By bridging real-world freight invoices with automated smart contract settlement, we unlock instant liquidity for carriers and high-yield real-world assets (RWA) for institutional capital.
                     </p>
+
                     <div class="flex flex-wrap gap-4 pt-2">
                         <button onclick="document.getElementById('institutionalModal').classList.remove('hidden')" class="bg-brand-500 hover:bg-brand-600 text-black font-bold px-8 py-4 rounded-xl transition shadow-xl shadow-brand-500/20 flex items-center space-x-2">
                             <span>Schedule VC Briefing</span>
                             <i class="fa-solid font-bold fa-arrow-right"></i>
                         </button>
+                        
+                        <!-- DIREKTEN GUMB NA MANIFEST -->
+                     <a href="Financial_Logistics_Manifesto.html" target="_blank" class="group relative block p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-brand-card via-slate-900 to-brand-card border border-brand-500/30 hover:border-brand-500 transition-all duration-300 shadow-2xl shadow-brand-500/10 hover:shadow-brand-500/30 hover:-translate-y-1">
+    <div class="absolute -top-3 right-6 bg-brand-500 text-black text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full shadow-md flex items-center gap-1">
+        <i class="fa-solid fa-scroll"></i> Strategic Paper
+    </div>
+    <div class="flex items-start justify-between gap-4">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white group-hover:text-brand-500 transition-colors">
+            Decentralized Freight Settlement & Liquidity Protocol.
+        </h1>
+        <div class="w-12 h-12 rounded-full bg-brand-500/10 border border-brand-500/30 flex items-center justify-center shrink-0 group-hover:bg-brand-500 group-hover:text-black text-brand-500 transition-all duration-300">
+            <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+        </div>
+    </div>
+    <div class="mt-4 flex items-center gap-2 text-xs font-bold text-brand-500 tracking-wider uppercase">
+        <span>Read The Manifesto: 25 Years of Operational Pain & The Solution</span>
+        <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition-transform"></i>
+    </div>
+</a>
+
                         <a href="#tokenomics" class="bg-brand-card hover:bg-slate-800 text-white font-semibold px-8 py-4 rounded-xl border border-brand-border transition flex items-center space-x-2">
                             <span>View Capital Structure</span>
                         </a>
@@ -98,6 +138,8 @@
             </div>
         </div>
     </section>
+</body>
+</html>
 
     <!-- Key VC Metrics -->
     <section class="py-16 bg-brand-dark">
