@@ -105,7 +105,7 @@
 </head>
 <body class="relative min-h-screen flex flex-col justify-between">
 
-    <!-- Ambient Background Glows -->
+<!-- Ambient Background Glows -->
     <div class="glow-point bg-cyan-600/20 w-96 h-96 top-0 left-1/4"></div>
     <div class="glow-point bg-purple-600/20 w-[500px] h-[500px] top-1/3 right-10"></div>
     <div class="glow-point bg-blue-600/15 w-[600px] h-[600px] bottom-10 left-10"></div>
@@ -141,6 +141,13 @@
 
             <!-- Action Buttons + Mini Logo (Desno) -->
             <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                <!-- TECHNICAL DEMO LINK V NAVIGACIJI -->
+                <a href="https://www.payfreight.io/cargotrans/dashboard/index.html" target="_blank" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 font-bold text-xs border border-cyan-500/30 transition-all shadow-sm">
+                    <i class="fa-solid fa-laptop-code text-cyan-400"></i>
+                    <span>Technical Demo</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70"></i>
+                </a>
+
                 <button onclick="openPrivateModal()" class="hidden md:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-800 text-slate-200 text-xs font-semibold transition-all">
                     <i class="fa-solid fa-lock text-yellow-400"></i>
                     <span>Private Pitch</span>
@@ -186,6 +193,14 @@
                             <span>Join Private Presale</span>
                             <i class="fa-solid fa-arrow-right"></i>
                         </a>
+                        
+                        <!-- IZPOSTAVLJEN TECHNICAL DEMO GUMB V HERO DELU -->
+                        <a href="https://www.payfreight.io/cargotrans/dashboard/index.html" target="_blank" class="px-7 py-4 rounded-xl bg-gradient-to-r from-slate-900 to-cyan-950 hover:from-slate-800 hover:to-cyan-900 text-cyan-300 font-extrabold text-sm border border-cyan-500/40 shadow-neon-cyan transition-all flex items-center gap-2.5">
+                            <i class="fa-solid fa-laptop-code text-cyan-400"></i>
+                            <span>Launch Technical Demo</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs opacity-75"></i>
+                        </a>
+
                         <a href="https://payfreight.io" target="_blank" class="px-7 py-4 rounded-xl glass-card hover:bg-slate-800/80 text-white font-bold text-sm border border-slate-700 transition-all flex items-center gap-2">
                             <i class="fa-solid fa-globe text-cyan-400"></i>
                             <span>Visit Payfreight.io</span>
@@ -303,7 +318,6 @@
             </div>
         </section>
     </main>
-
     <!-- FOOTER -->
     <footer class="border-t border-slate-800/80 glass-card py-6 sm:py-8 px-4 sm:px-6 text-center text-xs text-slate-500">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
