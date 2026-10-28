@@ -64,10 +64,10 @@
           </a>
         </nav>
 
-        <!-- Right Side: Profile -->
+        <!-- Right Side: User Avatar -->
         <div class="flex items-center space-x-4">
-          <div class="w-9 h-9 rounded-full bg-enterprise-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
-            DL
+          <div class="w-9 h-9 rounded-full bg-enterprise-600 text-white flex items-center justify-center font-bold text-sm shadow-sm" id="navAvatar">
+            HQ
           </div>
         </div>
 
@@ -85,152 +85,154 @@
           <i data-lucide="building-2" class="w-6 h-6"></i>
         </div>
         <div>
-          <h1 class="text-xl font-bold text-slate-900">Enterprise Company & Team Profile</h1>
-          <p class="text-xs text-slate-500">Manage corporate identity, fleet details, legal documents, and multi-dispatcher staff</p>
+          <h1 class="text-xl font-bold text-slate-900">Corporate & Team Profile HQ</h1>
+          <p class="text-xs text-slate-500">Manage global corporate identity, operational specifications, verification documents, and team dispatchers</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
         <span class="text-xs bg-blue-50 text-blue-700 font-bold px-3 py-1.5 rounded-lg border border-blue-200 flex items-center gap-1.5">
-          <i data-lucide="award" class="w-4 h-4 text-blue-600"></i> CT ID: CT-8842-EU
+          <i data-lucide="award" class="w-4 h-4 text-blue-600"></i> Network CT ID: CT-AUTO-GEN
         </span>
       </div>
     </div>
 
     <!-- FORM START -->
-    <form class="space-y-8">
+    <form id="companyProfileForm" onsubmit="event.preventDefault(); saveProfile();" class="space-y-8">
 
-      <!-- SECTION 1: CORPORATE IDENTITY & BANNER -->
+      <!-- SECTION 1: CORPORATE BANNER -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
           <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
             <i data-lucide="image" class="w-5 h-5 text-enterprise-600"></i>
-            <span>Company Banner & Visual Brand Identity</span>
+            <span>Corporate Banner & Branding</span>
           </h2>
-          <span class="text-xs text-slate-400">Displayed in Global User Database search</span>
+          <span class="text-xs text-slate-400">Displayed in Global User Directory search results</span>
         </div>
 
-        <!-- Banner Preview Box -->
         <div class="space-y-2">
           <label class="block text-xs font-semibold text-slate-700">Company Header Banner (Recommended: 1200x300px)</label>
-          <div class="relative w-full h-40 rounded-xl bg-gradient-to-r from-slate-900 via-enterprise-900 to-blue-900 flex flex-col items-center justify-center text-white border-2 border-dashed border-slate-300 hover:border-enterprise-600 transition group cursor-pointer overflow-hidden shadow-inner">
-            <!-- Background simulated visual pattern -->
-            <div class="absolute inset-0 opacity-25 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]"></div>
+          <input type="file" id="bannerFileInput" accept="image/*" class="hidden" onchange="handleBannerUpload(event)">
+          
+          <div onclick="document.getElementById('bannerFileInput').click()" id="bannerPreviewBox" class="relative w-full h-40 rounded-xl bg-slate-100 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-enterprise-600 transition group cursor-pointer overflow-hidden shadow-inner">
             <div class="relative z-10 flex flex-col items-center space-y-2 p-4 text-center">
-              <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <i data-lucide="upload-cloud" class="w-5 h-5 text-purple-300"></i>
+              <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+                <i data-lucide="upload-cloud" class="w-5 h-5 text-enterprise-600"></i>
               </div>
-              <span class="text-xs font-bold text-slate-200">Click to upload corporate banner image (.jpg, .png)</span>
-              <span class="text-[10px] text-purple-300">Your custom banner appears on all your freight listings & profile card</span>
+              <span class="text-xs font-bold text-slate-700" id="bannerStatusText">Click to select corporate banner image (.jpg, .png)</span>
+              <span class="text-[10px] text-slate-400">Custom banner will be embedded in your global exchange directory listings</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- SECTION 2: CORE COMPANY DETAILS & TAX ID -->
+      <!-- SECTION 2: CORE COMPANY DETAILS & TAX / REGISTRATION ID -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
           <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
             <i data-lucide="file-text" class="w-5 h-5 text-enterprise-600"></i>
-            <span>Legal Corporate Information & Tax ID</span>
+            <span>Global Legal Registration & Tax Identification</span>
           </h2>
-          <span class="text-xs text-enterprise-600 font-semibold bg-enterprise-50 px-2.5 py-1 rounded-md border border-enterprise-100">Billing & Invoicing Ready</span>
+          <span class="text-xs text-enterprise-600 font-semibold bg-enterprise-50 px-2.5 py-1 rounded-md border border-enterprise-100">B2B Settlement Ready</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div class="sm:col-span-2">
             <label class="block text-xs font-bold text-slate-700 mb-1">Company Legal Name *</label>
-            <input type="text" value="Logistika Trans d.o.o." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:outline-none focus:border-enterprise-600">
+            <input type="text" id="companyName" placeholder="Enter full registered corporate name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:outline-none focus:border-enterprise-600">
           </div>
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Tax / VAT ID (Davčna št.) *</label>
-            <input type="text" value="SI-98765432" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 focus:outline-none focus:border-enterprise-600">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Tax / VAT / EIN Registration ID *</label>
+            <input type="text" id="taxId" placeholder="e.g. US123456789 or EU-VAT-98765" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 focus:outline-none focus:border-enterprise-600">
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div class="sm:col-span-2">
-            <label class="block text-xs font-medium text-slate-600 mb-1">Street Address *</label>
-            <input type="text" value="Industrijska cesta 14" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+            <label class="block text-xs font-medium text-slate-600 mb-1">Corporate Street Address *</label>
+            <input type="text" id="streetAddress" placeholder="Street address and suite number" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-medium text-slate-600 mb-1">Postal Code *</label>
-              <input type="text" value="8000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+              <input type="text" id="postalCode" placeholder="ZIP / Postcode" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
             </div>
             <div>
               <label class="block text-xs font-medium text-slate-600 mb-1">Country *</label>
-              <input type="text" value="Slovenia" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+              <input type="text" id="countryName" placeholder="Country" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
             </div>
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Main Phone</label>
-            <input type="text" value="+386 7 300 4000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+            <label class="block text-xs font-medium text-slate-600 mb-1">Main Telephone</label>
+            <input type="text" id="mainPhone" placeholder="+1 (0) 000 0000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-600 mb-1">Fax Number</label>
-            <input type="text" value="+386 7 300 4009" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+            <input type="text" id="faxNumber" placeholder="Fax number (optional)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
           </div>
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Corporate Email</label>
-            <input type="email" value="info@logistika-trans.si" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+            <label class="block text-xs font-medium text-slate-600 mb-1">General Inquiries Email</label>
+            <input type="email" id="generalEmail" placeholder="contact@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
           </div>
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Official Website</label>
-            <input type="text" value="https://www.logistika-trans.si" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+            <label class="block text-xs font-medium text-slate-600 mb-1">Official Website URL</label>
+            <input type="text" id="websiteUrl" placeholder="https://www.company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
           </div>
         </div>
       </div>
 
-      <!-- SECTION 3: PRO DESCRIPTION, FLEET & MARKETS -->
+      <!-- SECTION 3: FLEET OVERVIEW & OPERATIONAL PRESENCE -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
           <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
             <i data-lucide="truck" class="w-5 h-5 text-enterprise-600"></i>
-            <span>Fleet Specifications, Operations & Market Presence</span>
+            <span>Fleet Specifications, Operations & Market Coverage</span>
           </h2>
-          <span class="text-xs text-slate-400">PRO level business description</span>
+          <span class="text-xs text-slate-400">Global freight directory description</span>
         </div>
 
         <div class="space-y-4">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Company & Fleet Overview (Opis flote in dejavnosti)</label>
-            <textarea rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed">Logistika Trans d.o.o. is a premier European transport and freight forwarding enterprise with over 20 years of hands-on industry expertise. We operate a modern fleet of 25+ EURO-6 standard mega tautliners, refrigerated trailers, and specialized lowloaders. Specializing in high-frequency automotive part deliveries, temperature-controlled goods, and heavy industrial cargo across Central and Western Europe.</textarea>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Company Description & Fleet Overview</label>
+            <textarea id="fleetDescription" rows="4" placeholder="Provide a summary of your company, operational fleet capacity (e.g., number of trucks, dry vans, reefers, containers, or charters), special handling expertise, and certifications..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">Current Active Markets & Regular Lanes (Trenutno prisotni na trgih / linijah)</label>
-            <textarea rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed">Regular daily departures across Slovenia, Austria, Germany (Bavaria, Baden-Württemberg, NRW), Northern Italy, Croatia, and Serbia. Dedicated express spot lanes available on demand.</textarea>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Active Markets & Primary Trade Corridors</label>
+            <textarea id="activeMarkets" rows="2" placeholder="List your active operational regions, international lanes, or regular freight corridors..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
           </div>
         </div>
       </div>
 
-      <!-- SECTION 4: COMPLIANCE & DOCUMENT UPLOADS (Licenca & Insurance) -->
+      <!-- SECTION 4: REAL COMPLIANCE FILE UPLOADS -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
           <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
-            <i data-lucide="shield-alert" class="w-5 h-5 text-enterprise-600"></i>
-            <span>Trust, Compliance & Insurance Certificates</span>
+            <i data-lucide="shield-check" class="w-5 h-5 text-enterprise-600"></i>
+            <span>Verification Documents & Insurance Certificates</span>
           </h2>
-          <span class="text-xs font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-md border border-emerald-200">Verified Partner Badge</span>
+          <span class="text-xs font-semibold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md">Directory Trust Badges</span>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <!-- License Upload -->
+          
+          <!-- Transport License Upload -->
           <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
             <div class="flex items-center justify-between">
               <div class="flex items-center space-x-2">
                 <i data-lucide="file-badge" class="w-5 h-5 text-enterprise-600"></i>
-                <span class="text-sm font-bold text-slate-900">Transport License (EU Licenca)</span>
+                <span class="text-sm font-bold text-slate-900">Transport / Carrier License</span>
               </div>
-              <span class="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Uploaded</span>
+              <span id="licenseBadge" class="text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded">Not Uploaded</span>
             </div>
-            <p class="text-xs text-slate-500">Official license for international road transport operations.</p>
+            <p class="text-xs text-slate-500">Upload official transport license or DOT/MC registration certificate (.pdf, .jpg, .png)</p>
+            
+            <input type="file" id="licenseFileInput" class="hidden" onchange="handleFileUpload(event, 'licenseBadge', 'licenseFileName')">
             <div class="flex items-center justify-between pt-2">
-              <span class="text-xs font-mono text-slate-600">EU_License_2026_Signed.pdf</span>
-              <button type="button" class="text-xs font-semibold text-enterprise-600 hover:underline">Replace File</button>
+              <span id="licenseFileName" class="text-xs font-mono text-slate-400 italic">No file selected</span>
+              <button type="button" onclick="document.getElementById('licenseFileInput').click()" class="px-3 py-1.5 bg-enterprise-600 hover:bg-enterprise-700 text-white rounded-lg text-xs font-semibold transition">Upload File</button>
             </div>
           </div>
 
@@ -238,119 +240,51 @@
           <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
             <div class="flex items-center justify-between">
               <div class="flex items-center space-x-2">
-                <i data-lucide="shield-check" class="w-5 h-5 text-enterprise-600"></i>
-                <span class="text-sm font-bold text-slate-900">CMR Insurance Policy (Zavarovalna polica)</span>
+                <i data-lucide="shield" class="w-5 h-5 text-enterprise-600"></i>
+                <span class="text-sm font-bold text-slate-900">CMR / Cargo Liability Insurance</span>
               </div>
-              <span class="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Verified (€600k coverage)</span>
+              <span id="insuranceBadge" class="text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded">Not Uploaded</span>
             </div>
-            <p class="text-xs text-slate-500">Carrier liability insurance policy covering cargo damage and theft.</p>
+            <p class="text-xs text-slate-500">Upload active cargo liability insurance policy or certificate of coverage (.pdf, .jpg, .png)</p>
+            
+            <input type="file" id="insuranceFileInput" class="hidden" onchange="handleFileUpload(event, 'insuranceBadge', 'insuranceFileName')">
             <div class="flex items-center justify-between pt-2">
-              <span class="text-xs font-mono text-slate-600">CMR_Insurance_Policy_2026.pdf</span>
-              <button type="button" class="text-xs font-semibold text-enterprise-600 hover:underline">Replace File</button>
+              <span id="insuranceFileName" class="text-xs font-mono text-slate-400 italic">No file selected</span>
+              <button type="button" onclick="document.getElementById('insuranceFileInput').click()" class="px-3 py-1.5 bg-enterprise-600 hover:bg-enterprise-700 text-white rounded-lg text-xs font-semibold transition">Upload File</button>
             </div>
           </div>
+
         </div>
       </div>
 
-      <!-- SECTION 5: TEAM HQ & DISPATCHERS DIRECTORY (Upoštevana omejitev do 100 uporabnikov) -->
+      <!-- SECTION 5: TEAM HQ & DYNAMIC DISPATCHER MANAGEMENT -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-2">
           <div>
             <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
               <i data-lucide="users" class="w-5 h-5 text-enterprise-600"></i>
-              <span>Team HQ & Dispatcher Directory (Staff Management)</span>
+              <span>Team HQ & Staff Directory (Up to 100 User Seats)</span>
             </h2>
-            <p class="text-xs text-slate-500">Organization members and individual contact details (Up to 100 seats)</p>
+            <p class="text-xs text-slate-500">Manage individual dispatchers, roles, and direct contact details within your corporate account</p>
           </div>
-          <span class="text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1 rounded-lg">4 of 100 Seats Active</span>
+          <span id="teamSeatCount" class="text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1 rounded-lg">0 Active Team Members</span>
         </div>
 
-        <!-- Dispatcher Cards List -->
-        <div class="space-y-4">
-          
-          <!-- Member 1: Admin -->
-          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-full bg-enterprise-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
-                DL
-              </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="font-bold text-sm text-slate-900">Dejan Luzar</span>
-                  <span class="text-[10px] font-bold bg-purple-100 text-enterprise-700 px-2 py-0.5 rounded-full">Primary Admin</span>
-                </div>
-                <div class="text-xs text-slate-500 mt-0.5">CEO & Senior Freight Forwarder</div>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-slate-600 w-full md:w-auto">
-              <div>
-                <span class="text-[10px] text-slate-400 block">Direct Mobile:</span>
-                <span class="font-semibold">+386 41 123 456</span>
-              </div>
-              <div>
-                <span class="text-[10px] text-slate-400 block">Email:</span>
-                <span class="font-semibold">dejan@logistika-trans.si</span>
-              </div>
-              <div class="col-span-2 sm:col-span-1">
-                <span class="text-[10px] text-slate-400 block">Office Phone / Ext:</span>
-                <span class="font-semibold">+386 7 300 4011</span>
-              </div>
-            </div>
-
-            <div class="flex items-center space-x-2 w-full md:w-auto justify-end">
-              <button type="button" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 rounded-lg text-xs font-semibold transition">Edit</button>
-            </div>
-          </div>
-
-          <!-- Member 2: Dispatcher -->
-          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
-                MK
-              </div>
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="font-bold text-sm text-slate-900">Marko Kranjc</span>
-                  <span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Dispatcher</span>
-                </div>
-                <div class="text-xs text-slate-500 mt-0.5">EU Road Fleet Coordinator</div>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-slate-600 w-full md:w-auto">
-              <div>
-                <span class="text-[10px] text-slate-400 block">Direct Mobile:</span>
-                <span class="font-semibold">+386 40 987 654</span>
-              </div>
-              <div>
-                <span class="text-[10px] text-slate-400 block">Email:</span>
-                <span class="font-semibold">marko@logistika-trans.si</span>
-              </div>
-              <div class="col-span-2 sm:col-span-1">
-                <span class="text-[10px] text-slate-400 block">Office Phone / Ext:</span>
-                <span class="font-semibold">+386 7 300 4015</span>
-              </div>
-            </div>
-
-            <div class="flex items-center space-x-2 w-full md:w-auto justify-end">
-              <button type="button" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 rounded-lg text-xs font-semibold transition">Edit</button>
-            </div>
-          </div>
-
+        <!-- Dynamic Team List Container -->
+        <div id="teamMembersContainer" class="space-y-4">
+          <!-- Dynamically populated via JavaScript -->
         </div>
 
-        <!-- Add New Contact Button -->
+        <!-- Add Team Member Action Button -->
         <div class="pt-2">
-          <button type="button" class="px-4 py-2.5 bg-enterprise-50 hover:bg-enterprise-100 text-enterprise-700 text-xs font-bold rounded-xl border border-enterprise-200 transition flex items-center gap-2 shadow-sm">
+          <button type="button" onclick="openAddMemberModal()" class="px-4 py-2.5 bg-enterprise-50 hover:bg-enterprise-100 text-enterprise-700 text-xs font-bold rounded-xl border border-enterprise-200 transition flex items-center gap-2 shadow-sm">
             <i data-lucide="user-plus" class="w-4 h-4"></i>
             <span>+ Add New Team Member / Dispatcher</span>
           </button>
         </div>
-
       </div>
 
-      <!-- FORM ACTIONS -->
+      <!-- FORM SAVE ACTIONS -->
       <div class="flex items-center justify-end pt-4 gap-3">
         <button type="button" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
           Cancel
@@ -364,19 +298,243 @@
     </form>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="bg-white border-t border-slate-200 mt-auto py-6">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-      <div>
-        © 2026 CargoNet Enterprise & PayFreight Escrow Protocol. All rights reserved.
+  <!-- MODAL DIALOG: ADD / EDIT TEAM MEMBER -->
+  <div id="memberModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 space-y-6 border border-slate-100">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2" id="modalTitle">
+          <i data-lucide="user-plus" class="w-5 h-5 text-enterprise-600"></i>
+          <span>Add Team Member / Dispatcher</span>
+        </h3>
+        <button type="button" onclick="closeMemberModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
       </div>
-      <div class="flex items-center space-x-6">
-        <a href="index.html" class="hover:text-slate-800 transition">Live Board</a>
-        <a href="company_profile.html" class="hover:text-slate-800 transition">Company HQ</a>
-        <a href="#" class="hover:text-slate-800 transition">Terms of Service</a>
+
+      <div class="space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">First Name *</label>
+            <input type="text" id="mFirstName" placeholder="First name" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Last Name *</label>
+            <input type="text" id="mLastName" placeholder="Last name" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Role / Position *</label>
+            <input type="text" id="mRole" placeholder="e.g. Senior Road Dispatcher" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Permission Level *</label>
+            <select id="mAccess" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600 font-semibold">
+              <option value="Dispatcher">Dispatcher / Operations</option>
+              <option value="Primary Admin">Primary Admin</option>
+              <option value="Billing / Finance">Billing / Finance</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Direct Email *</label>
+          <input type="email" id="mEmail" placeholder="dispatcher@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Direct Mobile Phone</label>
+            <input type="text" id="mMobile" placeholder="+1..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Office Extension / Direct Line</label>
+            <input type="text" id="mOffice" placeholder="Ext. 101" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-3 pt-3 border-t border-slate-100">
+        <button type="button" onclick="closeMemberModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg">Cancel</button>
+        <button type="button" onclick="saveTeamMember()" class="px-5 py-2 bg-enterprise-600 hover:bg-enterprise-700 text-white text-xs font-bold rounded-lg shadow-sm">Save Team Member</button>
       </div>
     </div>
-  </footer>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // State management for team members
+    let teamMembers = [];
+    let editingMemberIndex = null;
+
+    // Handle File Uploads
+    function handleFileUpload(event, badgeId, fileNameId) {
+      const file = event.target.files[0];
+      if (file) {
+        const badge = document.getElementById(badgeId);
+        const fileName = document.getElementById(fileNameId);
+        
+        badge.textContent = "Uploaded";
+        badge.className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+        
+        fileName.textContent = file.name;
+        fileName.className = "text-xs font-mono font-bold text-slate-800";
+      }
+    }
+
+    function handleBannerUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const statusText = document.getElementById('bannerStatusText');
+        const previewBox = document.getElementById('bannerPreviewBox');
+        
+        statusText.textContent = "Banner Attached: " + file.name;
+        previewBox.classList.remove('border-dashed', 'border-slate-300');
+        previewBox.classList.add('border-solid', 'border-enterprise-600', 'bg-enterprise-50');
+      }
+    }
+
+    // Modal Control
+    function openAddMemberModal() {
+      editingMemberIndex = null;
+      document.getElementById('modalTitle').textContent = "Add Team Member / Dispatcher";
+      document.getElementById('mFirstName').value = "";
+      document.getElementById('mLastName').value = "";
+      document.getElementById('mRole').value = "";
+      document.getElementById('mAccess').value = "Dispatcher";
+      document.getElementById('mEmail').value = "";
+      document.getElementById('mMobile').value = "";
+      document.getElementById('mOffice').value = "";
+      
+      document.getElementById('memberModal').classList.remove('hidden');
+    }
+
+    function closeMemberModal() {
+      document.getElementById('memberModal').classList.add('hidden');
+    }
+
+    function saveTeamMember() {
+      const firstName = document.getElementById('mFirstName').value.trim();
+      const lastName = document.getElementById('mLastName').value.trim();
+      const role = document.getElementById('mRole').value.trim();
+      const access = document.getElementById('mAccess').value;
+      const email = document.getElementById('mEmail').value.trim();
+      const mobile = document.getElementById('mMobile').value.trim();
+      const office = document.getElementById('mOffice').value.trim();
+
+      if (!firstName || !lastName || !email) {
+        alert("Please fill in First Name, Last Name, and Email.");
+        return;
+      }
+
+      const memberData = { firstName, lastName, role, access, email, mobile, office };
+
+      if (editingMemberIndex !== null) {
+        teamMembers[editingMemberIndex] = memberData;
+      } else {
+        teamMembers.push(memberData);
+      }
+
+      closeMemberModal();
+      renderTeamMembers();
+    }
+
+    function editMember(index) {
+      editingMemberIndex = index;
+      const m = teamMembers[index];
+      document.getElementById('modalTitle').textContent = "Edit Team Member";
+      document.getElementById('mFirstName').value = m.firstName;
+      document.getElementById('mLastName').value = m.lastName;
+      document.getElementById('mRole').value = m.role;
+      document.getElementById('mAccess').value = m.access;
+      document.getElementById('mEmail').value = m.email;
+      document.getElementById('mMobile').value = m.mobile;
+      document.getElementById('mOffice').value = m.office;
+
+      document.getElementById('memberModal').classList.remove('hidden');
+    }
+
+    function deleteMember(index) {
+      if (confirm("Are you sure you want to remove this team member?")) {
+        teamMembers.splice(index, 1);
+        renderTeamMembers();
+      }
+    }
+
+    function renderTeamMembers() {
+      const container = document.getElementById('teamMembersContainer');
+      const seatCount = document.getElementById('teamSeatCount');
+      
+      seatCount.textContent = `${teamMembers.length} of 100 Seats Active`;
+      container.innerHTML = "";
+
+      if (teamMembers.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center border-2 border-dashed border-slate-200 rounded-xl bg-slate-50/50">
+            <i data-lucide="users" class="w-8 h-8 mx-auto text-slate-300 mb-2"></i>
+            <p class="text-xs font-semibold text-slate-600">No team members added yet</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Click "+ Add New Team Member" below to register dispatchers and staff.</p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      teamMembers.forEach((m, idx) => {
+        const initials = (m.firstName.charAt(0) + m.lastName.charAt(0)).toUpperCase();
+        const badgeColor = m.access === 'Primary Admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800';
+
+        const card = document.createElement('div');
+        card.className = "p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4";
+        card.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-full bg-enterprise-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+              ${initials}
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-sm text-slate-900">${m.firstName} ${m.lastName}</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeColor}">${m.access}</span>
+              </div>
+              <div class="text-xs text-slate-500 mt-0.5">${m.role || 'Dispatcher'}</div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-slate-600 w-full md:w-auto">
+            <div>
+              <span class="text-[10px] text-slate-400 block">Direct Mobile:</span>
+              <span class="font-semibold">${m.mobile || 'N/A'}</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-400 block">Email:</span>
+              <span class="font-semibold">${m.email}</span>
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <span class="text-[10px] text-slate-400 block">Office Ext:</span>
+              <span class="font-semibold">${m.office || 'N/A'}</span>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-2 w-full md:w-auto justify-end">
+            <button type="button" onclick="editMember(${idx})" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 rounded-lg text-xs font-semibold transition">Edit</button>
+            <button type="button" onclick="deleteMember(${idx})" class="px-2.5 py-1.5 bg-rose-50 border border-rose-200 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-semibold transition"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    function saveProfile() {
+      alert("Enterprise Company Profile updated successfully!");
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      renderTeamMembers();
+    });
+  </script>
 
   <!-- Lucide Icons Initialization -->
   <script>
