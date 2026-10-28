@@ -412,7 +412,7 @@
       }
     }
 
-    // Helper: Upload a single file to Supabase Storage 'company-files'
+    // Helper: Upload a single file to Supabase Storage 'COMPANY-FILES-files'
     async function uploadToStorage(fileInputId, folderName) {
       const fileInput = document.getElementById(fileInputId);
       if (!fileInput || !fileInput.files[0]) return null;
@@ -422,7 +422,7 @@
       const fileName = `${folderName}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
       
       const { data, error } = await supabase.storage
-        .from('company-files')
+        .from('COMPANY-FILES')
         .upload(fileName, file);
         
       if (error) {
@@ -431,7 +431,7 @@
       }
       
       const { data: publicUrlData } = supabase.storage
-        .from('company-files')
+        .from('COMPANY-FILES')
         .getPublicUrl(fileName);
         
       return publicUrlData.publicUrl;
