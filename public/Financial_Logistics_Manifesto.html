@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payfreight | Universal Plug & Play Escrow for Logistics</title>
     <meta name="description" content="Payfreight is an independent Plug & Play financial layer for logistics. Eliminating payment defaults and 60+ day payment terms with instant payout upon delivery.">
+    <meta name="robots" content="noindex,nofollow">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,14 +44,12 @@
             overflow-x: hidden;
         }
 
-        /* Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        /* Header / Nav */
         header {
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
@@ -131,7 +130,6 @@
             box-shadow: 0 6px 20px rgba(2, 132, 199, 0.6);
         }
 
-        /* Hero Section */
         .hero {
             padding: 170px 0 100px;
             position: relative;
@@ -203,7 +201,6 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Hero Card / Dashboard Preview */
         .hero-dashboard-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -274,7 +271,6 @@
             font-weight: 700;
         }
 
-        /* Banner - Plug & Play Everywhere */
         .agnostic-banner {
             background: linear-gradient(90deg, rgba(2, 132, 199, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%);
             border: 1px solid var(--border-color);
@@ -315,7 +311,6 @@
             color: var(--text-main);
         }
 
-        /* Process Flow Section */
         .section {
             padding: 90px 0;
             border-top: 1px solid var(--border-color);
@@ -380,7 +375,6 @@
             color: var(--text-muted);
         }
 
-        /* Technical Architecture Section */
         .tech-box {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -419,7 +413,6 @@
             font-size: 1.2rem;
         }
 
-        /* Calculator Section */
         .calc-card {
             background: linear-gradient(135deg, rgba(30, 41, 59, 1) 0%, rgba(15, 23, 42, 1) 100%);
             border: 1px solid var(--border-color);
@@ -476,7 +469,6 @@
             color: var(--accent);
         }
 
-        /* Comparison Table */
         .table-wrapper {
             overflow-x: auto;
             margin-top: 30px;
@@ -515,7 +507,6 @@
             font-size: 1.2rem;
         }
 
-        /* Story Section */
         .story-box {
             background: rgba(30, 41, 59, 0.6);
             border-left: 4px solid var(--gold);
@@ -533,7 +524,6 @@
             font-size: 1.3rem;
         }
 
-        /* Footer */
         footer {
             border-top: 1px solid var(--border-color);
             padding: 60px 0 30px;
@@ -559,7 +549,72 @@
             gap: 12px;
         }
 
-        /* Responsive */
+        /* MODAL STYLES FOR FORMSPREE */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: #1e293b;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            padding: 32px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+        }
+
         @media (max-width: 992px) {
             .hero-grid, .calc-card, .agnostic-banner {
                 grid-template-columns: 1fr;
@@ -592,7 +647,7 @@
     <!-- Header / Navigation -->
     <header>
         <div class="container nav-container">
-            <a href="https://payfreight.io" target="_blank" class="logo-wrapper">
+            <a href="index.html" class="logo-wrapper">
                 <img src="https://raw.githubusercontent.com/Dejc123/payfreight-escrow/main/images/LOGO.jpg" alt="Payfreight Logo" class="logo-img">
                 <span class="logo-badge">PLUG & PLAY ESCROW</span>
             </a>
@@ -605,7 +660,7 @@
                     <li><a href="#story">Background</a></li>
                 </ul>
             </nav>
-            <a href="https://payfreight.io" target="_blank" class="btn-cta">Connect Payfreight</a>
+            <button onclick="openModal()" class="btn-cta">Connect Payfreight</button>
         </div>
     </header>
 
@@ -659,7 +714,7 @@
                         </div>
                     </div>
 
-                    <button style="width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <button onclick="openModal()" style="width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
                         <i class="fa-solid fa-bolt"></i> Instant SEPA Payout Upon POD Delivery
                     </button>
                 </div>
@@ -678,7 +733,7 @@
                 <span class="platform-tag">Direct Deals</span>
                 <span class="platform-tag">All Freight Exchanges</span>
                 <span class="platform-tag">Email / Phone</span>
-                <span class="platform-tag">Borza 4.0</span>
+                <span class="platform-tag">CargoNet Exchange</span>
             </div>
         </div>
     </div>
@@ -719,11 +774,11 @@
         </div>
     </section>
 
-    <!-- Technical Architecture -->
+    <!-- Technical Architecture (PRAVNO VARNO & NEVTRALNO) -->
     <section id="technology" class="section" style="background: rgba(15, 23, 42, 0.5);">
         <div class="container">
             <div class="section-header">
-                <h2>Advanced Blockchain Engine, Pure EUR Experience</h2>
+                <h2>Cryptographic Escrow Architecture, Pure EUR Experience</h2>
                 <p>Shippers and carriers operate exclusively in euros (EUR). No dealing with crypto wallets or technical complexities.</p>
             </div>
 
@@ -739,16 +794,16 @@
 
                     <div class="tech-node" style="border-color: var(--primary);">
                         <i class="fa-solid fa-cloud-bolt" style="color: #38bdf8;"></i>
-                        <h4>On-Ramp & Circle API</h4>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Automatic EURC Conversion</p>
+                        <h4>Licensed On-Ramp</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Regulated Conversion</p>
                     </div>
 
                     <div class="tech-arrow"><i class="fa-solid fa-chevron-right"></i></div>
 
                     <div class="tech-node" style="border-color: var(--accent);">
                         <i class="fa-solid fa-lock" style="color: var(--accent);"></i>
-                        <h4>Solana Escrow Contract</h4>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Unbreachable Smart Lock</p>
+                        <h4>Automated Smart Escrow</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 5px;">Cryptographic Smart Contract</p>
                     </div>
 
                     <div class="tech-arrow"><i class="fa-solid fa-chevron-right"></i></div>
@@ -760,9 +815,10 @@
                     </div>
                 </div>
 
+                <!-- PRAVNA PRILAGODITEV (MiCA ALIGNMENT) -->
                 <div style="text-align: center; color: var(--text-muted); font-size: 0.95rem; max-width: 800px; margin: 20px auto 0;">
                     <i class="fa-solid fa-shield-halved" style="color: var(--accent);"></i> 
-                    Full legal and financial compliance with EU MiCA regulations. The platform does not hold customer funds directly, but automates flows via licensed banking partners and smart contracts.
+                    Designed for full EU MiCA compliance, routing payments through licensed banking partners and non-custodial smart contracts.
                 </div>
             </div>
         </div>
@@ -859,64 +915,61 @@
         </div>
     </section>
 
-<!-- Story / Founder Context Section -->
-<section id="story" class="section">
-    <div class="container">
-        <div class="section-header">
-            <h2>Building From Real Freight Pain</h2>
-            <p>25 years of field experience, 21 trucks, and a solution actively being developed.</p>
-        </div>
+    <!-- Story / Founder Context Section -->
+    <section id="story" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Building From Real Freight Pain</h2>
+                <p>25 years of field experience, 21 trucks, and a solution actively being developed.</p>
+            </div>
 
-        <div class="story-box">
-            <h3><i class="fa-solid fa-quote-left"></i> The Story Behind Payfreight</h3>
-            <p style="font-size: 1.05rem; color: #e2e8f0; font-style: italic; margin-bottom: 20px;">
-                "When you manage a family fleet of 21 trucks (curtainsiders and car transporters), you experience every hardship firsthand: 120-day payment delays, debt collections, and economic crises that shut down businesses. We built one of the very first online freight exchanges back in 2001. But after two decades in the field, one truth remains clear: carriers don't just need another freight board – THEY NEED A DIRECT GUARANTEE OF INSTANT PAYMENT UPON DELIVERY and THE SHIPPER NEEDS A GUARANTEED TRUCK ON THE LOADING DATE. Payfreight.io is the solution I wished I had 20 years ago."
-            </p>
+            <div class="story-box">
+                <h3><i class="fa-solid fa-quote-left"></i> The Story Behind Payfreight</h3>
+                <p style="font-size: 1.05rem; color: #e2e8f0; font-style: italic; margin-bottom: 20px;">
+                    "When you manage a family fleet of 21 trucks (curtainsiders and car transporters), you experience every hardship firsthand: 120-day payment delays, debt collections, and economic crises that shut down businesses. We built one of the very first online freight exchanges back in 2001. But after two decades in the field, one truth remains clear: carriers don't just need another freight board – THEY NEED A DIRECT GUARANTEE OF INSTANT PAYMENT UPON DELIVERY and THE SHIPPER NEEDS A GUARANTEED TRUCK ON THE LOADING DATE. Payfreight.io is the solution I wished I had 20 years ago."
+                </p>
 
-            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 25px 0;">
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 25px 0;">
 
-            <!-- Execution Stack -->
-            <div style="margin-bottom: 25px; text-align: left;">
-                <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 12px;">
-                    Execution Stack & Development Architecture
-                </div>
-                
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
-                    <!-- Founder & Domain Lead -->
-                    <div style="background: rgba(15, 23, 42, 0.7); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
-                        <div style="font-weight: 700; color: white; margin-bottom: 4px; font-size: 0.9rem;">
-                            <i class="fa-solid fa-user-gear" style="color: var(--primary); margin-right: 6px;"></i> Founder & Domain Lead
-                        </div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">
-                            Electronics background • C+E heavy-truck driver at 19 • B.Sc. in Work Organization (Marketing & Support) • 25 years of fleet management & freight exchange development.
-                        </div>
+                <div style="margin-bottom: 25px; text-align: left;">
+                    <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 12px;">
+                        Execution Stack & Development Architecture
                     </div>
-
-                    <!-- Senior Software Architect -->
-                    <div style="background: rgba(15, 23, 42, 0.7); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
-                        <div style="font-weight: 700; color: white; margin-bottom: 4px; font-size: 0.9rem;">
-                            <i class="fa-solid fa-code" style="color: var(--primary); margin-right: 6px;"></i> Senior Software Architect
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                        <div style="background: rgba(15, 23, 42, 0.7); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
+                            <div style="font-weight: 700; color: white; margin-bottom: 4px; font-size: 0.9rem;">
+                                <i class="fa-solid fa-user-gear" style="color: var(--primary); margin-right: 6px;"></i> Founder & Domain Lead
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">
+                                Electronics background • C+E heavy-truck driver at 19 • B.Sc. in Work Organization • 25 years of fleet management & freight exchange development.
+                            </div>
                         </div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted);">
-                            B.Sc. in Computer Science • Senior Software Engineer • Core system architecture • B2B API integrations & data security.
+
+                        <div style="background: rgba(15, 23, 42, 0.7); padding: 15px; border-radius: 10px; border: 1px solid var(--border-color);">
+                            <div style="font-weight: 700; color: white; margin-bottom: 4px; font-size: 0.9rem;">
+                                <i class="fa-solid fa-code" style="color: var(--primary); margin-right: 6px;"></i> Senior Software Architect
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">
+                                B.Sc. in Computer Science • Senior Software Engineer • Core system architecture • B2B API integrations & data security.
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div style="font-weight: 700; color: var(--gold); text-align: right; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                — Actively Developed by Freight Operators & Systems Engineers
-            </div>
+                <div style="font-weight: 700; color: var(--gold); text-align: right; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                    — Actively Developed by Freight Operators & Systems Engineers
+                </div>
 
-            <!-- Big CTA Button Under Story -->
-            <div style="text-align: center; margin-top: 35px;">
-                <a href="https://payfreight.io" target="_blank" class="btn-cta" style="font-size: 1.2rem; padding: 16px 36px; display: inline-flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);">
-                    <i class="fa-solid fa-arrow-right-to-bracket"></i> Enter the World of PayFreight
-                </a>
+                <!-- CTA Button Under Story -->
+                <div style="text-align: center; margin-top: 35px;">
+                    <button onclick="openModal()" class="btn-cta" style="font-size: 1.2rem; padding: 16px 36px; display: inline-flex; align-items: center; gap: 12px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 6px 25px rgba(16, 185, 129, 0.4);">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Enter the World of PayFreight
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- Footer -->
     <footer id="contact">
@@ -941,7 +994,7 @@
 
                 <div>
                     <h4 style="color: white; margin-bottom: 15px;">Ecosystem</h4>
-                    <p style="margin-bottom: 8px;"><i class="fa-solid fa-globe"></i> carloads.eu</p>
+                    <p style="margin-bottom: 8px;"><i class="fa-solid fa-globe"></i> cargo-net.org</p>
                     <p style="margin-bottom: 8px;">
                         <i class="fa-solid fa-shield" style="color: var(--accent);"></i> 
                         <a href="https://payfreight.io" target="_blank" style="color: var(--text-main); text-decoration: none; font-weight: 700;">payfreight.io</a>
@@ -956,7 +1009,53 @@
         </div>
     </footer>
 
-    <!-- Interactive Calculator Script -->
+    <!-- FORMSPREE WAITLIST & INVESTOR MODAL -->
+    <div id="waitlistModal" class="modal-overlay">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div style="text-align: center; margin-bottom: 24px;">
+                <div style="width: 48px; height: 48px; background: rgba(2, 132, 199, 0.15); border: 1px solid var(--primary); color: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 1.2rem;">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+                <h3 style="font-size: 1.4rem; font-weight: 800; color: white;">Join Payfreight</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Get early access to the beta platform or request strategic VC materials.</p>
+            </div>
+
+            <!-- ACTION URL CONNECTED TO FORMSPREE -->
+            <form action="https://formspree.io/f/mgaayjbv" method="POST">
+                <div class="form-group">
+                    <label for="userRole">I am interested as a *</label>
+                    <select id="userRole" name="Role" required>
+                        <option value="Carrier / Transport Company">Carrier / Transport Fleet Operator</option>
+                        <option value="Shipper / Freight Forwarder">Shipper / Freight Forwarder</option>
+                        <option value="VC / Institutional Investor">VC / Institutional Investor (Request SAFT/Deck)</option>
+                        <option value="Technology / Exchange Partner">Technology / Freight Exchange Partner</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Corporate Email Address *</label>
+                    <input type="email" id="email" name="Email" placeholder="name@company.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="company">Company Name / Fleet Size</label>
+                    <input type="text" id="company" name="Company" placeholder="e.g. TransLogistics GmbH (20 Trucks)">
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Note / Specific Request (Optional)</label>
+                    <textarea id="message" name="Message" rows="3" placeholder="Tell us about your interest..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-cta" style="width: 100%; padding: 12px; margin-top: 8px;">
+                    Submit Request
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Interactive Calculator & Modal Scripts -->
     <script>
         const volumeInput = document.getElementById('monthly-volume');
         const daysInput = document.getElementById('payment-days');
@@ -979,6 +1078,22 @@
         daysInput.addEventListener('input', updateCalc);
 
         updateCalc();
+
+        // Modal Logic
+        function openModal() {
+            document.getElementById('waitlistModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('waitlistModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('waitlistModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
     </script>
 </body>
 </html>
