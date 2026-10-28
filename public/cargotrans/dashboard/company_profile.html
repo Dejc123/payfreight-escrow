@@ -8,6 +8,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -138,18 +140,18 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div class="sm:col-span-2">
             <label class="block text-xs font-bold text-slate-700 mb-1">Company Legal Name *</label>
-            <input type="text" id="companyName" placeholder="Enter full registered corporate name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:outline-none focus:border-enterprise-600">
+            <input type="text" id="company_name" placeholder="Enter full registered corporate name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:outline-none focus:border-enterprise-600" required>
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Tax / VAT / EIN Registration ID *</label>
-            <input type="text" id="taxId" placeholder="e.g. US123456789 or EU-VAT-98765" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 focus:outline-none focus:border-enterprise-600">
+            <input type="text" id="vat_number" placeholder="e.g. US123456789 or EU-VAT-98765" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 focus:outline-none focus:border-enterprise-600" required>
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div class="sm:col-span-2">
             <label class="block text-xs font-medium text-slate-600 mb-1">Corporate Street Address *</label>
-            <input type="text" id="streetAddress" placeholder="Street address and suite number" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+            <input type="text" id="address" placeholder="Street address and suite number" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
@@ -158,23 +160,23 @@
             </div>
             <div>
               <label class="block text-xs font-medium text-slate-600 mb-1">Country *</label>
-              <input type="text" id="countryName" placeholder="Country" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+              <input type="text" id="country" placeholder="Country" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
             </div>
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Main Telephone</label>
-            <input type="text" id="mainPhone" placeholder="+1 (0) 000 0000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+            <label class="block text-xs font-medium text-slate-600 mb-1">Main Telephone *</label>
+            <input type="text" id="phone" placeholder="+1 (0) 000 0000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-600 mb-1">Fax Number</label>
             <input type="text" id="faxNumber" placeholder="Fax number (optional)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
           </div>
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">General Inquiries Email</label>
-            <input type="email" id="generalEmail" placeholder="contact@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+            <label class="block text-xs font-medium text-slate-600 mb-1">General Inquiries Email *</label>
+            <input type="email" id="contact_email" placeholder="contact@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-600 mb-1">Official Website URL</label>
@@ -196,12 +198,12 @@
         <div class="space-y-4">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Company Description & Fleet Overview</label>
-            <textarea id="fleetDescription" rows="4" placeholder="Provide a summary of your company, operational fleet capacity (e.g., number of trucks, dry vans, reefers, containers, or charters), special handling expertise, and certifications..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
+            <textarea id="fleetDescription" rows="4" placeholder="Provide a summary of your company, operational fleet capacity..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
           </div>
 
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Active Markets & Primary Trade Corridors</label>
-            <textarea id="activeMarkets" rows="2" placeholder="List your active operational regions, international lanes, or regular freight corridors..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
+            <textarea id="activeMarkets" rows="2" placeholder="List your active operational regions, international lanes..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
           </div>
         </div>
       </div>
@@ -362,8 +364,13 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
+  <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
   <script>
+    // Supabase Initialization
+    const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     // State management for team members
     let teamMembers = [];
     let editingMemberIndex = null;
@@ -527,8 +534,31 @@
       lucide.createIcons();
     }
 
-    function saveProfile() {
-      alert("Enterprise Company Profile updated successfully!");
+    // Save Profile & Send Data directly to Supabase table 'companies'
+    async function saveProfile() {
+      const companyData = {
+        company_name: document.getElementById('company_name').value.trim(),
+        vat_number: document.getElementById('vat_number').value.trim(),
+        address: document.getElementById('address').value.trim(),
+        city: document.getElementById('postalCode').value.trim() || "N/A", // or map to dedicated city field if needed
+        country: document.getElementById('country').value.trim(),
+        contact_email: document.getElementById('contact_email').value.trim(),
+        phone: document.getElementById('phone').value.trim()
+      };
+
+      try {
+        const { data, error } = await supabase
+          .from('companies')
+          .insert([companyData]);
+
+        if (error) {
+          alert("Error saving profile to Supabase: " + error.message);
+        } else {
+          alert("Enterprise Company Profile successfully updated and saved to Supabase cloud database!");
+        }
+      } catch (err) {
+        alert("Unexpected error: " + err.message);
+      }
     }
 
     document.addEventListener("DOMContentLoaded", function() {
