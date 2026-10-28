@@ -115,7 +115,7 @@
           <label class="block text-xs font-semibold text-slate-700">Company Header Banner (Recommended: 1200x300px)</label>
           <input type="file" id="bannerFileInput" accept="image/*" class="hidden" onchange="handleBannerUpload(event)">
           
-          <div onclick="document.getElementById('bannerFileInput').click()" id="bannerPreviewBox" class="relative w-full h-40 rounded-xl bg-slate-100 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-enterprise-600 transition group cursor-pointer overflow-hidden shadow-inner">
+          <div onclick="document.getElementById('bannerFileInput').click()" id="bannerPreviewBox" class="relative w-full h-40 rounded-xl bg-slate-100 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-enterprise-600 transition group cursor-pointer overflow-hidden shadow-inner bg-cover bg-center">
             <div class="relative z-10 flex flex-col items-center space-y-2 p-4 text-center">
               <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
                 <i data-lucide="upload-cloud" class="w-5 h-5 text-enterprise-600"></i>
@@ -291,7 +291,7 @@
         <button type="button" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
           Cancel
         </button>
-        <button type="submit" class="px-8 py-3 bg-enterprise-600 hover:bg-enterprise-700 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center gap-2">
+        <button type="submit" id="saveProfileBtn" class="px-8 py-3 bg-enterprise-600 hover:bg-enterprise-700 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center gap-2">
           <i data-lucide="save" class="w-4 h-4"></i>
           <span>Save Enterprise Profile Changes</span>
         </button>
@@ -375,31 +375,63 @@
     let teamMembers = [];
     let editingMemberIndex = null;
 
-    // Handle File Uploads
+    // Handle File Uploads Display
     function handleFileUpload(event, badgeId, fileNameId) {
       const file = event.target.files[0];
       if (file) {
         const badge = document.getElementById(badgeId);
         const fileName = document.getElementById(fileNameId);
         
-        badge.textContent = "Uploaded";
-        badge.className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+        badge.textContent = "Ready to Upload";
+        badge.className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200";
         
         fileName.textContent = file.name;
         fileName.className = "text-xs font-mono font-bold text-slate-800";
       }
     }
 
+    // Handle Banner Upload & Instant Visual Preview
     function handleBannerUpload(event) {
       const file = event.target.files[0];
       if (file) {
         const statusText = document.getElementById('bannerStatusText');
         const previewBox = document.getElementById('bannerPreviewBox');
         
-        statusText.textContent = "Banner Attached: " + file.name;
-        previewBox.classList.remove('border-dashed', 'border-slate-300');
-        previewBox.classList.add('border-solid', 'border-enterprise-600', 'bg-enterprise-50');
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewBox.style.backgroundImage = `url('${e.target.result}')`;
+          statusText.textContent = "Banner Attached: " + file.name;
+          statusText.classList.add('bg-slate-900/80', 'text-white', 'px-3', 'py-1', 'rounded-lg', 'shadow-sm');
+          previewBox.classList.remove('border-dashed', 'border-slate-300');
+          previewBox.classList.add('border-solid', 'border-enterprise-600');
+        };
+        reader.readAsDataURL(file);
       }
+    }
+
+    // Helper: Upload a single file to Supabase Storage 'company-files'
+    async function uploadToStorage(fileInputId, folderName) {
+      const fileInput = document.getElementById(fileInputId);
+      if (!fileInput || !fileInput.files[0]) return null;
+      
+      const file = fileInput.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${folderName}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+      
+      const { data, error } = await supabase.storage
+        .from('company-files')
+        .upload(fileName, file);
+        
+      if (error) {
+        console.error(`Upload error (${fileInputId}):`, error.message);
+        return null;
+      }
+      
+      const { data: publicUrlData } = supabase.storage
+        .from('company-files')
+        .getPublicUrl(fileName);
+        
+      return publicUrlData.publicUrl;
     }
 
     // Modal Control
@@ -534,30 +566,60 @@
       lucide.createIcons();
     }
 
-    // Save Profile & Send Data directly to Supabase table 'companies'
+    // Save Profile & Upload Files to Supabase Storage + Save details to 'companies' table
     async function saveProfile() {
-      const companyData = {
-        company_name: document.getElementById('company_name').value.trim(),
-        vat_number: document.getElementById('vat_number').value.trim(),
-        address: document.getElementById('address').value.trim(),
-        city: document.getElementById('postalCode').value.trim() || "N/A", // or map to dedicated city field if needed
-        country: document.getElementById('country').value.trim(),
-        contact_email: document.getElementById('contact_email').value.trim(),
-        phone: document.getElementById('phone').value.trim()
-      };
+      const saveBtn = document.getElementById('saveProfileBtn');
+      const originalBtnHtml = saveBtn.innerHTML;
+      
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = `<span>Uploading files & saving...</span>`;
 
       try {
+        // 1. Upload Files to Supabase Storage
+        const bannerUrl = await uploadToStorage('bannerFileInput', 'banners');
+        const licenseUrl = await uploadToStorage('licenseFileInput', 'licenses');
+        const insuranceUrl = await uploadToStorage('insuranceFileInput', 'insurances');
+
+        // Update UI Badges if files uploaded
+        if (licenseUrl) {
+          const lBadge = document.getElementById('licenseBadge');
+          lBadge.textContent = "Uploaded";
+          lBadge.className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+        }
+        if (insuranceUrl) {
+          const iBadge = document.getElementById('insuranceBadge');
+          iBadge.textContent = "Uploaded";
+          iBadge.className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+        }
+
+        // 2. Map Database Fields
+        const companyData = {
+          company_name: document.getElementById('company_name').value.trim(),
+          vat_number: document.getElementById('vat_number').value.trim(),
+          address: document.getElementById('address').value.trim(),
+          city: document.getElementById('postalCode').value.trim() || "N/A",
+          country: document.getElementById('country').value.trim(),
+          contact_email: document.getElementById('contact_email').value.trim(),
+          phone: document.getElementById('phone').value.trim()
+        };
+
+        // 3. Insert record into 'companies' table
         const { data, error } = await supabase
           .from('companies')
           .insert([companyData]);
 
         if (error) {
-          alert("Error saving profile to Supabase: " + error.message);
+          alert("Error saving company profile to Supabase: " + error.message);
         } else {
-          alert("Enterprise Company Profile successfully updated and saved to Supabase cloud database!");
+          alert("Enterprise Company Profile & documents successfully saved to Supabase!");
         }
+
       } catch (err) {
         alert("Unexpected error: " + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = originalBtnHtml;
+        lucide.createIcons();
       }
     }
 
