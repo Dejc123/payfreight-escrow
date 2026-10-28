@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CargoNet Enterprise | Company Profile & Team HQ</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              800: '#075985',
+              900: '#0f172a',
+            },
+            enterprise: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              900: '#4c1d95',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
+
+  <!-- TOP NAVIGATION -->
+  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        
+        <!-- Logo & Status -->
+        <div class="flex items-center space-x-3">
+          <div class="bg-blue-600 text-white p-2 rounded-lg font-black tracking-wider text-xl flex items-center space-x-1">
+            <i data-lucide="truck" class="w-6 h-6"></i>
+            <span>Cargo<span class="text-blue-400">Net</span></span>
+          </div>
+          <span class="bg-enterprise-900 text-purple-200 text-xs px-2.5 py-1 rounded-full border border-purple-500/40 flex items-center gap-1.5 font-semibold">
+            <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+            Enterprise Company HQ
+          </span>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="hidden md:flex items-center space-x-1">
+          <a href="index.html" class="px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800">Live Board</a>
+          <a href="enter_cargo.html" class="px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800">Post Cargo</a>
+          <a href="#" class="px-3 py-2 rounded-md text-sm font-medium bg-enterprise-900 text-purple-200 border border-purple-500/30">Company Profile</a>
+          <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-purple-300 hover:text-white hover:bg-purple-900/40 flex items-center gap-1.5 border border-purple-500/30 rounded-md">
+            <i data-lucide="shield-check" class="w-4 h-4 text-purple-400"></i>
+            <span>PayFreight Escrow</span>
+          </a>
+        </nav>
+
+        <!-- Right Side: Profile -->
+        <div class="flex items-center space-x-4">
+          <div class="w-9 h-9 rounded-full bg-enterprise-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+            DL
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- PAGE HEADER -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white px-6 py-5 rounded-2xl border border-slate-200 shadow-sm gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-12 h-12 rounded-xl bg-enterprise-50 text-enterprise-600 flex items-center justify-center border border-enterprise-100">
+          <i data-lucide="building-2" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold text-slate-900">Enterprise Company & Team Profile</h1>
+          <p class="text-xs text-slate-500">Manage corporate identity, fleet details, legal documents, and multi-dispatcher staff</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-xs bg-blue-50 text-blue-700 font-bold px-3 py-1.5 rounded-lg border border-blue-200 flex items-center gap-1.5">
+          <i data-lucide="award" class="w-4 h-4 text-blue-600"></i> CT ID: CT-8842-EU
+        </span>
+      </div>
+    </div>
+
+    <!-- FORM START -->
+    <form class="space-y-8">
+
+      <!-- SECTION 1: CORPORATE IDENTITY & BANNER -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="image" class="w-5 h-5 text-enterprise-600"></i>
+            <span>Company Banner & Visual Brand Identity</span>
+          </h2>
+          <span class="text-xs text-slate-400">Displayed in Global User Database search</span>
+        </div>
+
+        <!-- Banner Preview Box -->
+        <div class="space-y-2">
+          <label class="block text-xs font-semibold text-slate-700">Company Header Banner (Recommended: 1200x300px)</label>
+          <div class="relative w-full h-40 rounded-xl bg-gradient-to-r from-slate-900 via-enterprise-900 to-blue-900 flex flex-col items-center justify-center text-white border-2 border-dashed border-slate-300 hover:border-enterprise-600 transition group cursor-pointer overflow-hidden shadow-inner">
+            <!-- Background simulated visual pattern -->
+            <div class="absolute inset-0 opacity-25 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            <div class="relative z-10 flex flex-col items-center space-y-2 p-4 text-center">
+              <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <i data-lucide="upload-cloud" class="w-5 h-5 text-purple-300"></i>
+              </div>
+              <span class="text-xs font-bold text-slate-200">Click to upload corporate banner image (.jpg, .png)</span>
+              <span class="text-[10px] text-purple-300">Your custom banner appears on all your freight listings & profile card</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: CORE COMPANY DETAILS & TAX ID -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="file-text" class="w-5 h-5 text-enterprise-600"></i>
+            <span>Legal Corporate Information & Tax ID</span>
+          </h2>
+          <span class="text-xs text-enterprise-600 font-semibold bg-enterprise-50 px-2.5 py-1 rounded-md border border-enterprise-100">Billing & Invoicing Ready</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Company Legal Name *</label>
+            <input type="text" value="Logistika Trans d.o.o." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Tax / VAT ID (Davčna št.) *</label>
+            <input type="text" value="SI-98765432" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 focus:outline-none focus:border-enterprise-600">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-medium text-slate-600 mb-1">Street Address *</label>
+            <input type="text" value="Industrijska cesta 14" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Postal Code *</label>
+              <input type="text" value="8000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Country *</label>
+              <input type="text" value="Slovenia" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Main Phone</label>
+            <input type="text" value="+386 7 300 4000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Fax Number</label>
+            <input type="text" value="+386 7 300 4009" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Corporate Email</label>
+            <input type="email" value="info@logistika-trans.si" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Official Website</label>
+            <input type="text" value="https://www.logistika-trans.si" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: PRO DESCRIPTION, FLEET & MARKETS -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="truck" class="w-5 h-5 text-enterprise-600"></i>
+            <span>Fleet Specifications, Operations & Market Presence</span>
+          </h2>
+          <span class="text-xs text-slate-400">PRO level business description</span>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Company & Fleet Overview (Opis flote in dejavnosti)</label>
+            <textarea rows="4" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed">Logistika Trans d.o.o. is a premier European transport and freight forwarding enterprise with over 20 years of hands-on industry expertise. We operate a modern fleet of 25+ EURO-6 standard mega tautliners, refrigerated trailers, and specialized lowloaders. Specializing in high-frequency automotive part deliveries, temperature-controlled goods, and heavy industrial cargo across Central and Western Europe.</textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Current Active Markets & Regular Lanes (Trenutno prisotni na trgih / linijah)</label>
+            <textarea rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed">Regular daily departures across Slovenia, Austria, Germany (Bavaria, Baden-Württemberg, NRW), Northern Italy, Croatia, and Serbia. Dedicated express spot lanes available on demand.</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: COMPLIANCE & DOCUMENT UPLOADS (Licenca & Insurance) -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="shield-alert" class="w-5 h-5 text-enterprise-600"></i>
+            <span>Trust, Compliance & Insurance Certificates</span>
+          </h2>
+          <span class="text-xs font-semibold bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-md border border-emerald-200">Verified Partner Badge</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <!-- License Upload -->
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <i data-lucide="file-badge" class="w-5 h-5 text-enterprise-600"></i>
+                <span class="text-sm font-bold text-slate-900">Transport License (EU Licenca)</span>
+              </div>
+              <span class="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Uploaded</span>
+            </div>
+            <p class="text-xs text-slate-500">Official license for international road transport operations.</p>
+            <div class="flex items-center justify-between pt-2">
+              <span class="text-xs font-mono text-slate-600">EU_License_2026_Signed.pdf</span>
+              <button type="button" class="text-xs font-semibold text-enterprise-600 hover:underline">Replace File</button>
+            </div>
+          </div>
+
+          <!-- Insurance Upload -->
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <i data-lucide="shield-check" class="w-5 h-5 text-enterprise-600"></i>
+                <span class="text-sm font-bold text-slate-900">CMR Insurance Policy (Zavarovalna polica)</span>
+              </div>
+              <span class="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Verified (€600k coverage)</span>
+            </div>
+            <p class="text-xs text-slate-500">Carrier liability insurance policy covering cargo damage and theft.</p>
+            <div class="flex items-center justify-between pt-2">
+              <span class="text-xs font-mono text-slate-600">CMR_Insurance_Policy_2026.pdf</span>
+              <button type="button" class="text-xs font-semibold text-enterprise-600 hover:underline">Replace File</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: TEAM HQ & DISPATCHERS DIRECTORY (Upoštevana omejitev do 100 uporabnikov) -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-2">
+          <div>
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="users" class="w-5 h-5 text-enterprise-600"></i>
+              <span>Team HQ & Dispatcher Directory (Staff Management)</span>
+            </h2>
+            <p class="text-xs text-slate-500">Organization members and individual contact details (Up to 100 seats)</p>
+          </div>
+          <span class="text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1 rounded-lg">4 of 100 Seats Active</span>
+        </div>
+
+        <!-- Dispatcher Cards List -->
+        <div class="space-y-4">
+          
+          <!-- Member 1: Admin -->
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-full bg-enterprise-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                DL
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-sm text-slate-900">Dejan Luzar</span>
+                  <span class="text-[10px] font-bold bg-purple-100 text-enterprise-700 px-2 py-0.5 rounded-full">Primary Admin</span>
+                </div>
+                <div class="text-xs text-slate-500 mt-0.5">CEO & Senior Freight Forwarder</div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-slate-600 w-full md:w-auto">
+              <div>
+                <span class="text-[10px] text-slate-400 block">Direct Mobile:</span>
+                <span class="font-semibold">+386 41 123 456</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 block">Email:</span>
+                <span class="font-semibold">dejan@logistika-trans.si</span>
+              </div>
+              <div class="col-span-2 sm:col-span-1">
+                <span class="text-[10px] text-slate-400 block">Office Phone / Ext:</span>
+                <span class="font-semibold">+386 7 300 4011</span>
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-2 w-full md:w-auto justify-end">
+              <button type="button" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 rounded-lg text-xs font-semibold transition">Edit</button>
+            </div>
+          </div>
+
+          <!-- Member 2: Dispatcher -->
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                MK
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-sm text-slate-900">Marko Kranjc</span>
+                  <span class="text-[10px] font-bold bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Dispatcher</span>
+                </div>
+                <div class="text-xs text-slate-500 mt-0.5">EU Road Fleet Coordinator</div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs text-slate-600 w-full md:w-auto">
+              <div>
+                <span class="text-[10px] text-slate-400 block">Direct Mobile:</span>
+                <span class="font-semibold">+386 40 987 654</span>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-400 block">Email:</span>
+                <span class="font-semibold">marko@logistika-trans.si</span>
+              </div>
+              <div class="col-span-2 sm:col-span-1">
+                <span class="text-[10px] text-slate-400 block">Office Phone / Ext:</span>
+                <span class="font-semibold">+386 7 300 4015</span>
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-2 w-full md:w-auto justify-end">
+              <button type="button" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 rounded-lg text-xs font-semibold transition">Edit</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Add New Contact Button -->
+        <div class="pt-2">
+          <button type="button" class="px-4 py-2.5 bg-enterprise-50 hover:bg-enterprise-100 text-enterprise-700 text-xs font-bold rounded-xl border border-enterprise-200 transition flex items-center gap-2 shadow-sm">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>+ Add New Team Member / Dispatcher</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- FORM ACTIONS -->
+      <div class="flex items-center justify-end pt-4 gap-3">
+        <button type="button" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
+          Cancel
+        </button>
+        <button type="submit" class="px-8 py-3 bg-enterprise-600 hover:bg-enterprise-700 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center gap-2">
+          <i data-lucide="save" class="w-4 h-4"></i>
+          <span>Save Enterprise Profile Changes</span>
+        </button>
+      </div>
+
+    </form>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 mt-auto py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <div>
+        © 2026 CargoNet Enterprise & PayFreight Escrow Protocol. All rights reserved.
+      </div>
+      <div class="flex items-center space-x-6">
+        <a href="index.html" class="hover:text-slate-800 transition">Live Board</a>
+        <a href="company_profile.html" class="hover:text-slate-800 transition">Company HQ</a>
+        <a href="#" class="hover:text-slate-800 transition">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lucide Icons Initialization -->
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
