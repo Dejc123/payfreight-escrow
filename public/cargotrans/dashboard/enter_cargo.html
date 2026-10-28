@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CargoNet Enterprise | Post Freight Offer</title>
+  <title>CargoNet Enterprise | Global Multimodal Freight Exchange</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -42,7 +43,7 @@
           </div>
           <span class="bg-slate-800 text-slate-300 text-xs px-2.5 py-1 rounded-full border border-slate-700 flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            Enterprise EU
+            Global Multimodal SaaS
           </span>
         </div>
 
@@ -53,11 +54,11 @@
           <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800">Transport Orders (e-CMR)</a>
           <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-purple-300 hover:text-white hover:bg-purple-900/40 flex items-center gap-1.5 border border-purple-500/30 rounded-md">
             <i data-lucide="shield-check" class="w-4 h-4 text-purple-400"></i>
-            <span>PayFreight Escrow</span>
+            <span>PayFreight Protocol</span>
           </a>
         </nav>
 
-        <!-- Right Side: User Profile -->
+        <!-- Right Side: Profile -->
         <div class="flex items-center space-x-4">
           <div class="flex items-center space-x-3 pl-2 border-l border-slate-800">
             <div class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
@@ -77,11 +78,11 @@
     <div class="flex items-center justify-between bg-white px-6 py-4 rounded-xl border border-slate-200 shadow-sm">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-          <i data-lucide="package-plus" class="w-5 h-5"></i>
+          <i data-lucide="globe-2" class="w-5 h-5"></i>
         </div>
         <div>
-          <h1 class="text-xl font-bold text-slate-900">Post Cargo Offer</h1>
-          <p class="text-xs text-slate-500">Publish a new freight load for verified European carriers</p>
+          <h1 class="text-xl font-bold text-slate-900">Post Global Cargo Offer</h1>
+          <p class="text-xs text-slate-500">Multimodal freight posting for Road, Ocean Container, and Air Freight corridors</p>
         </div>
       </div>
       <span class="text-xs text-slate-400 font-medium">User: dispo2</span>
@@ -90,60 +91,111 @@
     <!-- MAIN FORM CARD -->
     <form class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
       
-      <!-- ROUTE SECTION (From -> To) -->
+      <!-- STEP 1: MULTIMODAL TRANSPORT MODE SELECTOR -->
+      <div class="space-y-3 pb-6 border-b border-slate-100">
+        <label class="block text-xs font-bold text-slate-900 uppercase tracking-wider">Select Transport Mode *</label>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          
+          <button type="button" id="btnModeRoad" onclick="setTransportMode('road')" class="flex items-center space-x-3 p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50/60 text-blue-900 transition font-semibold text-sm">
+            <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center">
+              <i data-lucide="truck" class="w-4 h-4"></i>
+            </div>
+            <span>Road Freight</span>
+          </button>
+
+          <button type="button" id="btnModeOcean" onclick="setTransportMode('ocean')" class="flex items-center space-x-3 p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700 transition font-semibold text-sm">
+            <div class="w-8 h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center">
+              <i data-lucide="ship" class="w-4 h-4"></i>
+            </div>
+            <span>Ocean Container</span>
+          </button>
+
+          <button type="button" id="btnModeAir" onclick="setTransportMode('air')" class="flex items-center space-x-3 p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700 transition font-semibold text-sm">
+            <div class="w-8 h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center">
+              <i data-lucide="plane" class="w-4 h-4"></i>
+            </div>
+            <span>Air Cargo</span>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- ROUTE SECTION (Continent & Country Cascading) -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-slate-100">
         
-        <!-- Loading (From) -->
+        <!-- Loading (Origin) -->
         <div class="space-y-4">
           <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
             <i data-lucide="map-pin" class="w-4 h-4 text-blue-600"></i>
-            <span>Loading Details (From) *</span>
+            <span id="originHeaderLabel">Loading Origin (From) *</span>
           </h3>
+          
+          <!-- Continent Selector -->
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Country *</label>
-            <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
-              <option>Select country...</option>
-              <option selected>Slovenia (SI)</option>
-              <option>Germany (DE)</option>
-              <option>Italy (IT)</option>
-              <option>Austria (AT)</option>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Origin Continent / Region *</label>
+            <select id="originContinent" onchange="updateCountryDropdown('origin')" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+              <option value="EU" selected>Europe</option>
+              <option value="NA">North America (USA & Canada)</option>
+              <option value="AS">Asia & China Trade Hubs</option>
+              <option value="SA">South America</option>
+              <option value="ME">Middle East & Africa</option>
             </select>
           </div>
+
+          <!-- Country / Region Dynamic Dropdown -->
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Country / State / Port Hub *</label>
+            <select id="originCountry" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+              <!-- Dynamically populated via JS -->
+            </select>
+          </div>
+
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1">City</label>
+              <label class="block text-xs font-medium text-slate-600 mb-1">City / Terminal</label>
               <input type="text" value="Novo Mesto" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
             </div>
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1">Post code</label>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Zip / IATA / Port Code</label>
               <input type="text" value="8000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
             </div>
           </div>
         </div>
 
-        <!-- Unloading (To) -->
+        <!-- Unloading (Destination) -->
         <div class="space-y-4">
           <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
             <i data-lucide="navigation" class="w-4 h-4 text-emerald-600"></i>
-            <span>Unloading Details (To) *</span>
+            <span id="destHeaderLabel">Unloading Destination (To) *</span>
           </h3>
+          
+          <!-- Continent Selector -->
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Country *</label>
-            <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
-              <option>Select country...</option>
-              <option>Slovenia (SI)</option>
-              <option selected>Germany (DE)</option>
-              <option>Italy (IT)</option>
-              <option>Austria (AT)</option>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Destination Continent / Region *</label>
+            <select id="destContinent" onchange="updateCountryDropdown('dest')" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+              <option value="EU" selected>Europe</option>
+              <option value="NA">North America (USA & Canada)</option>
+              <option value="AS">Asia & China Trade Hubs</option>
+              <option value="SA">South America</option>
+              <option value="ME">Middle East & Africa</option>
             </select>
           </div>
+
+          <!-- Country / Region Dynamic Dropdown -->
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Country / State / Port Hub *</label>
+            <select id="destCountry" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+              <!-- Dynamically populated via JS -->
+            </select>
+          </div>
+
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1">City</label>
+              <label class="block text-xs font-medium text-slate-600 mb-1">City / Terminal</label>
               <input type="text" value="München" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
             </div>
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1">Post code</label>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Zip / IATA / Port Code</label>
               <input type="text" value="80331" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
             </div>
           </div>
@@ -151,77 +203,120 @@
 
       </div>
 
-      <!-- DATE & COUNTS -->
+      <!-- DATES & PRICE -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-6 border-b border-slate-100">
         <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Number of collections *</label>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Number of Collections *</label>
           <input type="number" value="1" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
         </div>
         <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Number of drops *</label>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Number of Drops *</label>
           <input type="number" value="1" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
         </div>
         <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Loading Date (DD.MM.YYYY)</label>
-          <div class="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
-            <input type="text" value="28.10.2026" class="bg-transparent focus:outline-none w-full">
-            <i data-lucide="calendar" class="w-4 h-4 text-slate-400"></i>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Freight Rate (€ / USD) *</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-sm">€</span>
+            <input type="number" placeholder="e.g. 1850" class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-semibold text-slate-900">
           </div>
         </div>
       </div>
 
-      <!-- VEHICLE & CARGO SPECS (WITH DYNAMIC CAR TRANSPORTER / LOAD FACTOR) -->
+      <!-- DYNAMIC VEHICLE / CONTAINER / AIR SPECS -->
       <div class="space-y-4 pb-6 border-b border-slate-100">
-        <h3 class="text-sm font-bold text-slate-900">Vehicle Type & Cargo Specifications</h3>
+        <h3 class="text-sm font-bold text-slate-900" id="specsHeader">Vehicle & Cargo Specifications</h3>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Vehicle Body Setup *</label>
-            <select id="vehicleTypeSelect" onchange="toggleCarTransporter()" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
-              <option value="tarpaulin">Tarpaulin / Tautliner</option>
-              <option value="reefer">Reefer (Refrigerated)</option>
-              <option value="car-transporter">Car Transporter (Avtotransporter)</option>
-              <option value="van">Van (up to 3.5t)</option>
-            </select>
+        <!-- ROAD SPECIFIC SETUP -->
+        <div id="roadSection" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Vehicle Setup Type *</label>
+              <select id="vehicleTypeSelect" onchange="toggleCarTransporter()" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+                <option value="tarpaulin">Tarpaulin / Tautliner</option>
+                <option value="reefer">Reefer (Refrigerated)</option>
+                <option value="car-transporter">Car Transporter (Avtotransporter)</option>
+                <option value="van">Van (up to 3.5t)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Loading Date (DD.MM.YYYY)</label>
+              <div class="flex items-center bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+                <input type="text" value="28.10.2026" class="bg-transparent focus:outline-none w-full">
+                <i data-lucide="calendar" class="w-4 h-4 text-slate-400"></i>
+              </div>
+            </div>
           </div>
 
-          <!-- Price (Cena prevoza) -->
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Transport Price (€) *</label>
-            <div class="relative">
-              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-sm">€</span>
-              <input type="number" placeholder="e.g. 1250" class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-semibold text-slate-900">
+          <!-- Standard Specs -->
+          <div id="standardSpecs" class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Weight (t)</label>
+              <input type="text" value="24" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Length (m)</label>
+              <input type="text" value="13.6" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Internal Height (m)</label>
+              <input type="text" placeholder="e.g. 2.7" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+          </div>
+
+          <!-- Car Transporter Mode (Load Factor: 9) -->
+          <div id="carTransporterSpecs" class="hidden p-4 bg-purple-50 border border-purple-200 rounded-xl space-y-3">
+            <div class="flex items-center gap-2 text-purple-900 font-semibold text-xs">
+              <i data-lucide="truck" class="w-4 h-4 text-purple-600"></i>
+              <span>Car Transporter Mode Active</span>
+            </div>
+            <div class="max-w-xs">
+              <label class="block text-xs font-medium text-purple-900 mb-1">Load Factor (Default vehicle slots count)</label>
+              <input type="number" id="loadFactorInput" value="9" class="w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-sm font-bold text-purple-900 focus:outline-none focus:border-purple-600">
+            </div>
+            <p class="text-[11px] text-purple-700">Weight and trailer length are substituted by the vehicle slot Load Factor for car haulers.</p>
+          </div>
+        </div>
+
+        <!-- OCEAN SPECIFIC SETUP (Hidden by default) -->
+        <div id="oceanSection" class="hidden space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Container Equipment Type</label>
+              <select class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+                <option>20' Standard Dry Van (20ft)</option>
+                <option selected>40' High Cube (40HC)</option>
+                <option>40' Standard Dry Van (40ft)</option>
+                <option>Reefer Container (40RF)</option>
+                <option>LCL (Less than Container Load)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Port of Loading (POL)</label>
+              <input type="text" placeholder="e.g. Shanghai / Koper" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Port of Discharge (POD)</label>
+              <input type="text" placeholder="e.g. Rotterdam / Hamburg" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
             </div>
           </div>
         </div>
 
-        <!-- Standard Weight & Length (Shown by default) -->
-        <div id="standardSpecs" class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Weight (t)</label>
-            <input type="text" value="24" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+        <!-- AIR SPECIFIC SETUP (Hidden by default) -->
+        <div id="airSection" class="hidden space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Gross Weight (kg)</label>
+              <input type="number" placeholder="e.g. 1450" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Volume (CBM)</label>
+              <input type="text" placeholder="e.g. 4.8" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Airport Departure (IATA)</label>
+              <input type="text" placeholder="e.g. FRA, JFK, LJU" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
           </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Length (m)</label>
-            <input type="text" value="13.6" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Internal Height (m)</label>
-            <input type="text" placeholder="e.g. 2.7" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
-          </div>
-        </div>
-
-        <!-- Car Transporter Special Field (Hidden by default, shows Load Factor: 9) -->
-        <div id="carTransporterSpecs" class="hidden p-4 bg-purple-50 border border-purple-200 rounded-xl space-y-3">
-          <div class="flex items-center gap-2 text-purple-900 font-semibold text-xs">
-            <i data-lucide="truck" class="w-4 h-4 text-purple-600"></i>
-            <span>Car Transporter Mode Active</span>
-          </div>
-          <div class="max-w-xs">
-            <label class="block text-xs font-medium text-purple-900 mb-1">Load Factor (Default vehicles slot count)</label>
-            <input type="number" id="loadFactorInput" value="9" class="w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-sm font-bold text-purple-900 focus:outline-none focus:border-purple-600">
-          </div>
-          <p class="text-[11px] text-purple-700">For car haulers, weight and trailer length are substituted by the vehicle slot Load Factor.</p>
         </div>
 
       </div>
@@ -235,7 +330,7 @@
             </div>
             <div>
               <h4 class="text-sm font-bold text-slate-900">PayFreight Escrow & Settlement Option</h4>
-              <p class="text-xs text-slate-500">Choose between instant cryptographic escrow or standard billing terms</p>
+              <p class="text-xs text-slate-500">Instant payout upon e-CMR / Bill of Lading verification vs standard credit terms</p>
             </div>
           </div>
           <span class="text-xs font-semibold px-2.5 py-1 bg-purple-100 text-purple-800 rounded-full">Optional</span>
@@ -269,12 +364,12 @@
       <!-- REMARKS & ADR -->
       <div class="space-y-4">
         <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Remarks / Additional Info</label>
-          <textarea rows="3" placeholder="Enter special loading instructions, references..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"></textarea>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Remarks / Special Instructions</label>
+          <textarea rows="3" placeholder="Enter custom references, port loading info, customs details..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"></textarea>
         </div>
         <div class="flex items-center space-x-2">
           <input type="checkbox" id="adrCheck" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
-          <label for="adrCheck" class="text-xs font-medium text-slate-700">ADR Hazardous Cargo transport required</label>
+          <label for="adrCheck" class="text-xs font-medium text-slate-700">ADR Hazardous / Special Handling required</label>
         </div>
       </div>
 
@@ -283,7 +378,7 @@
         <div class="flex items-center space-x-2 w-full sm:w-auto">
           <button type="button" class="w-full sm:w-auto px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-lg border border-rose-200 transition flex items-center justify-center gap-1.5">
             <i data-lucide="trash-2" class="w-4 h-4"></i>
-            <span>Removal / Delete Offer</span>
+            <span>Removal / Delete Listing</span>
           </button>
         </div>
 
@@ -293,7 +388,7 @@
           </button>
           <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center gap-1.5">
             <i data-lucide="send" class="w-4 h-4"></i>
-            <span>Publish Cargo Offer</span>
+            <span>Publish Multimodal Cargo</span>
           </button>
         </div>
       </div>
@@ -301,8 +396,45 @@
     </form>
   </main>
 
-  <!-- SCRIPT FOR DYNAMIC CAR TRANSPORTER / LOAD FACTOR -->
+  <!-- JAVASCRIPT LOGIC FOR MULTIMODAL & DYNAMIC GEO SELECTORS -->
   <script>
+    const countryData = {
+      EU: ["Slovenia (SI)", "Germany (DE)", "Italy (IT)", "Austria (AT)", "Croatia (HR)", "France (FR)", "Spain (ES)", "Netherlands (NL)", "Poland (PL)", "United Kingdom (UK)"],
+      NA: ["USA - California (CA)", "USA - Texas (TX)", "USA - Illinois (IL)", "USA - New York (NY)", "USA - Florida (FL)", "Canada - Ontario", "Canada - Quebec", "Mexico"],
+      AS: ["China - Shanghai", "China - Ningbo", "China - Shenzhen", "Kazakhstan", "India", "Vietnam", "United Arab Emirates"],
+      SA: ["Brazil", "Argentina", "Chile", "Colombia"],
+      ME: ["Egypt", "Morocco", "Saudi Arabia", "South Africa"]
+    };
+
+    function updateCountryDropdown(type) {
+      const continent = document.getElementById(type + 'Continent').value;
+      const select = document.getElementById(type + 'Country');
+      select.innerHTML = '';
+
+      countryData[continent].forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        select.appendChild(opt);
+      });
+    }
+
+    function setTransportMode(mode) {
+      // Buttons styling
+      const modes = ['road', 'ocean', 'air'];
+      modes.forEach(m => {
+        const btn = document.getElementById('btnMode' + m.charAt(0).toUpperCase() + m.slice(1));
+        const sec = document.getElementById(m + 'Section');
+        if (m === mode) {
+          btn.className = "flex items-center space-x-3 p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50/60 text-blue-900 transition font-semibold text-sm";
+          sec.classList.remove('hidden');
+        } else {
+          btn.className = "flex items-center space-x-3 p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700 transition font-semibold text-sm";
+          sec.classList.add('hidden');
+        }
+      });
+    }
+
     function toggleCarTransporter() {
       const select = document.getElementById('vehicleTypeSelect');
       const standardSpecs = document.getElementById('standardSpecs');
@@ -316,6 +448,12 @@
         carTransporterSpecs.classList.add('hidden');
       }
     }
+
+    // Initialize country dropdowns on load
+    document.addEventListener("DOMContentLoaded", function() {
+      updateCountryDropdown('origin');
+      updateCountryDropdown('dest');
+    });
   </script>
 
   <!-- Lucide Icons Initialization -->
