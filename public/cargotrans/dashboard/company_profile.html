@@ -366,10 +366,10 @@
 
   <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
   <script>
-    // Supabase Initialization
+    // Supabase Initialization (varno preimenovano, da ni konflikta)
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     // State management for team members
     let teamMembers = [];
@@ -412,7 +412,7 @@
       }
     }
 
-    // Helper: Upload a single file to Supabase Storage 'COMPANY-FILES-files'
+    // Helper: Upload a single file to Supabase Storage 'COMPANY-FILES'
     async function uploadToStorage(fileInputId, folderName) {
       const fileInput = document.getElementById(fileInputId);
       if (!fileInput || !fileInput.files[0]) return null;
@@ -421,7 +421,7 @@
       const fileExt = file.name.split('.').pop();
       const fileName = `${folderName}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
       
-      const { data, error } = await supabase.storage
+      const { data, error } = await sb.storage
         .from('COMPANY-FILES')
         .upload(fileName, file);
         
@@ -430,7 +430,7 @@
         return null;
       }
       
-      const { data: publicUrlData } = supabase.storage
+      const { data: publicUrlData } = sb.storage
         .from('COMPANY-FILES')
         .getPublicUrl(fileName);
         
@@ -607,7 +607,7 @@
         };
 
         // 3. Insert record into 'companies' table
-        const { data, error } = await supabase
+        const { data, error } = await sb
           .from('companies')
           .insert([companyData]);
 
