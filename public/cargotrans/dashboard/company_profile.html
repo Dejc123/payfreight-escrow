@@ -400,8 +400,11 @@
         const reader = new FileReader();
         reader.onload = function(e) {
           previewBox.style.backgroundImage = `url('${e.target.result}')`;
+          previewBox.style.backgroundSize = 'cover';
+          previewBox.style.backgroundPosition = 'center';
+          
           statusText.textContent = "Banner Attached: " + file.name;
-          statusText.classList.add('bg-slate-900/80', 'text-white', 'px-3', 'py-1', 'rounded-lg', 'shadow-sm');
+          statusText.classList.add('bg-slate-900/70', 'text-white', 'px-3', 'py-1', 'rounded-lg');
           previewBox.classList.remove('border-dashed', 'border-slate-300');
           previewBox.classList.add('border-solid', 'border-enterprise-600');
         };
