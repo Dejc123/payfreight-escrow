@@ -82,3 +82,6 @@ pub async fn handle_linkedin_auth(
 
     Ok(HttpResponse::Ok().json(response))
 }
+
+    Ok(HttpResponse::Ok().json(response))
+}
