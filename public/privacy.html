@@ -7,23 +7,28 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-[#0b0f19] text-slate-300 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-[#070a12] text-slate-300 font-sans antialiased min-h-screen flex flex-col border-t-2 border-cyan-500/80">
 
   <!-- HEADER -->
-  <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-md sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+  <header class="border-b border-slate-800/80 bg-[#0b0f19]/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
       <a href="index.html" class="flex items-center space-x-3">
-        <span class="text-xl font-black text-white">PayFreight<span class="text-cyan-400">.io</span></span>
+        <img src="https://raw.githubusercontent.com/Dejc123/payfreight-escrow/main/public/images/payfreight.logo4.png" alt="PayFreight Logo" class="h-9 w-auto object-contain">
       </a>
-      <a href="index.html" class="text-xs font-semibold text-slate-400 hover:text-white transition">← Back to Main Site</a>
+      <a href="index.html" class="text-xs font-semibold text-slate-300 hover:text-white bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 px-3.5 py-1.5 rounded-lg transition duration-200">
+        ← Back to Main Site
+      </a>
     </div>
   </header>
 
-  <!-- MAIN CONTENT -->
-  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-12 space-y-8">
+  <!-- MAIN CONTENT CONTAINER -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-10 space-y-8">
     
-    <div>
-      <div class="inline-flex items-center gap-2 bg-blue-950/80 border border-blue-500/30 px-3 py-1 rounded-full text-xs text-blue-300 font-medium mb-3">
+    <!-- PAGE TITLE HERO CARD -->
+    <div class="bg-gradient-to-b from-[#111726] to-[#0d121f] border border-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+      <div class="absolute -top-10 -right-10 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      
+      <div class="inline-flex items-center gap-2 bg-cyan-950/60 border border-cyan-500/30 px-3.5 py-1 rounded-full text-xs text-cyan-300 font-medium mb-3">
         <i data-lucide="shield-check" class="w-4 h-4 text-cyan-400"></i>
         <span>GDPR & Protocol Data Protection Compliant</span>
       </div>
@@ -31,25 +36,26 @@
       <p class="text-xs text-slate-400 mt-1">Effective Date: October 2026 | Version 2.5</p>
     </div>
 
-    <div class="space-y-8 text-sm text-slate-300 leading-relaxed border-t border-slate-800 pt-6">
+    <!-- DOCUMENT CONTENT CARD -->
+    <div class="bg-[#0b0f19] border border-slate-800/90 rounded-2xl p-6 sm:p-8 shadow-xl space-y-8 text-sm text-slate-300 leading-relaxed">
       
       <!-- 1. DATA CONTROLLER -->
-      <section class="space-y-2">
-        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+      <section class="space-y-3">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
           <i data-lucide="building" class="w-5 h-5 text-cyan-400"></i>
           1. Data Controller & Contact Information
         </h2>
         <p>The entity responsible for processing your personal data under EU General Data Protection Regulation (GDPR) and international data privacy laws is:</p>
-        <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl text-xs space-y-1 font-mono text-slate-300">
-          <p class="font-bold text-white">PayFreight Protocol</p>
+        <div class="bg-[#111726] border border-slate-800/80 p-4 rounded-xl text-xs space-y-1 font-mono text-slate-300 shadow-inner">
+          <p class="font-bold text-white text-sm">PayFreight Protocol</p>
           <p>Location: Slovenia, European Union</p>
-          <p>Primary Privacy Contact: <a href="mailto:escrow@payfreight.io" class="text-cyan-400 underline">escrow@payfreight.io</a></p>
+          <p>Primary Privacy Contact: <a href="mailto:escrow@payfreight.io" class="text-cyan-400 hover:text-cyan-300 underline font-semibold transition">escrow@payfreight.io</a></p>
         </div>
       </section>
 
       <!-- 2. INFORMATION COLLECTION -->
       <section class="space-y-3">
-        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
           <i data-lucide="database" class="w-5 h-5 text-cyan-400"></i>
           2. Information We Collect
         </h2>
@@ -63,7 +69,7 @@
 
       <!-- 3. HOW WE USE DATA -->
       <section class="space-y-3">
-        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
           <i data-lucide="cpu" class="w-5 h-5 text-cyan-400"></i>
           3. How We Use Your Information
         </h2>
@@ -77,17 +83,17 @@
 
       <!-- 4. COOKIE POLICY -->
       <section class="space-y-3">
-        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
           <i data-lucide="cookie" class="w-5 h-5 text-cyan-400"></i>
           4. Cookie Management Policy
         </h2>
         <p>We use session and essential cookies to optimize user experience, maintain active secure sessions, and save user preferences.</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
-          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-xs">
+          <div class="bg-[#111726] border border-slate-800/80 p-3.5 rounded-xl text-xs">
             <span class="font-bold text-white block mb-1">Essential Cookies</span>
             Required for active session authentication and escrow security.
           </div>
-          <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl text-xs">
+          <div class="bg-[#111726] border border-slate-800/80 p-3.5 rounded-xl text-xs">
             <span class="font-bold text-white block mb-1">Cookie Control</span>
             Manage or clear cookies via your browser settings at any time.
           </div>
@@ -96,7 +102,7 @@
 
       <!-- 5. SECURITY & DATA RIGHTS -->
       <section class="space-y-3">
-        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+        <h2 class="text-lg font-bold text-white flex items-center gap-2.5">
           <i data-lucide="lock" class="w-5 h-5 text-cyan-400"></i>
           5. Security & Your GDPR Rights
         </h2>
@@ -104,7 +110,7 @@
           All collected data is stored in encrypted, password-protected server directories with access restricted strictly to authorized platform personnel.
         </p>
         <p class="text-slate-400">
-          Under GDPR, you have the right to request access to, rectification of, or complete erasure ("Right to be Forgotten") of your personal data. To request profile deletion or data exports, send a request to <a href="mailto:escrow@payfreight.io" class="text-cyan-400 underline">escrow@payfreight.io</a>.
+          Under GDPR, you have the right to request access to, rectification of, or complete erasure ("Right to be Forgotten") of your personal data. To request profile deletion or data exports, send a request to <a href="mailto:escrow@payfreight.io" class="text-cyan-400 hover:text-cyan-300 underline transition">escrow@payfreight.io</a>.
         </p>
       </section>
 
@@ -112,7 +118,7 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+  <footer class="border-t border-slate-800/80 bg-[#0b0f19] py-6 text-center text-xs text-slate-500 mt-12">
     © 2026 PayFreight Protocol. All rights reserved.
   </footer>
 
