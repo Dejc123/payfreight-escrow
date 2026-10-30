@@ -553,17 +553,25 @@
       window.location.href = linkedinUrl;
     }
 
-    // Preverjanje vračila iz LinkedIna (Redirect)
+   // Preverjanje vračila iz LinkedIna (Redirect)
     window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
       
       if (code) {
-        console.log('LinkedIn Authorization Code:', code);
-        alert('LinkedIn avtentikacija uspesna! Koda je pripravljena za preverjanje na strezniku.');
+        // 1. Pred-izpolnimo osnovna polja za demonstracijo/test
+        document.getElementById('Email').value = 'richard.linkedin@cargonet.co.uk';
+        document.getElementById('KontaktnaOseba').value = 'Richard LinkedIn Member';
+        document.getElementById('UporabniskoIme').value = 'RICHARD_LINKEDIN';
+
+        // 2. Očistimo 'code' iz URL naslova za lep in čisto vidno domeno
+        window.history.replaceState({}, document.title, window.location.pathname);
+
+        // Optional: Če želiš uporabnika takoj po prijavi preusmeriti v dashboard:
+        // window.location.href = 'dashboard.html';
       }
     });
-
+    
     // Splosna funkcija za ostale ponudnike
     function handleSocialRegister(provider) {
       alert(`Povezovanje z ${provider}... Nastavitve so v obdelavi.`);
