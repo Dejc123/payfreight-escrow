@@ -22,6 +22,9 @@
 //!    the platform fee, and returns the locked $PAYFREIGHT tokens to the shipper.
 //! =============================================================================
 
+Rust
+pub mod auth;
+
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 
