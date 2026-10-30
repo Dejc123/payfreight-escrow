@@ -1,10 +1,11 @@
-use serde::{Deserialize, Serialize};
+use actix_web::{web, Error, HttpResponse};
 use reqwest::Client;
-use actix_web::{web, HttpResponse, Error};
+use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 pub struct LinkedInAuthRequest {
     pub code: String,
+    pub redirect_uri: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -31,15 +32,25 @@ pub async fn handle_linkedin_auth(
 ) -> Result<HttpResponse, Error> {
     let client = Client::new();
 
-    // 1. Izmenjava 'code' za 'access_token' pri LinkedInu
+    // 1. Resolve redirect URI (fallback to default if not provided by frontend)
+    let redirect_uri = payload
+        .redirect_uri
+        .clone()
+        .unwrap_or_else(|| "https://www.payfreight.io/cargotrans/register_cargonet.html".to_string());
+
+    // 2. Retrieve client secret from environment variable or fallback
+    let client_secret = std::env::var("LINKEDIN_CLIENT_SECRET")
+        .unwrap_or_else(|_| "WPL_AP1.KBbEsl8dFglyJaJC.okOUOA==".to_string());
+
+    // 3. Exchange 'code' for 'access_token' with LinkedIn OAuth server
     let token_res = client
         .post("https://www.linkedin.com/oauth/v2/accessToken")
         .form(&[
             ("grant_type", "authorization_code"),
             ("code", &payload.code),
             ("client_id", "770xgs9ozmyrwn"),
-            ("client_secret", "WPL_AP1.KBbEsl8dFglyJaJC.okOUOA=="), // Vstavi svoj skriti Client Secret!
-            ("redirect_uri", "https://www.payfreight.io/cargotrans/register_cargonet.html"),
+            ("client_secret", &client_secret),
+            ("redirect_uri", &redirect_uri),
         ])
         .send()
         .await
@@ -50,7 +61,7 @@ pub async fn handle_linkedin_auth(
         .await
         .map_err(|_| actix_web::error::ErrorInternalServerError("Failed to parse token"))?;
 
-    // 2. Pridobivanje resničnega profila prek OpenID userinfo endpointa
+    // 4. Fetch real user profile data via OpenID userinfo endpoint
     let user_info_res = client
         .get("https://api.linkedin.com/v2/userinfo")
         .bearer_auth(token_data.access_token)
