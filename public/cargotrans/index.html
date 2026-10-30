@@ -35,7 +35,7 @@
       <div class="flex items-center justify-between h-20 py-3">
         
         <!-- Logo -->
-        <a href="index_Front.html" class="flex items-center space-x-3 group">
+        <a href="index.html" class="flex items-center space-x-3 group">
           <div class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-700/80 flex items-center justify-center p-2 shadow-md">
             <svg viewBox="0 0 100 100" class="w-full h-full text-cyan-400 fill-current">
               <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="8" opacity="0.2"/>
@@ -68,13 +68,14 @@
             <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
           </div>
 
-          <button onclick="openAuthModal('login')" class="text-xs font-semibold px-4 py-2 rounded-lg text-slate-200 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 transition">
+          <button onclick="openAuthModal()" class="text-xs font-semibold px-4 py-2 rounded-lg text-slate-200 bg-slate-800/80 hover:bg-slate-700 border border-slate-700 transition">
             Sign In
           </button>
           
-          <button onclick="openAuthModal('register')" class="text-xs font-bold px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-900/30 transition">
+          <!-- Direct link to standalone registration page -->
+          <a href="register_cargonet.html" class="text-xs font-bold px-4 py-2 rounded-lg text-white bg-blue-600 hover:bg-blue-500 shadow-md shadow-blue-900/30 transition">
             Join Network
-          </button>
+          </a>
         </div>
 
       </div>
@@ -106,10 +107,11 @@
           </p>
 
           <div class="flex flex-col sm:flex-row gap-3 pt-2">
-            <button onclick="openAuthModal('register')" class="px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-sm text-white shadow-lg shadow-blue-600/20 transition flex items-center justify-center gap-2">
+            <!-- Direct link to standalone registration page -->
+            <a href="register_cargonet.html" class="px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-sm text-white shadow-lg shadow-blue-600/20 transition flex items-center justify-center gap-2">
               <span>Start Free Trial</span>
               <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </button>
+            </a>
             <a href="#ecosystem" class="px-6 py-3.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700 font-semibold text-sm text-slate-200 transition flex items-center justify-center gap-2">
               <span>Explore Platforms</span>
               <i data-lucide="layers" class="w-4 h-4 text-slate-400"></i>
@@ -133,7 +135,7 @@
           </div>
         </div>
 
-        <!-- Right Hero Preview Card (Mirroring Dashboard Action Box) -->
+        <!-- Right Hero Preview Card -->
         <div class="lg:col-span-5">
           <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-2xl relative backdrop-blur-md">
             <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
@@ -175,7 +177,7 @@
                 <span class="px-2.5 py-1 bg-purple-600 text-white font-bold text-[10px] rounded-lg shadow">ACTIVE</span>
               </div>
 
-              <button onclick="openAuthModal('login')" class="w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
+              <button onclick="openAuthModal()" class="w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
                 <span>Access Dashboard Live Board</span>
                 <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
               </button>
@@ -187,7 +189,7 @@
     </div>
   </section>
 
-  <!-- METRICS BAR (8500+ members, 7000+ cargo subscribers, since 2001) -->
+  <!-- METRICS BAR -->
   <section id="metrics" class="bg-slate-900 border-b border-slate-800 py-10 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -220,7 +222,7 @@
     </div>
   </section>
 
-  <!-- PLATFORM ECOSYSTEM SECTION (CargoNet, TransNet, Carloads) -->
+  <!-- PLATFORM ECOSYSTEM SECTION -->
   <section id="ecosystem" class="py-16 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
       
@@ -261,7 +263,7 @@
               </li>
             </ul>
           </div>
-          <button onclick="openAuthModal('login')" class="mt-6 w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition text-center">
+          <button onclick="openAuthModal()" class="mt-6 w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl transition text-center">
             Open CargoNet Exchange
           </button>
         </div>
@@ -401,7 +403,7 @@
     </div>
   </section>
 
-  <!-- AUTHENTICATION MODAL (LOGIN & REGISTER - RUST BACKEND READY) -->
+  <!-- AUTHENTICATION MODAL (LOGIN ONLY) -->
   <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-slate-200 relative">
       
@@ -412,8 +414,8 @@
 
       <!-- Modal Header -->
       <div class="mb-6">
-        <h3 id="modalTitle" class="text-2xl font-bold text-slate-900">Welcome Back</h3>
-        <p id="modalSubtitle" class="text-xs text-slate-500 mt-1">Access CargoNet Freight Exchange & PayFreight Escrow</p>
+        <h3 class="text-2xl font-bold text-slate-900">Welcome Back</h3>
+        <p class="text-xs text-slate-500 mt-1">Access CargoNet Freight Exchange & PayFreight Escrow</p>
       </div>
 
       <!-- Social Logins -->
@@ -447,7 +449,7 @@
         <div class="flex-grow border-t border-slate-200"></div>
       </div>
 
-      <!-- Rust API Form (Login & Registration) -->
+      <!-- Login Form -->
       <form id="authForm" onsubmit="submitAuthForm(event)" class="space-y-4">
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1">Username or Email</label>
@@ -459,24 +461,17 @@
           <input type="password" id="authPassword" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 transition">
         </div>
 
-        <div id="registerFields" class="hidden space-y-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Company Name & Tax ID</label>
-            <input type="text" id="authCompany" placeholder="Global Logistics Ltd." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 transition">
-          </div>
-        </div>
-
         <button type="submit" id="authSubmitBtn" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition">
           Sign In to Dashboard
         </button>
       </form>
 
-      <!-- Toggle Mode -->
+      <!-- Registration Page Redirect Link -->
       <div class="mt-4 text-center text-xs text-slate-500">
-        <span id="toggleText">Don't have an account?</span>
-        <button onclick="toggleAuthMode()" id="toggleBtn" class="text-blue-600 font-bold ml-1 hover:underline">
+        <span>Don't have an account?</span>
+        <a href="register_cargonet.html" class="text-blue-600 font-bold ml-1 hover:underline">
           Register now
-        </button>
+        </a>
       </div>
 
     </div>
@@ -497,74 +492,39 @@
     </div>
   </footer>
 
-  <!-- Lucide Icons Initialization & Auth Logic -->
+  <!-- Lucide Icons Initialization & Logic -->
   <script>
     lucide.createIcons();
 
-    let currentAuthMode = 'login'; // 'login' or 'register'
-
-    function openAuthModal(mode = 'login') {
-      currentAuthMode = mode;
-      const modal = document.getElementById('authModal');
-      const registerFields = document.getElementById('registerFields');
-      const modalTitle = document.getElementById('modalTitle');
-      const modalSubtitle = document.getElementById('modalSubtitle');
-      const submitBtn = document.getElementById('authSubmitBtn');
-      const toggleText = document.getElementById('toggleText');
-      const toggleBtn = document.getElementById('toggleBtn');
-
-      if (mode === 'register') {
-        modalTitle.innerText = 'Create Member Account';
-        modalSubtitle.innerText = 'Join 8,500+ verified logistics members';
-        submitBtn.innerText = 'Register & Join Network';
-        registerFields.classList.remove('hidden');
-        toggleText.innerText = 'Already have an account?';
-        toggleBtn.innerText = 'Sign In';
-      } else {
-        modalTitle.innerText = 'Welcome Back';
-        modalSubtitle.innerText = 'Access CargoNet Freight Exchange & PayFreight Escrow';
-        submitBtn.innerText = 'Sign In to Dashboard';
-        registerFields.classList.add('hidden');
-        toggleText.innerText = "Don't have an account?";
-        toggleBtn.innerText = 'Register now';
-      }
-
-      modal.classList.remove('hidden');
+    function openAuthModal() {
+      document.getElementById('authModal').classList.remove('hidden');
     }
 
     function closeAuthModal() {
       document.getElementById('authModal').classList.add('hidden');
     }
 
-    function toggleAuthMode() {
-      openAuthModal(currentAuthMode === 'login' ? 'register' : 'login');
-    }
-
-    // Social Auth Handler (Connects to Rust backend auth endpoints)
+    // Social Auth Handler
     function handleSocialAuth(provider) {
       console.log(`Initiating ${provider} OAuth redirect for Rust backend...`);
-      // Redirect URL for Rust Backend:
-      // window.location.href = `/api/v1/auth/social/${provider}`;
       alert(`Redirecting to ${provider} authentication...`);
     }
 
-    // Rust Form Submit Handler
+    // Login Form Submit Handler
     function submitAuthForm(event) {
       event.preventDefault();
       const username = document.getElementById('authUsername').value;
       const password = document.getElementById('authPassword').value;
-      const company = document.getElementById('authCompany').value;
 
       const payload = {
         username,
-        password,
-        company: currentAuthMode === 'register' ? company : undefined
+        password
       };
 
-      console.log(`Submitting ${currentAuthMode} payload to Rust API:`, payload);
+      console.log('Submitting login payload to Rust API:', payload);
 
-      // Demo redirect to dashboard index.html
-      window.location.href = 'index.html';
+      // Redirect to dashboard application
+      window.location.href = 'dashboard/index.html';
     }
   </script>
 </body>
