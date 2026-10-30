@@ -464,9 +464,7 @@
         <!-- GOOGLE RECAPTCHA WIDGET & SUBMIT ACTIONS -->
         <div class="pt-4 flex flex-col items-center space-y-4">
           
-          <!-- reCAPTCHA widget -->
-          <div class="g-recaptcha" data-sitekey="6LcqcBAsAAAAAFbHEVJw-Tn2vk-gH_pHJZshbx7O"></div>
-
+          
           <div class="flex items-center justify-center space-x-4 w-full pt-2">
             <input type="reset" value="Reset Form" id="button2" name="button2" class="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs rounded-xl cursor-pointer transition">
             <input type="submit" value="Complete Registration" id="submit1" name="submit1" class="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md cursor-pointer transition">
@@ -504,26 +502,6 @@
       document.getElementById('UporabniskoIme').value = 'RICHARD';
     }
 
-    // Client-side Validation (Replicating Legacy Validator JS + reCAPTCHA check)
-    function handleValidator(form) {
-      // Check Passwords Match
-      if (form.Geslo.value !== form.PonoviGeslo.value) {
-        alert("Passwords do not match!");
-        form.PonoviGeslo.focus();
-        return false;
-      }
-
-      // Check reCAPTCHA verification
-      var recaptchaResponse = grecaptcha.getResponse();
-      if (recaptchaResponse.length === 0) {
-        alert("Please confirm that you are not a robot (Google reCAPTCHA).");
-        return false;
-      }
-
-      // Validations pass
-      console.log("Registration form validated successfully. Submitting to backend...");
-      return true;
-    }
-  </script>
+   
 </body>
 </html>
