@@ -484,24 +484,95 @@
       <div>© 2001 - 2026 CargoNet Enterprise & PayFreight Escrow Protocol. All rights reserved.</div>
       <div class="flex space-x-4">
         <a href="index.html" class="hover:text-slate-800">Home</a>
-        <a href="#" class="hover:text-slate-800">Privacy Policy</a>
-        <a href="#" class="hover:text-slate-800">Terms of Service</a>
+        <a href="privacy.html" class="hover:text-slate-800 font-semibold">Privacy Policy</a>
       </div>
     </div>
   </footer>
 
+  <!-- INTEGRIRANI SCRIPT Z API-JI ZA GOOGLE IN LINKEDIN -->
   <script>
     lucide.createIcons();
 
-    // Social Pre-fill Handler
-    function handleSocialRegister(provider) {
-      console.log(`Initiating ${provider} register pre-fill...`);
-      alert(`Connecting to your ${provider} account... Known profile fields will be pre-filled.`);
-      document.getElementById('Email').value = 'richard@gmail.com';
-      document.getElementById('KontaktnaOseba').value = 'Richard';
-      document.getElementById('UporabniskoIme').value = 'RICHARD';
+    // 1. GOOGLE OAUTH CONFIGURATION
+    const GOOGLE_CLIENT_ID = '499288876518-rbhels3cha36udopos2fbdpnffq1qips.apps.googleusercontent.com';
+
+    window.onload = function() {
+      if (typeof google !== 'undefined') {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleResponse
+        });
+      }
+    };
+
+    function triggerGoogleAuth() {
+      if (typeof google !== 'undefined') {
+        google.accounts.id.prompt();
+      } else {
+        alert('Google SDK se še nalaga, prosim poskusi znova čez trenutek.');
+      }
     }
 
-   
+    function handleGoogleResponse(response) {
+      try {
+        const base64Url = response.credential.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        const userData = JSON.parse(jsonPayload);
+        
+        // Samodejno izpolnjevanje polj iz Google računa
+        if (userData.email) document.getElementById('Email').value = userData.email;
+        if (userData.name) document.getElementById('KontaktnaOseba').value = userData.name;
+        if (userData.given_name) {
+          document.getElementById('UporabniskoIme').value = userData.given_name.toUpperCase() + Math.floor(100 + Math.random() * 900);
+        }
+
+        alert('Uspesno! Podatki iz Google racuna (' + userData.email + ') so bili preneseni v obrazec.');
+      } catch (err) {
+        console.error('Napaka pri obdelavi Google podatkov:', err);
+      }
+    }
+
+    // 2. LINKEDIN OAUTH CONFIGURATION
+    const LINKEDIN_CLIENT_ID = '770xgs9ozmyrwn';
+    const REDIRECT_URI = 'https://www.payfreight.io/cargotrans/register_cargonet.html';
+
+    function triggerLinkedInAuth() {
+      const scope = 'openid profile email';
+      const state = 'PAYFREIGHT_STATE_' + Math.random().toString(36).substring(7);
+      
+      const linkedinUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${LINKEDIN_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${encodeURIComponent(scope)}&state=${state}`;
+      
+      window.location.href = linkedinUrl;
+    }
+
+    // Preverjanje vračila iz LinkedIna (Redirect)
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      
+      if (code) {
+        console.log('LinkedIn Authorization Code:', code);
+        alert('LinkedIn avtentikacija uspesna! Koda je pripravljena za preverjanje na strezniku.');
+      }
+    });
+
+    // Splosna funkcija za ostale ponudnike
+    function handleSocialRegister(provider) {
+      alert(`Povezovanje z ${provider}... Nastavitve so v obdelavi.`);
+    }
+
+    // Validacija gesel ob oddaji obrazca
+    function handleValidator(form) {
+      if (form.Geslo.value !== form.PonoviGeslo.value) {
+        alert('Gesli se ne ujemata!');
+        return false;
+      }
+      return true;
+    }
+  </script>
 </body>
 </html>
