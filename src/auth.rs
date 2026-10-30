@@ -38,7 +38,7 @@ pub async fn handle_linkedin_auth(
             ("grant_type", "authorization_code"),
             ("code", &payload.code),
             ("client_id", "770xgs9ozmyrwn"),
-            ("client_secret", "TUKAJ_VNESI_SVOJ_CLIENT_SECRET"), // Vstavi svoj skriti Client Secret!
+            ("client_secret", "WPL_AP1.KBbEsl8dFglyJaJC.okOUOA=="), // Vstavi svoj skriti Client Secret!
             ("redirect_uri", "https://www.payfreight.io/cargotrans/register_cargonet.html"),
         ])
         .send()
