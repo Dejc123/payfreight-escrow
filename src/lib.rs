@@ -42,6 +42,8 @@ pub mod payfreight_escrow_eur {
         escrow.shipper = ctx.accounts.shipper.key();
         escrow.carrier = ctx.accounts.carrier.key();
         escrow.admin = ctx.accounts.admin.key();
+        escrow.eurc_vault = ctx.accounts.eurc_vault.key();
+        escrow.payfreight_vault = ctx.accounts.payfreight_vault.key();
         escrow.eurc_amount = eurc_amount;
         escrow.payfreight_token_amount = payfreight_token_amount;
         escrow.order_id = order_id;
@@ -185,7 +187,7 @@ pub struct InitializeEscrowEur<'info> {
     #[account(
         init,
         payer = shipper,
-        space = 8 + 32 + 32 + 32 + 8 + 8 + 64 + 128 + 1 + 1 + 1,
+        space = 8 + 32 + 32 + 32 + 32 + 32 + 8 + 8 + 64 + 128 + 1 + 1 + 1,
         seeds = [b"escrow_eur", order_id.as_bytes()],
         bump
     )]
@@ -239,6 +241,7 @@ pub struct ApproveAndReleaseEur<'info> {
 
     #[account(
         mut,
+        has_one = admin,
         has_one = eurc_vault,
         has_one = payfreight_vault,
     )]
@@ -249,11 +252,22 @@ pub struct ApproveAndReleaseEur<'info> {
     #[account(mut)]
     pub payfreight_vault: Account<'info, TokenAccount>,
 
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = carrier_eurc_account.owner == escrow_account.carrier @ EscrowError::UnauthorizedCarrier
+    )]
     pub carrier_eurc_account: Account<'info, TokenAccount>,
-    #[account(mut)]
+
+    #[account(
+        mut,
+        constraint = admin_fee_eurc_account.owner == escrow_account.admin @ EscrowError::UnauthorizedAdmin
+    )]
     pub admin_fee_eurc_account: Account<'info, TokenAccount>,
-    #[account(mut)]
+
+    #[account(
+        mut,
+        constraint = shipper_payfreight_account.owner == escrow_account.shipper @ EscrowError::UnauthorizedShipper
+    )]
     pub shipper_payfreight_account: Account<'info, TokenAccount>,
 
     pub token_program: Program<'info, Token>,
@@ -268,6 +282,8 @@ pub struct EscrowAccountEur {
     pub shipper: Pubkey,                 // Shipper / Client
     pub carrier: Pubkey,                 // Carrier / Transporter
     pub admin: Pubkey,                   // Administrator
+    pub eurc_vault: Pubkey,              // EURC Vault Account Public Key
+    pub payfreight_vault: Pubkey,         // PAYFREIGHT Vault Account Public Key
     pub eurc_amount: u64,                // Freight amount in EURC
     pub payfreight_token_amount: u64,    // Locked $PAYFREIGHT token amount
     pub order_id: String,                // Order ID or Invoice Number
@@ -285,10 +301,12 @@ pub struct EscrowAccountEur {
 pub enum EscrowError {
     #[msg("The order has already been completed.")]
     AlreadyCompleted,
-    #[msg("Only the designated carrier can upload the CMR.")]
+    #[msg("Only the designated carrier can perform this action.")]
     UnauthorizedCarrier,
     #[msg("Only the authorized administrator can approve the payout.")]
     UnauthorizedAdmin,
+    #[msg("Account does not match designated shipper.")]
+    UnauthorizedShipper,
     #[msg("The CMR document has not been uploaded yet.")]
     CMRNotUploaded,
 }
