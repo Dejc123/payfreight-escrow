@@ -553,15 +553,15 @@
       window.location.href = linkedinUrl;
     }
 
-   // Preverjanje vračila iz LinkedIna (Redirect) - Produkcija
+// Preverjanje vračila iz LinkedIna (Redirect) - Produkcija
 window.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
   
   if (code) {
     try {
-      // 1. Pošljemo kodo na naš Rust backend endpoint
-      const response = await fetch('/api/auth/linkedin', {
+      // 1. Pošljemo kodo na naš Rust backend endpoint z ustreznim URL-jem
+      const response = await fetch('/cargotrans/api/auth/linkedin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code: code })
