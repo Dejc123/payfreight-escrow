@@ -360,7 +360,7 @@
           </div>
         </div>
 
-        <!-- SECTION 2: CONTACT & COMMUNICATIONS -->
+ <!-- SECTION 2: CONTACT & COMMUNICATIONS -->
         <div>
           <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100 flex items-center gap-2">
             <i data-lucide="user" class="w-4 h-4 text-blue-600"></i>
@@ -440,7 +440,6 @@
         <!-- GOOGLE RECAPTCHA WIDGET & SUBMIT ACTIONS -->
         <div class="pt-4 flex flex-col items-center space-y-4">
           
-          
           <div class="flex items-center justify-center space-x-4 w-full pt-2">
             <input type="reset" value="Reset Form" id="button2" name="button2" class="px-6 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs rounded-xl cursor-pointer transition">
             <input type="submit" value="Complete Registration" id="submit1" name="submit1" class="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md cursor-pointer transition">
@@ -465,7 +464,7 @@
     </div>
   </footer>
 
-<!-- INTEGRIRANI SCRIPT Z VALIDACIJO IN MODALNIM OKNOM -->
+  <!-- INTEGRIRANI SCRIPT Z VALIDACIJO, MODALNIM OKNOM IN API POVEZAVO -->
   <script>
     lucide.createIcons();
 
@@ -481,56 +480,102 @@
 
     function submitAuthForm(event) {
       event.preventDefault();
-      window.location.href = 'dashboard/index.html';
+      const usernameInput = document.getElementById('authUsername');
+      const username = usernameInput ? usernameInput.value : '';
+      window.location.href = `dashboard/index.html?UporabniskoIme=${encodeURIComponent(username)}`;
     }
 
     // Validacija gesel ob oddaji obrazca
     function handleValidator(form) {
-      if (form.Geslo.value !== form.PonoviGeslo.value) {
+      if (form.Geslo && form.PonoviGeslo && form.Geslo.value !== form.PonoviGeslo.value) {
         alert('Gesli se ne ujemata!');
         return false;
       }
       return true;
     }
+
+    // Poslušalec za registracijski obrazec
+    document.addEventListener('DOMContentLoaded', () => {
+      const registerForm = document.querySelector('form:not(#authForm)');
+      
+      if (registerForm) {
+        registerForm.addEventListener('submit', async (event) => {
+          event.preventDefault();
+
+          if (!handleValidator(registerForm)) {
+            return;
+          }
+
+          const podjetjeElem = document.getElementById('NazivPodjetja') || document.getElementById('Podjetje');
+          const emailElem = document.getElementById('Email');
+          const usernameElem = document.getElementById('UporabniskoIme');
+          const gesloElem = document.getElementById('Geslo');
+          const kontaktElem = document.getElementById('KontaktnaOseba');
+          const telefonElem = document.getElementById('Telefon');
+          const mobitelElem = document.getElementById('Mobitel');
+
+          const formData = {
+            Podjetje: podjetjeElem ? podjetjeElem.value : '',
+            Email: emailElem ? emailElem.value : '',
+            UporabniskoIme: usernameElem ? usernameElem.value : '',
+            Geslo: gesloElem ? gesloElem.value : '',
+            KontaktnaOseba: kontaktElem ? kontaktElem.value : '',
+            Telefon: telefonElem ? telefonElem.value : '',
+            Mobitel: mobitelElem ? mobitelElem.value : ''
+          };
+
+          try {
+            await fetch('/api/register_cargonet', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(formData)
+            });
+          } catch (err) {
+            console.error('Napaka pri povezavi z API-jem:', err);
+          }
+
+          window.location.href = `welcome.html?UporabniskoIme=${encodeURIComponent(formData.UporabniskoIme)}&Podjetje=${encodeURIComponent(formData.Podjetje)}`;
+        });
+      }
+    });
   </script>
 
-  
-<!-- LOGIN MODAL -->
-<div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-slate-200 relative">
-    
-    <!-- Close Button -->
-    <button type="button" onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-      </svg>
-    </button>
-
-    <!-- Modal Header -->
-    <div class="mb-6 text-center">
-      <h3 class="text-2xl font-bold text-slate-900">Welcome Back</h3>
-      <p class="text-xs text-slate-500 mt-1">Access CargoNet Freight Exchange & PayFreight Escrow</p>
-    </div>
-
-    <!-- Login Form -->
-    <form id="authForm" onsubmit="submitAuthForm(event)" class="space-y-4">
-      <div>
-        <label class="block text-xs font-semibold text-slate-700 mb-1">Username or Email</label>
-        <input type="text" id="authUsername" required placeholder="user@company.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 transition">
-      </div>
-
-      <div>
-        <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
-        <input type="password" id="authPassword" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 transition">
-      </div>
-
-      <button type="submit" id="authSubmitBtn" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition">
-        Sign In to Dashboard
+  <!-- LOGIN MODAL -->
+  <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-slate-200 relative">
+      
+      <!-- Close Button -->
+      <button type="button" onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
       </button>
-    </form>
 
+      <!-- Modal Header -->
+      <div class="mb-6 text-center">
+        <h3 class="text-2xl font-bold text-slate-900">Welcome Back</h3>
+        <p class="text-xs text-slate-500 mt-1">Access CargoNet Freight Exchange & PayFreight Escrow</p>
+      </div>
+
+      <!-- Login Form -->
+      <form id="authForm" onsubmit="submitAuthForm(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Username or Email</label>
+          <input type="text" id="authUsername" required placeholder="user@company.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 transition">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+          <input type="password" id="authPassword" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 transition">
+        </div>
+
+        <button type="submit" id="authSubmitBtn" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition">
+          Sign In to Dashboard
+        </button>
+      </form>
+
+    </div>
   </div>
-</div>
   
 </body>
 </html>
