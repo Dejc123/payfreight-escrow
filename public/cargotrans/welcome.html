@@ -226,7 +226,7 @@
     </div>
   </footer>
 
-  <!-- SCRIPTS -->
+<!-- SCRIPTS -->
   <script>
     lucide.createIcons();
 
@@ -249,6 +249,14 @@
       const secs = String(totalSeconds % 60).padStart(2, '0');
       countdownElement.textContent = `${hrs}:${mins}:${secs}`;
     }, 1000);
+
+    // Parse URL parameters passed from register_cargonet.html
+    const urlParams = new URLSearchParams(window.location.search);
+    const usernameParam = urlParams.get('UporabniskoIme');
+
+    if (usernameParam) {
+      document.getElementById('displayUsername').textContent = usernameParam;
+    }
   </script>
 
 </body>
