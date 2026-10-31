@@ -73,7 +73,7 @@
           </a>
           <a href="#" class="px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">Transport Orders (e-CMR)</a>
           
-          <!-- PayFreight Protocol (Redirects to payfreight.io) -->
+          <!-- PayFreight Protocol -->
           <a href="https://www.payfreight.io" target="_blank" class="px-3 py-2 rounded-lg text-xs font-bold text-purple-300 hover:text-white bg-purple-900/30 hover:bg-purple-900/60 flex items-center gap-1.5 border border-purple-500/30 transition shadow-sm ml-2">
             <i data-lucide="shield-check" class="w-4 h-4 text-purple-400"></i>
             <span>PayFreight Protocol</span>
@@ -81,13 +81,33 @@
           </a>
         </nav>
 
-     <!-- DEMO USER Status Badge -->
-<div class="flex items-center space-x-3 pl-2 border-l border-slate-800">
-  <a href="company_profile.html" class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg hover:bg-emerald-500/20 transition" title="Manage Company Profile & Team HQ">
-    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-    <span id="userBadgeDisplay" class="text-xs font-bold text-emerald-400 tracking-wide font-mono">DEMO USER</span>
-  </a>
-</div>
+        <!-- Right Side: Subscription Status Badge & Logout Button -->
+        <div class="flex items-center space-x-3 pl-2 border-l border-slate-800">
+          
+          <!-- Status veljavnosti računa (začeto na 0 dni / neaktivno) -->
+          <div id="subscriptionBadge" class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-lg">
+            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+            <span id="daysRemainingDisplay" class="text-xs font-bold text-amber-400 font-mono uppercase tracking-wide">
+              0 DAYS (INACTIVE)
+            </span>
+          </div>
+
+          <!-- User Badge / Profil link -->
+          <a href="company_profile.html" class="flex items-center gap-2 bg-slate-800 border border-slate-700 px-3 py-1.5 rounded-lg hover:bg-slate-700 transition" title="Manage Company Profile & Team HQ">
+            <span id="userBadgeDisplay" class="text-xs font-bold text-sky-400 tracking-wide font-mono uppercase">VERIFIED ADMIN</span>
+          </a>
+
+          <!-- Logout Gumb -->
+          <button type="button" onclick="handleLogout()" class="flex items-center gap-1.5 px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-lg text-xs font-bold transition">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span>Logout</span>
+          </button>
+
+        </div>
+
+      </div>
+    </div>
+  </header>
 
 
 
@@ -506,22 +526,21 @@
       </div>
     </div>
   </footer>
-<!-- Lucide Icons Initialization & Dynamic User Badge -->
+<!-- JavaScript Logika za Dashboard (Icons, User Badge & Logout) -->
 <script>
   document.addEventListener("DOMContentLoaded", () => {
-    // 1. Inicializacija ikon
+    // 1. Inicializacija Lucide ikon
     if (typeof lucide !== 'undefined') {
       lucide.createIcons();
     }
 
-    // 2. Prebiranje URL parametrov
+    // 2. Prebiranje URL parametrov za dinamični prikaz uporabnika/podjetja
     const urlParams = new URLSearchParams(window.location.search);
     const companyParam = urlParams.get('Podjetje');
     const usernameParam = urlParams.get('UporabniskoIme');
 
-    // 3. Posodobitev vseh značk z id userBadgeDisplay
+    // 3. Posodobitev značk uporabnika
     const badgeDisplays = document.querySelectorAll('#userBadgeDisplay');
-    
     badgeDisplays.forEach(badge => {
       if (companyParam) {
         badge.textContent = companyParam.toUpperCase() + ' (VERIFIED)';
@@ -532,7 +551,15 @@
       }
     });
   });
+
+  // Funkcija za varno odjavo
+  function handleLogout() {
+    if (confirm("Are you sure you want to log out of CargoNet?")) {
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.href = "../index.html";
+    }
+  }
 </script>
-  
 </body>
 </html>
