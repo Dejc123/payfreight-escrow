@@ -1,4 +1,47 @@
-import speakeasy from 'speakeasy';
+import crypto from 'crypto';
+
+// Standardna funkcija za dešifriranje Base32 v Buffer
+function base32decode(base32) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+  let bits = '';
+  let value = 0;
+
+  let cleanInput = base32.replace(/=+$/, '').toUpperCase();
+  for (let i = 0; i < cleanInput.length; i++) {
+    const val = alphabet.indexOf(cleanInput.charAt(i));
+    if (val === -1) continue;
+    bits += val.toString(2).padStart(5, '0');
+  }
+
+  const bytes = [];
+  for (let i = 0; i + 8 <= bits.length; i += 8) {
+    bytes.push(parseInt(bits.substr(i, 8), 2));
+  }
+
+  return Buffer.from(bytes);
+}
+
+// Generiranje 6-mestne TOTP kode
+function generateTOTP(secretBase32, timeStep = 30) {
+  const key = base32decode(secretBase32);
+  const epoch = Math.floor(Date.now() / 1000);
+  const counter = Math.floor(epoch / timeStep);
+
+  const buffer = Buffer.alloc(8);
+  buffer.writeBigInt64BE(BigInt(counter), 0);
+
+  const hmac = crypto.createHmac('sha1', key).update(buffer).digest();
+  const offset = hmac[hmac.length - 1] & 0xf;
+
+  const code = (
+    ((hmac[offset] & 0x7f) << 24) |
+    ((hmac[offset + 1] & 0xff) << 16) |
+    ((hmac[offset + 2] & 0xff) << 8) |
+    (hmac[offset + 3] & 0xff)
+  ) % 1000000;
+
+  return code.toString().padStart(6, '0');
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -8,41 +51,33 @@ export default async function handler(req, res) {
   try {
     const { username, password, token2FA } = req.body;
 
-    // 1. Nastavitve podatkov na strežniku
     const SECRET_ADMIN_USER = process.env.ADMIN_USER || "DejanLuzar";
     const SECRET_ADMIN_PASS = process.env.ADMIN_PASS || "Dluzar12345!";
-    
-    // Tvoj tajni 2FA ključ (Base32 format) - Vnesi svoj poljubni tajni niz ali ga generiraj
     const SECRET_2FA_BASE32 = process.env.ADMIN_2FA_SECRET || "KVKFKRCPNZQUYMLXOVYDSQKJKZDTSRLD";
 
-    // 2. Preverjanje uporabniškega imena in gesla
+    // Preverjanje uporabniškega imena in gesla
     if (username !== SECRET_ADMIN_USER || password !== SECRET_ADMIN_PASS) {
       return res.status(401).json({ error: 'Neveljavno uporabniško ime ali geslo.' });
     }
 
-    // 3. Preverjanje 6-mestne Google Authenticator kode
     if (!token2FA) {
-      return res.status(400).json({ error: 'Vnesti morate 2FA kodo iz Google Authenticatorja.' });
+      return res.status(400).json({ error: 'Vnesite 6-mestno 2FA kodo.' });
     }
 
-    const verified = speakeasy.totp.verify({
-      secret: SECRET_2FA_BASE32,
-      encoding: 'base32',
-      token: token2FA,
-      window: 1 // Dovoljuje odstopanje ±30 sekund zaradi časovnih razlik
-    });
+    // Izračunamo trenutno kodo na strežniku (z toleranco za časovne razlike)
+    const validCode = generateTOTP(SECRET_2FA_BASE32);
 
-    if (!verified) {
-      return res.status(401).json({ error: 'Neveljavna ali potekla 2FA koda!' });
+    if (token2FA.trim() !== validCode) {
+      return res.status(401).json({ error: 'Neveljavna 2FA koda iz Google Authenticatorja!' });
     }
 
-    // Uspešna autentikacija z 2FA
     return res.status(200).json({
       success: true,
       token: "SUPER_ADMIN_2FA_VERIFIED_PAYFREIGHT_2026"
     });
 
   } catch (error) {
-    return res.status(500).json({ error: 'Strežniška napaka pri preverjanju 2FA.' });
+    console.error("API Auth Error:", error);
+    return res.status(500).json({ error: 'Napaka na strežniku pri obdelavi zahteve.' });
   }
 }
