@@ -256,6 +256,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       const urlParams = new URLSearchParams(window.location.search);
       const usernameParam = urlParams.get('UporabniskoIme');
+      const cargoTransId = urlParams.get('CargoTransID');
       const token = urlParams.get("token");
 
       if (usernameParam) {
@@ -263,7 +264,13 @@
         if (userEl) userEl.textContent = usernameParam;
       }
 
-if (token) {
+      // Prikaz samodejno generirane CargoTrans ID številke (če element obstaja na strani)
+      if (cargoTransId) {
+        const idEl = document.getElementById('displayCargoTransID');
+        if (idEl) idEl.textContent = cargoTransId;
+      }
+
+      if (token) {
         // 1. Posodobitev značke zgoraj desno
         const statusBadges = document.querySelectorAll('div');
         statusBadges.forEach(el => {
@@ -300,11 +307,11 @@ if (token) {
           }
         });
 
-        // 4. Klic na backend za potrditev v bazi
+        // 4. Klic na backend za potrditev v bazi (s priloženim CargoTransID)
         fetch("/api/verify_email_cargonet", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ token: token })
+          body: JSON.stringify({ token: token, cargoTransId: cargoTransId })
         }).catch(err => console.error("Verification error:", err));
       }
     });
