@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to CargoNet - Confirm Your Account</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #0b0f19; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #f8fafc;">
+  
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #0b0f19; padding: 40px 10px;">
+    <tr>
+      <td align="center">
+        
+        <!-- Main Card Container -->
+        <table role="presentation" width="100%" max-width="600" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);">
+          
+          <!-- Header Bar with Logo -->
+          <tr>
+            <td style="background-color: #0b0f19; padding: 25px 30px; text-align: center; border-bottom: 1px solid #1e293b;">
+              <div style="font-size: 24px; font-weight: 900; letter-spacing: -0.5px; color: #ffffff;">
+                Cargo<span style="color: #22d3ee;">Net</span>
+              </div>
+              <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; color: #94a3b8; margin-top: 4px;">
+                Global Logistics Network
+              </div>
+            </td>
+          </tr>
+
+          <!-- Main Body Content -->
+          <tr>
+            <td style="padding: 35px 30px;">
+              <h1 style="margin: 0 0 12px 0; font-size: 22px; font-weight: 800; color: #ffffff; text-align: center;">
+                Welcome aboard, {{company_name}}!
+              </h1>
+              <p style="margin: 0 0 24px 0; font-size: 14px; line-height: 1.6; color: #94a3b8; text-align: center;">
+                Your registration on the CargoNet Freight Exchange has been successfully initialized. To activate your account and gain access to the live board, please verify your email address below.
+              </p>
+
+              <!-- Account Details Box -->
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #020617; border: 1px solid #1e293b; border-radius: 12px; margin-bottom: 25px; padding: 20px;">
+                <tr>
+                  <td>
+                    <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #22d3ee; margin-bottom: 12px;">
+                      Your Platform Access Credentials
+                    </div>
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="font-size: 13px; font-family: monospace;">
+                      <tr>
+                        <td style="color: #64748b; padding: 4px 0;">Username:</td>
+                        <td style="color: #f8fafc; font-weight: 700; padding: 4px 0; text-align: right;">{{username}}</td>
+                      </tr>
+                      <tr>
+                        <td style="color: #64748b; padding: 4px 0;">Password:</td>
+                        <td style="color: #f8fafc; font-weight: 700; padding: 4px 0; text-align: right;">{{password}}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Action Button / Confirm Link -->
+              <div style="text-align: center; margin-bottom: 30px;">
+                <a href="{{verification_link}}" target="_blank" style="display: inline-block; background-color: #2563eb; color: #ffffff; font-size: 14px; font-weight: 700; text-decoration: none; padding: 14px 32px; border-radius: 10px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+                  Confirm Account & Activate Access
+                </a>
+              </div>
+
+              <!-- Backup URL Link -->
+              <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #64748b; text-align: center;">
+                Or copy and paste this verification URL into your web browser:<br>
+                <a href="{{verification_link}}" style="color: #38bdf8; word-break: break-all;">{{verification_link}}</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #0b0f19; padding: 20px 30px; text-align: center; border-top: 1px solid #1e293b; font-size: 11px; color: #64748b; line-height: 1.5;">
+              <strong>CargoNet Enterprise & PayFreight Escrow Protocol</strong><br>
+              Need help? Contact support at <a href="mailto:info@cargotrans.net" style="color: #38bdf8; text-decoration: none;">info@cargotrans.net</a><br>
+              © 2001 - 2026 CargoNet. All rights reserved.
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
