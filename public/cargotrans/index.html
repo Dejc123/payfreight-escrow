@@ -8,6 +8,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -376,7 +378,7 @@
 
         <div class="bg-slate-900/90 border border-purple-500/30 rounded-2xl p-6 shadow-2xl space-y-5 relative overflow-hidden">
           
-          <!-- BRAND LOGO DISPLAY (CLEAN CSS BRANDING) -->
+          <!-- BRAND LOGO DISPLAY -->
           <div class="flex items-center justify-between border-b border-purple-900/40 pb-4">
             <div class="flex items-center gap-2.5">
               <div class="w-8 h-8 rounded-xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.2)]">
@@ -417,7 +419,7 @@
     </div>
   </section>
 
- <!-- AUTHENTICATION MODAL (LOGIN ONLY) -->
+  <!-- AUTHENTICATION MODAL (LOGIN) -->
   <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-slate-200 relative">
       
@@ -435,20 +437,22 @@
       <!-- Login Form -->
       <form id="authForm" onsubmit="submitAuthForm(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Username or Email</label>
-          <input type="text" id="authUsername" required placeholder="user@company.com" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 transition">
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Username, Email or CT ID</label>
+          <input type="text" id="authUsername" required placeholder="DejanLuzar or CT-1001" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 transition">
         </div>
 
         <div>
           <div class="flex items-center justify-between mb-1">
             <label class="block text-xs font-semibold text-slate-700">Password</label>
-            <!-- TUKAJ JE DODANA POVEZAVA ZA POZABLJENO GESLO -->
             <button type="button" onclick="openForgotPasswordModal()" class="text-[11px] text-blue-600 hover:text-blue-500 font-semibold underline transition">
               Forgot Password or Username?
             </button>
           </div>
           <input type="password" id="authPassword" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 transition">
         </div>
+
+        <!-- Napaka pri prijavi -->
+        <div id="loginErrorMessage" class="text-xs hidden p-2.5 rounded-lg bg-red-500/20 text-red-600 border border-red-500/30"></div>
 
         <button type="submit" id="authSubmitBtn" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition">
           Sign In to Dashboard
@@ -480,9 +484,16 @@
     </div>
   </footer>
 
-  <!-- Lucide Icons Initialization & Logic -->
+  <!-- SUPABASE INITIALIZATION & APP LOGIC -->
   <script>
     lucide.createIcons();
+
+    // Supabase Credentials (povezava na tvojo bazo)
+    const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZWYiOiJ3cWpxamZ4eXVjdWZ1eWlveHBobSIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzM5MTcwODU5LCJleHAiOjIwNTQ3NDY4NTl9...'; // Vstavi svoj ključ, če ni že nastavljen v configu
+    
+    // Inicijalizacija Supabase odjemalca
+    const sb = window.supabase.createClient(SUPABASE_URL, 'TUKAJ_VSTAVI_ANON_KEY'); // Uporabi svoj dejanski ključ, če ga že imaš v projektu
 
     function openAuthModal() {
       document.getElementById('authModal').classList.remove('hidden');
@@ -492,99 +503,127 @@
       document.getElementById('authModal').classList.add('hidden');
     }
 
-    // Login Form Submit Handler
-    function submitAuthForm(event) {
+    // Prava prijava direktno preko Supabase baze
+    async function submitAuthForm(event) {
       event.preventDefault();
-      const username = document.getElementById('authUsername').value;
-      const password = document.getElementById('authPassword').value;
+      
+      const userInput = document.getElementById('authUsername').value.trim();
+      const passwordInput = document.getElementById('authPassword').value.trim();
+      const errorBox = document.getElementById('loginErrorMessage');
+      const submitBtn = document.getElementById('authSubmitBtn');
 
-      const payload = {
-        username,
-        password
-      };
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Authenticating...";
+      errorBox.classList.add('hidden');
 
-      console.log('Submitting login payload to Rust API:', payload);
+      try {
+        // Preverjanje v tabeli 'companies' po uporabniškem imenu, e-pošti ali CT ID-ju
+        const { data: user, error } = await sb
+          .from('companies')
+          .select('*')
+          .or(`username.eq.${userInput},contact_email.eq.${userInput},cargo_trans_id.eq.${userInput}`)
+          .eq('password', passwordInput)
+          .single();
 
-      // Redirect to dashboard application
-      window.location.href = 'dashboard/index.html';
+        if (error || !user) {
+          errorBox.textContent = "Neveljavno uporabniško ime, e-pošta ali geslo!";
+          errorBox.classList.remove('hidden');
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Sign In to Dashboard";
+          return;
+        }
+
+        // Shranjevanje seje v lokalno shrambo brskalnika
+        localStorage.setItem('cargotrans_user', JSON.stringify(user));
+
+        // Preusmeritev na nadzorno ploščo
+        window.location.href = 'dashboard/index.html';
+
+      } catch (err) {
+        console.error('Login error:', err);
+        errorBox.textContent = "Prišlo je do sistemske napake pri povezavi z bazo.";
+        errorBox.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Sign In to Dashboard";
+      }
     }
   </script>
-<!-- MODAL: FORGOT PASSWORD -->
-<div id="forgotPasswordModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
-    <div class="flex items-center justify-between border-b border-slate-700 pb-3">
-      <h3 class="text-base font-bold text-white flex items-center gap-2">
-        <i data-lucide="key-round" class="w-5 h-5 text-sky-400"></i> Account Password Recovery
-      </h3>
-      <button type="button" onclick="closeForgotPasswordModal()" class="text-slate-400 hover:text-white">✕</button>
-    </div>
-    
-    <p class="text-xs text-slate-300">Enter your registered Corporate Email or System Username below. We will send your login credentials to your inbox.</p>
 
-    <div>
-      <label class="block text-xs font-semibold text-slate-300 mb-1">Email or Username</label>
-      <input type="text" id="recoveryIdentifier" placeholder="e.g. marko@company.com or marko.cargonet" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-sky-500">
-    </div>
+  <!-- MODAL: FORGOT PASSWORD -->
+  <div id="forgotPasswordModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="key-round" class="w-5 h-5 text-sky-400"></i> Account Password Recovery
+        </h3>
+        <button type="button" onclick="closeForgotPasswordModal()" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+      
+      <p class="text-xs text-slate-300">Enter your registered Corporate Email or System Username below. We will send your login credentials to your inbox.</p>
 
-    <div id="recoveryStatus" class="text-xs hidden p-2.5 rounded-lg"></div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-300 mb-1">Email or Username</label>
+        <input type="text" id="recoveryIdentifier" placeholder="e.g. marko@company.com ali DejanLuzar" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-sky-500">
+      </div>
 
-    <div class="flex justify-end gap-2 pt-2">
-      <button type="button" onclick="closeForgotPasswordModal()" class="px-4 py-2 bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl hover:bg-slate-600 transition">Cancel</button>
-      <button type="button" id="sendRecoveryBtn" onclick="submitPasswordRecovery()" class="px-5 py-2 bg-sky-600 text-white text-xs font-bold rounded-xl hover:bg-sky-500 transition">Send Recovery Email</button>
+      <div id="recoveryStatus" class="text-xs hidden p-2.5 rounded-lg"></div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" onclick="closeForgotPasswordModal()" class="px-4 py-2 bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl hover:bg-slate-600 transition">Cancel</button>
+        <button type="button" id="sendRecoveryBtn" onclick="submitPasswordRecovery()" class="px-5 py-2 bg-sky-600 text-white text-xs font-bold rounded-xl hover:bg-sky-500 transition">Send Recovery Email</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  function openForgotPasswordModal() {
-    document.getElementById('recoveryIdentifier').value = '';
-    document.getElementById('recoveryStatus').className = 'text-xs hidden p-2.5 rounded-lg';
-    document.getElementById('forgotPasswordModal').classList.remove('hidden');
-  }
-
-  function closeForgotPasswordModal() {
-    document.getElementById('forgotPasswordModal').classList.add('hidden');
-  }
-
-  async function submitPasswordRecovery() {
-    const identifier = document.getElementById('recoveryIdentifier').value.trim();
-    const statusBox = document.getElementById('recoveryStatus');
-    const sendBtn = document.getElementById('sendRecoveryBtn');
-
-    if (!identifier) {
-      statusBox.textContent = "Please enter an email or username.";
-      statusBox.className = "text-xs p-2.5 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 block";
-      return;
+  <script>
+    function openForgotPasswordModal() {
+      document.getElementById('recoveryIdentifier').value = '';
+      document.getElementById('recoveryStatus').className = 'text-xs hidden p-2.5 rounded-lg';
+      document.getElementById('forgotPasswordModal').classList.remove('hidden');
     }
 
-    sendBtn.disabled = true;
-    sendBtn.textContent = "Sending...";
+    function closeForgotPasswordModal() {
+      document.getElementById('forgotPasswordModal').classList.add('hidden');
+    }
 
-    try {
-      const res = await fetch("/api/forgot_password_cargonet", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier: identifier })
-      });
+    async function submitPasswordRecovery() {
+      const identifier = document.getElementById('recoveryIdentifier').value.trim();
+      const statusBox = document.getElementById('recoveryStatus');
+      const sendBtn = document.getElementById('sendRecoveryBtn');
 
-      const data = await res.json();
-
-      if (res.ok) {
-        statusBox.textContent = "✓ Recovery email sent! Check your inbox.";
-        statusBox.className = "text-xs p-2.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 block";
-      } else {
-        statusBox.textContent = data.error || "Failed to recover account.";
+      if (!identifier) {
+        statusBox.textContent = "Please enter an email or username.";
         statusBox.className = "text-xs p-2.5 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 block";
+        return;
       }
-    } catch (err) {
-      statusBox.textContent = "Server error. Please try again later.";
-      statusBox.className = "text-xs p-2.5 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 block";
-    } finally {
-      sendBtn.disabled = false;
-      sendBtn.textContent = "Send Recovery Email";
+
+      sendBtn.disabled = true;
+      sendBtn.textContent = "Sending...";
+
+      try {
+        const res = await fetch("/api/forgot_password_cargonet", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ identifier: identifier })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          statusBox.textContent = "✓ Recovery email sent! Check your inbox.";
+          statusBox.className = "text-xs p-2.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 block";
+        } else {
+          statusBox.textContent = data.error || "Failed to recover account.";
+          statusBox.className = "text-xs p-2.5 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 block";
+        }
+      } catch (err) {
+        statusBox.textContent = "Server error. Please try again later.";
+        statusBox.className = "text-xs p-2.5 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 block";
+      } finally {
+        sendBtn.disabled = false;
+        sendBtn.textContent = "Send Recovery Email";
+      }
     }
-  }
-</script>
-  
+  </script>
 </body>
 </html>
