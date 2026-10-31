@@ -263,18 +263,29 @@
         if (userEl) userEl.textContent = usernameParam;
       }
 
-      if (token) {
-        // 1. Posodobitev značke zgoraj desno (iskanje po besedilu)
-        const allElements = document.querySelectorAll('button, div, span, a');
-        allElements.forEach(el => {
-          if (el.textContent.includes("ACTION REQUIRED")) {
-            el.textContent = "EMAIL VERIFIED";
-            el.style.backgroundColor = "#10B981";
-            el.style.color = "#FFFFFF";
+if (token) {
+        // 1. Posodobitev značke zgoraj desno
+        const statusBadges = document.querySelectorAll('div');
+        statusBadges.forEach(el => {
+          if (el.textContent.includes("Action Required: Verify Email") || el.textContent.includes("ACTION REQUIRED")) {
+            el.innerHTML = `
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span class="text-xs font-bold text-emerald-400 tracking-wide font-mono uppercase">✓ Email Verified</span>
+            `;
+            el.className = "flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 rounded-lg";
           }
         });
 
-        // 2. Posodobitev rumenega opozorila na sredini
+        // 2. Posodobitev statusa "PRO STATUS: PENDING"
+        const proStatus = document.querySelectorAll('div, span');
+        proStatus.forEach(el => {
+          if (el.textContent.includes("PRO STATUS: PENDING")) {
+            el.textContent = "PRO STATUS: VERIFIED";
+            el.style.color = "#10B981";
+          }
+        });
+
+        // 3. Posodobitev rumenega opozorila na sredini
         const alertBoxes = document.querySelectorAll('div');
         alertBoxes.forEach(el => {
           if (el.textContent.includes("Verification link sent to your inbox")) {
@@ -289,7 +300,7 @@
           }
         });
 
-        // 3. Klic na pravilen backend endpoint za CargoNet
+        // 4. Klic na backend za potrditev v bazi
         fetch("/api/verify_email_cargonet", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
