@@ -264,27 +264,33 @@
       }
 
       if (token) {
-        // 1. Posodobitev značke zgoraj desno
-        const badge = document.querySelector(".badge, [data-status-badge]");
-        if (badge) {
-          badge.textContent = "EMAIL VERIFIED";
-          badge.style.backgroundColor = "#10B981";
-          badge.style.color = "#FFFFFF";
-        }
+        // 1. Posodobitev značke zgoraj desno (iskanje po besedilu)
+        const allElements = document.querySelectorAll('button, div, span, a');
+        allElements.forEach(el => {
+          if (el.textContent.includes("ACTION REQUIRED")) {
+            el.textContent = "EMAIL VERIFIED";
+            el.style.backgroundColor = "#10B981";
+            el.style.color = "#FFFFFF";
+          }
+        });
 
-        // 2. Posodobitev glavnega obvestila na strani
-        const alertBox = document.querySelector(".verification-alert, [data-alert-box]");
-        if (alertBox) {
-          alertBox.innerHTML = `
-            <div style="color: #10B981; font-weight: bold;">
-              ✓ Email Successfully Verified!
-            </div>
-            <p>Your corporate email has been confirmed. You can now access full network features.</p>
-          `;
-        }
+        // 2. Posodobitev rumenega opozorila na sredini
+        const alertBoxes = document.querySelectorAll('div');
+        alertBoxes.forEach(el => {
+          if (el.textContent.includes("Verification link sent to your inbox")) {
+            el.innerHTML = `
+              <div style="color: #10B981; font-weight: bold; font-size: 1.1rem;">
+                ✓ Email Successfully Verified!
+              </div>
+              <p style="color: #047857; margin-top: 4px;">Your corporate email has been confirmed. You can now access full network features.</p>
+            `;
+            el.style.backgroundColor = "#D1FAE5";
+            el.style.borderColor = "#10B981";
+          }
+        });
 
-        // 3. Klic na backend za potrditev v bazi
-        fetch("/api/verify_email", {
+        // 3. Klic na pravilen backend endpoint za CargoNet
+        fetch("/api/verify_email_cargonet", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ token: token })
