@@ -500,24 +500,33 @@
       </div>
     </div>
   </footer>
-
 <!-- Lucide Icons Initialization & Dynamic User Badge -->
-  <script>
-    lucide.createIcons();
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // 1. Inicializacija ikon
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
 
-    // Read parameters passed from registration / welcome page
+    // 2. Prebiranje URL parametrov
     const urlParams = new URLSearchParams(window.location.search);
     const companyParam = urlParams.get('Podjetje');
     const usernameParam = urlParams.get('UporabniskoIme');
 
-    const badgeElement = document.getElementById('userBadgeDisplay');
-    if (badgeElement) {
+    // 3. Posodobitev vseh značk z id userBadgeDisplay
+    const badgeDisplays = document.querySelectorAll('#userBadgeDisplay');
+    
+    badgeDisplays.forEach(badge => {
       if (companyParam) {
-        badgeElement.textContent = companyParam;
+        badge.textContent = companyParam.toUpperCase() + ' (VERIFIED)';
       } else if (usernameParam) {
-        badgeElement.textContent = usernameParam;
+        badge.textContent = usernameParam.toUpperCase() + ' (VERIFIED)';
+      } else {
+        badge.textContent = 'VERIFIED USER';
       }
-    }
-  </script>
+    });
+  });
+</script>
+  
 </body>
 </html>
