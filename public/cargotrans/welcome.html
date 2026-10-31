@@ -230,9 +230,9 @@
   <script>
     lucide.createIcons();
 
-    function goCargoNet() {
-      window.location.href = 'dashboard/index.html';
-    }
+   function goCargoNet() {
+  window.location.href = 'dashboard/index.html' + window.location.search;
+}
 
     // Dynamic 24-hour Countdown Timer
     let totalSeconds = 24 * 3600 - 1;
