@@ -10,7 +10,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col">
 
-  <!-- ADMIN LOGIN MODAL -->
+  <!-- ADMIN LOGIN MODAL WITH 2FA -->
   <div id="adminAuthModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-6">
       
@@ -22,23 +22,32 @@
         <p class="text-xs text-slate-400 font-mono">Server-Protected Master Control Panel</p>
       </div>
 
-      <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+      <!-- Form disabled autocomplete to prevent browser auto-fill -->
+      <form onsubmit="handleAdminLogin(event)" autocomplete="off" class="space-y-4">
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1">Admin Username</label>
-          <input type="text" id="adminUser" required placeholder="Enter username" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500 font-mono">
+          <input type="text" id="adminUser" name="admin_usr_no_autofill" required autocomplete="new-password" placeholder="Enter username" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500 font-mono">
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-300 mb-1">Admin Master Password</label>
-          <input type="password" id="adminPass" required placeholder="••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500 font-mono">
+          <input type="password" id="adminPass" name="admin_pwd_no_autofill" required autocomplete="new-password" placeholder="••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500 font-mono">
+        </div>
+
+        <!-- Google Authenticator 2FA Field -->
+        <div>
+          <label class="block text-xs font-semibold text-purple-400 mb-1 flex items-center gap-1">
+            <i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Google Authenticator (2FA Code)
+          </label>
+          <input type="text" id="admin2FA" name="admin_2fa_no_autofill" maxlength="6" pattern="[0-9]{6}" required placeholder="6-digit code (e.g. 123456)" class="w-full bg-slate-950 border border-purple-500/50 rounded-xl px-3.5 py-2.5 text-sm text-center tracking-widest text-emerald-400 font-mono font-bold focus:outline-none focus:border-purple-400">
         </div>
 
         <div id="loginError" class="hidden text-xs text-rose-400 bg-rose-500/10 border border-rose-500/30 p-2.5 rounded-lg text-center font-mono">
-          Invalid Credentials
+          Neveljavni podatki ali 2FA koda!
         </div>
 
         <button type="submit" id="loginBtn" class="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold font-mono rounded-xl shadow-lg transition flex items-center justify-center gap-2">
-          <i data-lucide="key" class="w-4 h-4"></i> Authenticate via API
+          <i data-lucide="shield-check" class="w-4 h-4"></i> Authenticate with 2FA
         </button>
       </form>
 
@@ -59,7 +68,7 @@
             <span class="text-xl font-black tracking-wider text-white">CargoTrans <span class="text-purple-400">MASTER HQ</span></span>
             <span class="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono px-2 py-0.5 rounded-full font-bold">SUPER ADMIN</span>
           </div>
-          <span class="text-[11px] text-slate-400 block font-mono">Server Session: <strong class="text-emerald-400">AUTHENTICATED (100% SECURE)</strong></span>
+          <span class="text-[11px] text-slate-400 block font-mono">Server Session: <strong class="text-emerald-400">AUTHENTICATED (2FA SECURE)</strong></span>
         </div>
       </div>
 
@@ -179,7 +188,7 @@
 
     document.addEventListener("DOMContentLoaded", () => {
       const token = sessionStorage.getItem("admin_server_token");
-      if (token === "SUPER_ADMIN_GRANTED_PAYFREIGHT_2026") {
+      if (token === "SUPER_ADMIN_2FA_VERIFIED_PAYFREIGHT_2026") {
         showAdminDashboard();
       } else {
         lucide.createIcons();
@@ -190,17 +199,18 @@
       e.preventDefault();
       const u = document.getElementById('adminUser').value.trim();
       const p = document.getElementById('adminPass').value.trim();
+      const t2fa = document.getElementById('admin2FA').value.trim();
       const errBox = document.getElementById('loginError');
       const btn = document.getElementById('loginBtn');
 
       btn.disabled = true;
-      btn.textContent = "Verifying...";
+      btn.textContent = "Verifying 2FA...";
 
       try {
         const res = await fetch('/api/admin_login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: u, password: p })
+          body: JSON.stringify({ username: u, password: p, token2FA: t2fa })
         });
 
         const data = await res.json();
@@ -210,13 +220,14 @@
           errBox.classList.add('hidden');
           showAdminDashboard();
         } else {
+          errBox.textContent = data.error || "Neveljavni podatki ali 2FA koda!";
           errBox.classList.remove('hidden');
         }
       } catch (err) {
-        alert("Server error. Please check backend API.");
+        alert("Strežniška napaka. Preverite backend API.");
       } finally {
         btn.disabled = false;
-        btn.textContent = "Authenticate via API";
+        btn.textContent = "Authenticate with 2FA";
       }
     }
 
