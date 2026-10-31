@@ -213,7 +213,7 @@
 
   </main>
 
-  <!-- FOOTER -->
+ <!-- FOOTER -->
   <footer class="bg-white border-t border-slate-200 mt-auto py-6">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
       <div>
@@ -230,34 +230,67 @@
   <script>
     lucide.createIcons();
 
-   function goCargoNet() {
-  window.location.href = 'dashboard/index.html' + window.location.search;
-}
+    function goCargoNet() {
+      window.location.href = 'dashboard/index.html' + window.location.search;
+    }
 
     // Dynamic 24-hour Countdown Timer
     let totalSeconds = 24 * 3600 - 1;
     const countdownElement = document.getElementById('countdown');
 
-    setInterval(() => {
-      if (totalSeconds <= 0) {
-        countdownElement.textContent = "00:00:00";
-        return;
-      }
-      totalSeconds--;
-      const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-      const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-      const secs = String(totalSeconds % 60).padStart(2, '0');
-      countdownElement.textContent = `${hrs}:${mins}:${secs}`;
-    }, 1000);
-
-    // Parse URL parameters passed from register_cargonet.html
-    const urlParams = new URLSearchParams(window.location.search);
-    const usernameParam = urlParams.get('UporabniskoIme');
-
-    if (usernameParam) {
-      document.getElementById('displayUsername').textContent = usernameParam;
+    if (countdownElement) {
+      setInterval(() => {
+        if (totalSeconds <= 0) {
+          countdownElement.textContent = "00:00:00";
+          return;
+        }
+        totalSeconds--;
+        const hrs = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+        const mins = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+        const secs = String(totalSeconds % 60).padStart(2, '0');
+        countdownElement.textContent = `${hrs}:${mins}:${secs}`;
+      }, 1000);
     }
-  </script>
 
+    // Parse URL parameters & Email verification
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const usernameParam = urlParams.get('UporabniskoIme');
+      const token = urlParams.get("token");
+
+      if (usernameParam) {
+        const userEl = document.getElementById('displayUsername');
+        if (userEl) userEl.textContent = usernameParam;
+      }
+
+      if (token) {
+        // 1. Posodobitev značke zgoraj desno
+        const badge = document.querySelector(".badge, [data-status-badge]");
+        if (badge) {
+          badge.textContent = "EMAIL VERIFIED";
+          badge.style.backgroundColor = "#10B981";
+          badge.style.color = "#FFFFFF";
+        }
+
+        // 2. Posodobitev glavnega obvestila na strani
+        const alertBox = document.querySelector(".verification-alert, [data-alert-box]");
+        if (alertBox) {
+          alertBox.innerHTML = `
+            <div style="color: #10B981; font-weight: bold;">
+              ✓ Email Successfully Verified!
+            </div>
+            <p>Your corporate email has been confirmed. You can now access full network features.</p>
+          `;
+        }
+
+        // 3. Klic na backend za potrditev v bazi
+        fetch("/api/verify_email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: token })
+        }).catch(err => console.error("Verification error:", err));
+      }
+    });
+  </script>
 </body>
 </html>
