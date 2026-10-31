@@ -27,6 +27,19 @@
     }
   </script>
 </head>
+<script>
+  (function checkAccess() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    const username = urlParams.get('UporabniskoIme');
+
+    // Če ni tokena ali uporabniškega imena, uporabnika vržemo nazaj na vstopno stran
+    if (!token && !username) {
+      window.location.href = "../index.html?status=not_registered";
+    }
+  })();
+</script>
+  
 <body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
 
 <!-- TOP NAVIGATION (Navbar) -->
