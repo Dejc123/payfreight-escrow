@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CargoTrans Multi-SaaS | Master Super Admin HQ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col">
+
+  <!-- ADMIN LOGIN MODAL -->
+  <div id="adminAuthModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-6">
+      
+      <div class="text-center space-y-2">
+        <div class="w-12 h-12 rounded-2xl bg-purple-600/20 border border-purple-500/40 flex items-center justify-center mx-auto shadow-lg">
+          <i data-lucide="shield-lock" class="w-6 h-6 text-purple-400"></i>
+        </div>
+        <h2 class="text-xl font-black tracking-wider text-white">Super Admin Access</h2>
+        <p class="text-xs text-slate-400 font-mono">Server-Protected Master Control Panel</p>
+      </div>
+
+      <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Admin Username</label>
+          <input type="text" id="adminUser" required placeholder="Enter username" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500 font-mono">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Admin Master Password</label>
+          <input type="password" id="adminPass" required placeholder="••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500 font-mono">
+        </div>
+
+        <div id="loginError" class="hidden text-xs text-rose-400 bg-rose-500/10 border border-rose-500/30 p-2.5 rounded-lg text-center font-mono">
+          Invalid Credentials
+        </div>
+
+        <button type="submit" id="loginBtn" class="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold font-mono rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+          <i data-lucide="key" class="w-4 h-4"></i> Authenticate via API
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- MASTER SUPER ADMIN CONTENT (SKRIT DOKLER BACKEND NE POTRDI PRIJAVE) -->
+  <div id="adminMainContent" class="hidden min-h-screen flex flex-col">
+
+    <!-- MASTER SUPER ADMIN HEADER -->
+    <header class="bg-slate-900 border-b border-slate-800 py-4 px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/40 flex items-center justify-center shadow-lg">
+          <i data-lucide="shield-alert" class="w-6 h-6 text-purple-400"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xl font-black tracking-wider text-white">CargoTrans <span class="text-purple-400">MASTER HQ</span></span>
+            <span class="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono px-2 py-0.5 rounded-full font-bold">SUPER ADMIN</span>
+          </div>
+          <span class="text-[11px] text-slate-400 block font-mono">Server Session: <strong class="text-emerald-400">AUTHENTICATED (100% SECURE)</strong></span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="loadAdminData()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono font-bold rounded-xl transition border border-slate-700 flex items-center gap-2">
+          <i data-lucide="refresh-cw" class="w-4 h-4 text-sky-400"></i> Refresh System Data
+        </button>
+        <button onclick="handleAdminLogout()" class="px-3.5 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs font-mono font-bold rounded-xl border border-rose-500/30 transition flex items-center gap-1.5">
+          <i data-lucide="log-out" class="w-4 h-4"></i> Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="max-w-7xl mx-auto w-full p-6 space-y-6 flex-1">
+      
+      <!-- TOP STATS OVERVIEW -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-slate-900/70 border border-slate-800 p-4 rounded-2xl flex items-center justify-between shadow-sm">
+          <div>
+            <span class="text-[11px] text-slate-400 font-mono uppercase block">CargoNet Accounts</span>
+            <span id="statCargoNet" class="text-2xl font-black text-cyan-400 font-mono">0</span>
+            <span class="text-[10px] text-slate-500 block mt-0.5">Full Access (Carriers & Brokers)</span>
+          </div>
+          <i data-lucide="truck" class="w-8 h-8 text-cyan-400/40"></i>
+        </div>
+
+        <div class="bg-slate-900/70 border border-slate-800 p-4 rounded-2xl flex items-center justify-between shadow-sm">
+          <div>
+            <span class="text-[11px] text-slate-400 font-mono uppercase block">TransNet Accounts</span>
+            <span id="statTransNet" class="text-2xl font-black text-indigo-400 font-mono">0</span>
+            <span class="text-[10px] text-slate-500 block mt-0.5">Restricted (Shippers & Factories)</span>
+          </div>
+          <i data-lucide="factory" class="w-8 h-8 text-indigo-400/40"></i>
+        </div>
+
+        <div class="bg-slate-900/70 border border-slate-800 p-4 rounded-2xl flex items-center justify-between shadow-sm">
+          <div>
+            <span class="text-[11px] text-slate-400 font-mono uppercase block">CarLoads Accounts</span>
+            <span id="statCarLoads" class="text-2xl font-black text-amber-400 font-mono">0</span>
+            <span class="text-[10px] text-slate-500 block mt-0.5">Auto-Transporters Only</span>
+          </div>
+          <i data-lucide="car" class="w-8 h-8 text-amber-400/40"></i>
+        </div>
+
+        <div class="bg-slate-900/70 border border-slate-800 p-4 rounded-2xl flex items-center justify-between shadow-sm">
+          <div>
+            <span class="text-[11px] text-slate-400 font-mono uppercase block">PayFreight Active</span>
+            <span id="statPayFreight" class="text-2xl font-black text-emerald-400 font-mono">0</span>
+            <span class="text-[10px] text-slate-500 block mt-0.5">Escrow Protocol Enrolled</span>
+          </div>
+          <i data-lucide="shield-check" class="w-8 h-8 text-emerald-400/40"></i>
+        </div>
+      </div>
+
+      <!-- NAVIGATION TABS -->
+      <div class="flex items-center space-x-2 border-b border-slate-800 pb-3 overflow-x-auto">
+        <button onclick="switchTab('cargonet')" id="tabCargoNet" class="px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 bg-purple-600 text-white shadow-md">
+          <i data-lucide="truck" class="w-4 h-4"></i> CargoNet (Full Freight Borza)
+        </button>
+        <button onclick="switchTab('transnet')" id="tabTransNet" class="px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 bg-slate-900 text-slate-400 hover:text-white border border-slate-800">
+          <i data-lucide="factory" class="w-4 h-4"></i> TransNet (Proizvodnja / Restricted)
+        </button>
+        <button onclick="switchTab('carloads')" id="tabCarLoads" class="px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 bg-slate-900 text-slate-400 hover:text-white border border-slate-800">
+          <i data-lucide="car" class="w-4 h-4"></i> CarLoads (Auto-Transporters)
+        </button>
+        <button onclick="switchTab('payfreight')" id="tabPayFreight" class="px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 bg-slate-900 text-slate-400 hover:text-white border border-slate-800">
+          <i data-lucide="shield-check" class="w-4 h-4"></i> PayFreight Protocol
+        </button>
+      </div>
+
+      <!-- DATABASE TABLE CONTAINER -->
+      <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <div>
+            <h2 class="text-base font-bold text-white flex items-center gap-2" id="tableTitle">
+              <i data-lucide="database" class="w-5 h-5 text-purple-400"></i> CargoNet Registered Companies & Dispatchers
+            </h2>
+            <p class="text-xs text-slate-400 mt-0.5" id="tableSubtitle">Showing full-access carrier & freight forwarding accounts with active credentials</p>
+          </div>
+          <div class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
+            Super Admin Key: <span class="text-emerald-400 font-bold">FULL UNRESTRICTED MASTER CONTROL</span>
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="text-[11px] uppercase bg-slate-950 text-slate-400 font-mono border-b border-slate-800">
+              <tr>
+                <th class="py-3.5 px-4">CargoTrans ID</th>
+                <th class="py-3.5 px-4">Company Name</th>
+                <th class="py-3.5 px-4">Admin Username</th>
+                <th class="py-3.5 px-4">Active Password / Key</th>
+                <th class="py-3.5 px-4">Account Validity</th>
+                <th class="py-3.5 px-4 text-right">Subscription Actions</th>
+              </tr>
+            </thead>
+            <tbody id="managerTableBody" class="divide-y divide-slate-800/60">
+              <!-- Dynamically Loaded via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- JAVASCRIPT INTEGRATION -->
+  <script>
+    const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentPlatform = 'cargonet';
+    let allCompanies = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = sessionStorage.getItem("admin_server_token");
+      if (token === "SUPER_ADMIN_GRANTED_PAYFREIGHT_2026") {
+        showAdminDashboard();
+      } else {
+        lucide.createIcons();
+      }
+    });
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('adminUser').value.trim();
+      const p = document.getElementById('adminPass').value.trim();
+      const errBox = document.getElementById('loginError');
+      const btn = document.getElementById('loginBtn');
+
+      btn.disabled = true;
+      btn.textContent = "Verifying...";
+
+      try {
+        const res = await fetch('/api/admin_login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: u, password: p })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          sessionStorage.setItem("admin_server_token", data.token);
+          errBox.classList.add('hidden');
+          showAdminDashboard();
+        } else {
+          errBox.classList.remove('hidden');
+        }
+      } catch (err) {
+        alert("Server error. Please check backend API.");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Authenticate via API";
+      }
+    }
+
+    function showAdminDashboard() {
+      document.getElementById('adminAuthModal').classList.add('hidden');
+      document.getElementById('adminMainContent').classList.remove('hidden');
+      loadAdminData();
+      lucide.createIcons();
+    }
+
+    function handleAdminLogout() {
+      sessionStorage.removeItem("admin_server_token");
+      location.reload();
+    }
+
+    function switchTab(platform) {
+      currentPlatform = platform;
+      
+      ['cargonet', 'transnet', 'carloads', 'payfreight'].forEach(p => {
+        const btn = document.getElementById(`tab${p.charAt(0).toUpperCase() + p.slice(1)}`);
+        if (p === platform) {
+          btn.className = "px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 bg-purple-600 text-white shadow-md";
+        } else {
+          btn.className = "px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 bg-slate-900 text-slate-400 hover:text-white border border-slate-800";
+        }
+      });
+
+      const title = document.getElementById('tableTitle');
+      const subtitle = document.getElementById('tableSubtitle');
+
+      if (platform === 'cargonet') {
+        title.innerHTML = `<i data-lucide="truck" class="w-5 h-5 text-cyan-400"></i> CargoNet Registered Companies & Dispatchers`;
+        subtitle.textContent = "Showing FULL ACCESS accounts for carriers and freight forwarders";
+      } else if (platform === 'transnet') {
+        title.innerHTML = `<i data-lucide="factory" class="w-5 h-5 text-indigo-400"></i> TransNet Restricted Production Accounts`;
+        subtitle.textContent = "Showing RESTRICTED accounts for factories and shippers (Cargo posting only)";
+      } else if (platform === 'carloads') {
+        title.innerHTML = `<i data-lucide="car" class="w-5 h-5 text-amber-400"></i> CarLoads Auto-Transporter Accounts`;
+        subtitle.textContent = "Showing specialized vehicle transportation accounts";
+      } else if (platform === 'payfreight') {
+        title.innerHTML = `<i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i> PayFreight Protocol Enrolled Accounts`;
+        subtitle.textContent = "Showing B2B Escrow & Instant Settlement active participants";
+      }
+
+      renderTable();
+      lucide.createIcons();
+    }
+
+    async function loadAdminData() {
+      const tbody = document.getElementById('managerTableBody');
+      tbody.innerHTML = '<tr><td colspan="6" class="p-6 text-center text-slate-500 font-mono">Fetching Supabase ecosystem records...</td></tr>';
+
+      try {
+        const { data: companies, error } = await sb.from('companies').select('*');
+        if (error) throw error;
+
+        allCompanies = companies || [];
+
+        document.getElementById('statCargoNet').textContent = allCompanies.filter(c => (c.platform || 'cargonet') === 'cargonet').length;
+        document.getElementById('statTransNet').textContent = allCompanies.filter(c => c.platform === 'transnet').length;
+        document.getElementById('statCarLoads').textContent = allCompanies.filter(c => c.platform === 'carloads').length;
+        document.getElementById('statPayFreight').textContent = allCompanies.filter(c => c.payfreight_enabled === true).length;
+
+        renderTable();
+
+      } catch (err) {
+        console.error("Manager fetch error:", err);
+        tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-rose-400 font-mono">Error loading records: ${err.message}</td></tr>`;
+      } finally {
+        lucide.createIcons();
+      }
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('managerTableBody');
+      tbody.innerHTML = '';
+
+      const filtered = allCompanies.filter(c => {
+        if (currentPlatform === 'payfreight') return c.payfreight_enabled === true;
+        return (c.platform || 'cargonet') === currentPlatform;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-500 font-mono">No accounts registered under ${currentPlatform.toUpperCase()} module yet.</td></tr>`;
+        return;
+      }
+
+      filtered.forEach(comp => {
+        const validity = comp.validity_days || 0;
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-900/60 transition";
+        tr.innerHTML = `
+          <td class="py-3.5 px-4 font-mono font-bold text-sky-400">${comp.cargo_trans_id || 'CT-PENDING'}</td>
+          <td class="py-3.5 px-4 font-bold text-white">${comp.company_name}</td>
+          <td class="py-3.5 px-4 font-mono text-slate-300">${comp.contact_email}</td>
+          <td class="py-3.5 px-4 font-mono text-emerald-400 font-bold">${comp.password || 'CT-P@ss#2026'}</td>
+          <td class="py-3.5 px-4">
+            <span class="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold ${validity > 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'}">
+              ${validity > 0 ? validity + ' Days Active' : '0 DAYS (INACTIVE)'}
+            </span>
+          </td>
+          <td class="py-3.5 px-4 text-right space-x-1.5">
+            <button onclick="add30Days('${comp.cargo_trans_id}', ${validity})" class="px-3 py-1 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg text-[11px] transition shadow-sm font-mono">
+              +30 Days Free
+            </button>
+            <button onclick="resetValidity('${comp.cargo_trans_id}')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-lg text-[11px] transition font-mono border border-slate-700">
+              Reset 0
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function add30Days(cargoTransId, currentDays) {
+      const newDays = (currentDays || 0) + 30;
+      const { error } = await sb
+        .from('companies')
+        .update({ validity_days: newDays })
+        .eq('cargo_trans_id', cargoTransId);
+
+      if (error) {
+        alert("Error updating account validity: " + error.message);
+      } else {
+        alert(`Successfully added +30 days to account ${cargoTransId}! New total: ${newDays} days.`);
+        loadAdminData();
+      }
+    }
+
+    async function resetValidity(cargoTransId) {
+      if (confirm(`Reset validity of ${cargoTransId} to 0 DAYS (INACTIVE)?`)) {
+        const { error } = await sb
+          .from('companies')
+          .update({ validity_days: 0 })
+          .eq('cargo_trans_id', cargoTransId);
+
+        if (error) {
+          alert("Error resetting account: " + error.message);
+        } else {
+          loadAdminData();
+        }
+      }
+    }
+  </script>
+</body>
+</html>
