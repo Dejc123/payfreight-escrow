@@ -196,12 +196,12 @@
         </div>
       </div>
 
-      <!-- SECTION 3: FLEET OVERVIEW & OPERATIONAL PRESENCE + CMR LICENCE -->
+      <!-- SECTION 3: FLEET OVERVIEW & OPERATIONAL PRESENCE -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
           <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
             <i data-lucide="truck" class="w-5 h-5 text-enterprise-600"></i>
-            <span>Fleet Specifications, Operations & CMR License</span>
+            <span>Fleet Specifications, Operations & Market Coverage</span>
           </h2>
           <span class="text-xs text-slate-400">Global freight directory description</span>
         </div>
@@ -209,18 +209,12 @@
         <div class="space-y-4">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Company Description & Fleet Overview</label>
-            <textarea id="fleetDescription" rows="3" placeholder="Provide a summary of your company, operational fleet capacity..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
+            <textarea id="fleetDescription" rows="4" placeholder="Provide a summary of your company, operational fleet capacity..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
           </div>
 
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Active Markets & Primary Trade Corridors</label>
             <textarea id="activeMarkets" rows="2" placeholder="List your active operational regions, international lanes..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
-          </div>
-
-          <!-- DODANO: CMR Licenca polje -->
-          <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">CMR License Number / Details *</label>
-            <input type="text" id="cmr_license" placeholder="Enter CMR license number or details..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-enterprise-700 focus:outline-none focus:border-enterprise-600">
           </div>
         </div>
       </div>
@@ -403,18 +397,18 @@
     </div>
   </div>
 
- <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
+  <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
   <script>
     // Supabase Initialization
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Pridobitev podatkov o prijavljenem uporabniku iz URL-ja ali localStorage
+    // Dynamic URL parameters or localStorage fallback
     const urlParams = new URLSearchParams(window.location.search);
-    let cargoTransId = urlParams.get('CargoTransID') || '';
-    let usernameParam = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user') || '';
-    let companyParam = urlParams.get('Podjetje') || '';
+    let cargoTransId = urlParams.get('CargoTransID') || localStorage.getItem('cargotrans_id') || '';
+    const usernameParam = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user') || '';
+    const companyParam = urlParams.get('Podjetje') || '';
 
     let teamMembers = [];
     let editingMemberIndex = null;
@@ -567,7 +561,7 @@
       lucide.createIcons();
     }
 
-    // Shranjevanje podatkov v bazo Supabase
+    // Save Profile & Update database in Supabase
     async function saveProfile() {
       const saveBtn = document.getElementById('saveProfileBtn');
       saveBtn.disabled = true;
@@ -582,8 +576,7 @@
           city: document.getElementById('postalCode').value.trim() || "N/A",
           country: document.getElementById('country').value.trim(),
           contact_email: document.getElementById('contact_email').value.trim(),
-          phone: document.getElementById('phone').value.trim(),
-          cmr_license: document.getElementById('cmr_license').value.trim()
+          phone: document.getElementById('phone').value.trim()
         };
 
         const { error } = await sb
@@ -592,12 +585,12 @@
           .eq('cargo_trans_id', cargoTransId);
 
         if (error) {
-          alert("Napaka pri shranjevanju: " + error.message);
+          alert("Error saving profile: " + error.message);
         } else {
-          alert("Profil podjetja je uspešno posodobljen v bazi inviden v managerju!");
+          alert("Enterprise Company Profile successfully updated and synced with manager HQ!");
         }
       } catch (err) {
-        alert("Napaka: " + err.message);
+        alert("Unexpected error: " + err.message);
       } finally {
         saveBtn.disabled = false;
         saveBtn.textContent = "Save Enterprise Profile Changes";
@@ -608,7 +601,6 @@
     // Avtomatsko nalaganje podatkov prijavljenega uporabnika iz baze ob odprtju strani
     document.addEventListener("DOMContentLoaded", async function() {
       try {
-        // Poiščemo podatke v bazi glede na uporabniško ime, email ali cargo_trans_id
         let query = sb.from('companies').select('*');
         if (cargoTransId) {
           query = query.eq('cargo_trans_id', cargoTransId);
@@ -623,6 +615,7 @@
         if (data) {
           cargoTransId = data.cargo_trans_id || cargoTransId;
           document.getElementById('displayCargoTransID').textContent = cargoTransId;
+          localStorage.setItem('cargotrans_id', cargoTransId);
           
           if (data.company_name) document.getElementById('company_name').value = data.company_name;
           if (data.vat_number) document.getElementById('vat_number').value = data.vat_number;
@@ -631,7 +624,6 @@
           if (data.country) document.getElementById('country').value = data.country;
           if (data.contact_email) document.getElementById('contact_email').value = data.contact_email;
           if (data.phone) document.getElementById('phone').value = data.phone;
-          if (data.cmr_license) document.getElementById('cmr_license').value = data.cmr_license;
           
           if (data.company_name) {
             document.getElementById('headerCompanyName').textContent = data.company_name + ' - Corporate HQ';
