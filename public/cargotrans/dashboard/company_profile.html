@@ -403,18 +403,18 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
+ <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
   <script>
     // Supabase Initialization
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Dynamic URL parameters or localStorage fallback
+    // Pridobitev podatkov o prijavljenem uporabniku iz URL-ja ali localStorage
     const urlParams = new URLSearchParams(window.location.search);
-    const cargoTransId = urlParams.get('CargoTransID') || localStorage.getItem('cargotrans_id') || 'CT-' + Math.floor(10000 + Math.random() * 90000);
-    const usernameParam = urlParams.get('UporabniskoIme');
-    const companyParam = urlParams.get('Podjetje');
+    let cargoTransId = urlParams.get('CargoTransID') || '';
+    let usernameParam = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user') || '';
+    let companyParam = urlParams.get('Podjetje') || '';
 
     let teamMembers = [];
     let editingMemberIndex = null;
@@ -422,15 +422,11 @@
     // Auto-generate Username and Password based on name
     function autoGenerateCredentials() {
       if (editingMemberIndex !== null) return;
-      
       const firstName = document.getElementById('mFirstName').value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
       const lastName = document.getElementById('mLastName').value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-      
       if (firstName || lastName) {
         document.getElementById('mUsername').value = `${firstName}.${lastName}` || 'user';
-        if (!document.getElementById('mPassword').value) {
-          generateNewPassword();
-        }
+        if (!document.getElementById('mPassword').value) generateNewPassword();
       }
     }
 
@@ -443,69 +439,45 @@
       document.getElementById('mPassword').value = pwd;
     }
 
-    // Handle File Uploads Display
     function handleFileUpload(event, badgeId, fileNameId) {
       const file = event.target.files[0];
       if (file) {
-        const badge = document.getElementById(badgeId);
-        const fileName = document.getElementById(fileNameId);
-        
-        badge.textContent = "Ready to Upload";
-        badge.className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200";
-        
-        fileName.textContent = file.name;
-        fileName.className = "text-xs font-mono font-bold text-slate-800";
+        document.getElementById(badgeId).textContent = "Ready to Upload";
+        document.getElementById(badgeId).className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200";
+        document.getElementById(fileNameId).textContent = file.name;
+        document.getElementById(fileNameId).className = "text-xs font-mono font-bold text-slate-800";
       }
     }
 
-    // Handle Banner Upload Preview
     function handleBannerUpload(event) {
       const file = event.target.files[0];
       if (file) {
         const statusText = document.getElementById('bannerStatusText');
         const previewBox = document.getElementById('bannerPreviewBox');
-        
         const reader = new FileReader();
         reader.onload = function(e) {
           previewBox.style.backgroundImage = `url('${e.target.result}')`;
           previewBox.style.backgroundSize = 'cover';
           previewBox.style.backgroundPosition = 'center';
-          
           statusText.textContent = "Banner Attached: " + file.name;
           statusText.classList.add('bg-slate-900/70', 'text-white', 'px-3', 'py-1', 'rounded-lg');
-          previewBox.classList.remove('border-dashed', 'border-slate-300');
-          previewBox.classList.add('border-solid', 'border-enterprise-600');
         };
         reader.readAsDataURL(file);
       }
     }
 
-    // Helper: Upload file to Supabase Storage
     async function uploadToStorage(fileInputId, folderName) {
       const fileInput = document.getElementById(fileInputId);
       if (!fileInput || !fileInput.files[0]) return null;
-      
       const file = fileInput.files[0];
       const fileExt = file.name.split('.').pop();
-      const fileName = `${folderName}/${cargoTransId}_${Date.now()}.${fileExt}`;
-      
-      const { data, error } = await sb.storage
-        .from('COMPANY-FILES')
-        .upload(fileName, file);
-        
-      if (error) {
-        console.error(`Upload error (${fileInputId}):`, error.message);
-        return null;
-      }
-      
-      const { data: publicUrlData } = sb.storage
-        .from('COMPANY-FILES')
-        .getPublicUrl(fileName);
-        
+      const fileName = `${folderName}/${cargoTransId || 'company'}_${Date.now()}.${fileExt}`;
+      const { data, error } = await sb.storage.from('COMPANY-FILES').upload(fileName, file);
+      if (error) return null;
+      const { data: publicUrlData } = sb.storage.from('COMPANY-FILES').getPublicUrl(fileName);
       return publicUrlData.publicUrl;
     }
 
-    // Modal Control
     function openAddMemberModal() {
       editingMemberIndex = null;
       document.getElementById('modalTitle').textContent = "Add Team Member / Dispatcher Account";
@@ -517,7 +489,6 @@
       document.getElementById('mMobile').value = "";
       document.getElementById('mOffice').value = "";
       document.getElementById('mUsername').value = "";
-      
       generateNewPassword();
       document.getElementById('memberModal').classList.remove('hidden');
     }
@@ -538,18 +509,15 @@
       const password = document.getElementById('mPassword').value.trim();
 
       if (!firstName || !lastName || !email || !username || !password) {
-        alert("Please fill in First Name, Last Name, Email, Username, and Password.");
+        alert("Please fill in required fields.");
         return;
       }
-
       const memberData = { firstName, lastName, role, access, email, mobile, office, username, password, cargoTransId };
-
       if (editingMemberIndex !== null) {
         teamMembers[editingMemberIndex] = memberData;
       } else {
         teamMembers.push(memberData);
       }
-
       closeMemberModal();
       renderTeamMembers();
     }
@@ -567,7 +535,6 @@
       document.getElementById('mOffice').value = m.office;
       document.getElementById('mUsername').value = m.username || '';
       document.getElementById('mPassword').value = m.password || '';
-
       document.getElementById('memberModal').classList.remove('hidden');
     }
 
@@ -581,96 +548,32 @@
     function renderTeamMembers() {
       const container = document.getElementById('teamMembersContainer');
       const seatCount = document.getElementById('teamSeatCount');
-      
       seatCount.textContent = `${teamMembers.length} of 100 Seats Active`;
       container.innerHTML = "";
-
       if (teamMembers.length === 0) {
-        container.innerHTML = `
-          <div class="p-8 text-center border-2 border-dashed border-slate-200 rounded-xl bg-slate-50/50">
-            <i data-lucide="users" class="w-8 h-8 mx-auto text-slate-300 mb-2"></i>
-            <p class="text-xs font-semibold text-slate-600">No team members added yet</p>
-            <p class="text-[11px] text-slate-400 mt-0.5">Click "+ Add New Team Member" below to register dispatchers under ${cargoTransId}.</p>
-          </div>
-        `;
+        container.innerHTML = `<div class="p-8 text-center border-2 border-dashed border-slate-200 rounded-xl bg-slate-50/50"><p class="text-xs font-semibold text-slate-600">No team members added yet</p></div>`;
         lucide.createIcons();
         return;
       }
-
       teamMembers.forEach((m, idx) => {
         const initials = (m.firstName.charAt(0) + m.lastName.charAt(0)).toUpperCase();
-        const badgeColor = m.access === 'Primary Admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800';
-
-        const card = document.createElement('div');
-        card.className = "p-4 bg-slate-50 border border-slate-200 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4";
-        card.innerHTML = `
-          <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 rounded-full bg-enterprise-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
-              ${initials}
-            </div>
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="font-bold text-sm text-slate-900">${m.firstName} ${m.lastName}</span>
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeColor}">${m.access}</span>
-              </div>
-              <div class="text-xs text-slate-500 mt-0.5">${m.role || 'Dispatcher'}</div>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs text-slate-600 w-full md:w-auto">
-            <div>
-              <span class="text-[10px] text-slate-400 block">Username:</span>
-              <span class="font-mono font-bold text-sky-700">${m.username}</span>
-            </div>
-            <div>
-              <span class="text-[10px] text-slate-400 block">Password:</span>
-              <span class="font-mono text-emerald-600 font-bold">${m.password}</span>
-            </div>
-            <div>
-              <span class="text-[10px] text-slate-400 block">Email:</span>
-              <span class="font-semibold">${m.email}</span>
-            </div>
-            <div>
-              <span class="text-[10px] text-slate-400 block">Mobile:</span>
-              <span class="font-semibold">${m.mobile || 'N/A'}</span>
-            </div>
-          </div>
-
-          <div class="flex items-center space-x-2 w-full md:w-auto justify-end">
-            <button type="button" onclick="editMember(${idx})" class="px-3 py-1.5 bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 rounded-lg text-xs font-semibold transition">Edit</button>
-            <button type="button" onclick="deleteMember(${idx})" class="px-2.5 py-1.5 bg-rose-50 border border-rose-200 text-rose-600 hover:bg-rose-100 rounded-lg text-xs font-semibold transition"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+        container.innerHTML += `
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex justify-between items-center text-xs">
+            <div><b>${m.firstName} ${m.lastName}</b> (${m.username}) - ${m.access}</div>
+            <button type="button" onclick="deleteMember(${idx})" class="text-rose-600 font-bold">Remove</button>
           </div>
         `;
-        container.appendChild(card);
       });
-
       lucide.createIcons();
     }
 
-    // Save Profile & Upload Files to Supabase (Pametni upsert, ki shrani tudi CMR licenco in podatke prijavljenega)
+    // Shranjevanje podatkov v bazo Supabase
     async function saveProfile() {
       const saveBtn = document.getElementById('saveProfileBtn');
-      const originalBtnHtml = saveBtn.innerHTML;
-      
       saveBtn.disabled = true;
-      saveBtn.innerHTML = `<span>Uploading files & saving...</span>`;
+      saveBtn.textContent = "Saving...";
 
       try {
-        const bannerUrl = await uploadToStorage('bannerFileInput', 'banners');
-        const licenseUrl = await uploadToStorage('licenseFileInput', 'licenses');
-        const insuranceUrl = await uploadToStorage('insuranceFileInput', 'insurances');
-
-        if (licenseUrl) {
-          const lBadge = document.getElementById('licenseBadge');
-          lBadge.textContent = "Uploaded";
-          lBadge.className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
-        }
-        if (insuranceUrl) {
-          const iBadge = document.getElementById('insuranceBadge');
-          iBadge.textContent = "Uploaded";
-          iBadge.className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
-        }
-
         const companyData = {
           cargo_trans_id: cargoTransId,
           company_name: document.getElementById('company_name').value.trim(),
@@ -680,57 +583,47 @@
           country: document.getElementById('country').value.trim(),
           contact_email: document.getElementById('contact_email').value.trim(),
           phone: document.getElementById('phone').value.trim(),
-          cmr_license: document.getElementById('cmr_license') ? document.getElementById('cmr_license').value.trim() : ''
+          cmr_license: document.getElementById('cmr_license').value.trim()
         };
 
-        if (bannerUrl) companyData.banner_url = bannerUrl;
-
-        // Uporabimo .upsert(), ki preveri če zapisi s tem cargo_trans_id že obstajajo; če obstajajo jih posodobi, drugače ustvari novega
-        const { data, error } = await sb
+        const { error } = await sb
           .from('companies')
-          .upsert([companyData], { onConflict: 'cargo_trans_id' });
+          .update(companyData)
+          .eq('cargo_trans_id', cargoTransId);
 
         if (error) {
-          alert("Error saving company profile to Supabase: " + error.message);
+          alert("Napaka pri shranjevanju: " + error.message);
         } else {
-          alert(`Enterprise Company Profile (${cargoTransId}) successfully saved!`);
+          alert("Profil podjetja je uspešno posodobljen v bazi inviden v managerju!");
         }
-
       } catch (err) {
-        alert("Unexpected error: " + err.message);
+        alert("Napaka: " + err.message);
       } finally {
         saveBtn.disabled = false;
-        saveBtn.innerHTML = originalBtnHtml;
+        saveBtn.textContent = "Save Enterprise Profile Changes";
         lucide.createIcons();
       }
     }
 
-    // Avtomatsko nalaganje obstoječih podatkov iz baze za logiranega uporabnika ob odprtju strani
+    // Avtomatsko nalaganje podatkov prijavljenega uporabnika iz baze ob odprtju strani
     document.addEventListener("DOMContentLoaded", async function() {
-      document.getElementById('displayCargoTransID').textContent = cargoTransId;
-      localStorage.setItem('cargotrans_id', cargoTransId);
-      
-      const userBadge = document.getElementById('userBadgeDisplay');
-      if (usernameParam) {
-        userBadge.textContent = usernameParam.toUpperCase() + ' (ADMIN)';
-      } else if (companyParam) {
-        userBadge.textContent = companyParam.toUpperCase() + ' (ADMIN)';
-      }
-
-      if (companyParam) {
-        document.getElementById('company_name').value = companyParam;
-        document.getElementById('headerCompanyName').textContent = companyParam + ' - Corporate HQ';
-      }
-
-      // Poteg podatkov iz baze Supabase za tega uporabnika/podjetje
       try {
-        const { data, error } = await sb
-          .from('companies')
-          .select('*')
-          .eq('cargo_trans_id', cargoTransId)
-          .maybeSingle();
+        // Poiščemo podatke v bazi glede na uporabniško ime, email ali cargo_trans_id
+        let query = sb.from('companies').select('*');
+        if (cargoTransId) {
+          query = query.eq('cargo_trans_id', cargoTransId);
+        } else if (usernameParam) {
+          query = query.or(`username.eq.${usernameParam},contact_email.eq.${usernameParam}`);
+        } else {
+          query = query.limit(1);
+        }
+
+        const { data, error } = await query.maybeSingle();
 
         if (data) {
+          cargoTransId = data.cargo_trans_id || cargoTransId;
+          document.getElementById('displayCargoTransID').textContent = cargoTransId;
+          
           if (data.company_name) document.getElementById('company_name').value = data.company_name;
           if (data.vat_number) document.getElementById('vat_number').value = data.vat_number;
           if (data.address) document.getElementById('address').value = data.address;
@@ -738,15 +631,17 @@
           if (data.country) document.getElementById('country').value = data.country;
           if (data.contact_email) document.getElementById('contact_email').value = data.contact_email;
           if (data.phone) document.getElementById('phone').value = data.phone;
-          if (data.cmr_license && document.getElementById('cmr_license')) {
-            document.getElementById('cmr_license').value = data.cmr_license;
+          if (data.cmr_license) document.getElementById('cmr_license').value = data.cmr_license;
+          
+          if (data.company_name) {
+            document.getElementById('headerCompanyName').textContent = data.company_name + ' - Corporate HQ';
           }
-          if (companyParam) {
-            document.getElementById('headerCompanyName').textContent = (data.company_name || companyParam) + ' - Corporate HQ';
-          }
+          document.getElementById('userBadgeDisplay').textContent = (data.username || usernameParam || 'ADMIN').toUpperCase() + ' (VERIFIED)';
+        } else {
+          document.getElementById('displayCargoTransID').textContent = cargoTransId || 'CT-NEW';
         }
       } catch (err) {
-        console.error("Napaka pri branju podatkov iz baze:", err);
+        console.error("Napaka pri pridobivanju podatkov iz baze:", err);
       }
 
       renderTeamMembers();
