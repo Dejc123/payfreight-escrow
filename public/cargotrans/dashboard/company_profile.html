@@ -409,51 +409,41 @@
     const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-
-
-const urlParams = new URLSearchParams(window.location.search);
+    // 1. Zajememo parametre iz URL-ja ali preverimo, kdo je dejansko prijavljen v seji (localStorage)
+    const urlParams = new URLSearchParams(window.location.search);
     
-    // Dinamično prebere ID iz URL-ja (npr. ?CargoTransID=CT-397976). 
-    // Če ga v URL-ju ni, preveri localStorage, sicer pusti prazno za novega/trenutnega.
+    // Prioriteta: 1. URL parameter, 2. shranjen ID prijavljenega uporabnika
     let cargoTransId = urlParams.get('CargoTransID') || urlParams.get('cargotrans_id') || localStorage.getItem('cargotrans_id') || '';
-    
-    // Če je bil ID poslan v URL-ju, ga takoj osvežimo v localStorage za tega specifičnega uporabnika
-    if (urlParams.get('CargoTransID') || urlParams.get('cargotrans_id')) {
-      cargoTransId = urlParams.get('CargoTransID') || urlParams.get('cargotrans_id');
-      localStorage.setItem('cargotrans_id', cargoTransId);
-    }
-
     const usernameParam = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user') || '';
-    const companyParam = urlParams.get('Podjetje') || '';
-    
 
     let teamMembers = [];
     let savedLicenseUrl = '';
     let savedInsuranceUrl = '';
     let savedBannerUrl = '';
 
-    // Load data on startup and populate fields
+    // Load data on startup and populate fields (Podobno kot v ASP: baza.Execute za prijavljenega ponudnika)
     document.addEventListener("DOMContentLoaded", async () => {
       try {
         let query = sb.from('companies').select('*');
+        
+        // Če imamo ID prijavljenega uporabnika, poiščemo točno njega (kot v ASP: PonudnikSQL)
         if (cargoTransId) {
           query = query.eq('cargo_trans_id', cargoTransId);
         } else if (usernameParam) {
           query = query.or(`username.eq.${usernameParam},contact_email.eq.${usernameParam}`);
-        } else if (companyParam) {
-          query = query.eq('company_name', companyParam);
         } else {
-          query = query.order('id', { ascending: false }).limit(1);
+          // Varnostni izhod: če ni ničesar, opozorimo ali preusmerimo nazaj na prijavo
+          console.warn("Uporabnik ni prijavljen ali pa manjka CargoTransID.");
         }
 
         const { data, error } = await query.maybeSingle();
 
         if (data) {
+          // Uspešno najdeni podatki iz baze - napolnimo obrazec
           cargoTransId = data.cargo_trans_id || cargoTransId;
           document.getElementById('displayCargoTransID').textContent = cargoTransId;
           localStorage.setItem('cargotrans_id', cargoTransId);
           
-          // Populate text fields
           if (data.company_name) document.getElementById('company_name').value = data.company_name;
           if (data.vat_number) document.getElementById('vat_number').value = data.vat_number;
           if (data.address) document.getElementById('address').value = data.address;
@@ -492,12 +482,12 @@ const urlParams = new URLSearchParams(window.location.search);
             document.getElementById('insuranceDeleteBtn').classList.remove('hidden');
           }
 
-          if (data.company_name) {
-            document.getElementById('headerCompanyName').textContent = data.company_name + ' - Corporate HQ';
+          if (data.company_name && document.getElementById('headerName')) {
+            document.getElementById('headerName').textContent = data.company_name + ' - Corporate HQ';
           }
-          document.getElementById('userBadgeDisplay').textContent = (data.username || usernameParam || 'ADMIN').toUpperCase() + ' (VERIFIED)';
+          document.getElementById('userBadgeDisplay').textContent = (data.username || usernameParam || 'VERIFIED ADMIN').toUpperCase();
         } else {
-          document.getElementById('displayCargoTransID').textContent = cargoTransId || 'CT-NEW';
+          document.getElementById('displayCargoTransID').textContent = cargoTransId || 'CT-PENDING';
         }
       } catch (err) {
         console.error("Error fetching data from database:", err);
@@ -661,5 +651,4 @@ const urlParams = new URLSearchParams(window.location.search);
       }
     }
   </script>
-</body>
 </html>
