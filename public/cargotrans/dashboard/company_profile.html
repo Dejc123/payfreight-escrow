@@ -452,22 +452,54 @@ let savedBannerUrl = '';
           member = result.data;
         }
 
-        if (member && member.company_id) {
-          companyId = String(member.company_id);
-          localStorage.setItem('cargotrans_company_id', companyId);
-          const result = await sb.from('companies').select('*').eq('id', member.company_id).maybeSingle();
-          if (result.error) throw result.error;
-          companyRecord = result.data;
-        } else if (cargoTransId) {
-          // Compatibility for older company-admin accounts not yet linked in company_members.
-          const result = await sb.from('companies').select('*').eq('cargo_trans_id', cargoTransId).maybeSingle();
-          if (result.error) throw result.error;
-          companyRecord = result.data;
-          if (companyRecord) {
-            companyId = String(companyRecord.id);
-            localStorage.setItem('cargotrans_company_id', companyId);
-          }
-        }
+
+if (member && member.company_id) {
+  companyId = String(member.company_id);
+  localStorage.setItem('cargotrans_company_id', companyId);
+
+  const result = await sb.from('companies')
+    .select('*')
+    .eq('id', member.company_id)
+    .maybeSingle();
+
+  if (result.error) throw result.error;
+  companyRecord = result.data;
+}
+
+// Iskanje obstoječega podjetja po CargoTrans ID.
+if (!companyRecord && cargoTransId) {
+  const result = await sb.from('companies')
+    .select('*')
+    .eq('cargo_trans_id', cargoTransId)
+    .maybeSingle();
+
+  if (result.error) throw result.error;
+  companyRecord = result.data;
+}
+
+// Dodatno iskanje po uporabniškem imenu.
+if (!companyRecord && usernameParam) {
+  const result = await sb.from('companies')
+    .select('*')
+    .ilike('username', usernameParam)
+    .maybeSingle();
+
+  if (result.error) throw result.error;
+  companyRecord = result.data;
+}
+
+// Shrani povezavo z obstoječim podjetjem.
+if (companyRecord) {
+  companyId = String(companyRecord.id);
+  localStorage.setItem('cargotrans_company_id', companyId);
+
+  cargoTransId = companyRecord.cargo_trans_id || cargoTransId;
+
+  if (cargoTransId) {
+    localStorage.setItem('cargotrans_id', String(cargoTransId));
+  }
+}
+
 
         if (!companyRecord) {
           document.getElementById('displayCargoTransID').textContent = cargoTransId || 'NOT LINKED';
