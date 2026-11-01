@@ -196,12 +196,12 @@
         </div>
       </div>
 
-      <!-- SECTION 3: FLEET OVERVIEW & OPERATIONAL PRESENCE -->
+      <!-- SECTION 3: FLEET OVERVIEW & OPERATIONAL PRESENCE + CMR LICENCE -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
           <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
             <i data-lucide="truck" class="w-5 h-5 text-enterprise-600"></i>
-            <span>Fleet Specifications, Operations & Market Coverage</span>
+            <span>Fleet Specifications, Operations & CMR License</span>
           </h2>
           <span class="text-xs text-slate-400">Global freight directory description</span>
         </div>
@@ -209,12 +209,18 @@
         <div class="space-y-4">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Company Description & Fleet Overview</label>
-            <textarea id="fleetDescription" rows="4" placeholder="Provide a summary of your company, operational fleet capacity..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
+            <textarea id="fleetDescription" rows="3" placeholder="Provide a summary of your company, operational fleet capacity..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
           </div>
 
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Active Markets & Primary Trade Corridors</label>
             <textarea id="activeMarkets" rows="2" placeholder="List your active operational regions, international lanes..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
+          </div>
+
+          <!-- DODANO: CMR Licenca polje -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">CMR License Number / Details *</label>
+            <input type="text" id="cmr_license" placeholder="Enter CMR license number or details..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-enterprise-700 focus:outline-none focus:border-enterprise-600">
           </div>
         </div>
       </div>
@@ -311,7 +317,7 @@
     </form>
   </main>
 
-  <!-- MODAL DIALOG: ADD / EDIT TEAM MEMBER (VKLJUČUJE USERNAME & PASSWORD) -->
+  <!-- MODAL DIALOG: ADD / EDIT TEAM MEMBER -->
   <div id="memberModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 space-y-6 border border-slate-100 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -356,7 +362,7 @@
           <input type="email" id="mEmail" placeholder="dispatcher@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
         </div>
 
-        <!-- NEW: LOGIN CREDENTIALS SECTION -->
+        <!-- LOGIN CREDENTIALS SECTION -->
         <div class="p-3.5 bg-slate-900 rounded-xl space-y-3 text-white border border-slate-800">
           <div class="flex items-center justify-between">
             <span class="font-bold text-xs text-sky-400 flex items-center gap-1.5">
@@ -404,9 +410,9 @@
     const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Dynamic URL parameters
+    // Dynamic URL parameters or localStorage fallback
     const urlParams = new URLSearchParams(window.location.search);
-    const cargoTransId = urlParams.get('CargoTransID') || 'CT-' + Math.floor(10000 + Math.random() * 90000);
+    const cargoTransId = urlParams.get('CargoTransID') || localStorage.getItem('cargotrans_id') || 'CT-' + Math.floor(10000 + Math.random() * 90000);
     const usernameParam = urlParams.get('UporabniskoIme');
     const companyParam = urlParams.get('Podjetje');
 
@@ -415,7 +421,7 @@
 
     // Auto-generate Username and Password based on name
     function autoGenerateCredentials() {
-      if (editingMemberIndex !== null) return; // Ne pregašamo obstoječih ob urejanju
+      if (editingMemberIndex !== null) return;
       
       const firstName = document.getElementById('mFirstName').value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
       const lastName = document.getElementById('mLastName').value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -641,7 +647,7 @@
       lucide.createIcons();
     }
 
-    // Save Profile & Upload Files to Supabase
+    // Save Profile & Upload Files to Supabase (Pametni upsert, ki shrani tudi CMR licenco in podatke prijavljenega)
     async function saveProfile() {
       const saveBtn = document.getElementById('saveProfileBtn');
       const originalBtnHtml = saveBtn.innerHTML;
@@ -673,12 +679,16 @@
           city: document.getElementById('postalCode').value.trim() || "N/A",
           country: document.getElementById('country').value.trim(),
           contact_email: document.getElementById('contact_email').value.trim(),
-          phone: document.getElementById('phone').value.trim()
+          phone: document.getElementById('phone').value.trim(),
+          cmr_license: document.getElementById('cmr_license') ? document.getElementById('cmr_license').value.trim() : ''
         };
 
+        if (bannerUrl) companyData.banner_url = bannerUrl;
+
+        // Uporabimo .upsert(), ki preveri če zapisi s tem cargo_trans_id že obstajajo; če obstajajo jih posodobi, drugače ustvari novega
         const { data, error } = await sb
           .from('companies')
-          .insert([companyData]);
+          .upsert([companyData], { onConflict: 'cargo_trans_id' });
 
         if (error) {
           alert("Error saving company profile to Supabase: " + error.message);
@@ -695,11 +705,11 @@
       }
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
-      // Prikaz CargoTrans ID
+    // Avtomatsko nalaganje obstoječih podatkov iz baze za logiranega uporabnika ob odprtju strani
+    document.addEventListener("DOMContentLoaded", async function() {
       document.getElementById('displayCargoTransID').textContent = cargoTransId;
+      localStorage.setItem('cargotrans_id', cargoTransId);
       
-      // Dynamic User Badge Display
       const userBadge = document.getElementById('userBadgeDisplay');
       if (usernameParam) {
         userBadge.textContent = usernameParam.toUpperCase() + ' (ADMIN)';
@@ -712,14 +722,36 @@
         document.getElementById('headerCompanyName').textContent = companyParam + ' - Corporate HQ';
       }
 
+      // Poteg podatkov iz baze Supabase za tega uporabnika/podjetje
+      try {
+        const { data, error } = await sb
+          .from('companies')
+          .select('*')
+          .eq('cargo_trans_id', cargoTransId)
+          .maybeSingle();
+
+        if (data) {
+          if (data.company_name) document.getElementById('company_name').value = data.company_name;
+          if (data.vat_number) document.getElementById('vat_number').value = data.vat_number;
+          if (data.address) document.getElementById('address').value = data.address;
+          if (data.city) document.getElementById('postalCode').value = data.city;
+          if (data.country) document.getElementById('country').value = data.country;
+          if (data.contact_email) document.getElementById('contact_email').value = data.contact_email;
+          if (data.phone) document.getElementById('phone').value = data.phone;
+          if (data.cmr_license && document.getElementById('cmr_license')) {
+            document.getElementById('cmr_license').value = data.cmr_license;
+          }
+          if (companyParam) {
+            document.getElementById('headerCompanyName').textContent = (data.company_name || companyParam) + ' - Corporate HQ';
+          }
+        }
+      } catch (err) {
+        console.error("Napaka pri branju podatkov iz baze:", err);
+      }
+
       renderTeamMembers();
       lucide.createIcons();
     });
-  </script>
-
-  <!-- Lucide Icons Initialization -->
-  <script>
-    lucide.createIcons();
   </script>
 </body>
 </html>
