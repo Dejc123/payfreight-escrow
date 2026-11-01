@@ -526,12 +526,12 @@
       const fileExt = file.name.split('.').pop();
       const fileName = `${folderName}/${cargoTransId || 'company'}_${Date.now()}.${fileExt}`;
       
-      const { data, error } = await sb.storage.from('COMPANY-FILES').upload(fileName, file);
+      const { data, error } = await sb.storage.from('company-files').upload(fileName, file);
       if (error) {
         console.error("Storage upload error:", error);
         return null;
       }
-      const { data: publicUrlData } = sb.storage.from('COMPANY-FILES').getPublicUrl(fileName);
+      const { data: publicUrlData } = sb.storage.from('company-files').getPublicUrl(fileName);
       return publicUrlData.publicUrl;
     }
 
