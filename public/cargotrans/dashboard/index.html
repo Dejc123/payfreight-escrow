@@ -553,16 +553,22 @@
       lucide.createIcons();
     }
 
-    // 2. Prebiranje URL parametrov in seje
-    const urlParams = new URLSearchParams(window.location.search);
-    let username = urlParams.get('UporabniskoIme') || localStorage.getItem('cargotrans_user');
-    const companyParam = urlParams.get('Podjetje');
+    // 2. Prebiranje URL parametrov in seje
+    const urlParams = new URLSearchParams(window.location.search);
+    let username = urlParams.get('UporabniskoIme') || localStorage.getItem('cargotrans_user');
+    const companyParam = urlParams.get('Podjetje');
 
-    if (username) {
-      localStorage.setItem('cargotrans_user', username);
-    }
-
-    // 3. Posodobitev značk uporabnika
+    if (username) {
+      localStorage.setItem('cargotrans_user', username);
+    }
+// Dinamično posodobi VSE povezave do company_profile.html, da vsebujejo trenutnega uporabnika
+    const currentUser = localStorage.getItem('cargotrans_user');
+    if (currentUser) {
+      document.querySelectorAll('a[href="company_profile.html"]').forEach(link => {
+        link.href = `company_profile.html?username=${encodeURIComponent(currentUser)}`;
+      });
+    }
+    // 3. Posodobitev značk uporabnika 
     const badgeDisplays = document.querySelectorAll('#userBadgeDisplay');
     badgeDisplays.forEach(badge => {
       if (companyParam) {
