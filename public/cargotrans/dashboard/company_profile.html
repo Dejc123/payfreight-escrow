@@ -409,16 +409,27 @@
     const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // CargoTrans user identity. Resolve the member first, then follow company_members.company_id.
-    const urlParams = new URLSearchParams(window.location.search);
-    let cargoTransId = urlParams.get('CargoTransID') || urlParams.get('cargotrans_id') || localStorage.getItem('cargotrans_id') || '';
-    const usernameParam = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user') || '';
-    let companyId = localStorage.getItem('cargotrans_company_id') || '';
-    let companyRecord = null;
-    let teamMembers = [];
-    let savedLicenseUrl = '';
-    let savedInsuranceUrl = '';
-    let savedBannerUrl = '';
+// CargoTrans user identity
+const urlParams = new URLSearchParams(window.location.search);
+
+let cargoTransId =
+  urlParams.get('CargoTransID') ||
+  urlParams.get('cargotrans_id') ||
+  localStorage.getItem('cargotrans_id') ||
+  '';
+
+const usernameParam =
+  urlParams.get('UporabniskoIme') ||
+  urlParams.get('username') ||
+  localStorage.getItem('cargotrans_user') ||
+  '';
+
+let companyId = localStorage.getItem('cargotrans_company_id') || '';
+let companyRecord = null;
+let teamMembers = [];
+let savedLicenseUrl = '';
+let savedInsuranceUrl = '';
+let savedBannerUrl = '';
 
     document.addEventListener("DOMContentLoaded", async () => {
       try {
