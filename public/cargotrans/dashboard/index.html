@@ -33,9 +33,19 @@
     const token = urlParams.get('token');
     const username = urlParams.get('UporabniskoIme');
 
-    // Če ni tokena ali uporabniškega imena, uporabnika vržemo nazaj na vstopno stran
-    if (!token && !username) {
-      window.location.href = "../index.html?status=not_registered";
+    if (token || username) {
+      // Če so podatki v URL-ju, jih shranimo v localStorage, da ohranimo sejo
+      localStorage.setItem('cargotrans_token', token || '');
+      localStorage.setItem('cargotrans_user', username || '');
+    } else {
+      // Če jih ni v URL-ju, preverimo, če obstajajo v localStorage
+      const savedUser = localStorage.getItem('cargotrans_user');
+      const savedToken = localStorage.getItem('cargotrans_token');
+
+      if (!savedUser && !savedToken) {
+        // Če ni ne v URL-ju ne v localStorage, šele takrat vržemo ven
+        window.location.href = "../index.html?status=not_registered";
+      }
     }
   })();
 </script>
