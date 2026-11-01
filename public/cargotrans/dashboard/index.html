@@ -34,12 +34,14 @@
   (function checkAccess() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
-    const username = urlParams.get('UporabniskoIme');
+    const username = urlParams.get('UporabniskoIme') || urlParams.get('username');
+    const cargoTransId = urlParams.get('CargoTransID') || urlParams.get('cargotrans_id');
 
-    if (token || username) {
+    if (token || username || cargoTransId) {
       // Če so podatki v URL-ju, jih shranimo v localStorage, da ohranimo sejo
       localStorage.setItem('cargotrans_token', token || '');
-      localStorage.setItem('cargotrans_user', username || '');
+      if (username) localStorage.setItem('cargotrans_user', username);
+      if (cargoTransId) localStorage.setItem('cargotrans_id', cargoTransId);
     } else {
       // Če jih ni v URL-ju, preverimo, če obstajajo v localStorage
       const savedUser = localStorage.getItem('cargotrans_user');
@@ -548,82 +550,84 @@
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   document.addEventListener("DOMContentLoaded", async () => {
-    // 1. Inicializacija Lucide ikon
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
-    }
+    if (typeof lucide !== 'undefined') lucide.createIcons();
 
-    // 2. Prebiranje URL parametrov in seje
-    const urlParams = new URLSearchParams(window.location.search);
-    let username = urlParams.get('UporabniskoIme') || localStorage.getItem('cargotrans_user');
-    const companyParam = urlParams.get('Podjetje');
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user') || '';
+    const cargoTransId = urlParams.get('CargoTransID') || urlParams.get('cargotrans_id') || localStorage.getItem('cargotrans_id') || '';
+    const companyParam = urlParams.get('Podjetje') || '';
 
-    if (username) {
-      localStorage.setItem('cargotrans_user', username);
-    }
-// Dinamično posodobi VSE povezave do company_profile.html, da vsebujejo trenutnega uporabnika
-    const currentUser = localStorage.getItem('cargotrans_user');
-    if (currentUser) {
-      document.querySelectorAll('a[href="company_profile.html"]').forEach(link => {
-        link.href = `company_profile.html?username=${encodeURIComponent(currentUser)}`;
-      });
-    }
-    // 3. Posodobitev značk uporabnika 
-    const badgeDisplays = document.querySelectorAll('#userBadgeDisplay');
-    badgeDisplays.forEach(badge => {
-      if (companyParam) {
-        badge.textContent = companyParam.toUpperCase() + ' (VERIFIED)';
-      } else if (username) {
-        badge.textContent = username.toUpperCase() + ' (VERIFIED)';
-      } else {
-        badge.textContent = 'VERIFIED USER';
-      }
+    if (username) localStorage.setItem('cargotrans_user', username);
+    if (cargoTransId) localStorage.setItem('cargotrans_id', cargoTransId);
+
+    document.querySelectorAll('#userBadgeDisplay').forEach(badge => {
+      badge.textContent = (companyParam || username || 'VERIFIED USER').toUpperCase() + (companyParam || username ? ' (VERIFIED)' : '');
     });
 
-    // 4. POVLEK VELJAVNOSTI DNI DIREKTNO IZ SUPABASE TABELE 'companies'
-    if (username) {
-      try {
-        const { data: compList, error } = await sb
-          .from('companies')
-          .select('*')
-          .ilike('username', username);
-
-        if (error) {
-          console.error("Napaka pri branju iz baze:", error);
-          return;
-        }
-
-        if (compList && compList.length > 0) {
-          const comp = compList[0];
-          const validityDays = comp.validity_days || 0;
-
-          const daysDisplay = document.getElementById('daysRemainingDisplay');
-          const badgeContainer = document.getElementById('subscriptionBadge');
-
-          if (daysDisplay && badgeContainer) {
-            if (validityDays > 0) {
-              daysDisplay.textContent = `${validityDays} DAYS ACTIVE`;
-              badgeContainer.className = "flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 rounded-lg";
-              badgeContainer.querySelector('span').className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
-              daysDisplay.className = "text-xs font-bold text-emerald-400 font-mono uppercase tracking-wide";
-            } else {
-              daysDisplay.textContent = "0 DAYS (INACTIVE)";
-              badgeContainer.className = "flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-lg";
-              badgeContainer.querySelector('span').className = "w-2 h-2 rounded-full bg-amber-500 animate-pulse";
-              daysDisplay.className = "text-xs font-bold text-amber-400 font-mono uppercase tracking-wide";
-            }
-          }
-        }
-      } catch (err) {
-        console.error("Sistemska napaka pri povezavi s Supabase:", err);
+    try {
+      let member = null;
+      if (username) {
+        const result = await sb.from('company_members').select('id, company_id, cargo_trans_id, username, email, is_active').ilike('username', username).maybeSingle();
+        if (result.error) throw result.error;
+        member = result.data;
       }
+      if (!member && cargoTransId) {
+        const result = await sb.from('company_members').select('id, company_id, cargo_trans_id, username, email, is_active').eq('cargo_trans_id', cargoTransId).maybeSingle();
+        if (result.error) throw result.error;
+        member = result.data;
+      }
+
+      let company = null;
+      if (member && member.company_id) {
+        const result = await sb.from('companies').select('id, company_name, cargo_trans_id, validity_days').eq('id', member.company_id).maybeSingle();
+        if (result.error) throw result.error;
+        company = result.data;
+      } else if (cargoTransId) {
+        // Legacy compatibility only: never create a new record or guess by username.
+        const result = await sb.from('companies').select('id, company_name, cargo_trans_id, validity_days').eq('cargo_trans_id', cargoTransId).maybeSingle();
+        if (result.error) throw result.error;
+        company = result.data;
+      }
+
+      if (!company) {
+        console.warn('CargoNet member/company link not found. No new company record was created.');
+        return;
+      }
+
+      localStorage.setItem('cargotrans_company_id', String(company.id));
+      if (company.cargo_trans_id) localStorage.setItem('cargotrans_id', String(company.cargo_trans_id));
+      document.querySelectorAll('#userBadgeDisplay').forEach(badge => {
+        badge.textContent = (company.company_name || username || 'VERIFIED USER').toUpperCase() + ' (VERIFIED)';
+      });
+
+      const validityDays = Number(company.validity_days || 0);
+      const daysDisplay = document.getElementById('daysRemainingDisplay');
+      const badgeContainer = document.getElementById('subscriptionBadge');
+      if (daysDisplay && badgeContainer) {
+        if (validityDays > 0) {
+          daysDisplay.textContent = `${validityDays} DAYS ACTIVE`;
+          badgeContainer.className = "flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 rounded-lg";
+          badgeContainer.querySelector('span').className = "w-2 h-2 rounded-full bg-emerald-500 animate-pulse";
+          daysDisplay.className = "text-xs font-bold text-emerald-400 font-mono uppercase tracking-wide";
+        } else {
+          daysDisplay.textContent = "0 DAYS (INACTIVE)";
+          badgeContainer.className = "flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-lg";
+          badgeContainer.querySelector('span').className = "w-2 h-2 rounded-full bg-amber-500 animate-pulse";
+          daysDisplay.className = "text-xs font-bold text-amber-400 font-mono uppercase tracking-wide";
+        }
+      }
+    } catch (err) {
+      console.error('Supabase member/company lookup failed:', err);
     }
   });
 
   // Funkcija za varno odjavo
   function handleLogout() {
     if (confirm("Are you sure you want to log out of CargoNet?")) {
-      localStorage.clear();
+      localStorage.removeItem('cargotrans_token');
+      localStorage.removeItem('cargotrans_user');
+      localStorage.removeItem('cargotrans_id');
+      localStorage.removeItem('cargotrans_company_id');
       sessionStorage.clear();
       window.location.href = "../index.html";
     }
