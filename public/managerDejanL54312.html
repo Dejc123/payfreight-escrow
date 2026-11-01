@@ -130,7 +130,7 @@
           </button>
         </div>
 
-        <!-- SEARCH BAR (Kot na Web2 strani) -->
+        <!-- SEARCH BAR -->
         <div class="flex items-center gap-2 w-full md:w-80">
           <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Išči podjetje, ID, email..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono">
         </div>
@@ -179,7 +179,7 @@
     </main>
   </div>
 
-  <!-- EDIT / DETAILS MODAL (Urejanje vseh podatkov podjetja kot na Web2) -->
+  <!-- EDIT / DETAILS MODAL (Vključno z gumbom za brisanje podjetja) -->
   <div id="editModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8">
       <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -260,9 +260,17 @@
           </select>
         </div>
 
-        <div class="md:col-span-2 flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
-          <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-bold">Prekliči</button>
-          <button type="submit" class="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold shadow-md">Shrani Spremembe</button>
+        <div class="md:col-span-2 flex items-center justify-between pt-4 border-t border-slate-800">
+          <!-- Gumb za brisanje podjetja / računa -->
+          <button type="button" onclick="deleteCompany()" class="px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-xl font-bold transition flex items-center gap-1.5">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+            <span>Izbriši Račun / Podjetje</span>
+          </button>
+
+          <div class="flex items-center gap-3">
+            <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-bold">Prekliči</button>
+            <button type="submit" class="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold shadow-md">Shrani Spremembe</button>
+          </div>
         </div>
       </form>
     </div>
@@ -277,7 +285,7 @@
     let currentPlatform = 'cargonet';
     let allCompanies = [];
     let currentPage = 1;
-    const pageSize = 25; // 25 zapisov na stran kot na Web2
+    const pageSize = 25;
     let searchQuery = '';
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -316,7 +324,6 @@
           errBox.classList.remove('hidden');
         }
       } catch (err) {
-        // Fallback za test brez backenda
         if (u === "admin" && t2fa.length === 6) {
           sessionStorage.setItem("admin_server_token", "SUPER_ADMIN_2FA_VERIFIED_PAYFREIGHT_2026");
           showAdminDashboard();
@@ -416,7 +423,6 @@
       const tbody = document.getElementById('managerTableBody');
       tbody.innerHTML = '';
 
-      // Filtriranje po modulu in iskalnem nizu
       const filtered = allCompanies.filter(c => {
         const matchesPlatform = (currentPlatform === 'payfreight') ? c.payfreight_enabled === true : (c.platform || 'cargonet') === currentPlatform;
         if (!matchesPlatform) return false;
@@ -434,7 +440,6 @@
         return;
       }
 
-      // Paginacija (25 na stran)
       const totalPages = Math.ceil(filtered.length / pageSize);
       if (currentPage > totalPages) currentPage = totalPages;
       const start = (currentPage - 1) * pageSize;
@@ -548,6 +553,39 @@
         alert("Podatki podjetja uspešno posodobljeni!");
         closeEditModal();
         loadAdminData();
+      }
+    }
+
+    // NOVA FUNKCIJA ZA BRISANJE PODJETJA / RAČUNA IZ BAZE
+    async function deleteCompany() {
+      const id = document.getElementById('editDbId').value;
+      const compName = document.getElementById('editCompanyName').value;
+
+      if (!id) {
+        alert("Napaka: ID podjetja ni določen.");
+        return;
+      }
+
+      if (confirm(`Ali ste povsem prepričani, da želite trajno izbrisati podjetje in račun "${compName}"? Tega dejanja ni mogoče razveljaviti.`)) {
+        try {
+          const { error } = await sb
+            .from('companies')
+            .delete()
+            .eq('id', id);
+
+          if (error) {
+            console.error("Napaka pri brisanju:", error);
+            alert("Napaka pri brisanju podjetja: " + error.message);
+            return;
+          }
+
+          alert("Podjetje je bilo uspešno izbrisano iz baze.");
+          closeEditModal();
+          loadAdminData(); // Osveži tabelo in statistiko
+        } catch (err) {
+          console.error("Sistemska napaka:", err);
+          alert("Prišlo je do napake pri povezavi s podatkovno bazo.");
+        }
       }
     }
 
