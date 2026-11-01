@@ -311,7 +311,7 @@
     </form>
   </main>
 
-  <!-- MODAL DIALOG: ADD / EDIT TEAM MEMBER -->
+  <!-- MODAL DIALOG: ADD / EDIT TEAM MEMBER (VKLJUČUJE USERNAME & PASSWORD) -->
   <div id="memberModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 space-y-6 border border-slate-100 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -356,7 +356,7 @@
           <input type="email" id="mEmail" placeholder="dispatcher@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
         </div>
 
-        <!-- LOGIN CREDENTIALS SECTION -->
+        <!-- NEW: LOGIN CREDENTIALS SECTION -->
         <div class="p-3.5 bg-slate-900 rounded-xl space-y-3 text-white border border-slate-800">
           <div class="flex items-center justify-between">
             <span class="font-bold text-xs text-sky-400 flex items-center gap-1.5">
@@ -436,10 +436,12 @@
     function handleFileUpload(event, badgeId, fileNameId) {
       const file = event.target.files[0];
       if (file) {
-        document.getElementById(badgeId).textContent = "Ready to Upload";
-        document.getElementById(badgeId).className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200";
-        document.getElementById(fileNameId).textContent = file.name;
-        document.getElementById(fileNameId).className = "text-xs font-mono font-bold text-slate-800";
+        const badge = document.getElementById(badgeId);
+        const fileName = document.getElementById(fileNameId);
+        badge.textContent = "Ready to Upload";
+        badge.className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200";
+        fileName.textContent = file.name;
+        fileName.className = "text-xs font-mono font-bold text-slate-800";
       }
     }
 
@@ -455,6 +457,8 @@
           previewBox.style.backgroundPosition = 'center';
           statusText.textContent = "Banner Attached: " + file.name;
           statusText.classList.add('bg-slate-900/70', 'text-white', 'px-3', 'py-1', 'rounded-lg');
+          previewBox.classList.remove('border-dashed', 'border-slate-300');
+          previewBox.classList.add('border-solid', 'border-enterprise-600');
         };
         reader.readAsDataURL(file);
       }
@@ -606,6 +610,8 @@
           query = query.eq('cargo_trans_id', cargoTransId);
         } else if (usernameParam) {
           query = query.or(`username.eq.${usernameParam},contact_email.eq.${usernameParam}`);
+        } else if (companyParam) {
+          query = query.eq('company_name', companyParam);
         } else {
           query = query.limit(1);
         }
