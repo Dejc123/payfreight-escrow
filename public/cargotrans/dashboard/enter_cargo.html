@@ -69,7 +69,7 @@
         <div class="flex items-center space-x-3">
           <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-xs font-bold text-emerald-400 tracking-wide font-mono">DEMO USER</span>
+            <span id="navUsername" class="text-xs font-bold text-emerald-400 tracking-wide font-mono">Loading...</span>
           </div>
         </div>
 
@@ -758,5 +758,26 @@
   <script>
     lucide.createIcons();
   </script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Preberemo prijavljenega uporabnika iz localStorage
+    const savedUser = localStorage.getItem('cargotrans_user');
+    
+    if (savedUser) {
+      const userData = JSON.parse(savedUser);
+      
+      // Zamenjamo tekst v zgornjem desnem kotu z dejanskim uporabniškim imenom ali podjetjem
+      const navUserEl = document.getElementById('navUsername');
+      if (navUserEl) {
+        navUserEl.textContent = userData.username || userData.company_name || "USER";
+      }
+
+      // Zamenjamo tekst v glavi obrazca
+      const formUserEl = document.getElementById('formUserLabel');
+      if (formUserEl) {
+        formUserEl.textContent = "User: " + (userData.username || "Admin");
+      }
+    }
+  });
+  
 </body>
 </html>
