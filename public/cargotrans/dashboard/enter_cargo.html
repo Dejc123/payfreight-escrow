@@ -756,23 +756,26 @@
   </script>
 
   <script>
-    lucide.createIcons();
-document.addEventListener("DOMContentLoaded", function() {
-    // 1. Neposredno preberemo objekt iz localStorage
+  document.addEventListener("DOMContentLoaded", function() {
+    // 1. Inicializacija Lucide ikon, ko je DOM zagotovo naložen
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    }
+
+    // 2. Branje prijavljenega uporabnika iz localStorage
     const savedUserStr = localStorage.getItem('cargotrans_user');
     
     if (savedUserStr) {
       try {
         const user = JSON.parse(savedUserStr);
         
-        // 2. Poiščemo element za uporabniško ime v zgornjem desnem kotu
+        // Vpis v zgornji desni kot
         const navUserEl = document.getElementById('navUsername');
         if (navUserEl) {
-          // Nastavimo pravo uporabniško ime ali ime podjetja iz baze
           navUserEl.textContent = user.username || user.company_name || user.contact_email || "DEJANLUZAR";
         }
         
-        // 3. Poiščemo element v glavi obrazca
+        // Vpis v glavo obrazca
         const formUserEl = document.getElementById('formUserLabel');
         if (formUserEl) {
           formUserEl.textContent = "User: " + (user.username || user.cargo_trans_id || "DejanLuzar");
@@ -781,7 +784,7 @@ document.addEventListener("DOMContentLoaded", function() {
         console.error("Napaka pri branju uporabnika:", e);
       }
     } else {
-      // Če se slučajno zgodi, da ni seje, vsaj izpišemo podatke, da ni "Loading..."
+      // Rezerva, če seje ni v localStorage
       const navUserEl = document.getElementById('navUsername');
       if (navUserEl) navUserEl.textContent = "DEJANLUZAR";
       
@@ -789,6 +792,7 @@ document.addEventListener("DOMContentLoaded", function() {
       if (formUserEl) formUserEl.textContent = "User: DejanLuzar";
     }
   });
+</script>
   
 </body>
 </html>
