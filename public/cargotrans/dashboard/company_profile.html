@@ -219,7 +219,7 @@
         </div>
       </div>
 
-      <!-- SECTION 4: REAL COMPLIANCE FILE UPLOADS -->
+    <!-- SECTION 4: REAL COMPLIANCE FILE UPLOADS -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
           <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
@@ -245,7 +245,10 @@
             <input type="file" id="licenseFileInput" class="hidden" onchange="handleFileUpload(event, 'licenseBadge', 'licenseFileName')">
             <div class="flex items-center justify-between pt-2">
               <span id="licenseFileName" class="text-xs font-mono text-slate-400 italic">No file selected</span>
-              <button type="button" onclick="document.getElementById('licenseFileInput').click()" class="px-3 py-1.5 bg-enterprise-600 hover:bg-enterprise-700 text-white rounded-lg text-xs font-semibold transition">Upload File</button>
+              <div class="flex items-center gap-2">
+                <button type="button" id="licenseDeleteBtn" onclick="deleteFile('license')" class="hidden px-2 py-1.5 bg-rose-50 text-rose-600 rounded-lg text-xs font-semibold border border-rose-200">Delete</button>
+                <button type="button" onclick="document.getElementById('licenseFileInput').click()" class="px-3 py-1.5 bg-enterprise-600 hover:bg-enterprise-700 text-white rounded-lg text-xs font-semibold transition">Upload File</button>
+              </div>
             </div>
           </div>
 
@@ -263,7 +266,10 @@
             <input type="file" id="insuranceFileInput" class="hidden" onchange="handleFileUpload(event, 'insuranceBadge', 'insuranceFileName')">
             <div class="flex items-center justify-between pt-2">
               <span id="insuranceFileName" class="text-xs font-mono text-slate-400 italic">No file selected</span>
-              <button type="button" onclick="document.getElementById('insuranceFileInput').click()" class="px-3 py-1.5 bg-enterprise-600 hover:bg-enterprise-700 text-white rounded-lg text-xs font-semibold transition">Upload File</button>
+              <div class="flex items-center gap-2">
+                <button type="button" id="insuranceDeleteBtn" onclick="deleteFile('insurance')" class="hidden px-2 py-1.5 bg-rose-50 text-rose-600 rounded-lg text-xs font-semibold border border-rose-200">Delete</button>
+                <button type="button" onclick="document.getElementById('insuranceFileInput').click()" class="px-3 py-1.5 bg-enterprise-600 hover:bg-enterprise-700 text-white rounded-lg text-xs font-semibold transition">Upload File</button>
+              </div>
             </div>
           </div>
 
@@ -397,215 +403,32 @@
     </div>
   </div>
 
- <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
+<!-- SCRIPT LOGIC & SUPABASE -->
   <script>
-    // Supabase Initialization
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Pridobitev podatkov o prijavljenem uporabniku iz URL-ja ali localStorage
     const urlParams = new URLSearchParams(window.location.search);
-    let cargoTransId = urlParams.get('CargoTransID') || '';
-    let usernameParam = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user') || '';
-    let companyParam = urlParams.get('Podjetje') || '';
+    let cargoTransId = urlParams.get('CargoTransID') || localStorage.getItem('cargotrans_id') || '';
+    const usernameParam = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user') || '';
+    const companyParam = urlParams.get('Podjetje') || '';
 
     let teamMembers = [];
-    let editingMemberIndex = null;
+    let savedLicenseUrl = '';
+    let savedInsuranceUrl = '';
+    let savedBannerUrl = '';
 
-    // Auto-generate Username and Password based on name
-    function autoGenerateCredentials() {
-      if (editingMemberIndex !== null) return;
-      const firstName = document.getElementById('mFirstName').value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-      const lastName = document.getElementById('mLastName').value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-      if (firstName || lastName) {
-        document.getElementById('mUsername').value = `${firstName}.${lastName}` || 'user';
-        if (!document.getElementById('mPassword').value) generateNewPassword();
-      }
-    }
-
-    function generateNewPassword() {
-      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789#@!';
-      let pwd = 'CT-';
-      for (let i = 0; i < 6; i++) {
-        pwd += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      document.getElementById('mPassword').value = pwd;
-    }
-
-    function handleFileUpload(event, badgeId, fileNameId) {
-      const file = event.target.files[0];
-      if (file) {
-        document.getElementById(badgeId).textContent = "Ready to Upload";
-        document.getElementById(badgeId).className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200";
-        document.getElementById(fileNameId).textContent = file.name;
-        document.getElementById(fileNameId).className = "text-xs font-mono font-bold text-slate-800";
-      }
-    }
-
-    function handleBannerUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const statusText = document.getElementById('bannerStatusText');
-        const previewBox = document.getElementById('bannerPreviewBox');
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          previewBox.style.backgroundImage = `url('${e.target.result}')`;
-          previewBox.style.backgroundSize = 'cover';
-          previewBox.style.backgroundPosition = 'center';
-          statusText.textContent = "Banner Attached: " + file.name;
-          statusText.classList.add('bg-slate-900/70', 'text-white', 'px-3', 'py-1', 'rounded-lg');
-        };
-        reader.readAsDataURL(file);
-      }
-    }
-
-    async function uploadToStorage(fileInputId, folderName) {
-      const fileInput = document.getElementById(fileInputId);
-      if (!fileInput || !fileInput.files[0]) return null;
-      const file = fileInput.files[0];
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${folderName}/${cargoTransId || 'company'}_${Date.now()}.${fileExt}`;
-      const { data, error } = await sb.storage.from('COMPANY-FILES').upload(fileName, file);
-      if (error) return null;
-      const { data: publicUrlData } = sb.storage.from('COMPANY-FILES').getPublicUrl(fileName);
-      return publicUrlData.publicUrl;
-    }
-
-    function openAddMemberModal() {
-      editingMemberIndex = null;
-      document.getElementById('modalTitle').textContent = "Add Team Member / Dispatcher Account";
-      document.getElementById('mFirstName').value = "";
-      document.getElementById('mLastName').value = "";
-      document.getElementById('mRole').value = "";
-      document.getElementById('mAccess').value = "Dispatcher";
-      document.getElementById('mEmail').value = "";
-      document.getElementById('mMobile').value = "";
-      document.getElementById('mOffice').value = "";
-      document.getElementById('mUsername').value = "";
-      generateNewPassword();
-      document.getElementById('memberModal').classList.remove('hidden');
-    }
-
-    function closeMemberModal() {
-      document.getElementById('memberModal').classList.add('hidden');
-    }
-
-    function saveTeamMember() {
-      const firstName = document.getElementById('mFirstName').value.trim();
-      const lastName = document.getElementById('mLastName').value.trim();
-      const role = document.getElementById('mRole').value.trim();
-      const access = document.getElementById('mAccess').value;
-      const email = document.getElementById('mEmail').value.trim();
-      const mobile = document.getElementById('mMobile').value.trim();
-      const office = document.getElementById('mOffice').value.trim();
-      const username = document.getElementById('mUsername').value.trim();
-      const password = document.getElementById('mPassword').value.trim();
-
-      if (!firstName || !lastName || !email || !username || !password) {
-        alert("Please fill in required fields.");
-        return;
-      }
-      const memberData = { firstName, lastName, role, access, email, mobile, office, username, password, cargoTransId };
-      if (editingMemberIndex !== null) {
-        teamMembers[editingMemberIndex] = memberData;
-      } else {
-        teamMembers.push(memberData);
-      }
-      closeMemberModal();
-      renderTeamMembers();
-    }
-
-    function editMember(index) {
-      editingMemberIndex = index;
-      const m = teamMembers[index];
-      document.getElementById('modalTitle').textContent = "Edit Team Member Account";
-      document.getElementById('mFirstName').value = m.firstName;
-      document.getElementById('mLastName').value = m.lastName;
-      document.getElementById('mRole').value = m.role;
-      document.getElementById('mAccess').value = m.access;
-      document.getElementById('mEmail').value = m.email;
-      document.getElementById('mMobile').value = m.mobile;
-      document.getElementById('mOffice').value = m.office;
-      document.getElementById('mUsername').value = m.username || '';
-      document.getElementById('mPassword').value = m.password || '';
-      document.getElementById('memberModal').classList.remove('hidden');
-    }
-
-    function deleteMember(index) {
-      if (confirm("Are you sure you want to remove this team member account?")) {
-        teamMembers.splice(index, 1);
-        renderTeamMembers();
-      }
-    }
-
-    function renderTeamMembers() {
-      const container = document.getElementById('teamMembersContainer');
-      const seatCount = document.getElementById('teamSeatCount');
-      seatCount.textContent = `${teamMembers.length} of 100 Seats Active`;
-      container.innerHTML = "";
-      if (teamMembers.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center border-2 border-dashed border-slate-200 rounded-xl bg-slate-50/50"><p class="text-xs font-semibold text-slate-600">No team members added yet</p></div>`;
-        lucide.createIcons();
-        return;
-      }
-      teamMembers.forEach((m, idx) => {
-        const initials = (m.firstName.charAt(0) + m.lastName.charAt(0)).toUpperCase();
-        container.innerHTML += `
-          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex justify-between items-center text-xs">
-            <div><b>${m.firstName} ${m.lastName}</b> (${m.username}) - ${m.access}</div>
-            <button type="button" onclick="deleteMember(${idx})" class="text-rose-600 font-bold">Remove</button>
-          </div>
-        `;
-      });
-      lucide.createIcons();
-    }
-
- // Shranjevanje podatkov v bazo Supabase
-    async function saveProfile() {
-      const saveBtn = document.getElementById('saveProfileBtn');
-      saveBtn.disabled = true;
-      saveBtn.textContent = "Saving...";
-
-      try {
-        const companyData = {
-          cargo_trans_id: cargoTransId,
-          company_name: document.getElementById('company_name').value.trim(),
-          vat_number: document.getElementById('vat_number').value.trim(),
-          address: document.getElementById('address').value.trim(),
-          city: document.getElementById('postalCode').value.trim() || "N/A",
-          country: document.getElementById('country').value.trim(),
-          contact_email: document.getElementById('contact_email').value.trim(),
-          phone: document.getElementById('phone').value.trim()
-        };
-
-        const { error } = await sb
-          .from('companies')
-          .update(companyData)
-          .eq('cargo_trans_id', cargoTransId);
-
-        if (error) {
-          alert("Error saving profile: " + error.message);
-        } else {
-          alert("Company profile successfully updated and visible in manager HQ!");
-        }
-      } catch (err) {
-        alert("Error: " + err.message);
-      } finally {
-        saveBtn.disabled = false;
-        saveBtn.textContent = "Save Enterprise Profile Changes";
-        lucide.createIcons();
-      }
-    }
-
-    // Avtomatsko nalaganje podatkov prijavljenega uporabnika iz baze ob odprtju strani
-    document.addEventListener("DOMContentLoaded", async function() {
+    // Load data on startup
+    document.addEventListener("DOMContentLoaded", async () => {
       try {
         let query = sb.from('companies').select('*');
         if (cargoTransId) {
           query = query.eq('cargo_trans_id', cargoTransId);
         } else if (usernameParam) {
           query = query.or(`username.eq.${usernameParam},contact_email.eq.${usernameParam}`);
+        } else if (companyParam) {
+          query = query.eq('company_name', companyParam);
         } else {
           query = query.limit(1);
         }
@@ -615,6 +438,7 @@
         if (data) {
           cargoTransId = data.cargo_trans_id || cargoTransId;
           document.getElementById('displayCargoTransID').textContent = cargoTransId;
+          localStorage.setItem('cargotrans_id', cargoTransId);
           
           if (data.company_name) document.getElementById('company_name').value = data.company_name;
           if (data.vat_number) document.getElementById('vat_number').value = data.vat_number;
@@ -623,7 +447,37 @@
           if (data.country) document.getElementById('country').value = data.country;
           if (data.contact_email) document.getElementById('contact_email').value = data.contact_email;
           if (data.phone) document.getElementById('phone').value = data.phone;
-          
+          if (data.fleet_description) document.getElementById('fleetDescription').value = data.fleet_description;
+          if (data.active_markets) document.getElementById('activeMarkets').value = data.active_markets;
+
+          // Banner
+          if (data.banner_url) {
+            savedBannerUrl = data.banner_url;
+            const pb = document.getElementById('bannerPreviewBox');
+            pb.style.backgroundImage = `url('${data.banner_url}')`;
+            pb.style.backgroundSize = 'cover';
+            pb.style.backgroundPosition = 'center';
+            document.getElementById('bannerStatusText').textContent = "Banner loaded from database";
+          }
+
+          // License File
+          if (data.license_url) {
+            savedLicenseUrl = data.license_url;
+            document.getElementById('licenseBadge').textContent = "Uploaded";
+            document.getElementById('licenseBadge').className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+            document.getElementById('licenseFileName').textContent = data.license_url.split('/').pop().split('?')[0];
+            document.getElementById('licenseDeleteBtn').classList.remove('hidden');
+          }
+
+          // Insurance File
+          if (data.insurance_url) {
+            savedInsuranceUrl = data.insurance_url;
+            document.getElementById('insuranceBadge').textContent = "Uploaded";
+            document.getElementById('insuranceBadge').className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+            document.getElementById('insuranceFileName').textContent = data.insurance_url.split('/').pop().split('?')[0];
+            document.getElementById('insuranceDeleteBtn').classList.remove('hidden');
+          }
+
           if (data.company_name) {
             document.getElementById('headerCompanyName').textContent = data.company_name + ' - Corporate HQ';
           }
@@ -638,6 +492,162 @@
       renderTeamMembers();
       lucide.createIcons();
     });
+
+    function handleFileUpload(event, badgeId, fileNameId) {
+      const file = event.target.files[0];
+      if (file) {
+        document.getElementById(badgeId).textContent = "Ready to Upload";
+        document.getElementById(badgeId).className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200";
+        document.getElementById(fileNameId).textContent = file.name;
+        document.getElementById(fileNameId).className = "text-xs font-mono font-bold text-slate-800";
+      }
+    }
+
+    function handleBannerUpload(event) {
+      const f = event.target.files[0];
+      if (f) {
+        const previewBox = document.getElementById('bannerPreviewBox');
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewBox.style.backgroundImage = `url('${e.target.result}')`;
+          previewBox.style.backgroundSize = 'cover';
+          previewBox.style.backgroundPosition = 'center';
+          document.getElementById('bannerStatusText').textContent = "Banner Attached: " + f.name;
+        };
+        reader.readAsDataURL(f);
+      }
+    }
+
+    async function uploadToStorage(fileInputId, folderName) {
+      const fileInput = document.getElementById(fileInputId);
+      if (!fileInput || !fileInput.files[0]) return null;
+      const file = fileInput.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${folderName}/${cargoTransId || 'company'}_${Date.now()}.${fileExt}`;
+      
+      const { data, error } = await sb.storage.from('COMPANY-FILES').upload(fileName, file);
+      if (error) {
+        console.error("Storage upload error:", error);
+        return null;
+      }
+      const { data: publicUrlData } = sb.storage.from('COMPANY-FILES').getPublicUrl(fileName);
+      return publicUrlData.publicUrl;
+    }
+
+    async function deleteFile(type) {
+      if (!confirm("Are you sure you want to delete this document?")) return;
+      
+      if (type === 'license') {
+        savedLicenseUrl = '';
+        document.getElementById('licenseBadge').textContent = "Not Uploaded";
+        document.getElementById('licenseBadge').className = "text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded";
+        document.getElementById('licenseFileName').textContent = "No file selected";
+        document.getElementById('licenseDeleteBtn').classList.add('hidden');
+        document.getElementById('licenseFileInput').value = '';
+      } else if (type === 'insurance') {
+        savedInsuranceUrl = '';
+        document.getElementById('insuranceBadge').textContent = "Not Uploaded";
+        document.getElementById('insuranceBadge').className = "text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded";
+        document.getElementById('insuranceFileName').textContent = "No file selected";
+        document.getElementById('insuranceDeleteBtn').classList.add('hidden');
+        document.getElementById('insuranceFileInput').value = '';
+      }
+      
+      // Auto update database after deletion
+      await saveProfile(true);
+    }
+
+    function openAddMemberModal() {
+      document.getElementById('mFirstName').value = "";
+      document.getElementById('mLastName').value = "";
+      document.getElementById('mEmail').value = "";
+      document.getElementById('mUsername').value = "";
+      document.getElementById('mPassword').value = "CT-" + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('memberModal').classList.remove('hidden');
+    }
+
+    function closeMemberModal() { document.getElementById('memberModal').classList.add('hidden'); }
+
+    function saveTeamMember() {
+      const f = document.getElementById('mFirstName').value.trim();
+      const l = document.getElementById('mLastName').value.trim();
+      const e = document.getElementById('mEmail').value.trim();
+      const u = document.getElementById('mUsername').value.trim();
+      const p = document.getElementById('mPassword').value.trim();
+      if (!f || !l || !u || !p) { alert("Please fill in required fields!"); return; }
+      teamMembers.push({ firstName: f, lastName: l, email: e, username: u, password: p });
+      closeMemberModal();
+      renderTeamMembers();
+    }
+
+    function renderTeamMembers() {
+      const c = document.getElementById('teamMembersContainer');
+      document.getElementById('teamSeatCount').textContent = `${teamMembers.length} Active Members`;
+      c.innerHTML = teamMembers.length === 0 ? '<p class="text-xs text-slate-400 italic">No team members added yet.</p>' : '';
+      teamMembers.forEach((m, idx) => {
+        c.innerHTML += `<div class="p-3 bg-slate-50 border rounded-xl flex justify-between items-center text-xs"><span><b>${m.firstName} ${m.lastName}</b> (${m.username})</span><button type="button" onclick="teamMembers.splice(${idx},1);renderTeamMembers()" class="text-rose-500 font-bold">Remove</button></div>`;
+      });
+      lucide.createIcons();
+    }
+
+    // Save Profile & Upload Files to Supabase
+    async function saveProfile(silent = false) {
+      const btn = document.getElementById('saveProfileBtn');
+      if (!silent) {
+        btn.disabled = true;
+        btn.textContent = "Saving profile & uploading files...";
+      }
+
+      try {
+        const newBannerUrl = await uploadToStorage('bannerFileInput', 'banners');
+        const newLicenseUrl = await uploadToStorage('licenseFileInput', 'licenses');
+        const newInsuranceUrl = await uploadToStorage('insuranceFileInput', 'insurances');
+
+        if (newBannerUrl) savedBannerUrl = newBannerUrl;
+        if (newLicenseUrl) {
+          savedLicenseUrl = newLicenseUrl;
+          document.getElementById('licenseBadge').textContent = "Uploaded";
+          document.getElementById('licenseBadge').className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+          document.getElementById('licenseDeleteBtn').classList.remove('hidden');
+        }
+        if (newInsuranceUrl) {
+          savedInsuranceUrl = newInsuranceUrl;
+          document.getElementById('insuranceBadge').textContent = "Uploaded";
+          document.getElementById('insuranceBadge').className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+          document.getElementById('insuranceDeleteBtn').classList.remove('hidden');
+        }
+
+        const updateData = {
+          company_name: document.getElementById('company_name').value.trim(),
+          vat_number: document.getElementById('vat_number').value.trim(),
+          address: document.getElementById('address').value.trim(),
+          city: document.getElementById('postalCode').value.trim(),
+          country: document.getElementById('country').value.trim(),
+          contact_email: document.getElementById('contact_email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          fleet_description: document.getElementById('fleetDescription').value.trim(),
+          active_markets: document.getElementById('activeMarkets').value.trim(),
+          banner_url: savedBannerUrl,
+          license_url: savedLicenseUrl,
+          insurance_url: savedInsuranceUrl
+        };
+
+        const { error } = await sb.from('companies').update(updateData).eq('cargo_trans_id', cargoTransId);
+        if (error) {
+          if (!silent) alert("Error saving profile: " + error.message);
+        } else {
+          if (!silent) alert("Company profile successfully updated and visible in manager HQ!");
+        }
+      } catch (err) {
+        if (!silent) alert("Error: " + err.message);
+      } finally {
+        if (!silent) {
+          btn.disabled = false;
+          btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Enterprise Profile Changes';
+          lucide.createIcons();
+        }
+      }
+    }
   </script>
 </body>
 </html>
