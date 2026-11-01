@@ -561,7 +561,7 @@
       lucide.createIcons();
     }
 
-    // Shranjevanje podatkov v bazo Supabase
+ // Shranjevanje podatkov v bazo Supabase
     async function saveProfile() {
       const saveBtn = document.getElementById('saveProfileBtn');
       saveBtn.disabled = true;
@@ -585,12 +585,12 @@
           .eq('cargo_trans_id', cargoTransId);
 
         if (error) {
-          alert("Napaka pri shranjevanju: " + error.message);
+          alert("Error saving profile: " + error.message);
         } else {
-          alert("Profil podjetja je uspešno posodobljen v bazi in viden v managerju!");
+          alert("Company profile successfully updated and visible in manager HQ!");
         }
       } catch (err) {
-        alert("Napaka: " + err.message);
+        alert("Error: " + err.message);
       } finally {
         saveBtn.disabled = false;
         saveBtn.textContent = "Save Enterprise Profile Changes";
@@ -632,7 +632,7 @@
           document.getElementById('displayCargoTransID').textContent = cargoTransId || 'CT-NEW';
         }
       } catch (err) {
-        console.error("Napaka pri pridobivanju podatkov iz baze:", err);
+        console.error("Error fetching data from database:", err);
       }
 
       renderTeamMembers();
