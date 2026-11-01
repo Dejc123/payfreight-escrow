@@ -419,7 +419,7 @@
     let savedInsuranceUrl = '';
     let savedBannerUrl = '';
 
-    // Load data on startup
+    // Load data on startup and populate fields
     document.addEventListener("DOMContentLoaded", async () => {
       try {
         let query = sb.from('companies').select('*');
@@ -430,7 +430,7 @@
         } else if (companyParam) {
           query = query.eq('company_name', companyParam);
         } else {
-          query = query.limit(1);
+          query = query.order('id', { ascending: false }).limit(1);
         }
 
         const { data, error } = await query.maybeSingle();
@@ -440,6 +440,7 @@
           document.getElementById('displayCargoTransID').textContent = cargoTransId;
           localStorage.setItem('cargotrans_id', cargoTransId);
           
+          // Populate text fields
           if (data.company_name) document.getElementById('company_name').value = data.company_name;
           if (data.vat_number) document.getElementById('vat_number').value = data.vat_number;
           if (data.address) document.getElementById('address').value = data.address;
@@ -450,7 +451,7 @@
           if (data.fleet_description) document.getElementById('fleetDescription').value = data.fleet_description;
           if (data.active_markets) document.getElementById('activeMarkets').value = data.active_markets;
 
-          // Banner
+          // Banner preview
           if (data.banner_url) {
             savedBannerUrl = data.banner_url;
             const pb = document.getElementById('bannerPreviewBox');
@@ -460,7 +461,7 @@
             document.getElementById('bannerStatusText').textContent = "Banner loaded from database";
           }
 
-          // License File
+          // License File status
           if (data.license_url) {
             savedLicenseUrl = data.license_url;
             document.getElementById('licenseBadge').textContent = "Uploaded";
@@ -469,7 +470,7 @@
             document.getElementById('licenseDeleteBtn').classList.remove('hidden');
           }
 
-          // Insurance File
+          // Insurance File status
           if (data.insurance_url) {
             savedInsuranceUrl = data.insurance_url;
             document.getElementById('insuranceBadge').textContent = "Uploaded";
@@ -553,7 +554,6 @@
         document.getElementById('insuranceFileInput').value = '';
       }
       
-      // Auto update database after deletion
       await saveProfile(true);
     }
 
@@ -590,7 +590,6 @@
       lucide.createIcons();
     }
 
-    // Save Profile & Upload Files to Supabase
     async function saveProfile(silent = false) {
       const btn = document.getElementById('saveProfileBtn');
       if (!silent) {
