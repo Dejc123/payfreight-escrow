@@ -360,7 +360,7 @@
           </div>
         </div>
 
- <!-- SECTION 2: CONTACT & COMMUNICATIONS -->
+<!-- SECTION 2: CONTACT & COMMUNICATIONS -->
         <div>
           <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4 pb-2 border-b border-slate-100 flex items-center gap-2">
             <i data-lucide="user" class="w-4 h-4 text-blue-600"></i>
@@ -464,12 +464,19 @@
     </div>
   </footer>
 
-  <!-- INTEGRIRANI SCRIPT Z VALIDACIJO, MODALNIM OKNOM IN API POVEZAVO -->
+  <!-- Vključitev Supabase SDK klienta za direktno shranjevanje -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     lucide.createIcons();
 
+    // Supabase konfiguracija za neposreden zapis v bazo
+    const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     function openAuthModal() {
       const modal = document.getElementById('authModal');
+      if (modal) modal.classList.add('hidden'); // popravek za varno odpiranje
       if (modal) modal.classList.remove('hidden');
     }
 
@@ -488,13 +495,13 @@
     // Validacija gesel ob oddaji obrazca
     function handleValidator(form) {
       if (form.Geslo && form.PonoviGeslo && form.Geslo.value !== form.PonoviGeslo.value) {
-        alert('Gesli se ne ujemata!');
+        alert('Passwords do not match!');
         return false;
       }
       return true;
     }
 
-    // Poslušalec za registracijski obrazec
+    // Poslušalec za registracijski obrazec z neposrednim zapisom v Supabase 'companies' tabelo
     document.addEventListener('DOMContentLoaded', () => {
       const registerForm = document.querySelector('form:not(#authForm)');
       
@@ -506,35 +513,49 @@
             return;
           }
 
-          const podjetjeElem = document.getElementById('NazivPodjetja') || document.getElementById('Podjetje');
-          const emailElem = document.getElementById('Email');
-          const usernameElem = document.getElementById('UporabniskoIme');
-          const gesloElem = document.getElementById('Geslo');
-          const kontaktElem = document.getElementById('KontaktnaOseba');
-          const telefonElem = document.getElementById('Telefon');
-          const mobitelElem = document.getElementById('Mobitel');
-
-          const formData = {
-            Podjetje: podjetjeElem ? podjetjeElem.value : '',
-            Email: emailElem ? emailElem.value : '',
-            UporabniskoIme: usernameElem ? usernameElem.value : '',
-            Geslo: gesloElem ? gesloElem.value : '',
-            KontaktnaOseba: kontaktElem ? kontaktElem.value : '',
-            Telefon: telefonElem ? telefonElem.value : '',
-            Mobitel: mobitelElem ? mobitelElem.value : ''
+          // Priprava podatkov za tabelo 'companies'
+          const companyData = {
+            cargo_trans_id: 'CT-' + Math.floor(100000 + Math.random() * 900000),
+            company_name: document.getElementById('Podjetje').value,
+            vat_number: document.getElementById('DavcnaStevilka').value,
+            address: document.getElementById('Naslov').value,
+            postal_code: document.getElementById('Posta').value,
+            city: document.getElementById('Mesto').value,
+            country: document.getElementById('Drzava').value,
+            website: document.getElementById('WWW') ? document.getElementById('WWW').value : '',
+            contact_person: document.getElementById('KontaktnaOseba').value,
+            contact_email: document.getElementById('Email').value,
+            phone: document.getElementById('Telefon').value,
+            mobile: document.getElementById('Mobitel') ? document.getElementById('Mobitel').value : '',
+            fax: document.getElementById('Fax') ? document.getElementById('Fax').value : '',
+            username: document.getElementById('UporabniskoIme').value,
+            password: document.getElementById('Geslo').value,
+            platform: 'cargonet',
+            validity_days: 30, // Nastavi začetnih 30 dni veljavnosti
+            payfreight_enabled: true
           };
 
           try {
-            await fetch('/api/register_cargonet', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(formData)
-            });
-          } catch (err) {
-            console.error('Napaka pri povezavi z API-jem:', err);
-          }
+            // Direktni zapis v Supabase bazo
+            const { data, error } = await sb
+              .from('companies')
+              .insert([companyData]);
 
-          window.location.href = `welcome.html?UporabniskoIme=${encodeURIComponent(formData.UporabniskoIme)}&Podjetje=${encodeURIComponent(formData.Podjetje)}`;
+            if (error) {
+              console.error('Database insertion error:', error.message);
+              alert('Registration failed: ' + error.message);
+              return;
+            }
+
+            console.log('Successfully saved to database:', data);
+
+            // Uspešna preusmeritev na welcome stran z ustreznimi parametri
+            window.location.href = `welcome.html?UporabniskoIme=${encodeURIComponent(companyData.username)}&Podjetje=${encodeURIComponent(companyData.company_name)}`;
+            
+          } catch (err) {
+            console.error('System error during registration:', err);
+            alert('An unexpected error occurred during registration.');
+          }
         });
       }
     });
