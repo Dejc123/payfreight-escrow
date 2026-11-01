@@ -79,12 +79,23 @@
         Welcome aboard! Your account has been initialized on the <strong>CargoNet Freight Exchange</strong>.
       </p>
 
-      <!-- EMAIL VERIFICATION NOTICE -->
-      <div class="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 max-w-2xl mx-auto text-left flex items-start gap-3">
-        <i data-lucide="mail-warning" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5"></i>
-        <div class="text-xs text-amber-900 leading-relaxed">
-          <strong class="font-semibold block mb-0.5">Verification link sent to your inbox</strong>
-          Please check your registered corporate email and click the confirmation link to fully activate your account.
+      <!-- EMAIL VERIFICATION NOTICE & RESEND CONTROLS -->
+      <div class="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 max-w-2xl mx-auto text-left flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="flex items-start gap-3">
+          <i data-lucide="mail-warning" class="w-5 h-5 text-amber-600 shrink-0 mt-0.5"></i>
+          <div class="text-xs text-amber-900 leading-relaxed">
+            <strong class="font-semibold block mb-0.5">Verification link sent to your inbox</strong>
+            Please check your registered corporate email and click the confirmation link to fully activate your account.
+          </div>
+        </div>
+        
+        <!-- RESEND LINK BUTTON & COUNTDOWN -->
+        <div class="shrink-0 w-full sm:w-auto text-center">
+          <button id="resendBtn" onclick="resendVerificationEmail()" class="w-full sm:w-auto px-4 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs rounded-lg transition shadow-sm font-mono flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i>
+            <span id="resendText">Resend Link</span>
+          </button>
+          <div id="resendTimer" class="text-[10px] text-slate-500 font-mono mt-1 hidden">Resend available in <span id="timerSeconds">30</span>s</div>
         </div>
       </div>
     </div>
@@ -234,6 +245,43 @@
       window.location.href = 'dashboard/index.html' + window.location.search;
     }
 
+    // Funkcija za ponovno pošiljanje verifikacijskega linka s 30-sekundnim odštevanjem
+    function resendVerificationEmail() {
+      const btn = document.getElementById('resendBtn');
+      const timerBox = document.getElementById('resendTimer');
+      const timerSecSpan = document.getElementById('timerSeconds');
+      
+      // Onemogočimo gumb
+      btn.disabled = true;
+      timerBox.classList.remove('hidden');
+      
+      let timeLeft = 30;
+      timerSecSpan.textContent = timeLeft;
+
+      // Klic na backend za ponovno pošiljanje maila (opcijsko)
+      const urlParams = new URLSearchParams(window.location.search);
+      const username = urlParams.get('UporabniskoIme');
+      
+      fetch("/api/resend_verification", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username })
+      }).catch(err => console.log("Resend API call info:", err));
+
+      alert("Verification link has been resent to your corporate email!");
+
+      // Začetek odštevanja
+      const interval = setInterval(() => {
+        timeLeft--;
+        timerSecSpan.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          btn.disabled = false;
+          timerBox.classList.add('hidden');
+        }
+      }, 1000);
+    }
+
     // Dynamic 24-hour Countdown Timer
     let totalSeconds = 24 * 3600 - 1;
     const countdownElement = document.getElementById('countdown');
@@ -264,14 +312,12 @@
         if (userEl) userEl.textContent = usernameParam;
       }
 
-      // Prikaz samodejno generirane CargoTrans ID številke (če element obstaja na strani)
       if (cargoTransId) {
         const idEl = document.getElementById('displayCargoTransID');
         if (idEl) idEl.textContent = cargoTransId;
       }
 
       if (token) {
-        // 1. Posodobitev značke zgoraj desno
         const statusBadges = document.querySelectorAll('div');
         statusBadges.forEach(el => {
           if (el.textContent.includes("Action Required: Verify Email") || el.textContent.includes("ACTION REQUIRED")) {
@@ -283,7 +329,6 @@
           }
         });
 
-        // 2. Posodobitev statusa "PRO STATUS: PENDING"
         const proStatus = document.querySelectorAll('div, span');
         proStatus.forEach(el => {
           if (el.textContent.includes("PRO STATUS: PENDING")) {
@@ -292,7 +337,6 @@
           }
         });
 
-        // 3. Posodobitev rumenega opozorila na sredini
         const alertBoxes = document.querySelectorAll('div');
         alertBoxes.forEach(el => {
           if (el.textContent.includes("Verification link sent to your inbox")) {
@@ -307,7 +351,6 @@
           }
         });
 
-        // 4. Klic na backend za potrditev v bazi (s priloženim CargoTransID)
         fetch("/api/verify_email_cargonet", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
