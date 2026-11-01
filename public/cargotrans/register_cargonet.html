@@ -513,8 +513,9 @@
             return;
           }
 
-          // Priprava podatkov za tabelo 'companies'
+        // Priprava podatkov za tabelo 'companies'
           const companyData = {
+            id: Math.floor(1000 + Math.random() * 900000), // <--- DODANO: Naključen ID za preprečitev napake 'not-null constraint'
             cargo_trans_id: 'CT-' + Math.floor(100000 + Math.random() * 900000),
             company_name: document.getElementById('Podjetje').value,
             vat_number: document.getElementById('DavcnaStevilka').value,
