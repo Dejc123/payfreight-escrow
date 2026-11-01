@@ -397,18 +397,18 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
+ <!-- JAVASCRIPT LOGIC & SUPABASE INTEGRATION -->
   <script>
     // Supabase Initialization
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Dynamic URL parameters or localStorage fallback
+    // Pridobitev podatkov o prijavljenem uporabniku iz URL-ja ali localStorage
     const urlParams = new URLSearchParams(window.location.search);
-    let cargoTransId = urlParams.get('CargoTransID') || localStorage.getItem('cargotrans_id') || '';
-    const usernameParam = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user') || '';
-    const companyParam = urlParams.get('Podjetje') || '';
+    let cargoTransId = urlParams.get('CargoTransID') || '';
+    let usernameParam = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user') || '';
+    let companyParam = urlParams.get('Podjetje') || '';
 
     let teamMembers = [];
     let editingMemberIndex = null;
@@ -436,12 +436,10 @@
     function handleFileUpload(event, badgeId, fileNameId) {
       const file = event.target.files[0];
       if (file) {
-        const badge = document.getElementById(badgeId);
-        const fileName = document.getElementById(fileNameId);
-        badge.textContent = "Ready to Upload";
-        badge.className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200";
-        fileName.textContent = file.name;
-        fileName.className = "text-xs font-mono font-bold text-slate-800";
+        document.getElementById(badgeId).textContent = "Ready to Upload";
+        document.getElementById(badgeId).className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200";
+        document.getElementById(fileNameId).textContent = file.name;
+        document.getElementById(fileNameId).className = "text-xs font-mono font-bold text-slate-800";
       }
     }
 
@@ -457,8 +455,6 @@
           previewBox.style.backgroundPosition = 'center';
           statusText.textContent = "Banner Attached: " + file.name;
           statusText.classList.add('bg-slate-900/70', 'text-white', 'px-3', 'py-1', 'rounded-lg');
-          previewBox.classList.remove('border-dashed', 'border-slate-300');
-          previewBox.classList.add('border-solid', 'border-enterprise-600');
         };
         reader.readAsDataURL(file);
       }
@@ -565,7 +561,7 @@
       lucide.createIcons();
     }
 
-    // Save Profile & Update database in Supabase
+    // Shranjevanje podatkov v bazo Supabase
     async function saveProfile() {
       const saveBtn = document.getElementById('saveProfileBtn');
       saveBtn.disabled = true;
@@ -589,12 +585,12 @@
           .eq('cargo_trans_id', cargoTransId);
 
         if (error) {
-          alert("Error saving profile: " + error.message);
+          alert("Napaka pri shranjevanju: " + error.message);
         } else {
-          alert("Enterprise Company Profile successfully updated and synced with manager HQ!");
+          alert("Profil podjetja je uspešno posodobljen v bazi in viden v managerju!");
         }
       } catch (err) {
-        alert("Unexpected error: " + err.message);
+        alert("Napaka: " + err.message);
       } finally {
         saveBtn.disabled = false;
         saveBtn.textContent = "Save Enterprise Profile Changes";
@@ -610,8 +606,6 @@
           query = query.eq('cargo_trans_id', cargoTransId);
         } else if (usernameParam) {
           query = query.or(`username.eq.${usernameParam},contact_email.eq.${usernameParam}`);
-        } else if (companyParam) {
-          query = query.eq('company_name', companyParam);
         } else {
           query = query.limit(1);
         }
@@ -621,7 +615,6 @@
         if (data) {
           cargoTransId = data.cargo_trans_id || cargoTransId;
           document.getElementById('displayCargoTransID').textContent = cargoTransId;
-          localStorage.setItem('cargotrans_id', cargoTransId);
           
           if (data.company_name) document.getElementById('company_name').value = data.company_name;
           if (data.vat_number) document.getElementById('vat_number').value = data.vat_number;
