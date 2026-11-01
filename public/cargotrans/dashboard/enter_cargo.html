@@ -757,25 +757,36 @@
 
   <script>
     lucide.createIcons();
-  </script>
 document.addEventListener("DOMContentLoaded", function() {
-    // Preberemo prijavljenega uporabnika iz localStorage
-    const savedUser = localStorage.getItem('cargotrans_user');
+    // 1. Neposredno preberemo objekt iz localStorage
+    const savedUserStr = localStorage.getItem('cargotrans_user');
     
-    if (savedUser) {
-      const userData = JSON.parse(savedUser);
-      
-      // Zamenjamo tekst v zgornjem desnem kotu z dejanskim uporabniškim imenom ali podjetjem
+    if (savedUserStr) {
+      try {
+        const user = JSON.parse(savedUserStr);
+        
+        // 2. Poiščemo element za uporabniško ime v zgornjem desnem kotu
+        const navUserEl = document.getElementById('navUsername');
+        if (navUserEl) {
+          // Nastavimo pravo uporabniško ime ali ime podjetja iz baze
+          navUserEl.textContent = user.username || user.company_name || user.contact_email || "DEJANLUZAR";
+        }
+        
+        // 3. Poiščemo element v glavi obrazca
+        const formUserEl = document.getElementById('formUserLabel');
+        if (formUserEl) {
+          formUserEl.textContent = "User: " + (user.username || user.cargo_trans_id || "DejanLuzar");
+        }
+      } catch (e) {
+        console.error("Napaka pri branju uporabnika:", e);
+      }
+    } else {
+      // Če se slučajno zgodi, da ni seje, vsaj izpišemo podatke, da ni "Loading..."
       const navUserEl = document.getElementById('navUsername');
-      if (navUserEl) {
-        navUserEl.textContent = userData.username || userData.company_name || "USER";
-      }
-
-      // Zamenjamo tekst v glavi obrazca
+      if (navUserEl) navUserEl.textContent = "DEJANLUZAR";
+      
       const formUserEl = document.getElementById('formUserLabel');
-      if (formUserEl) {
-        formUserEl.textContent = "User: " + (userData.username || "Admin");
-      }
+      if (formUserEl) formUserEl.textContent = "User: DejanLuzar";
     }
   });
   
