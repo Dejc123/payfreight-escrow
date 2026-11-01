@@ -389,6 +389,7 @@
             <span class="text-[10px] font-mono font-bold text-purple-400 bg-purple-950/80 border border-purple-700/50 px-2.5 py-1 rounded-full uppercase tracking-wider">
               Solana Mainnet
             </span>
+
           </div>
 
           <div class="text-xs font-bold text-purple-300 uppercase tracking-wider">Escrow Settlement Simulation</div>
@@ -488,12 +489,12 @@
   <script>
     lucide.createIcons();
 
-    // Supabase Credentials (povezava na tvojo bazo)
+    // Supabase Credentials
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZWYiOiJ3cWpxamZ4eXVjdWZ1eWlveHBobSIsInJvbGUiOiJhbm9uIiwiaWF0IjoxNzM5MTcwODU5LCJleHAiOjIwNTQ3NDY4NTl9...'; // Vstavi svoj ključ, če ni že nastavljen v configu
+    const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     
-    // Inicijalizacija Supabase odjemalca
-    const sb = window.supabase.createClient(SUPABASE_URL, 'TUKAJ_VSTAVI_ANON_KEY'); // Uporabi svoj dejanski ključ, če ga že imaš v projektu
+    // Inicijalizacija Supabase odjemalca s pravim ključem
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     function openAuthModal() {
       document.getElementById('authModal').classList.remove('hidden');
@@ -517,15 +518,20 @@
       errorBox.classList.add('hidden');
 
       try {
-        // Preverjanje v tabeli 'companies' po uporabniškem imenu, e-pošti ali CT ID-ju
-        const { data: user, error } = await sb
+        // Preverimo vseh uporabnikov v tabeli 'companies', da najdemo ustrezen račun
+        const { data: companies, error } = await sb
           .from('companies')
-          .select('*')
-          .or(`username.eq.${userInput},contact_email.eq.${userInput},cargo_trans_id.eq.${userInput}`)
-          .eq('password', passwordInput)
-          .single();
+          .select('*');
 
-        if (error || !user) {
+        if (error) throw error;
+
+        // Poiščemo uporabnika po uporabniškem imenu, e-pošti ali cargo_trans_id
+        const user = (companies || []).find(c => 
+          (c.username === userInput || c.contact_email === userInput || c.cargo_trans_id === userInput) &&
+          String(c.password) === String(passwordInput)
+        );
+
+        if (!user) {
           errorBox.textContent = "Neveljavno uporabniško ime, e-pošta ali geslo!";
           errorBox.classList.remove('hidden');
           submitBtn.disabled = false;
@@ -533,11 +539,12 @@
           return;
         }
 
-        // Shranjevanje seje v lokalno shrambo brskalnika
-        localStorage.setItem('cargotrans_user', JSON.stringify(user));
+        // Shranimo podatke v localStorage
+        localStorage.setItem('cargotrans_user', user.username || '');
+        localStorage.setItem('cargotrans_token', 'active_session_' + user.id);
 
-        // Preusmeritev na nadzorno ploščo
-        window.location.href = 'dashboard/index.html';
+        // Preusmeritev na dashboard z ustreznimi URL parametri, da dashboard takoj prepozna uporabnika in podjetje
+        window.location.href = `dashboard/index.html?UporabniskoIme=${encodeURIComponent(user.username)}&Podjetje=${encodeURIComponent(user.company_name)}`;
 
       } catch (err) {
         console.error('Login error:', err);
