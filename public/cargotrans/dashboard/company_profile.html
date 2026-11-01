@@ -409,90 +409,107 @@
     const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // 1. Zajememo parametre iz URL-ja ali preverimo, kdo je dejansko prijavljen v seji (localStorage)
+    // CargoTrans user identity. Resolve the member first, then follow company_members.company_id.
     const urlParams = new URLSearchParams(window.location.search);
-    
-    // Prioriteta: 1. URL parameter, 2. shranjen ID prijavljenega uporabnika
     let cargoTransId = urlParams.get('CargoTransID') || urlParams.get('cargotrans_id') || localStorage.getItem('cargotrans_id') || '';
     const usernameParam = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user') || '';
-
+    let companyId = localStorage.getItem('cargotrans_company_id') || '';
+    let companyRecord = null;
     let teamMembers = [];
     let savedLicenseUrl = '';
     let savedInsuranceUrl = '';
     let savedBannerUrl = '';
 
-    // Load data on startup and populate fields (Podobno kot v ASP: baza.Execute za prijavljenega ponudnika)
     document.addEventListener("DOMContentLoaded", async () => {
       try {
-        let query = sb.from('companies').select('*');
-        
-        // Če imamo ID prijavljenega uporabnika, poiščemo točno njega (kot v ASP: PonudnikSQL)
-        if (cargoTransId) {
-          query = query.eq('cargo_trans_id', cargoTransId);
-        } else if (usernameParam) {
-          query = query.or(`username.eq.${usernameParam},contact_email.eq.${usernameParam}`);
-        } else {
-          // Varnostni izhod: če ni ničesar, opozorimo ali preusmerimo nazaj na prijavo
-          console.warn("Uporabnik ni prijavljen ali pa manjka CargoTransID.");
+        if (usernameParam) localStorage.setItem('cargotrans_user', usernameParam);
+        if (cargoTransId) localStorage.setItem('cargotrans_id', cargoTransId);
+
+        let member = null;
+        if (usernameParam) {
+          const result = await sb.from('company_members')
+            .select('id, company_id, cargo_trans_id, username, email, first_name, last_name, role, is_active')
+            .ilike('username', usernameParam).maybeSingle();
+          if (result.error) throw result.error;
+          member = result.data;
+        }
+        if (!member && cargoTransId) {
+          const result = await sb.from('company_members')
+            .select('id, company_id, cargo_trans_id, username, email, first_name, last_name, role, is_active')
+            .eq('cargo_trans_id', cargoTransId).maybeSingle();
+          if (result.error) throw result.error;
+          member = result.data;
         }
 
-        const { data, error } = await query.maybeSingle();
-
-        if (data) {
-          // Uspešno najdeni podatki iz baze - napolnimo obrazec
-          cargoTransId = data.cargo_trans_id || cargoTransId;
-          document.getElementById('displayCargoTransID').textContent = cargoTransId;
-          localStorage.setItem('cargotrans_id', cargoTransId);
-          
-          if (data.company_name) document.getElementById('company_name').value = data.company_name;
-          if (data.vat_number) document.getElementById('vat_number').value = data.vat_number;
-          if (data.address) document.getElementById('address').value = data.address;
-          if (data.city) document.getElementById('postalCode').value = data.city;
-          if (data.country) document.getElementById('country').value = data.country;
-          if (data.contact_email) document.getElementById('contact_email').value = data.contact_email;
-          if (data.phone) document.getElementById('phone').value = data.phone;
-          if (data.fleet_description) document.getElementById('fleetDescription').value = data.fleet_description;
-          if (data.active_markets) document.getElementById('activeMarkets').value = data.active_markets;
-
-          // Banner preview
-          if (data.banner_url) {
-            savedBannerUrl = data.banner_url;
-            const pb = document.getElementById('bannerPreviewBox');
-            pb.style.backgroundImage = `url('${data.banner_url}')`;
-            pb.style.backgroundSize = 'cover';
-            pb.style.backgroundPosition = 'center';
-            document.getElementById('bannerStatusText').textContent = "Banner loaded from database";
+        if (member && member.company_id) {
+          companyId = String(member.company_id);
+          localStorage.setItem('cargotrans_company_id', companyId);
+          const result = await sb.from('companies').select('*').eq('id', member.company_id).maybeSingle();
+          if (result.error) throw result.error;
+          companyRecord = result.data;
+        } else if (cargoTransId) {
+          // Compatibility for older company-admin accounts not yet linked in company_members.
+          const result = await sb.from('companies').select('*').eq('cargo_trans_id', cargoTransId).maybeSingle();
+          if (result.error) throw result.error;
+          companyRecord = result.data;
+          if (companyRecord) {
+            companyId = String(companyRecord.id);
+            localStorage.setItem('cargotrans_company_id', companyId);
           }
-
-          // License File status
-          if (data.license_url) {
-            savedLicenseUrl = data.license_url;
-            document.getElementById('licenseBadge').textContent = "Uploaded";
-            document.getElementById('licenseBadge').className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
-            document.getElementById('licenseFileName').textContent = data.license_url.split('/').pop().split('?')[0];
-            document.getElementById('licenseDeleteBtn').classList.remove('hidden');
-          }
-
-          // Insurance File status
-          if (data.insurance_url) {
-            savedInsuranceUrl = data.insurance_url;
-            document.getElementById('insuranceBadge').textContent = "Uploaded";
-            document.getElementById('insuranceBadge').className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
-            document.getElementById('insuranceFileName').textContent = data.insurance_url.split('/').pop().split('?')[0];
-            document.getElementById('insuranceDeleteBtn').classList.remove('hidden');
-          }
-
-          if (data.company_name && document.getElementById('headerName')) {
-            document.getElementById('headerName').textContent = data.company_name + ' - Corporate HQ';
-          }
-          document.getElementById('userBadgeDisplay').textContent = (data.username || usernameParam || 'VERIFIED ADMIN').toUpperCase();
-        } else {
-          document.getElementById('displayCargoTransID').textContent = cargoTransId || 'CT-PENDING';
         }
+
+        if (!companyRecord) {
+          document.getElementById('displayCargoTransID').textContent = cargoTransId || 'NOT LINKED';
+          console.error('No linked company found for this CargoTrans member. No new company record was created.');
+          alert('Your CargoTrans account was recognized, but its company record could not be found. Please contact support.');
+          return;
+        }
+
+        cargoTransId = companyRecord.cargo_trans_id || cargoTransId;
+        if (cargoTransId) localStorage.setItem('cargotrans_id', String(cargoTransId));
+        document.getElementById('displayCargoTransID').textContent = cargoTransId || '—';
+
+        const setValue = (id, value) => { const el = document.getElementById(id); if (el && value != null) el.value = value; };
+        setValue('company_name', companyRecord.company_name);
+        setValue('vat_number', companyRecord.vat_number);
+        setValue('address', companyRecord.address);
+        setValue('postalCode', companyRecord.postal_code);
+        setValue('city', companyRecord.city);
+        setValue('country', companyRecord.country);
+        setValue('contact_email', companyRecord.contact_email);
+        setValue('phone', companyRecord.phone);
+        setValue('websiteUrl', companyRecord.website);
+        setValue('fleetDescription', companyRecord.fleet_description);
+        setValue('activeMarkets', companyRecord.active_markets);
+
+        if (companyRecord.banner_url) {
+          savedBannerUrl = companyRecord.banner_url;
+          const pb = document.getElementById('bannerPreviewBox');
+          pb.style.backgroundImage = `url('${companyRecord.banner_url}')`;
+          pb.style.backgroundSize = 'cover';
+          pb.style.backgroundPosition = 'center';
+          document.getElementById('bannerStatusText').textContent = 'Banner loaded from database';
+        }
+        if (companyRecord.license_url) {
+          savedLicenseUrl = companyRecord.license_url;
+          document.getElementById('licenseBadge').textContent = 'Uploaded';
+          document.getElementById('licenseBadge').className = 'text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200';
+          document.getElementById('licenseFileName').textContent = companyRecord.license_url.split('/').pop().split('?')[0];
+          document.getElementById('licenseDeleteBtn').classList.remove('hidden');
+        }
+        if (companyRecord.insurance_url) {
+          savedInsuranceUrl = companyRecord.insurance_url;
+          document.getElementById('insuranceBadge').textContent = 'Uploaded';
+          document.getElementById('insuranceBadge').className = 'text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200';
+          document.getElementById('insuranceFileName').textContent = companyRecord.insurance_url.split('/').pop().split('?')[0];
+          document.getElementById('insuranceDeleteBtn').classList.remove('hidden');
+        }
+        if (companyRecord.company_name) document.getElementById('headerName').textContent = companyRecord.company_name + ' - Corporate HQ';
+        document.getElementById('userBadgeDisplay').textContent = (member?.username || usernameParam || companyRecord.company_name || 'VERIFIED USER').toUpperCase();
       } catch (err) {
-        console.error("Error fetching data from database:", err);
+        console.error('Error fetching CargoTrans member/company:', err);
+        alert('Could not load your company profile: ' + err.message);
       }
-
       renderTeamMembers();
       lucide.createIcons();
     });
@@ -527,7 +544,7 @@
       if (!fileInput || !fileInput.files[0]) return null;
       const file = fileInput.files[0];
       const fileExt = file.name.split('.').pop();
-      const fileName = `${folderName}/${cargoTransId || 'company'}_${Date.now()}.${fileExt}`;
+      const fileName = `${folderName}/${companyId || 'company'}_${Date.now()}.${fileExt}`;
       
       const { data, error } = await sb.storage.from('company-files').upload(fileName, file);
       if (error) {
@@ -623,10 +640,12 @@
           company_name: document.getElementById('company_name').value.trim(),
           vat_number: document.getElementById('vat_number').value.trim(),
           address: document.getElementById('address').value.trim(),
-          city: document.getElementById('postalCode').value.trim(),
+          postal_code: document.getElementById('postalCode').value.trim(),
+          city: document.getElementById('city').value.trim(),
           country: document.getElementById('country').value.trim(),
           contact_email: document.getElementById('contact_email').value.trim(),
           phone: document.getElementById('phone').value.trim(),
+          website: document.getElementById('websiteUrl').value.trim(),
           fleet_description: document.getElementById('fleetDescription').value.trim(),
           active_markets: document.getElementById('activeMarkets').value.trim(),
           banner_url: savedBannerUrl,
@@ -634,7 +653,8 @@
           insurance_url: savedInsuranceUrl
         };
 
-        const { error } = await sb.from('companies').update(updateData).eq('cargo_trans_id', cargoTransId);
+        if (!companyId) throw new Error('Company record is not linked. Profile update cancelled to prevent creating or changing the wrong company.');
+        const { error } = await sb.from('companies').update(updateData).eq('id', companyId);
         if (error) {
           if (!silent) alert("Error saving profile: " + error.message);
         } else {
