@@ -40,7 +40,7 @@ pub async fn handle_linkedin_auth(
 
     // 2. Retrieve client secret from environment variable or fallback
     let client_secret = std::env::var("LINKEDIN_CLIENT_SECRET")
-        .unwrap_or_else(|_| "WPL_AP1.KBbEsl8dFglyJaJC.okOUOA==".to_string());
+        .unwrap_or_else(|_| "add_secret_key".to_string());
 
     // 3. Exchange 'code' for 'access_token' with LinkedIn OAuth server
     let token_res = client
