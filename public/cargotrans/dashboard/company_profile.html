@@ -163,14 +163,10 @@
   <!-- CONTACT PERSON DETAILS (FIRST NAME & LAST NAME) -->
   <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
     <div>
-      <label class="block text-xs font-medium text-slate-600 mb-1">Contact Person First Name *</label>
+      <label class="block text-xs font-medium text-slate-600 mb-1">Contact Person  *</label>
       <input type="text" id="contact_first_name" placeholder="First Name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
     </div>
-    <div>
-      <label class="block text-xs font-medium text-slate-600 mb-1">Contact Person Last Name *</label>
-      <input type="text" id="contact_last_name" placeholder="Last Name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
-    </div>
-  </div>
+
 
   <!-- ADDRESS & LOCATION -->
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -550,7 +546,7 @@ if (companyRecord) {
         const mobilePhone = (companyRecord.mobile) ? companyRecord.mobile : (member ? member.phone : '');
 
         setValue('contact_first_name', firstName);
-        setValue('contact_last_name', lastName);
+  
         setValue('mobile_phone', mobilePhone);
 
         if (companyRecord.banner_url) {
