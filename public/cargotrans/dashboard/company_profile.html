@@ -544,10 +544,10 @@ if (companyRecord) {
         setValue('fleetDescription', companyRecord.fleet_description);
         setValue('activeMarkets', companyRecord.active_markets);
 
-// Varno povleci ime in priimek iz memberja ali companyRecord-a
-        const firstName = (member && member.first_name) ? member.first_name : (companyRecord.first_name || '');
-        const lastName = (member && member.last_name) ? member.last_name : (companyRecord.last_name || '');
-        const mobilePhone = (companyRecord.mobile_phone) ? companyRecord.mobile_phone : (member ? member.mobile_phone : '');
+// Točno usklajeno s Supabase shemo:
+        const firstName = (member && member.first_name) ? member.first_name : (companyRecord.contact_person || '');
+        const lastName = (member && member.last_name) ? member.last_name : '';
+        const mobilePhone = (companyRecord.mobile) ? companyRecord.mobile : (member ? member.phone : '');
 
         setValue('contact_first_name', firstName);
         setValue('contact_last_name', lastName);
