@@ -147,26 +147,18 @@
     </div>
   </div>
 
-  <!-- EXPANDABLE CORE MODULES SECTION (Z gumbom / pluskom za prikaz 5 modulov) -->
-  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div>
-        <h1 class="text-xl font-bold text-slate-900 tracking-tight">
-          Next-Gen Global Multimodal Freight & Capacity Exchange
-        </h1>
-        <p class="text-xs text-slate-500 mt-0.5">
-          Post shipments or source available capacity across Road, Ocean, and Air corridors worldwide.
-        </p>
-      </div>
-      <!-- Gumb s plusom za razširitev / zapiranje modulov -->
-      <button type="button" onclick="toggleCoreModules()" class="self-start sm:self-auto bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 border border-slate-300">
-        <i id="modulePlusIcon" data-lucide="plus" class="w-4 h-4 text-blue-600 transition-transform duration-200"></i>
-        <span id="moduleToggleLabel">Show Quick Modules</span>
-      </button>
+  <!-- PRIMARY ACTIONS GRID (5 Core Modules - Always Visible) -->
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+    <div class="max-w-3xl mb-6">
+      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+        Next-Gen Global Multimodal Freight & Capacity Exchange
+      </h1>
+      <p class="text-slate-500 mt-1">
+        Post shipments or source available capacity across Road, Ocean, and Air corridors worldwide.
+      </p>
     </div>
 
-    <!-- Skriti/Razširljivi grid s 5 moduli -->
-    <div id="coreModulesGrid" class="hidden mt-6 pt-6 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       
       <!-- 1. Post Freight -->
       <a href="enter_cargo.html" class="flex flex-col justify-between p-4 bg-gradient-to-br from-blue-50 to-slate-50 hover:from-blue-100 hover:to-blue-50 border border-blue-200/80 rounded-xl transition-all duration-200 group text-left shadow-sm">
@@ -650,22 +642,6 @@
       console.error('Supabase lookup error:', err);
     }
   });
-
-  // Toggle Expandable Core Modules (5 modulov z gumbom plus)
-  function toggleCoreModules() {
-    const grid = document.getElementById('coreModulesGrid');
-    const label = document.getElementById('moduleToggleLabel');
-    const icon = document.getElementById('modulePlusIcon');
-    if (grid.classList.contains('hidden')) {
-      grid.classList.remove('hidden');
-      label.textContent = "Hide Quick Modules";
-      icon.style.transform = "rotate(45deg)";
-    } else {
-      grid.classList.add('hidden');
-      label.textContent = "Show Quick Modules";
-      icon.style.transform = "rotate(0deg)";
-    }
-  }
 
   // Toggle Advanced Corridor Panel (Multi-country / Continent selector)
   function toggleAdvancedCorridor() {
