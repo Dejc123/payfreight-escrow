@@ -254,7 +254,7 @@
           </div>
         </div>
       </div>
-      <!-- SECTION 4: REAL COMPLIANCE FILE UPLOADS WITH PREVIEW -->
+      <!-- SECTION 4: REAL COMPLIANCE FILE UPLOADS WITH INSTANT UX -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
           <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
@@ -276,7 +276,7 @@
             </div>
             <p class="text-xs text-slate-500">Upload official transport license or DOT/MC registration certificate (.pdf, .jpg, .png)</p>
             
-            <input type="file" id="licenseFileInput" class="hidden" onchange="handleFileUpload(event, 'licenseBadge', 'licenseFileName')">
+            <input type="file" id="licenseFileInput" class="hidden" onchange="handleFileUpload(event, 'license')">
             <div class="flex items-center justify-between pt-2">
               <span id="licenseFileName" class="text-xs font-mono text-slate-400 italic">No file selected</span>
               <div class="flex items-center gap-2">
@@ -299,7 +299,7 @@
             </div>
             <p class="text-xs text-slate-500">Upload active cargo liability insurance policy or certificate of coverage (.pdf, .jpg, .png)</p>
             
-            <input type="file" id="insuranceFileInput" class="hidden" onchange="handleFileUpload(event, 'insuranceBadge', 'insuranceFileName')">
+            <input type="file" id="insuranceFileInput" class="hidden" onchange="handleFileUpload(event, 'insurance')">
             <div class="flex items-center justify-between pt-2">
               <span id="insuranceFileName" class="text-xs font-mono text-slate-400 italic">No file selected</span>
               <div class="flex items-center gap-2">
@@ -345,6 +345,7 @@
       </div>
     </form>
   </main>
+
   <!-- MODAL DIALOG: ADD / EDIT TEAM MEMBER -->
   <div id="memberModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 space-y-6 border border-slate-100 max-h-[90vh] overflow-y-auto">
@@ -358,7 +359,6 @@
         </button>
       </div>
       <div class="space-y-4 text-xs">
-        <!-- Skriti ID za sledenje urejanja obstoječega člana -->
         <input type="hidden" id="editingMemberId" value="">
         <div class="space-y-4 text-xs">
           <div class="grid grid-cols-2 gap-3">
@@ -416,7 +416,6 @@
               <input type="text" id="mOffice" placeholder="Ext. 101" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
             </div>
           </div>
-          <!-- DODANO: Spoken Languages & Profile Photo -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <label class="block font-semibold text-slate-700 mb-1">Spoken Languages</label>
@@ -435,6 +434,7 @@
       </div>
     </div>
   </div>
+
   <!-- PASSWORD CHANGE MODAL -->
   <div id="passwordModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-5 border border-slate-100">
@@ -463,6 +463,7 @@
       </div>
     </div>
   </div>
+
   <!-- BANNER CROPPER MODAL (PAN & ZOOM) -->
   <div id="cropperModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 space-y-5 border border-slate-100 flex flex-col">
@@ -493,6 +494,25 @@
       </div>
     </div>
   </div>
+
+  <!-- DOCUMENT / BANNER LIGHTBOX PREVIEW MODAL -->
+  <div id="docPreviewModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full p-6 space-y-4 border border-slate-100 flex flex-col max-h-[90vh]">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2" id="docPreviewTitle">
+          <i data-lucide="eye" class="w-5 h-5 text-enterprise-600"></i>
+          <span>Document Preview</span>
+        </h3>
+        <button type="button" onclick="closeDocPreviewModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div id="docPreviewContainer" class="flex-1 overflow-auto flex items-center justify-center min-h-[400px] bg-slate-900 rounded-xl p-2">
+        <!-- Dinamični predogled slike ali PDF-ja -->
+      </div>
+    </div>
+  </div>
+
   <!-- SCRIPT LOGIC & SUPABASE -->
   <script>
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
@@ -525,6 +545,7 @@
     };
     let isDragging = false;
     let startX = 0, startY = 0;
+
     document.addEventListener("DOMContentLoaded", async () => {
       try {
         if (usernameParam) localStorage.setItem('cargotrans_user', usernameParam);
@@ -600,7 +621,7 @@
         setValue('vat_number', companyRecord.vat_number);
         setValue('address', companyRecord.address);
         setValue('postalCode', companyRecord.postal_code);
-        setValue('city', companyRecord.city);
+        if (document.getElementById('city')) setValue('city', companyRecord.city);
         setValue('country', companyRecord.country);
         setValue('contact_email', companyRecord.contact_email);
         setValue('phone', companyRecord.phone);
@@ -617,6 +638,7 @@
         const mobilePhone = (companyRecord.mobile) ? companyRecord.mobile : (member ? member.phone : '');
         setValue('contact_first_name', firstName);
         setValue('mobile_phone', mobilePhone);
+
         if (companyRecord.banner_url) {
           savedBannerUrl = companyRecord.banner_url;
           const pb = document.getElementById('bannerPreviewBox');
@@ -650,12 +672,11 @@
         alert('Could not load your company profile: ' + err.message);
       }
       
-      // Naloži člane iz baze ob zagonu
       await loadTeamMembersFromSupabase();
       setupBannerDragEvents();
       lucide.createIcons();
     });
-  // --- LOGIKA ZA ČLANE EKIPE (SUPABASE SYNC, EDIT & REMOVE) ---
+
     async function loadTeamMembersFromSupabase() {
       if (!companyId) return;
       try {
@@ -670,6 +691,7 @@
         console.error('Error loading team members:', err);
       }
     }
+
     function openAddMemberModal() {
       document.getElementById('editingMemberId').value = "";
       document.getElementById('modalTitle').innerHTML = '<i data-lucide="user-plus" class="w-5 h-5 text-enterprise-600"></i><span>Add Team Member / Dispatcher Account</span>';
@@ -686,6 +708,7 @@
       document.getElementById('memberModal').classList.remove('hidden');
       lucide.createIcons();
     }
+
     function openEditMemberModal(id) {
       const member = teamMembers.find(m => String(m.id) === String(id));
       if (!member) return;
@@ -706,9 +729,11 @@
       document.getElementById('memberModal').classList.remove('hidden');
       lucide.createIcons();
     }
+
     function closeMemberModal() {
       document.getElementById('memberModal').classList.add('hidden');
     }
+
     async function saveTeamMember() {
       const editId = document.getElementById('editingMemberId').value;
       const firstName = document.getElementById('mFirstName').value.trim();
@@ -722,8 +747,9 @@
       const officeExt = document.getElementById('mOffice').value.trim();
       const languages = document.getElementById('mLanguages') ? document.getElementById('mLanguages').value.trim() : '';
       const avatarInput = document.getElementById('mAvatarFile');
+
       if (!firstName || !lastName || !username || !email) {
-        alert("Please fill in all required fields (First Name, Last Name, Username, Email)!");
+        alert("Please fulfill all required fields (First Name, Last Name, Username, Email)!");
         return;
       }
       if (!companyId) {
@@ -731,7 +757,6 @@
         return;
       }
       let avatarUrl = null;
-      // Nalaganje slike v Supabase Storage (če je izbrana)
       if (avatarInput && avatarInput.files && avatarInput.files[0]) {
         const file = avatarInput.files[0];
         const fileExt = file.name.split('.').pop();
@@ -748,6 +773,7 @@
           .getPublicUrl(fileName);
         avatarUrl = publicURLData.publicUrl;
       }
+
       const memberPayload = {
         company_id: companyId,
         first_name: firstName,
@@ -762,10 +788,10 @@
         languages: languages,
         cargo_trans_id: cargoTransId || null
       };
-      // Če imamo nov avatar, ga dodamo v payload
       if (avatarUrl) {
         memberPayload.avatar_url = avatarUrl;
       }
+
       try {
         if (editId) {
           const { error } = await sb
@@ -788,6 +814,7 @@
         alert("Error saving team member: " + err.message);
       }
     }
+
     async function deleteTeamMember(id) {
       if (!confirm("Are you sure you want to delete this team member?")) return;
       try {
@@ -802,6 +829,7 @@
         alert("Error deleting member: " + err.message);
       }
     }
+
     function renderTeamMembers() {
       const container = document.getElementById('teamMembersContainer');
       document.getElementById('teamSeatCount').textContent = `${teamMembers.length} Active Members`;
@@ -835,7 +863,8 @@
       });
       lucide.createIcons();
     }
-    // --- LOGIKA ZA PREMIKANJE & ZOOM PASICE (PAN & ZOOM) ---
+
+    // --- BANNER ZOOM & PAN ---
     function handleBannerUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -860,6 +889,7 @@
       };
       reader.readAsDataURL(file);
     }
+
     function setupBannerDragEvents() {
       const viewport = document.getElementById('cropViewport');
       if (!viewport) return;
@@ -874,38 +904,26 @@
         currentImg.y = e.clientY - startY;
         updateImageTransform();
       });
-      window.addEventListener('mouseup', () => {
-        isDragging = false;
-      });
-      viewport.addEventListener('touchstart', (e) => {
-        isDragging = true;
-        startX = e.touches[0].clientX - currentImg.x;
-        startY = e.touches[0].clientY - currentImg.y;
-      });
-      window.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        currentImg.x = e.touches[0].clientX - startX;
-        currentImg.y = e.touches[0].clientY - startY;
-        updateImageTransform();
-      });
-      window.addEventListener('touchend', () => {
-        isDragging = false;
-      });
+      window.addEventListener('mouseup', () => { isDragging = false; });
     }
+
     function onZoomChange(val) {
       currentImg.scale = parseFloat(val);
       updateImageTransform();
     }
+
     function updateImageTransform() {
       const imgEl = document.getElementById('imageToCrop');
       if (imgEl) {
         imgEl.style.transform = `translate(${currentImg.x}px, ${currentImg.y}px) scale(${currentImg.scale})`;
       }
     }
+
     function closeCropperModal() {
       document.getElementById('cropperModal').classList.add('hidden');
       document.getElementById('bannerFileInput').value = '';
     }
+
     async function saveCroppedBanner() {
       const canvas = document.createElement('canvas');
       canvas.width = 1200;
@@ -947,58 +965,102 @@
           }
           const { data: publicUrlData } = sb.storage.from('company-files').getPublicUrl(fileName);
           savedBannerUrl = publicUrlData.publicUrl;
-
-          // Omogočimo gumb za predogled pasice
           document.getElementById('bannerPreviewBtn').classList.remove('hidden');
           document.getElementById('bannerPreviewBtn').classList.add('flex');
-
-          // Shranimo v bazo
           await saveProfile(true);
           document.getElementById('bannerStatusText').textContent = "Banner successfully updated & saved!";
         }, 'image/png');
       };
     }
-    // --- POMOŽNE FUNKCIJE ZA DATOTEKE IN PROFIL ---
-    function previewBanner() {
-      if (savedBannerUrl) {
-        window.open(savedBannerUrl, '_blank');
-      } else {
-        alert("No corporate banner uploaded yet.");
-      }
-    }
-    function viewDocument(type) {
-      if (type === 'license' && savedLicenseUrl) {
-        window.open(savedLicenseUrl, '_blank');
-      } else if (type === 'insurance' && savedInsuranceUrl) {
-        window.open(savedInsuranceUrl, '_blank');
-      } else {
-        alert("No document uploaded yet to preview.");
-      }
-    }
-    function handleFileUpload(event, badgeId, fileNameId) {
+
+    // --- INSTANT UPLOAD & MODAL PREVIEW ---
+    async function handleFileUpload(event, type) {
       const file = event.target.files[0];
-      if (file) {
-        document.getElementById(badgeId).textContent = "Ready to Upload";
-        document.getElementById(badgeId).className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200";
-        document.getElementById(fileNameId).textContent = file.name;
-        document.getElementById(fileNameId).className = "text-xs font-mono font-bold text-slate-800";
-      }
-    }
-    async function uploadToStorage(fileInputId, folderName) {
-      const fileInput = document.getElementById(fileInputId);
-      if (!fileInput || !fileInput.files[0]) return null;
-      const file = fileInput.files[0];
+      if (!file) return;
+
+      const badgeId = type === 'license' ? 'licenseBadge' : 'insuranceBadge';
+      const fileNameId = type === 'license' ? 'licenseFileName' : 'insuranceFileName';
+      const viewBtnId = type === 'license' ? 'licenseViewBtn' : 'insuranceViewBtn';
+      const deleteBtnId = type === 'license' ? 'licenseDeleteBtn' : 'insuranceDeleteBtn';
+
+      const badge = document.getElementById(badgeId);
+      const fileName = document.getElementById(fileNameId);
+
+      badge.textContent = "Uploading...";
+      badge.className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 animate-pulse";
+      fileName.textContent = file.name;
+
+      const folderName = type === 'license' ? 'licenses' : 'insurances';
       const fileExt = file.name.split('.').pop();
-      const fileName = `${folderName}/${companyId || 'company'}_${Date.now()}.${fileExt}`;
-      
-      const { data, error } = await sb.storage.from('company-files').upload(fileName, file);
+      const storagePath = `${folderName}/${companyId || 'company'}_${Date.now()}.${fileExt}`;
+
+      const { data, error } = await sb.storage.from('company-files').upload(storagePath, file);
+
       if (error) {
-        console.error("Storage upload error:", error);
-        return null;
+        alert("Upload failed: " + error.message);
+        badge.textContent = "Not Uploaded";
+        badge.className = "text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded";
+        return;
       }
-      const { data: publicUrlData } = sb.storage.from('company-files').getPublicUrl(fileName);
-      return publicUrlData.publicUrl;
+
+      const { data: publicUrlData } = sb.storage.from('company-files').getPublicUrl(storagePath);
+      const uploadedUrl = publicUrlData.publicUrl;
+
+      if (type === 'license') savedLicenseUrl = uploadedUrl;
+      if (type === 'insurance') savedInsuranceUrl = uploadedUrl;
+
+      badge.textContent = "Uploaded";
+      badge.className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+      document.getElementById(viewBtnId).classList.remove('hidden');
+      document.getElementById(deleteBtnId).classList.remove('hidden');
+
+      await saveProfile(true);
     }
+
+    function viewDocument(type) {
+      let url = '';
+      let title = 'Document Preview';
+
+      if (type === 'license') {
+        url = savedLicenseUrl;
+        title = 'Carrier / Transport License Preview';
+      } else if (type === 'insurance') {
+        url = savedInsuranceUrl;
+        title = 'CMR / Cargo Insurance Certificate Preview';
+      } else if (type === 'banner') {
+        url = savedBannerUrl;
+        title = 'Corporate Banner Preview';
+      }
+
+      if (!url) {
+        alert("Please fulfill and upload document first.");
+        return;
+      }
+
+      const container = document.getElementById('docPreviewContainer');
+      document.getElementById('docPreviewTitle').querySelector('span').textContent = title;
+
+      const isPdf = url.toLowerCase().includes('.pdf');
+
+      if (isPdf) {
+        container.innerHTML = `<iframe src="${url}" class="w-full h-[550px] rounded-lg border-0"></iframe>`;
+      } else {
+        container.innerHTML = `<img src="${url}" class="max-h-[550px] w-auto object-contain rounded-lg shadow-md">`;
+      }
+
+      document.getElementById('docPreviewModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function previewBanner() {
+      viewDocument('banner');
+    }
+
+    function closeDocPreviewModal() {
+      document.getElementById('docPreviewModal').classList.add('hidden');
+      document.getElementById('docPreviewContainer').innerHTML = '';
+    }
+
     async function deleteFile(type) {
       if (!confirm("Are you sure you want to delete this document?")) return;
       
@@ -1021,48 +1083,47 @@
       }
       await saveProfile(true);
     }
+
     async function saveProfile(silent = false) {
       const btn = document.getElementById('saveProfileBtn');
+      
       if (!silent) {
+        const companyName = document.getElementById('company_name')?.value.trim();
+        const vatNumber = document.getElementById('vat_number')?.value.trim();
+        const address = document.getElementById('address')?.value.trim();
+        const email = document.getElementById('contact_email')?.value.trim();
+
+        if (!companyName || !vatNumber || !address || !email) {
+          alert("Please fulfill all required corporate details before saving.");
+          return;
+        }
+
         btn.disabled = true;
         btn.textContent = "Saving profile & uploading files...";
       }
+
       try {
-        const newLicenseUrl = await uploadToStorage('licenseFileInput', 'licenses');
-        const newInsuranceUrl = await uploadToStorage('insuranceFileInput', 'insurances');
-        if (newLicenseUrl) {
-          savedLicenseUrl = newLicenseUrl;
-          document.getElementById('licenseBadge').textContent = "Uploaded";
-          document.getElementById('licenseBadge').className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
-          document.getElementById('licenseDeleteBtn').classList.remove('hidden');
-          document.getElementById('licenseViewBtn').classList.remove('hidden');
-        }
-        if (newInsuranceUrl) {
-          savedInsuranceUrl = newInsuranceUrl;
-          document.getElementById('insuranceBadge').textContent = "Uploaded";
-          document.getElementById('insuranceBadge').className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
-          document.getElementById('insuranceDeleteBtn').classList.remove('hidden');
-          document.getElementById('insuranceViewBtn').classList.remove('hidden');
-        }
         const updateData = {
-          company_name: document.getElementById('company_name').value.trim(),
-          vat_number: document.getElementById('vat_number').value.trim(),
-          address: document.getElementById('address').value.trim(),
-          postal_code: document.getElementById('postalCode').value.trim(),
-          city: document.getElementById('city').value.trim(),
-          country: document.getElementById('country').value.trim(),
-          contact_email: document.getElementById('contact_email').value.trim(),
-          phone: document.getElementById('phone').value.trim(),
-          website: document.getElementById('websiteUrl').value.trim(),
-          fleet_description: document.getElementById('fleetDescription').value.trim(),
-          active_markets: document.getElementById('activeMarkets').value.trim(),
+          company_name: document.getElementById('company_name')?.value.trim() || '',
+          vat_number: document.getElementById('vat_number')?.value.trim() || '',
+          address: document.getElementById('address')?.value.trim() || '',
+          postal_code: document.getElementById('postalCode')?.value.trim() || '',
+          city: document.getElementById('city') ? document.getElementById('city').value.trim() : '',
+          country: document.getElementById('country')?.value.trim() || '',
+          contact_email: document.getElementById('contact_email')?.value.trim() || '',
+          phone: document.getElementById('phone')?.value.trim() || '',
+          website: document.getElementById('websiteUrl')?.value.trim() || '',
+          fleet_description: document.getElementById('fleetDescription')?.value.trim() || '',
+          active_markets: document.getElementById('activeMarkets')?.value.trim() || '',
           banner_url: savedBannerUrl,
           license_url: savedLicenseUrl,
           insurance_url: savedInsuranceUrl,
-          username: document.getElementById('company_username').value.trim(),
-          subscribed_to_mailing: document.getElementById('subscribed_to_mailing').checked
+          username: document.getElementById('company_username')?.value.trim() || '',
+          subscribed_to_mailing: document.getElementById('subscribed_to_mailing')?.checked || false
         };
+
         if (!companyId) throw new Error('Company record is not linked. Profile update cancelled.');
+        
         const { error } = await sb.from('companies').update(updateData).eq('id', companyId);
         if (error) {
           if (!silent) alert("Error saving profile: " + error.message);
@@ -1079,9 +1140,8 @@
         }
       }
     }
-    function openPasswordModal() {
-      document.getElementById('passwordModal').classList.remove('hidden');
-    }
+
+    function openPasswordModal() { document.getElementById('passwordModal').classList.remove('hidden'); }
     function closePasswordModal() {
       document.getElementById('passwordModal').classList.add('hidden');
       document.getElementById('newPasswordInput').value = '';
@@ -1098,10 +1158,7 @@
         alert('Gesli se ne ujemata!');
         return;
       }
-      const { error } = await sb
-        .from('companies')
-        .update({ password: p1 })
-        .eq('id', companyId);
+      const { error } = await sb.from('companies').update({ password: p1 }).eq('id', companyId);
       if (error) {
         alert('Napaka pri posodobitvi gesla: ' + error.message);
       } else {
