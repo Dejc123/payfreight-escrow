@@ -1,8 +1,8 @@
 const nodemailer = require('nodemailer');
 
-// Skupna nastavitev e-poštnega strežnika (SMTP)
+// General SMTP email server configuration
 const transporter = nodemailer.createTransport({
-  host: 'smtp.yourmailserver.com', // Tukaj vpišeš svoj pravi SMTP strežnik
+  host: 'smtp.yourmailserver.com', // Enter your real SMTP server here
   port: 587,
   secure: false,
   auth: {
@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Splošna funkcija za pošiljanje mailov
+// General function to send emails
 async function sendEmail(to, subject, htmlContent) {
   try {
     let info = await transporter.sendMail({
@@ -20,10 +20,10 @@ async function sendEmail(to, subject, htmlContent) {
       subject: subject,
       html: htmlContent
     });
-    console.log("Email uspešno poslan: %s", info.messageId);
+    console.log("Email successfully sent: %s", info.messageId);
     return true;
   } catch (error) {
-    console.error("Napaka pri pošiljanju emaila:", error);
+    console.error("Error sending email:", error);
     return false;
   }
 }
