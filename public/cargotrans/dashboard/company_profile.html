@@ -377,77 +377,89 @@
         </button>
       </div>
 
-      <!-- Skriti ID za sledenje urejanja obstoječega člana -->
-      <input type="hidden" id="editingMemberId" value="">
+<div class="space-y-4 text-xs">
+  <!-- Skriti ID za sledenje urejanja obstoječega člana -->
+  <input type="hidden" id="editingMemberId" value="">
 
-      <div class="space-y-4 text-xs">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">First Name *</label>
-            <input type="text" id="mFirstName" placeholder="First name" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">Last Name *</label>
-            <input type="text" id="mLastName" placeholder="Last name" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
-          </div>
-        </div>
+  <div class="space-y-4 text-xs">
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">First Name *</label>
+        <input type="text" id="mFirstName" placeholder="First name" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Last Name *</label>
+        <input type="text" id="mLastName" placeholder="Last name" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+      </div>
+    </div>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">Role / Position *</label>
-            <input type="text" id="mRole" placeholder="e.g. Senior Road Dispatcher" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">Permission Level *</label>
-            <select id="mAccess" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600 font-semibold">
-              <option value="Dispatcher">Dispatcher / Operations</option>
-              <option value="Primary Admin">Primary Admin</option>
-              <option value="Billing / Finance">Billing / Finance</option>
-            </select>
-          </div>
-        </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Role / Position *</label>
+        <input type="text" id="mRole" placeholder="e.g. Senior Road Dispatcher" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Permission Level *</label>
+        <select id="mAccess" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600 font-semibold">
+          <option value="Dispatcher">Dispatcher / Operations</option>
+          <option value="Primary Admin">Primary Admin</option>
+          <option value="Billing / Finance">Billing / Finance</option>
+        </select>
+      </div>
+    </div>
 
+    <div>
+      <label class="block font-semibold text-slate-700 mb-1">Direct Corporate Email *</label>
+      <input type="email" id="mEmail" placeholder="dispatcher@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+    </div>
+
+    <div class="p-3.5 bg-slate-900 rounded-xl space-y-3 text-white border border-slate-800">
+      <div class="flex items-center justify-between">
+        <span class="font-bold text-xs text-sky-400 flex items-center gap-1.5">
+          <i data-lucide="key" class="w-3.5 h-3.5"></i> Generated Login Credentials
+        </span>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block font-semibold text-slate-700 mb-1">Direct Corporate Email *</label>
-          <input type="email" id="mEmail" placeholder="dispatcher@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+          <label class="block text-[10px] text-slate-400 mb-1">System Username *</label>
+          <input type="text" id="mUsername" placeholder="username" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-emerald-400 font-mono font-bold focus:outline-none focus:border-sky-500">
         </div>
-
-        <div class="p-3.5 bg-slate-900 rounded-xl space-y-3 text-white border border-slate-800">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-xs text-sky-400 flex items-center gap-1.5">
-              <i data-lucide="key" class="w-3.5 h-3.5"></i> Generated Login Credentials
-            </span>
-          </div>
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="block text-[10px] text-slate-400 mb-1">System Username *</label>
-              <input type="text" id="mUsername" placeholder="username" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-emerald-400 font-mono font-bold focus:outline-none focus:border-sky-500">
-            </div>
-            <div>
-              <label class="block text-[10px] text-slate-400 mb-1">Active Password *</label>
-              <input type="text" id="mPassword" placeholder="password" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-emerald-400 font-mono font-bold focus:outline-none focus:border-sky-500">
-            </div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">Direct Mobile Phone</label>
-            <input type="text" id="mMobile" placeholder="+386..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
-          </div>
-          <div>
-            <label class="block font-semibold text-slate-700 mb-1">Office Extension / Direct Line</label>
-            <input type="text" id="mOffice" placeholder="Ext. 101" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
-          </div>
+        <div>
+          <label class="block text-[10px] text-slate-400 mb-1">Active Password *</label>
+          <input type="text" id="mPassword" placeholder="password" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-emerald-400 font-mono font-bold focus:outline-none focus:border-sky-500">
         </div>
       </div>
+    </div>
 
-      <div class="flex items-center justify-end space-x-3 pt-3 border-t border-slate-100">
-        <button type="button" onclick="closeMemberModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg">Cancel</button>
-        <button type="button" onclick="saveTeamMember()" class="px-5 py-2 bg-enterprise-600 hover:bg-enterprise-700 text-white text-xs font-bold rounded-lg shadow-sm">Save Team Member</button>
+    <div class="grid grid-cols-2 gap-3">
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Direct Mobile Phone</label>
+        <input type="text" id="mMobile" placeholder="+386..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Office Extension / Direct Line</label>
+        <input type="text" id="mOffice" placeholder="Ext. 101" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+      </div>
+    </div>
+
+    <!-- DODANO: Spoken Languages & Profile Photo -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Spoken Languages</label>
+        <input type="text" id="mLanguages" placeholder="e.g. English, German, Slovenian" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-700 mb-1">Profile Photo / Avatar</label>
+        <input type="file" id="mAvatarFile" accept="image/*" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-1.5 text-sm file:mr-4 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-slate-200 file:text-slate-700 hover:file:bg-slate-300">
       </div>
     </div>
   </div>
+
+  <div class="flex items-center justify-end space-x-3 pt-3 border-t border-slate-100">
+    <button type="button" onclick="closeMemberModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg">Cancel</button>
+    <button type="button" onclick="saveTeamMember()" class="px-5 py-2 bg-enterprise-600 hover:bg-enterprise-700 text-white text-xs font-bold rounded-lg shadow-sm">Save Team Member</button>
+  </div>
+</div>
 
   <!-- PASSWORD CHANGE MODAL -->
   <div id="passwordModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -698,7 +710,7 @@
       lucide.createIcons();
     });
 
-    // --- LOGIKA ZA ČLANE EKIPE (SUPABASE SYNC, EDIT & REMOVE) ---
+  // --- LOGIKA ZA ČLANE EKIPE (SUPABASE SYNC, EDIT & REMOVE) ---
     async function loadTeamMembersFromSupabase() {
       if (!companyId) return;
       try {
@@ -726,6 +738,8 @@
       document.getElementById('mPassword').value = "CT-" + Math.floor(1000 + Math.random() * 9000);
       document.getElementById('mMobile').value = "";
       document.getElementById('mOffice').value = "";
+      if (document.getElementById('mLanguages')) document.getElementById('mLanguages').value = "";
+      if (document.getElementById('mAvatarFile')) document.getElementById('mAvatarFile').value = "";
       document.getElementById('memberModal').classList.remove('hidden');
       lucide.createIcons();
     }
@@ -746,6 +760,8 @@
       document.getElementById('mPassword').value = member.password || '';
       document.getElementById('mMobile').value = member.phone || '';
       document.getElementById('mOffice').value = member.office_extension || '';
+      if (document.getElementById('mLanguages')) document.getElementById('mLanguages').value = member.languages || '';
+      if (document.getElementById('mAvatarFile')) document.getElementById('mAvatarFile').value = '';
 
       document.getElementById('memberModal').classList.remove('hidden');
       lucide.createIcons();
@@ -766,6 +782,8 @@
       const password = document.getElementById('mPassword').value.trim();
       const phone = document.getElementById('mMobile').value.trim();
       const officeExt = document.getElementById('mOffice').value.trim();
+      const languages = document.getElementById('mLanguages') ? document.getElementById('mLanguages').value.trim() : '';
+      const avatarInput = document.getElementById('mAvatarFile');
 
       if (!firstName || !lastName || !username || !email) {
         alert("Please fill in all required fields (First Name, Last Name, Username, Email)!");
@@ -775,6 +793,30 @@
       if (!companyId) {
         alert("Company is not linked. Cannot save team member.");
         return;
+      }
+
+      let avatarUrl = null;
+
+      // Nalaganje slike v Supabase Storage (če je izbrana)
+      if (avatarInput && avatarInput.files && avatarInput.files[0]) {
+        const file = avatarInput.files[0];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${companyId}_${Date.now()}_${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
+
+        const { data: uploadData, error: uploadError } = await sb.storage
+          .from('member-avatars')
+          .upload(fileName, file);
+
+        if (uploadError) {
+          alert("Napaka pri nalaganju slike: " + uploadError.message);
+          return;
+        }
+
+        const { data: publicURLData } = sb.storage
+          .from('member-avatars')
+          .getPublicUrl(fileName);
+
+        avatarUrl = publicURLData.publicUrl;
       }
 
       const memberPayload = {
@@ -788,8 +830,14 @@
         password: password,
         phone: phone,
         office_extension: officeExt,
+        languages: languages,
         cargo_trans_id: cargoTransId || null
       };
+
+      // Če imamo nov avatar, ga dodamo v payload
+      if (avatarUrl) {
+        memberPayload.avatar_url = avatarUrl;
+      }
 
       try {
         if (editId) {
@@ -845,11 +893,21 @@
 
       container.innerHTML = '';
       teamMembers.forEach((m) => {
+        const avatarImg = m.avatar_url 
+          ? `<img src="${m.avatar_url}" class="w-9 h-9 rounded-full object-cover border border-slate-200">`
+          : `<div class="w-9 h-9 rounded-full bg-enterprise-100 text-enterprise-700 flex items-center justify-center font-bold text-xs">${(m.first_name?.[0] || '') + (m.last_name?.[0] || '')}</div>`;
+
+        const langBadge = m.languages ? `<div class="text-[10px] text-slate-400">🗣️ ${m.languages}</div>` : '';
+
         container.innerHTML += `
           <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl flex justify-between items-center text-xs shadow-sm">
-            <div class="space-y-0.5">
-              <div class="font-bold text-slate-900">${m.first_name || ''} ${m.last_name || ''} <span class="font-normal text-slate-500">(${m.username || 'no username'})</span></div>
-              <div class="text-[11px] text-slate-500">${m.role || 'Dispatcher'} • ${m.email || 'No email'}</div>
+            <div class="flex items-center gap-3">
+              ${avatarImg}
+              <div class="space-y-0.5">
+                <div class="font-bold text-slate-900">${m.first_name || ''} ${m.last_name || ''} <span class="font-normal text-slate-500">(${m.username || 'no username'})</span></div>
+                <div class="text-[11px] text-slate-500">${m.role || 'Dispatcher'} • ${m.email || 'No email'}</div>
+                ${langBadge}
+              </div>
             </div>
             <div class="flex items-center gap-2">
               <button type="button" onclick="openEditMemberModal('${m.id}')" class="px-2.5 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-lg transition">Edit</button>
