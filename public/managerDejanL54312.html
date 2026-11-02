@@ -3,603 +3,699 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CargoTrans Multi-SaaS | Master Super Admin HQ</title>
+  <title>CargoNet Enterprise | Company Profile & Team HQ</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              800: '#075985',
+              900: '#0f172a',
+            },
+            enterprise: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              600: '#7c3aed',
+              700: '#6d28d9',
+              900: '#4c1d95',
+            }
+          }
+        }
+      }
+    }
+  </script>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col">
+<body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
 
-  <!-- ADMIN LOGIN MODAL WITH 2FA -->
-  <div id="adminAuthModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-2xl space-y-6">
-      <div class="text-center space-y-2">
-        <div class="w-12 h-12 rounded-2xl bg-purple-600/20 border border-purple-500/40 flex items-center justify-center mx-auto shadow-lg">
-          <i data-lucide="shield-lock" class="w-6 h-6 text-purple-400"></i>
+  <!-- TOP NAVIGATION (Enterprise  HQ) -->
+  <header class="bg-[#0b0f19] text-white border-b border-slate-800 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-18 py-3">
+        
+        <!-- Nov 2D CargoNet Logo & Status -->
+        <a href="index.html" class="flex items-center space-x-3 group">
+          <div class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-700/80 flex items-center justify-center p-2 shadow-md">
+            <!-- Minimalist 2D Globe SVG -->
+            <svg viewBox="0 0 100 100" class="w-full h-full text-cyan-400 fill-current">
+              <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="8" opacity="0.2"/>
+              <ellipse cx="50" cy="50" rx="42" ry="16" fill="none" stroke="currentColor" stroke-width="8"/>
+              <ellipse cx="50" cy="50" rx="16" ry="42" fill="none" stroke="currentColor" stroke-width="8"/>
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xl font-black tracking-tight text-white leading-none">Cargo<span class="text-cyan-400">Net</span></span>
+            <span class="text-[10px] text-purple-400 font-semibold uppercase tracking-wider mt-1 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
+              Enterprise HQ
+            </span>
+          </div>
+        </a>
+
+        <!-- Navigation Menu -->
+        <nav class="hidden md:flex items-center space-x-2">
+          <a href="index.html" class="px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">Live Board</a>
+          <a href="enter_cargo.html" class="px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">Post Cargo</a>
+          <a href="company_profile.html" class="px-3 py-2 rounded-lg text-xs font-semibold bg-purple-900/40 text-purple-200 border border-purple-500/30 shadow-sm">Profile</a>
+          
+          <!-- PayFreight Protocol -->
+          <a href="https://www.payfreight.io" target="_blank" class="px-3 py-2 rounded-lg text-xs font-bold text-purple-300 hover:text-white bg-purple-900/30 hover:bg-purple-900/60 flex items-center gap-1.5 border border-purple-500/30 transition shadow-sm ml-2">
+            <i data-lucide="shield-check" class="w-4 h-4 text-purple-400"></i>
+            <span>PayFreight Protocol</span>
+            <i data-lucide="external-link" class="w-3 h-3 text-purple-400 opacity-60"></i>
+          </a>
+        </nav>
+
+        <!-- Right Side: Dynamic User Badge -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="userBadgeDisplay" class="text-xs font-bold text-emerald-400 tracking-wide font-mono uppercase">VERIFIED ADMIN</span>
+          </div>
         </div>
-        <h2 class="text-xl font-black tracking-wider text-white">Super Admin Access</h2>
-        <p class="text-xs text-slate-400 font-mono">Server-Protected Master Control Panel</p>
+
       </div>
-
-      <form onsubmit="handleAdminLogin(event)" autocomplete="off" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Admin Username</label>
-          <input type="text" id="adminUser" required placeholder="Enter username" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500 font-mono">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-300 mb-1">Admin Master Password</label>
-          <input type="password" id="adminPass" required placeholder="••••••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500 font-mono">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-purple-400 mb-1 flex items-center gap-1">
-            <i data-lucide="smartphone" class="w-3.5 h-3.5"></i> Google Authenticator (2FA Code)
-          </label>
-          <input type="text" id="admin2FA" maxlength="6" pattern="[0-9]{6}" required placeholder="6-digit code (e.g. 123456)" class="w-full bg-slate-950 border border-purple-500/50 rounded-xl px-3.5 py-2.5 text-sm text-center tracking-widest text-emerald-400 font-mono font-bold focus:outline-none focus:border-purple-400">
-        </div>
-        <div id="loginError" class="hidden text-xs text-rose-400 bg-rose-500/10 border border-rose-500/30 p-2.5 rounded-lg text-center font-mono">
-          Neveljavni podatki ali 2FA koda!
-        </div>
-        <button type="submit" id="loginBtn" class="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold font-mono rounded-xl shadow-lg transition flex items-center justify-center gap-2">
-          <i data-lucide="shield-check" class="w-4 h-4"></i> Authenticate with 2FA
-        </button>
-      </form>
     </div>
-  </div>
+  </header>
 
-  <!-- MASTER SUPER ADMIN CONTENT -->
-  <div id="adminMainContent" class="hidden min-h-screen flex flex-col">
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
-    <!-- HEADER -->
-    <header class="bg-slate-900 border-b border-slate-800 py-4 px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/40 flex items-center justify-center shadow-lg">
-          <i data-lucide="shield-alert" class="w-6 h-6 text-purple-400"></i>
+    <!-- PAGE HEADER -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white px-6 py-5 rounded-2xl border border-slate-200 shadow-sm gap-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-12 h-12 rounded-xl bg-enterprise-50 text-enterprise-600 flex items-center justify-center border border-enterprise-100">
+          <i data-lucide="building-2" class="w-6 h-6"></i>
         </div>
         <div>
-          <div class="flex items-center gap-2">
-            <span class="text-xl font-black tracking-wider text-white">CargoTrans <span class="text-purple-400">MASTER HQ</span></span>
-            <span class="text-[10px] bg-purple-500/20 text-purple-300 border border-purple-500/30 font-mono px-2 py-0.5 rounded-full font-bold">SUPER ADMIN</span>
+          <h1 class="text-xl font-bold text-slate-900" id="headerName">Corporate & Team Profile HQ</h1>
+          <p class="text-xs text-slate-500">Manage global corporate identity, operational specifications, verification documents, and team dispatchers</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-xs bg-blue-50 text-blue-700 font-bold px-3 py-1.5 rounded-lg border border-blue-200 flex items-center gap-1.5">
+          <i data-lucide="award" class="w-4 h-4 text-blue-600"></i> Network ID: <span id="displayCargoTransID" class="font-mono">CT-PENDING</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- FORM START -->
+    <form id="ProfileForm" onsubmit="event.preventDefault(); saveProfile();" class="space-y-8">
+
+      <!-- SECTION 1: CORPORATE BANNER -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="image" class="w-5 h-5 text-enterprise-600"></i>
+            <span>Corporate Banner & Branding</span>
+          </h2>
+          <span class="text-xs text-slate-400">Displayed in Global User Directory search results</span>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-xs font-semibold text-slate-700">Header Banner (Recommended: 1200x300px)</label>
+          <input type="file" id="bannerFileInput" accept="image/*" class="hidden" onchange="handleBannerUpload(event)">
+          
+          <div onclick="document.getElementById('bannerFileInput').click()" id="bannerPreviewBox" class="relative w-full h-40 rounded-xl bg-slate-100 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-enterprise-600 transition group cursor-pointer overflow-hidden shadow-inner bg-cover bg-center">
+            <div class="relative z-10 flex flex-col items-center space-y-2 p-4 text-center">
+              <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+                <i data-lucide="upload-cloud" class="w-5 h-5 text-enterprise-600"></i>
+              </div>
+              <span class="text-xs font-bold text-slate-700" id="bannerStatusText">Click to select corporate banner image (.jpg, .png)</span>
+              <span class="text-[10px] text-slate-400">Custom banner will be embedded in your global exchange directory listings</span>
+            </div>
           </div>
-          <span class="text-[11px] text-slate-400 block font-mono">Server Session: <strong class="text-emerald-400">AUTHENTICATED (2FA SECURE)</strong></span>
         </div>
       </div>
 
-      <div class="flex items-center gap-3">
-        <button onclick="loadAdminData()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono font-bold rounded-xl transition border border-slate-700 flex items-center gap-2">
-          <i data-lucide="refresh-cw" class="w-4 h-4 text-sky-400"></i> Refresh System Data
-        </button>
-        <button onclick="handleAdminLogout()" class="px-3.5 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 text-xs font-mono font-bold rounded-xl border border-rose-500/30 transition flex items-center gap-1.5">
-          <i data-lucide="log-out" class="w-4 h-4"></i> Logout
-        </button>
-      </div>
-    </header>
-
-    <!-- MAIN CONTENT -->
-    <main class="max-w-7xl mx-auto w-full p-6 space-y-6 flex-1">
-      
-      <!-- STATS OVERVIEW -->
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="bg-slate-900/70 border border-slate-800 p-4 rounded-2xl flex items-center justify-between shadow-sm">
-          <div>
-            <span class="text-[11px] text-slate-400 font-mono uppercase block">CargoNet Accounts</span>
-            <span id="statCargoNet" class="text-2xl font-black text-cyan-400 font-mono">0</span>
-            <span class="text-[10px] text-slate-500 block mt-0.5">Full Access (Carriers & Brokers)</span>
-          </div>
-          <i data-lucide="truck" class="w-8 h-8 text-cyan-400/40"></i>
-        </div>
-        <div class="bg-slate-900/70 border border-slate-800 p-4 rounded-2xl flex items-center justify-between shadow-sm">
-          <div>
-            <span class="text-[11px] text-slate-400 font-mono uppercase block">TransNet Accounts</span>
-            <span id="statTransNet" class="text-2xl font-black text-indigo-400 font-mono">0</span>
-            <span class="text-[10px] text-slate-500 block mt-0.5">Restricted (Shippers & Factories)</span>
-          </div>
-          <i data-lucide="factory" class="w-8 h-8 text-indigo-400/40"></i>
-        </div>
-        <div class="bg-slate-900/70 border border-slate-800 p-4 rounded-2xl flex items-center justify-between shadow-sm">
-          <div>
-            <span class="text-[11px] text-slate-400 font-mono uppercase block">CarLoads Accounts</span>
-            <span id="statCarLoads" class="text-2xl font-black text-amber-400 font-mono">0</span>
-            <span class="text-[10px] text-slate-500 block mt-0.5">Auto-Transporters Only</span>
-          </div>
-          <i data-lucide="car" class="w-8 h-8 text-amber-400/40"></i>
-        </div>
-        <div class="bg-slate-900/70 border border-slate-800 p-4 rounded-2xl flex items-center justify-between shadow-sm">
-          <div>
-            <span class="text-[11px] text-slate-400 font-mono uppercase block">PayFreight Active</span>
-            <span id="statPayFreight" class="text-2xl font-black text-emerald-400 font-mono">0</span>
-            <span class="text-[10px] text-slate-500 block mt-0.5">Escrow Protocol Enrolled</span>
-          </div>
-          <i data-lucide="shield-check" class="w-8 h-8 text-emerald-400/40"></i>
-        </div>
-      </div>
-
-      <!-- TABS & SEARCH BAR -->
-      <div class="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-slate-800 pb-3">
-        <div class="flex items-center space-x-2 overflow-x-auto w-full md:w-auto">
-          <button onclick="switchTab('cargonet')" id="tabCargoNet" class="px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 bg-purple-600 text-white shadow-md">
-            <i data-lucide="truck" class="w-4 h-4"></i> CargoNet
-          </button>
-          <button onclick="switchTab('transnet')" id="tabTransNet" class="px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 bg-slate-900 text-slate-400 hover:text-white border border-slate-800">
-            <i data-lucide="factory" class="w-4 h-4"></i> TransNet
-          </button>
-          <button onclick="switchTab('carloads')" id="tabCarLoads" class="px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 bg-slate-900 text-slate-400 hover:text-white border border-slate-800">
-            <i data-lucide="car" class="w-4 h-4"></i> CarLoads
-          </button>
-          <button onclick="switchTab('payfreight')" id="tabPayFreight" class="px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 bg-slate-900 text-slate-400 hover:text-white border border-slate-800">
-            <i data-lucide="shield-check" class="w-4 h-4"></i> PayFreight
-          </button>
+      <!-- SECTION 2: CORE DETAILS & TAX / REGISTRATION ID -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="file-text" class="w-5 h-5 text-enterprise-600"></i>
+            <span>Global Legal Registration & Tax Identification</span>
+          </h2>
+          <span class="text-xs text-enterprise-600 font-semibold bg-enterprise-50 px-2.5 py-1 rounded-md border border-enterprise-100">B2B Settlement Ready</span>
         </div>
 
-        <!-- SEARCH BAR -->
-        <div class="flex items-center gap-2 w-full md:w-80">
-          <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Išči podjetje, ID, email..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Company Legal Name *</label>
+            <input type="text" id="company_name" placeholder="Enter full registered corporate name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:outline-none focus:border-enterprise-600" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Tax / VAT / EIN Registration ID *</label>
+            <input type="text" id="vat_number" placeholder="e.g. SI12345678 or EU-VAT-98765" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 focus:outline-none focus:border-enterprise-600" required>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-medium text-slate-600 mb-1">Corporate Street Address *</label>
+            <input type="text" id="address" placeholder="Street address and suite number" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Postal Code *</label>
+              <input type="text" id="postalCode" placeholder="ZIP / Postcode" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Country *</label>
+              <input type="text" id="country" placeholder="Country" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Main Telephone *</label>
+            <input type="text" id="phone" placeholder="+386 1 000 000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Fax Number</label>
+            <input type="text" id="faxNumber" placeholder="Fax number (optional)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">General Inquiries Email *</label>
+            <input type="email" id="contact_email" placeholder="contact@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Official Website URL</label>
+            <input type="text" id="websiteUrl" placeholder="https://www.company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+          </div>
         </div>
       </div>
 
-      <!-- DATABASE TABLE CONTAINER -->
-      <div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-xl">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+      <!-- SECTION 3: FLEET OVERVIEW & OPERATIONAL PRESENCE -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="truck" class="w-5 h-5 text-enterprise-600"></i>
+            <span>Fleet Specifications, Operations & Market Coverage</span>
+          </h2>
+          <span class="text-xs text-slate-400">Global freight directory description</span>
+        </div>
+
+        <div class="space-y-4">
           <div>
-            <h2 class="text-base font-bold text-white flex items-center gap-2" id="tableTitle">
-              <i data-lucide="database" class="w-5 h-5 text-purple-400"></i> Registered Companies
+            <label class="block text-xs font-bold text-slate-700 mb-1">Company Description & Fleet Overview</label>
+            <textarea id="fleetDescription" rows="4" placeholder="Provide a summary of your company, operational fleet capacity..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Active Markets & Primary Trade Corridors</label>
+            <textarea id="activeMarkets" rows="2" placeholder="List your active operational regions, international lanes..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-3 text-sm focus:outline-none focus:border-enterprise-600 leading-relaxed"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: REAL COMPLIANCE FILE UPLOADS -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="shield-check" class="w-5 h-5 text-enterprise-600"></i>
+            <span>Verification Documents & Insurance Certificates</span>
+          </h2>
+          <span class="text-xs font-semibold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-md">Directory Trust Badges</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          
+          <!-- Transport License Upload -->
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <i data-lucide="file-badge" class="w-5 h-5 text-enterprise-600"></i>
+                <span class="text-sm font-bold text-slate-900">Transport / Carrier License</span>
+              </div>
+              <span id="licenseBadge" class="text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded">Not Uploaded</span>
+            </div>
+            <p class="text-xs text-slate-500">Upload official transport license or DOT/MC registration certificate (.pdf, .jpg, .png)</p>
+            
+            <input type="file" id="licenseFileInput" class="hidden" onchange="handleFileUpload(event, 'licenseBadge', 'licenseFileName')">
+            <div class="flex items-center justify-between pt-2">
+              <span id="licenseFileName" class="text-xs font-mono text-slate-400 italic">No file selected</span>
+              <div class="flex items-center gap-2">
+                <button type="button" id="licenseDeleteBtn" onclick="deleteFile('license')" class="hidden px-2 py-1.5 bg-rose-50 text-rose-600 rounded-lg text-xs font-semibold border border-rose-200">Delete</button>
+                <button type="button" onclick="document.getElementById('licenseFileInput').click()" class="px-3 py-1.5 bg-enterprise-600 hover:bg-enterprise-700 text-white rounded-lg text-xs font-semibold transition">Upload File</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Insurance Upload -->
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <i data-lucide="shield" class="w-5 h-5 text-enterprise-600"></i>
+                <span class="text-sm font-bold text-slate-900">CMR / Cargo Liability Insurance</span>
+              </div>
+              <span id="insuranceBadge" class="text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded">Not Uploaded</span>
+            </div>
+            <p class="text-xs text-slate-500">Upload active cargo liability insurance policy or certificate of coverage (.pdf, .jpg, .png)</p>
+            
+            <input type="file" id="insuranceFileInput" class="hidden" onchange="handleFileUpload(event, 'insuranceBadge', 'insuranceFileName')">
+            <div class="flex items-center justify-between pt-2">
+              <span id="insuranceFileName" class="text-xs font-mono text-slate-400 italic">No file selected</span>
+              <div class="flex items-center gap-2">
+                <button type="button" id="insuranceDeleteBtn" onclick="deleteFile('insurance')" class="hidden px-2 py-1.5 bg-rose-50 text-rose-600 rounded-lg text-xs font-semibold border border-rose-200">Delete</button>
+                <button type="button" onclick="document.getElementById('insuranceFileInput').click()" class="px-3 py-1.5 bg-enterprise-600 hover:bg-enterprise-700 text-white rounded-lg text-xs font-semibold transition">Upload File</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SECTION 5: TEAM HQ & DYNAMIC DISPATCHER MANAGEMENT -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-2">
+          <div>
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i data-lucide="users" class="w-5 h-5 text-enterprise-600"></i>
+              <span>Team HQ & Staff Directory (Up to 100 User Seats)</span>
             </h2>
-            <p class="text-xs text-slate-400 mt-0.5" id="tableSubtitle">Showing accounts with active credentials</p>
+            <p class="text-xs text-slate-500">Manage individual dispatchers, roles, and direct login credentials within your corporate account</p>
           </div>
-          <div id="recordCount" class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
-            Skupaj zapisov: 0
-          </div>
+          <span id="teamSeatCount" class="text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1 rounded-lg">0 Active Team Members</span>
         </div>
 
-        <!-- TABLE -->
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs text-slate-300">
-            <thead class="text-[11px] uppercase bg-slate-950 text-slate-400 font-mono border-b border-slate-800">
-              <tr>
-                <th class="py-3.5 px-4">CargoTrans ID</th>
-                <th class="py-3.5 px-4">Company Name</th>
-                <th class="py-3.5 px-4">Contact Person</th>
-                <th class="py-3.5 px-4">City / Country</th>
-                <th class="py-3.5 px-4">Email / Username</th>
-                <th class="py-3.5 px-4">Validity</th>
-                <th class="py-3.5 px-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="managerTableBody" class="divide-y divide-slate-800/60">
-              <!-- Dynamically Loaded -->
-            </tbody>
-          </table>
+        <!-- Dynamic Team List Container -->
+        <div id="teamMembersContainer" class="space-y-4">
+          <!-- Dynamically populated via JavaScript -->
         </div>
 
-        <!-- PAGINATION -->
-        <div id="paginationContainer" class="flex items-center justify-center gap-1.5 pt-4 flex-wrap font-mono text-xs">
-          <!-- Dinamične strani -->
+        <!-- Add Team Member Action Button -->
+        <div class="pt-2">
+          <button type="button" onclick="openAddMemberModal()" class="px-4 py-2.5 bg-enterprise-50 hover:bg-enterprise-100 text-enterprise-700 text-xs font-bold rounded-xl border border-enterprise-200 transition flex items-center gap-2 shadow-sm">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>+ Add New Team Member / Dispatcher Account</span>
+          </button>
         </div>
       </div>
 
-    </main>
-  </div>
+      <!-- FORM SAVE ACTIONS -->
+      <div class="flex items-center justify-end pt-4 gap-3">
+        <a href="index.html" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
+          Cancel
+        </a>
+        <button type="submit" id="saveProfileBtn" class="px-8 py-3 bg-enterprise-600 hover:bg-enterprise-700 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center gap-2">
+          <i data-lucide="save" class="w-4 h-4"></i>
+          <span>Save Enterprise Profile Changes</span>
+        </button>
+      </div>
 
-  <!-- EDIT / DETAILS MODAL (Vključno z gumbom za brisanje podjetja) -->
-  <div id="editModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-        <div class="flex items-center gap-2">
-          <i data-lucide="edit-3" class="w-5 h-5 text-purple-400"></i>
-          <h3 class="text-base font-bold text-white">Urejanje Podatkov Podjetja (Master HQ)</h3>
-        </div>
-        <button onclick="closeEditModal()" class="text-slate-400 hover:text-white">
+    </form>
+  </main>
+
+  <!-- MODAL DIALOG: ADD / EDIT TEAM MEMBER -->
+  <div id="memberModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 space-y-6 border border-slate-100 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2" id="modalTitle">
+          <i data-lucide="user-plus" class="w-5 h-5 text-enterprise-600"></i>
+          <span>Add Team Member / Dispatcher Account</span>
+        </h3>
+        <button type="button" onclick="closeMemberModal()" class="text-slate-400 hover:text-slate-600">
           <i data-lucide="x" class="w-5 h-5"></i>
         </button>
       </div>
 
-      <form id="editForm" onsubmit="saveCompanyChanges(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
-        <input type="hidden" id="editDbId">
-
-        <div>
-          <label class="block text-slate-400 mb-1">CargoTrans ID</label>
-          <input type="text" id="editCargoTransId" readonly class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-slate-400">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Company Name *</label>
-          <input type="text" id="editCompanyName" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">VAT Number / Davčna *</label>
-          <input type="text" id="editVatNumber" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Contact Person *</label>
-          <input type="text" id="editContactPerson" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-        </div>
-        <div class="md:col-span-2">
-          <label class="block text-slate-400 mb-1">Address *</label>
-          <input type="text" id="editAddress" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Postal Code *</label>
-          <input type="text" id="editPostalCode" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">City *</label>
-          <input type="text" id="editCity" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Country *</label>
-          <input type="text" id="editCountry" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Corporate Email *</label>
-          <input type="email" id="editEmail" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Phone *</label>
-          <input type="text" id="editPhone" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Mobile</label>
-          <input type="text" id="editMobile" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Username *</label>
-          <input type="text" id="editUsername" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Password *</label>
-          <input type="text" id="editPassword" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-emerald-400 font-bold">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Validity (Days)</label>
-          <input type="number" id="editValidityDays" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-        </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Platform Module</label>
-          <select id="editPlatform" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-            <option value="cargonet">CargoNet</option>
-            <option value="transnet">TransNet</option>
-            <option value="carloads">CarLoads</option>
-          </select>
-        </div>
-
-        <div class="md:col-span-2 flex items-center justify-between pt-4 border-t border-slate-800">
-          <!-- Gumb za brisanje podjetja / računa -->
-          <button type="button" onclick="deleteCompany()" class="px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-xl font-bold transition flex items-center gap-1.5">
-            <i data-lucide="trash-2" class="w-4 h-4"></i>
-            <span>Izbriši Račun / Podjetje</span>
-          </button>
-
-          <div class="flex items-center gap-3">
-            <button type="button" onclick="closeEditModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl font-bold">Prekliči</button>
-            <button type="submit" class="px-6 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold shadow-md">Shrani Spremembe</button>
+      <div class="space-y-4 text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">First Name *</label>
+            <input type="text" id="mFirstName" placeholder="First name" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Last Name *</label>
+            <input type="text" id="mLastName" placeholder="Last name" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
           </div>
         </div>
-      </form>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Role / Position *</label>
+            <input type="text" id="mRole" placeholder="e.g. Senior Road Dispatcher" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Permission Level *</label>
+            <select id="mAccess" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600 font-semibold">
+              <option value="Dispatcher">Dispatcher / Operations</option>
+              <option value="Primary Admin">Primary Admin</option>
+              <option value="Billing / Finance">Billing / Finance</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Direct Corporate Email *</label>
+          <input type="email" id="mEmail" placeholder="dispatcher@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+        </div>
+
+        <!-- LOGIN CREDENTIALS SECTION -->
+        <div class="p-3.5 bg-slate-900 rounded-xl space-y-3 text-white border border-slate-800">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-xs text-sky-400 flex items-center gap-1.5">
+              <i data-lucide="key" class="w-3.5 h-3.5"></i> Generated Login Credentials
+            </span>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">System Username *</label>
+              <input type="text" id="mUsername" placeholder="username" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-emerald-400 font-mono font-bold focus:outline-none focus:border-sky-500">
+            </div>
+            <div>
+              <label class="block text-[10px] text-slate-400 mb-1">Active Password *</label>
+              <input type="text" id="mPassword" placeholder="password" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-xs text-emerald-400 font-mono font-bold focus:outline-none focus:border-sky-500">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-3 pt-3 border-t border-slate-100">
+        <button type="button" onclick="closeMemberModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg">Cancel</button>
+        <button type="button" onclick="saveTeamMember()" class="px-5 py-2 bg-enterprise-600 hover:bg-enterprise-700 text-white text-xs font-bold rounded-lg shadow-sm">Save Team Member</button>
+      </div>
     </div>
   </div>
 
-  <!-- JAVASCRIPT -->
+  <!-- SCRIPT LOGIC & SUPABASE -->
   <script>
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    let currentPlatform = 'cargonet';
-    let allCompanies = [];
-    let currentPage = 1;
-    const pageSize = 25;
-    let searchQuery = '';
+    const urlParams = new URLSearchParams(window.location.search);
+    let usernameParam = urlParams.get('username') || urlParams.get('UporabniskoIme') || localStorage.getItem('cargotrans_user') || '';
+    
+    if (urlParams.get('username') || urlParams.get('UporabniskoIme')) {
+      usernameParam = urlParams.get('username') || urlParams.get('UporabniskoIme');
+      localStorage.setItem('cargotrans_user', usernameParam);
+    }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const token = sessionStorage.getItem("admin_server_token");
-      if (token === "SUPER_ADMIN_2FA_VERIFIED_PAYFREIGHT_2026") {
-        showAdminDashboard();
-      } else {
-        lucide.createIcons();
+    let cargoTransId = urlParams.get('CargoTransID') || localStorage.getItem('cargotrans_id') || '';
+    let teamMembers = [];
+    let savedLicenseUrl = '';
+    let savedInsuranceUrl = '';
+    let savedBannerUrl = '';
+
+    // Load data on startup and populate fields
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        let query = sb.from('companies').select('*');
+        
+        if (usernameParam) {
+          query = query.ilike('username', usernameParam);
+        } else if (cargoTransId) {
+          query = query.eq('cargo_trans_id', cargoTransId);
+        } else {
+          query = query.order('id', { ascending: false }).limit(1);
+        }
+
+        const { data, error } = await query.maybeSingle();
+
+        if (data) {
+          cargoTransId = data.cargo_trans_id || cargoTransId;
+          document.getElementById('displayCargoTransID').textContent = cargoTransId;
+          localStorage.setItem('cargotrans_id', cargoTransId);
+          
+          // Populate text fields
+          if (data.company_name) document.getElementById('company_name').value = data.company_name;
+          if (data.vat_number) document.getElementById('vat_number').value = data.vat_number;
+          if (data.address) document.getElementById('address').value = data.address;
+          if (data.city) document.getElementById('postalCode').value = data.city;
+          if (data.country) document.getElementById('country').value = data.country;
+          if (data.contact_email) document.getElementById('contact_email').value = data.contact_email;
+          if (data.phone) document.getElementById('phone').value = data.phone;
+          if (data.fleet_description) document.getElementById('fleetDescription').value = data.fleet_description;
+          if (data.active_markets) document.getElementById('activeMarkets').value = data.active_markets;
+
+          // Banner preview
+          if (data.banner_url) {
+            savedBannerUrl = data.banner_url;
+            const pb = document.getElementById('bannerPreviewBox');
+            pb.style.backgroundImage = `url('${data.banner_url}')`;
+            pb.style.backgroundSize = 'cover';
+            pb.style.backgroundPosition = 'center';
+            document.getElementById('bannerStatusText').textContent = "Banner loaded from database";
+          }
+
+          // License File status
+          if (data.license_url) {
+            savedLicenseUrl = data.license_url;
+            document.getElementById('licenseBadge').textContent = "Uploaded";
+            document.getElementById('licenseBadge').className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+            document.getElementById('licenseFileName').textContent = data.license_url.split('/').pop().split('?')[0];
+            document.getElementById('licenseDeleteBtn').classList.remove('hidden');
+          }
+
+          // Insurance File status
+          if (data.insurance_url) {
+            savedInsuranceUrl = data.insurance_url;
+            document.getElementById('insuranceBadge').textContent = "Uploaded";
+            document.getElementById('insuranceBadge').className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+            document.getElementById('insuranceFileName').textContent = data.insurance_url.split('/').pop().split('?')[0];
+            document.getElementById('insuranceDeleteBtn').classList.remove('hidden');
+          }
+
+          if (data.company_name && document.getElementById('headerName')) {
+            document.getElementById('headerName').textContent = data.company_name + ' - Corporate HQ';
+          }
+          document.getElementById('userBadgeDisplay').textContent = (data.username || usernameParam || 'VERIFIED ADMIN').toUpperCase();
+        } else {
+          document.getElementById('displayCargoTransID').textContent = cargoTransId || 'CT-PENDING';
+        }
+
+        // Nalaganje članov ekipe iz tabele company_members
+        if (cargoTransId) {
+          const { data: membersData } = await sb.from('company_members').select('*').eq('cargo_trans_id', cargoTransId);
+          if (membersData) {
+            teamMembers = membersData.map(m => ({
+              id: m.id,
+              firstName: m.first_name,
+              lastName: m.last_name,
+              email: m.email,
+              username: m.username,
+              password: m.password,
+              role: m.role || m.access_level
+            }));
+            renderTeamMembers();
+          }
+        }
+
+      } catch (err) {
+        console.error("Error fetching data from database:", err);
       }
+
+      lucide.createIcons();
     });
 
-    async function handleAdminLogin(e) {
-      e.preventDefault();
-      const u = document.getElementById('adminUser').value.trim();
-      const p = document.getElementById('adminPass').value.trim();
-      const t2fa = document.getElementById('admin2FA').value.trim();
-      const errBox = document.getElementById('loginError');
-      const btn = document.getElementById('loginBtn');
-
-      btn.disabled = true;
-      btn.textContent = "Verifying 2FA...";
-
-      try {
-        const res = await fetch('/api/admin_login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: u, password: p, token2FA: t2fa })
-        });
-        const data = await res.json();
-        if (res.ok && data.success) {
-          sessionStorage.setItem("admin_server_token", data.token);
-          errBox.classList.add('hidden');
-          showAdminDashboard();
-        } else {
-          errBox.textContent = data.error || "Neveljavni podatki ali 2FA koda!";
-          errBox.classList.remove('hidden');
-        }
-      } catch (err) {
-        if (u === "admin" && t2fa.length === 6) {
-          sessionStorage.setItem("admin_server_token", "SUPER_ADMIN_2FA_VERIFIED_PAYFREIGHT_2026");
-          showAdminDashboard();
-        } else {
-          errBox.textContent = "Napaka pri prijavi ali API povezavi.";
-          errBox.classList.remove('hidden');
-        }
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Authenticate with 2FA";
+    function handleFileUpload(event, badgeId, fileNameId) {
+      const file = event.target.files[0];
+      if (file) {
+        document.getElementById(badgeId).textContent = "Ready to Upload";
+        document.getElementById(badgeId).className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200";
+        document.getElementById(fileNameId).textContent = file.name;
+        document.getElementById(fileNameId).className = "text-xs font-mono font-bold text-slate-800";
       }
     }
 
-    function showAdminDashboard() {
-      document.getElementById('adminAuthModal').classList.add('hidden');
-      document.getElementById('adminMainContent').classList.remove('hidden');
-      loadAdminData();
+    function handleBannerUpload(event) {
+      const f = event.target.files[0];
+      if (f) {
+        const previewBox = document.getElementById('bannerPreviewBox');
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          previewBox.style.backgroundImage = `url('${e.target.result}')`;
+          previewBox.style.backgroundSize = 'cover';
+          previewBox.style.backgroundPosition = 'center';
+          document.getElementById('bannerStatusText').textContent = "Banner Attached: " + f.name;
+        };
+        reader.readAsDataURL(f);
+      }
+    }
+
+    async function uploadToStorage(fileInputId, folderName) {
+      const fileInput = document.getElementById(fileInputId);
+      if (!fileInput || !fileInput.files[0]) return null;
+      const file = fileInput.files[0];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${folderName}/${cargoTransId || 'company'}_${Date.now()}.${fileExt}`;
+      
+      const { data, error } = await sb.storage.from('company-files').upload(fileName, file);
+      if (error) {
+        console.error("Storage upload error:", error);
+        return null;
+      }
+      const { data: publicUrlData } = sb.storage.from('company-files').getPublicUrl(fileName);
+      return publicUrlData.publicUrl;
+    }
+
+    async function deleteFile(type) {
+      if (!confirm("Are you sure you want to delete this document?")) return;
+      
+      if (type === 'license') {
+        savedLicenseUrl = '';
+        document.getElementById('licenseBadge').textContent = "Not Uploaded";
+        document.getElementById('licenseBadge').className = "text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded";
+        document.getElementById('licenseFileName').textContent = "No file selected";
+        document.getElementById('licenseDeleteBtn').classList.add('hidden');
+        document.getElementById('licenseFileInput').value = '';
+      } else if (type === 'insurance') {
+        savedInsuranceUrl = '';
+        document.getElementById('insuranceBadge').textContent = "Not Uploaded";
+        document.getElementById('insuranceBadge').className = "text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded";
+        document.getElementById('insuranceFileName').textContent = "No file selected";
+        document.getElementById('insuranceDeleteBtn').classList.add('hidden');
+        document.getElementById('insuranceFileInput').value = '';
+      }
+      
+      await saveProfile(true);
+    }
+
+    function openAddMemberModal() {
+      document.getElementById('mFirstName').value = "";
+      document.getElementById('mLastName').value = "";
+      document.getElementById('mEmail').value = "";
+      document.getElementById('mUsername').value = "";
+      document.getElementById('mPassword').value = "CT-" + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('memberModal').classList.remove('hidden');
+    }
+
+    function closeMemberModal() { document.getElementById('memberModal').classList.add('hidden'); }
+
+    async function saveTeamMember() {
+      const f = document.getElementById('mFirstName').value.trim();
+      const l = document.getElementById('mLastName').value.trim();
+      const e = document.getElementById('mEmail').value.trim();
+      const u = document.getElementById('mUsername').value.trim();
+      const p = document.getElementById('mPassword').value.trim();
+      const r = document.getElementById('mRole').value.trim() || 'Dispatcher';
+      const a = document.getElementById('mAccess').value;
+
+      if (!f || !l || !u || !p) { alert("Please fill in required fields!"); return; }
+
+      // Shranjevanje v Supabase tabelo company_members
+      const newMember = {
+        cargo_trans_id: cargoTransId,
+        first_name: f,
+        last_name: l,
+        email: e,
+        username: u,
+        password: p,
+        role: r,
+        access_level: a,
+        is_active: true
+      };
+
+      const { data, error } = await sb.from('company_members').insert([newMember]).select();
+      if (error) {
+        alert("Error saving member: " + error.message);
+      } else {
+        if (data && data[0]) {
+          teamMembers.push({
+            id: data[0].id,
+            firstName: f,
+            lastName: l,
+            email: e,
+            username: u,
+            password: p,
+            role: r
+          });
+        }
+        closeMemberModal();
+        renderTeamMembers();
+      }
+    }
+
+    function renderTeamMembers() {
+      const c = document.getElementById('teamMembersContainer');
+      document.getElementById('teamSeatCount').textContent = `${teamMembers.length} Active Members`;
+      c.innerHTML = teamMembers.length === 0 ? '<p class="text-xs text-slate-400 italic">No team members added yet.</p>' : '';
+      teamMembers.forEach((m, idx) => {
+        c.innerHTML += `
+          <div class="p-3 bg-slate-50 border rounded-xl flex justify-between items-center text-xs">
+            <span><b>${m.firstName} ${m.lastName}</b> (${m.username}) - <span class="text-slate-500">${m.role || ''}</span></span>
+            <button type="button" onclick="removeTeamMember(${idx}, ${m.id || 'null'})" class="text-rose-500 font-bold hover:underline">Remove</button>
+          </div>`;
+      });
       lucide.createIcons();
     }
 
-    function handleAdminLogout() {
-      sessionStorage.removeItem("admin_server_token");
-      location.reload();
-    }
-
-    function switchTab(platform) {
-      currentPlatform = platform;
-      currentPage = 1;
-      
-      ['cargonet', 'transnet', 'carloads', 'payfreight'].forEach(p => {
-        const btnId = `tab${p.charAt(0).toUpperCase() + p.slice(1)}`;
-        const btn = document.getElementById(btnId);
-        if (btn) {
-          if (p === platform) {
-            btn.className = "px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 bg-purple-600 text-white shadow-md";
-          } else {
-            btn.className = "px-4 py-2 rounded-xl text-xs font-bold font-mono transition flex items-center gap-2 bg-slate-900 text-slate-400 hover:text-white border border-slate-800";
-          }
-        }
-      });
-
-      const title = document.getElementById('tableTitle');
-      const subtitle = document.getElementById('tableSubtitle');
-
-      if (title && subtitle) {
-        if (platform === 'cargonet') {
-          title.innerHTML = `<i data-lucide="truck" class="w-5 h-5 text-cyan-400"></i> CargoNet Registered Companies`;
-          subtitle.textContent = "Showing FULL ACCESS accounts for carriers and freight forwarders";
-        } else if (platform === 'transnet') {
-          title.innerHTML = `<i data-lucide="factory" class="w-5 h-5 text-indigo-400"></i> TransNet Restricted Production Accounts`;
-          subtitle.textContent = "Showing RESTRICTED accounts for factories and shippers";
-        } else if (platform === 'carloads') {
-          title.innerHTML = `<i data-lucide="car" class="w-5 h-5 text-amber-400"></i> CarLoads Auto-Transporter Accounts`;
-          subtitle.textContent = "Showing specialized vehicle transportation accounts";
-        } else if (platform === 'payfreight') {
-          title.innerHTML = `<i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i> PayFreight Protocol Enrolled Accounts`;
-          subtitle.textContent = "Showing B2B Escrow active participants";
-        }
+    async function removeTeamMember(idx, memberId) {
+      if (!confirm("Are you sure you want to remove this team member?")) return;
+      if (memberId) {
+        await sb.from('company_members').delete().eq('id', memberId);
       }
-
-      renderTable();
-      if (typeof lucide !== 'undefined') lucide.createIcons();
+      teamMembers.splice(idx, 1);
+      renderTeamMembers();
     }
 
-    async function loadAdminData() {
-      const tbody = document.getElementById('managerTableBody');
-      tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500 font-mono">Fetching Supabase ecosystem records...</td></tr>';
+    async function saveProfile(silent = false) {
+      const btn = document.getElementById('saveProfileBtn');
+      if (!silent) {
+        btn.disabled = true;
+        btn.textContent = "Saving profile & uploading files...";
+      }
 
       try {
-        const { data: companies, error } = await sb.from('companies').select('*').order('id', { ascending: false });
-        if (error) throw error;
+        const newBannerUrl = await uploadToStorage('bannerFileInput', 'banners');
+        const newLicenseUrl = await uploadToStorage('licenseFileInput', 'licenses');
+        const newInsuranceUrl = await uploadToStorage('insuranceFileInput', 'insurances');
 
-        allCompanies = companies || [];
-
-        document.getElementById('statCargoNet').textContent = allCompanies.filter(c => (c.platform || 'cargonet') === 'cargonet').length;
-        document.getElementById('statTransNet').textContent = allCompanies.filter(c => c.platform === 'transnet').length;
-        document.getElementById('statCarLoads').textContent = allCompanies.filter(c => c.platform === 'carloads').length;
-        document.getElementById('statPayFreight').textContent = allCompanies.filter(c => c.payfreight_enabled === true).length;
-
-        renderTable();
-
-      } catch (err) {
-        console.error("Manager fetch error:", err);
-        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-rose-400 font-mono">Error loading records: ${err.message}</td></tr>`;
-      } finally {
-        if (typeof lucide !== 'undefined') lucide.createIcons();
-      }
-    }
-
-    function handleSearch() {
-      searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
-      currentPage = 1;
-      renderTable();
-    }
-
-    function renderTable() {
-      const tbody = document.getElementById('managerTableBody');
-      tbody.innerHTML = '';
-
-      const filtered = allCompanies.filter(c => {
-        const matchesPlatform = (currentPlatform === 'payfreight') ? c.payfreight_enabled === true : (c.platform || 'cargonet') === currentPlatform;
-        if (!matchesPlatform) return false;
-
-        if (!searchQuery) return true;
-        const searchableText = `${c.cargo_trans_id} ${c.company_name} ${c.contact_email} ${c.city} ${c.vat_number} ${c.username}`.toLowerCase();
-        return searchableText.includes(searchQuery);
-      });
-
-      document.getElementById('recordCount').textContent = `Skupaj zapisov: ${filtered.length}`;
-
-      if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-slate-500 font-mono">Ni najdenih zapisov.</td></tr>`;
-        document.getElementById('paginationContainer').innerHTML = '';
-        return;
-      }
-
-      const totalPages = Math.ceil(filtered.length / pageSize);
-      if (currentPage > totalPages) currentPage = totalPages;
-      const start = (currentPage - 1) * pageSize;
-      const paginatedItems = filtered.slice(start, start + pageSize);
-
-      paginatedItems.forEach(comp => {
-        const validity = comp.validity_days || 0;
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-900/60 transition";
-        tr.innerHTML = `
-          <td class="py-3.5 px-4 font-mono font-bold text-sky-400">${comp.cargo_trans_id || 'CT-PENDING'}</td>
-          <td class="py-3.5 px-4 font-bold text-white">${comp.company_name}</td>
-          <td class="py-3.5 px-4 text-slate-300">${comp.contact_person || '-'}</td>
-          <td class="py-3.5 px-4 text-slate-400">${comp.city || ''} (${comp.country || ''})</td>
-          <td class="py-3.5 px-4 font-mono text-slate-300">${comp.contact_email}</td>
-          <td class="py-3.5 px-4">
-            <span class="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold ${validity > 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-400 border border-amber-500/30'}">
-              ${validity > 0 ? validity + ' Days Active' : 'INACTIVE'}
-            </span>
-          </td>
-          <td class="py-3.5 px-4 text-right space-x-1.5">
-            <button onclick="openEditModal(${comp.id})" class="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg text-[11px] transition shadow-sm font-mono">
-              Uredi / Detajli
-            </button>
-            <button onclick="add30Days('${comp.cargo_trans_id}', ${validity})" class="px-2.5 py-1 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg text-[11px] transition shadow-sm font-mono">
-              +30d
-            </button>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      renderPagination(totalPages);
-    }
-
-    function renderPagination(totalPages) {
-      const container = document.getElementById('paginationContainer');
-      container.innerHTML = '';
-
-      if (totalPages <= 1) return;
-
-      for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement('button');
-        btn.textContent = i;
-        btn.className = `px-3 py-1 rounded-lg border font-bold transition ${i === currentPage ? 'bg-purple-600 text-white border-purple-500 shadow' : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'}`;
-        btn.onclick = () => {
-          currentPage = i;
-          renderTable();
-        };
-        container.appendChild(btn);
-      }
-    }
-
-    function openEditModal(companyId) {
-      const comp = allCompanies.find(c => c.id === companyId);
-      if (!comp) return;
-
-      document.getElementById('editDbId').value = comp.id;
-      document.getElementById('editCargoTransId').value = comp.cargo_trans_id || '';
-      document.getElementById('editCompanyName').value = comp.company_name || '';
-      document.getElementById('editVatNumber').value = comp.vat_number || '';
-      document.getElementById('editContactPerson').value = comp.contact_person || '';
-      document.getElementById('editAddress').value = comp.address || '';
-      document.getElementById('editPostalCode').value = comp.postal_code || '';
-      document.getElementById('editCity').value = comp.city || '';
-      document.getElementById('editCountry').value = comp.country || '';
-      document.getElementById('editEmail').value = comp.contact_email || '';
-      document.getElementById('editPhone').value = comp.phone || '';
-      document.getElementById('editMobile').value = comp.mobile || '';
-      document.getElementById('editUsername').value = comp.username || '';
-      document.getElementById('editPassword').value = comp.password || '';
-      document.getElementById('editValidityDays').value = comp.validity_days || 30;
-      document.getElementById('editPlatform').value = comp.platform || 'cargonet';
-
-      document.getElementById('editModal').classList.remove('hidden');
-    }
-
-    function closeEditModal() {
-      document.getElementById('editModal').classList.add('hidden');
-    }
-
-    async function saveCompanyChanges(e) {
-      e.preventDefault();
-      const id = document.getElementById('editDbId').value;
-
-      const updatedData = {
-        company_name: document.getElementById('editCompanyName').value,
-        vat_number: document.getElementById('editVatNumber').value,
-        contact_person: document.getElementById('editContactPerson').value,
-        address: document.getElementById('editAddress').value,
-        postal_code: document.getElementById('editPostalCode').value,
-        city: document.getElementById('editCity').value,
-        country: document.getElementById('editCountry').value,
-        contact_email: document.getElementById('editEmail').value,
-        phone: document.getElementById('editPhone').value,
-        mobile: document.getElementById('editMobile').value,
-        username: document.getElementById('editUsername').value,
-        password: document.getElementById('editPassword').value,
-        validity_days: parseInt(document.getElementById('editValidityDays').value) || 0,
-        platform: document.getElementById('editPlatform').value
-      };
-
-      const { error } = await sb
-        .from('companies')
-        .update(updatedData)
-        .eq('id', id);
-
-      if (error) {
-        alert("Napaka pri posodabljanju: " + error.message);
-      } else {
-        alert("Podatki podjetja uspešno posodobljeni!");
-        closeEditModal();
-        loadAdminData();
-      }
-    }
-
-    // NOVA FUNKCIJA ZA BRISANJE PODJETJA / RAČUNA IZ BAZE
-    async function deleteCompany() {
-      const id = document.getElementById('editDbId').value;
-      const compName = document.getElementById('editCompanyName').value;
-
-      if (!id) {
-        alert("Napaka: ID podjetja ni določen.");
-        return;
-      }
-
-      if (confirm(`Ali ste povsem prepričani, da želite trajno izbrisati podjetje in račun "${compName}"? Tega dejanja ni mogoče razveljaviti.`)) {
-        try {
-          const { error } = await sb
-            .from('companies')
-            .delete()
-            .eq('id', id);
-
-          if (error) {
-            console.error("Napaka pri brisanju:", error);
-            alert("Napaka pri brisanju podjetja: " + error.message);
-            return;
-          }
-
-          alert("Podjetje je bilo uspešno izbrisano iz baze.");
-          closeEditModal();
-          loadAdminData(); // Osveži tabelo in statistiko
-        } catch (err) {
-          console.error("Sistemska napaka:", err);
-          alert("Prišlo je do napake pri povezavi s podatkovno bazo.");
+        if (newBannerUrl) savedBannerUrl = newBannerUrl;
+        if (newLicenseUrl) {
+          savedLicenseUrl = newLicenseUrl;
+          document.getElementById('licenseBadge').textContent = "Uploaded";
+          document.getElementById('licenseBadge').className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+          document.getElementById('licenseDeleteBtn').classList.remove('hidden');
         }
-      }
-    }
+        if (newInsuranceUrl) {
+          savedInsuranceUrl = newInsuranceUrl;
+          document.getElementById('insuranceBadge').textContent = "Uploaded";
+          document.getElementById('insuranceBadge').className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+          document.getElementById('insuranceDeleteBtn').classList.remove('hidden');
+        }
 
-    async function add30Days(cargoTransId, currentDays) {
-      const newDays = (currentDays || 0) + 30;
-      const { error } = await sb
-        .from('companies')
-        .update({ validity_days: newDays })
-        .eq('cargo_trans_id', cargoTransId);
+        const updateData = {
+          company_name: document.getElementById('company_name').value.trim(),
+          vat_number: document.getElementById('vat_number').value.trim(),
+          address: document.getElementById('address').value.trim(),
+          city: document.getElementById('postalCode').value.trim(),
+          country: document.getElementById('country').value.trim(),
+          contact_email: document.getElementById('contact_email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          fleet_description: document.getElementById('fleetDescription').value.trim(),
+          active_markets: document.getElementById('activeMarkets').value.trim(),
+          banner_url: savedBannerUrl,
+          license_url: savedLicenseUrl,
+          insurance_url: savedInsuranceUrl
+        };
 
-      if (error) {
-        alert("Napaka: " + error.message);
-      } else {
-        loadAdminData();
+        const { error } = await sb.from('companies').update(updateData).eq('cargo_trans_id', cargoTransId);
+        if (error) {
+          if (!silent) alert("Error saving profile: " + error.message);
+        } else {
+          if (!silent) alert("Company profile successfully updated and visible in manager HQ!");
+        }
+      } catch (err) {
+        if (!silent) alert("Error: " + err.message);
+      } finally {
+        if (!silent) {
+          btn.disabled = false;
+          btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Enterprise Profile Changes';
+          lucide.createIcons();
+        }
       }
     }
   </script>
