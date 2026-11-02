@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CargoTrans | Rate Deal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex items-center justify-center p-4">
+
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-6">
+    <div class="text-center space-y-2">
+      <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center mx-auto shadow-lg">
+        <i data-lucide="star" class="w-6 h-6 text-amber-400"></i>
+      </div>
+      <h2 class="text-xl font-black tracking-wider text-white">Rate Collaboration</h2>
+      <p class="text-xs text-slate-400 font-mono">Ensure transparency and reputation in the community</p>
+    </div>
+
+    <form onsubmit="submitRating(event)" class="space-y-4">
+      <!-- Star Selection -->
+      <div class="flex justify-center space-x-2 py-2" id="starContainer">
+        <button type="button" onclick="setRating(1)" class="text-slate-600 hover:text-amber-400 transition star-btn" data-value="1"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+        <button type="button" onclick="setRating(2)" class="text-slate-600 hover:text-amber-400 transition star-btn" data-value="2"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+        <button type="button" onclick="setRating(3)" class="text-slate-600 hover:text-amber-400 transition star-btn" data-value="3"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+        <button type="button" onclick="setRating(4)" class="text-slate-600 hover:text-amber-400 transition star-btn" data-value="4"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+        <button type="button" onclick="setRating(5)" class="text-slate-600 hover:text-amber-400 transition star-btn" data-value="5"><i data-lucide="star" class="w-8 h-8 fill-current"></i></button>
+      </div>
+      <input type="hidden" id="selectedRating" value="5">
+
+      <div>
+        <label class="block text-xs font-semibold text-slate-300 mb-1">Your Comment / Feedback</label>
+        <textarea id="ratingComment" rows="4" placeholder="e.g. All was good, fast loading and professional communication..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-purple-500 font-mono"></textarea>
+      </div>
+
+      <button type="submit" id="submitBtn" class="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold font-mono rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+        <i data-lucide="send" class="w-4 h-4"></i> Submit Rating
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const dealId = urlParams.get('deal');
+
+    let currentRating = 5;
+    setRating(5); // default 5 stars
+
+    function setRating(val) {
+      currentRating = val;
+      document.getElementById('selectedRating').value = val;
+      const buttons = document.querySelectorAll('.star-btn');
+      buttons.forEach(btn => {
+        const v = parseInt(btn.getAttribute('data-value'));
+        if (v <= val) {
+          btn.className = "text-amber-400 transition star-btn";
+        } else {
+          btn.className = "text-slate-600 transition star-btn";
+        }
+      });
+    }
+
+    async function submitRating(e) {
+      e.preventDefault();
+      const comment = document.getElementById('ratingComment').value.trim();
+
+      const { error } = await sb.from('company_ratings').insert([{
+        deal_id: dealId || 'DIRECT-DEAL',
+        rating: currentRating,
+        comment: comment || 'All was perfect.'
+      }]);
+
+      if (error) {
+        alert("Error submitting rating: " + error.message);
+      } else {
+        alert("Thank you! Your rating has been successfully recorded.");
+        window.close();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
