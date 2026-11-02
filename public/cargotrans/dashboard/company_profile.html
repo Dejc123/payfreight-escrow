@@ -128,7 +128,6 @@
           </div>
           <input type="file" id="bannerFileInput" accept="image/*" class="hidden" onchange="handleBannerUpload(event)">
           
-          <!-- Pravilno razmerje škatle (aspect-[4/1]), da ni več zožano -->
           <div onclick="document.getElementById('bannerFileInput').click()" id="bannerPreviewBox" class="relative w-full aspect-[4/1] rounded-xl bg-slate-900 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-enterprise-600 transition group cursor-pointer overflow-hidden shadow-inner bg-cover bg-center">
             <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition flex flex-col items-center justify-center p-4 text-center">
               <div class="w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform shadow-md mb-2">
@@ -151,7 +150,6 @@
           <span class="text-xs text-enterprise-600 font-semibold bg-enterprise-50 px-2.5 py-1 rounded-md border border-enterprise-100">B2B Settlement Ready</span>
         </div>
 
-        <!-- COMPANY & TAX ID -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div class="sm:col-span-2">
             <label class="block text-xs font-bold text-slate-700 mb-1">Company Legal Name *</label>
@@ -163,7 +161,6 @@
           </div>
         </div>
 
-        <!-- CONTACT PERSON & CORPORATE STREET ADDRESS -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div>
             <label class="block text-xs font-medium text-slate-600 mb-1">Contact Person *</label>
@@ -175,7 +172,6 @@
           </div>
         </div>
 
-        <!-- POSTAL CODE & COUNTRY -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div>
             <label class="block text-xs font-medium text-slate-600 mb-1">Postal Code *</label>
@@ -187,7 +183,6 @@
           </div>
         </div>
 
-        <!-- COMMUNICATION & CONTACT NUMBERS -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label class="block text-xs font-medium text-slate-600 mb-1">Main Telephone *</label>
@@ -382,6 +377,9 @@
         </button>
       </div>
 
+      <!-- Skriti ID za sledenje urejanja obstoječega člana -->
+      <input type="hidden" id="editingMemberId" value="">
+
       <div class="space-y-4 text-xs">
         <div class="grid grid-cols-2 gap-3">
           <div>
@@ -495,16 +493,13 @@
         </button>
       </div>
 
-      <!-- Glavno območje za premikanje slike -->
       <div id="cropViewport" class="relative w-full h-80 bg-slate-900 rounded-xl overflow-hidden cursor-grab active:cursor-grabbing flex items-center justify-center select-none border border-slate-800">
         <img id="imageToCrop" src="" alt="Banner to crop" class="absolute max-none transform-gpu origin-center">
-        <!-- Fiksni okvir za pasico v sredini -->
         <div class="absolute inset-x-6 inset-y-12 border-2 border-dashed border-cyan-400/80 rounded-lg pointer-events-none shadow-2xl bg-black/10 flex items-center justify-center">
           <span class="bg-black/60 text-cyan-300 text-[10px] font-mono px-2 py-1 rounded backdrop-blur-sm">Banner View Area (1200 x 300)</span>
         </div>
       </div>
 
-      <!-- Nadzorna plošča za Zoom (Drsnik) -->
       <div class="flex items-center space-x-4 px-2">
         <span class="text-xs font-semibold text-slate-600 flex items-center gap-1"><i data-lucide="zoom-out" class="w-4 h-4"></i> Zoom</span>
         <input type="range" id="zoomRange" min="0.1" max="3" step="0.01" value="1" class="w-full accent-enterprise-600 cursor-pointer" oninput="onZoomChange(this.value)">
@@ -526,7 +521,6 @@
     const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // CargoTrans user identity
     const urlParams = new URLSearchParams(window.location.search);
 
     let cargoTransId =
@@ -548,7 +542,6 @@
     let savedInsuranceUrl = '';
     let savedBannerUrl = '';
 
-    // Spremenljivke za premikanje in zoomiranje pasice
     let currentImg = {
       src: '',
       x: 0,
@@ -698,14 +691,177 @@
         console.error('Error fetching CargoTrans member/company:', err);
         alert('Could not load your company profile: ' + err.message);
       }
-      renderTeamMembers();
+      
+      // Naloži člane iz baze ob zagonu
+      await loadTeamMembersFromSupabase();
       setupBannerDragEvents();
       lucide.createIcons();
     });
 
-    // ----------------------------------------------------
-    // POPRAVLJENA LOGIKA ZA PREMIKANJE & ZOOM PASICE (PAN & ZOOM)
-    // ----------------------------------------------------
+    // --- LOGIKA ZA ČLANE EKIPE (SUPABASE SYNC, EDIT & REMOVE) ---
+    async function loadTeamMembersFromSupabase() {
+      if (!companyId) return;
+      try {
+        const { data, error } = await sb
+          .from('company_members')
+          .select('*')
+          .eq('company_id', companyId);
+
+        if (error) throw error;
+        teamMembers = data || [];
+        renderTeamMembers();
+      } catch (err) {
+        console.error('Error loading team members:', err);
+      }
+    }
+
+    function openAddMemberModal() {
+      document.getElementById('editingMemberId').value = "";
+      document.getElementById('modalTitle').innerHTML = '<i data-lucide="user-plus" class="w-5 h-5 text-enterprise-600"></i><span>Add Team Member / Dispatcher Account</span>';
+      document.getElementById('mFirstName').value = "";
+      document.getElementById('mLastName').value = "";
+      document.getElementById('mRole').value = "";
+      document.getElementById('mEmail').value = "";
+      document.getElementById('mUsername').value = "";
+      document.getElementById('mPassword').value = "CT-" + Math.floor(1000 + Math.random() * 9000);
+      document.getElementById('mMobile').value = "";
+      document.getElementById('mOffice').value = "";
+      document.getElementById('memberModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function openEditMemberModal(id) {
+      const member = teamMembers.find(m => String(m.id) === String(id));
+      if (!member) return;
+
+      document.getElementById('editingMemberId').value = member.id;
+      document.getElementById('modalTitle').innerHTML = '<i data-lucide="user-cog" class="w-5 h-5 text-enterprise-600"></i><span>Edit Team Member Account</span>';
+      
+      document.getElementById('mFirstName').value = member.first_name || '';
+      document.getElementById('mLastName').value = member.last_name || '';
+      document.getElementById('mRole').value = member.role || '';
+      if (document.getElementById('mAccess')) document.getElementById('mAccess').value = member.access_level || 'Dispatcher';
+      document.getElementById('mEmail').value = member.email || '';
+      document.getElementById('mUsername').value = member.username || '';
+      document.getElementById('mPassword').value = member.password || '';
+      document.getElementById('mMobile').value = member.phone || '';
+      document.getElementById('mOffice').value = member.office_extension || '';
+
+      document.getElementById('memberModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeMemberModal() {
+      document.getElementById('memberModal').classList.add('hidden');
+    }
+
+    async function saveTeamMember() {
+      const editId = document.getElementById('editingMemberId').value;
+      const firstName = document.getElementById('mFirstName').value.trim();
+      const lastName = document.getElementById('mLastName').value.trim();
+      const role = document.getElementById('mRole').value.trim();
+      const accessLevel = document.getElementById('mAccess') ? document.getElementById('mAccess').value : 'Dispatcher';
+      const email = document.getElementById('mEmail').value.trim();
+      const username = document.getElementById('mUsername').value.trim();
+      const password = document.getElementById('mPassword').value.trim();
+      const phone = document.getElementById('mMobile').value.trim();
+      const officeExt = document.getElementById('mOffice').value.trim();
+
+      if (!firstName || !lastName || !username || !email) {
+        alert("Please fill in all required fields (First Name, Last Name, Username, Email)!");
+        return;
+      }
+
+      if (!companyId) {
+        alert("Company is not linked. Cannot save team member.");
+        return;
+      }
+
+      const memberPayload = {
+        company_id: companyId,
+        first_name: firstName,
+        last_name: lastName,
+        role: role,
+        access_level: accessLevel,
+        email: email,
+        username: username,
+        password: password,
+        phone: phone,
+        office_extension: officeExt,
+        cargo_trans_id: cargoTransId || null
+      };
+
+      try {
+        if (editId) {
+          const { error } = await sb
+            .from('company_members')
+            .update(memberPayload)
+            .eq('id', editId);
+
+          if (error) throw error;
+          alert("Team member successfully updated!");
+        } else {
+          const { error } = await sb
+            .from('company_members')
+            .insert([memberPayload]);
+
+          if (error) throw error;
+          alert("New team member successfully created in database!");
+        }
+
+        closeMemberModal();
+        await loadTeamMembersFromSupabase();
+      } catch (err) {
+        console.error("Error saving team member:", err);
+        alert("Error saving team member: " + err.message);
+      }
+    }
+
+    async function deleteTeamMember(id) {
+      if (!confirm("Are you sure you want to delete this team member?")) return;
+
+      try {
+        const { error } = await sb
+          .from('company_members')
+          .delete()
+          .eq('id', id);
+
+        if (error) throw error;
+        await loadTeamMembersFromSupabase();
+      } catch (err) {
+        console.error("Error deleting team member:", err);
+        alert("Error deleting member: " + err.message);
+      }
+    }
+
+    function renderTeamMembers() {
+      const container = document.getElementById('teamMembersContainer');
+      document.getElementById('teamSeatCount').textContent = `${teamMembers.length} Active Members`;
+      
+      if (!teamMembers || teamMembers.length === 0) {
+        container.innerHTML = '<p class="text-xs text-slate-400 italic">No team members added yet.</p>';
+        return;
+      }
+
+      container.innerHTML = '';
+      teamMembers.forEach((m) => {
+        container.innerHTML += `
+          <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl flex justify-between items-center text-xs shadow-sm">
+            <div class="space-y-0.5">
+              <div class="font-bold text-slate-900">${m.first_name || ''} ${m.last_name || ''} <span class="font-normal text-slate-500">(${m.username || 'no username'})</span></div>
+              <div class="text-[11px] text-slate-500">${m.role || 'Dispatcher'} • ${m.email || 'No email'}</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="openEditMemberModal('${m.id}')" class="px-2.5 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-lg transition">Edit</button>
+              <button type="button" onclick="deleteTeamMember('${m.id}')" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold rounded-lg border border-rose-200 transition">Remove</button>
+            </div>
+          </div>
+        `;
+      });
+      lucide.createIcons();
+    }
+
+    // --- LOGIKA ZA PREMIKANJE & ZOOM PASICE (PAN & ZOOM) ---
     function handleBannerUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -849,7 +1005,7 @@
       };
     }
 
-    // Ostale pomožne funkcije za datoteke, člane in modalno geslo
+    // --- POMOŽNE FUNKCIJE ZA DATOTEKE IN PROFIL ---
     function handleFileUpload(event, badgeId, fileNameId) {
       const file = event.target.files[0];
       if (file) {
@@ -895,39 +1051,6 @@
         document.getElementById('insuranceFileInput').value = '';
       }
       await saveProfile(true);
-    }
-
-    function openAddMemberModal() {
-      document.getElementById('mFirstName').value = "";
-      document.getElementById('mLastName').value = "";
-      document.getElementById('mEmail').value = "";
-      document.getElementById('mUsername').value = "";
-      document.getElementById('mPassword').value = "CT-" + Math.floor(1000 + Math.random() * 9000);
-      document.getElementById('memberModal').classList.remove('hidden');
-    }
-
-    function closeMemberModal() { document.getElementById('memberModal').classList.add('hidden'); }
-
-    function saveTeamMember() {
-      const f = document.getElementById('mFirstName').value.trim();
-      const l = document.getElementById('mLastName').value.trim();
-      const e = document.getElementById('mEmail').value.trim();
-      const u = document.getElementById('mUsername').value.trim();
-      const p = document.getElementById('mPassword').value.trim();
-      if (!f || !l || !u || !p) { alert("Please fill in required fields!"); return; }
-      teamMembers.push({ firstName: f, lastName: l, email: e, username: u, password: p });
-      closeMemberModal();
-      renderTeamMembers();
-    }
-
-    function renderTeamMembers() {
-      const c = document.getElementById('teamMembersContainer');
-      document.getElementById('teamSeatCount').textContent = `${teamMembers.length} Active Members`;
-      c.innerHTML = teamMembers.length === 0 ? '<p class="text-xs text-slate-400 italic">No team members added yet.</p>' : '';
-      teamMembers.forEach((m, idx) => {
-        c.innerHTML += `<div class="p-3 bg-slate-50 border rounded-xl flex justify-between items-center text-xs"><span><b>${m.firstName} ${m.lastName}</b> (${m.username})</span><button type="button" onclick="teamMembers.splice(${idx},1);renderTeamMembers()" class="text-rose-500 font-bold">Remove</button></div>`;
-      });
-      lucide.createIcons();
     }
 
     async function saveProfile(silent = false) {
