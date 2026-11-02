@@ -122,16 +122,20 @@
         </div>
 
         <div class="space-y-2">
-          <label class="block text-xs font-semibold text-slate-700"> Header Banner (Recommended: 1200x300px)</label>
+          <div class="flex justify-between items-center">
+            <label class="block text-xs font-semibold text-slate-700">Header Banner (Recommended: 1200 x 300px)</label>
+            <span class="text-[10px] text-slate-400 font-mono">Ratio 4:1</span>
+          </div>
           <input type="file" id="bannerFileInput" accept="image/*" class="hidden" onchange="handleBannerUpload(event)">
           
-          <div onclick="document.getElementById('bannerFileInput').click()" id="bannerPreviewBox" class="relative w-full h-40 rounded-xl bg-slate-100 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-enterprise-600 transition group cursor-pointer overflow-hidden shadow-inner bg-cover bg-center">
-            <div class="relative z-10 flex flex-col items-center space-y-2 p-4 text-center">
-              <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
-                <i data-lucide="upload-cloud" class="w-5 h-5 text-enterprise-600"></i>
+          <!-- Pravilno razmerje škatle (aspect-[4/1]), da ni več zožano -->
+          <div onclick="document.getElementById('bannerFileInput').click()" id="bannerPreviewBox" class="relative w-full aspect-[4/1] rounded-xl bg-slate-900 flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-enterprise-600 transition group cursor-pointer overflow-hidden shadow-inner bg-cover bg-center">
+            <div class="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition flex flex-col items-center justify-center p-4 text-center">
+              <div class="w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform shadow-md mb-2">
+                <i data-lucide="camera" class="w-5 h-5 text-enterprise-600"></i>
               </div>
-              <span class="text-xs font-bold text-slate-700" id="bannerStatusText">Click to select corporate banner image (.jpg, .png)</span>
-              <span class="text-[10px] text-slate-400">Custom banner will be embedded in your global exchange directory listings</span>
+              <span class="text-xs font-bold text-white drop-shadow" id="bannerStatusText">Click to upload or change corporate banner</span>
+              <span class="text-[10px] text-slate-200 drop-shadow mt-0.5">Optimal size 1200x300px with custom zoom & pan</span>
             </div>
           </div>
         </div>
