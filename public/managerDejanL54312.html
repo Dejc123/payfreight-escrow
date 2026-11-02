@@ -179,13 +179,13 @@
     </main>
   </div>
 
-  <!-- EDIT / DETAILS MODAL (Vključno s prikazom članov company_members in brisanjem) -->
+  <!-- EDIT / DETAILS MODAL (Vključuje urejanje, člane, dokumente in brisanje) -->
   <div id="editModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8">
       <div class="flex items-center justify-between border-b border-slate-800 pb-4">
         <div class="flex items-center gap-2">
           <i data-lucide="edit-3" class="w-5 h-5 text-purple-400"></i>
-          <h3 class="text-base font-bold text-white">Urejanje Podatkov Podjetja & Člani Ekipe (Master HQ)</h3>
+          <h3 class="text-base font-bold text-white">Master HQ: Urejanje Podatkov & Dokumenti Podjetja</h3>
         </div>
         <button onclick="closeEditModal()" class="text-slate-400 hover:text-white">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -251,19 +251,29 @@
           <label class="block text-slate-400 mb-1">Validity (Days)</label>
           <input type="number" id="editValidityDays" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
         </div>
-        <div>
-          <label class="block text-slate-400 mb-1">Platform Module</label>
-          <select id="editPlatform" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
-            <option value="cargonet">CargoNet</option>
-            <option value="transnet">TransNet</option>
-            <option value="carloads">CarLoads</option>
-          </select>
+        <div class="md:col-span-2">
+          <label class="block text-slate-400 mb-1">Fleet Description & Operations</label>
+          <textarea id="editFleetDesc" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white"></textarea>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-slate-400 mb-1">Active Markets & Corridors</label>
+          <input type="text" id="editActiveMarkets" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
         </div>
 
-        <!-- PRIKAZ ČLANOV EKIPE (COMPANY MEMBERS) V MODALU -->
+        <!-- PREGLED NALOŽENIH DOKUMENTOV IN DATOTEK (CMR, Licence, Banner) -->
+        <div class="md:col-span-2 pt-4 border-t border-slate-800 space-y-2">
+          <h4 class="text-sm font-bold text-sky-400 flex items-center gap-2">
+            <i data-lucide="file-check" class="w-4 h-4"></i> Naloženi Dokumenti & Datoteke Podjetja
+          </h4>
+          <div id="modalDocumentsList" class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex flex-wrap gap-2 text-xs">
+            <span class="text-slate-500 italic">Ni naloženih dokumentov.</span>
+          </div>
+        </div>
+
+        <!-- PRIKAZ ČLANOV EKIPE (COMPANY MEMBERS) -->
         <div class="md:col-span-2 pt-4 border-t border-slate-800 space-y-3">
           <h4 class="text-sm font-bold text-purple-400 flex items-center gap-2">
-            <i data-lucide="users" class="w-4 h-4"></i> Povezani Člani Ekipe / Dispečerji (company_members)
+            <i data-lucide="users" class="w-4 h-4"></i> Povezani Člani Ekipe / Dispečerji (company_members)[cite: 8]
           </h4>
           <div id="modalTeamMembersList" class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 max-h-40 overflow-y-auto text-xs">
             <span class="text-slate-500 italic">Nalaganje članov...</span>
@@ -271,7 +281,6 @@
         </div>
 
         <div class="md:col-span-2 flex items-center justify-between pt-4 border-t border-slate-800">
-          <!-- Gumb za brisanje podjetja / računa -->
           <button type="button" onclick="deleteCompany()" class="px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-xl font-bold transition flex items-center gap-1.5">
             <i data-lucide="trash-2" class="w-4 h-4"></i>
             <span>Izbriši Račun / Podjetje</span>
@@ -294,7 +303,7 @@
 
     let currentPlatform = 'cargonet';
     let allCompanies = [];
-    let allMembers = []; // Shranjujemo tudi člane ekipe
+    let allMembers = [];
     let currentPage = 1;
     const pageSize = 25;
     let searchQuery = '';
@@ -404,7 +413,6 @@
       tbody.innerHTML = '<tr><td colspan="7" class="p-6 text-center text-slate-500 font-mono">Fetching Supabase ecosystem records...</td></tr>';
 
       try {
-        // Hkrati povlečemo podjetja in člane iz tabele company_members
         const [compRes, memRes] = await Promise.all([
           sb.from('companies').select('*').order('id', { ascending: false }),
           sb.from('company_members').select('*').order('id', { ascending: false })
@@ -530,16 +538,38 @@
       document.getElementById('editUsername').value = comp.username || '';
       document.getElementById('editPassword').value = comp.password || '';
       document.getElementById('editValidityDays').value = comp.validity_days || 30;
-      document.getElementById('editPlatform').value = comp.platform || 'cargonet';
+      document.getElementById('editFleetDesc').value = comp.fleet_description || '';
+      document.getElementById('editActiveMarkets').value = comp.active_markets || '';
 
-      // Prikaz povezanih članov ekipe v modalu
+      // Prikaz naloženih dokumentov (CMR, licence, banner)
+      const docContainer = document.getElementById('modalDocumentsList');
+      docContainer.innerHTML = '';
+      let hasDocs = false;
+
+      if (comp.banner_url) {
+        hasDocs = true;
+        docContainer.innerHTML += `<a href="${comp.banner_url}" target="_blank" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded text-cyan-400 hover:underline">🖼️ Banner Image</a>`;
+      }
+      if (comp.license_url) {
+        hasDocs = true;
+        docContainer.innerHTML += `<a href="${comp.license_url}" target="_blank" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded text-emerald-400 hover:underline">📄 Transport License</a>`;
+      }
+      if (comp.insurance_url) {
+        hasDocs = true;
+        docContainer.innerHTML += `<a href="${comp.insurance_url}" target="_blank" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded text-amber-400 hover:underline">🛡️ CMR Insurance Policy</a>`;
+      }
+      if (!hasDocs) {
+        docContainer.innerHTML = '<span class="text-slate-500 italic">Za to podjetje ni naloženih nobenih dokumentov.</span>';
+      }
+
+      // Prikaz povezanih članov ekipe
       const teamContainer = document.getElementById('modalTeamMembersList');
       teamContainer.innerHTML = '';
       
       const membersOfCompany = allMembers.filter(m => m.cargo_trans_id === comp.cargo_trans_id || m.company_id === comp.id);
       
       if (membersOfCompany.length === 0) {
-        teamContainer.innerHTML = '<span class="text-slate-500 italic">Za to podjetje ni dodanih nobenih članov/dispečerjev.</span>';
+        teamContainer.innerHTML = '<span class="text-slate-500 italic">Za to podjetje ni dodanih nobenih članov/dispečerjev[cite: 8].</span>';
       } else {
         membersOfCompany.forEach(m => {
           teamContainer.innerHTML += `
@@ -581,7 +611,8 @@
         username: document.getElementById('editUsername').value,
         password: document.getElementById('editPassword').value,
         validity_days: parseInt(document.getElementById('editValidityDays').value) || 0,
-        platform: document.getElementById('editPlatform').value
+        fleet_description: document.getElementById('editFleetDesc').value,
+        active_markets: document.getElementById('editActiveMarkets').value
       };
 
       const { error } = await sb
