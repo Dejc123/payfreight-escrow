@@ -210,8 +210,7 @@
     </div>
   </div>
 </div>
-
- <!-- SECTION: PLATFORM LOGIN CREDENTIALS -->
+<!-- SECTION: PLATFORM LOGIN CREDENTIALS -->
 <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
   <div class="flex items-center justify-between border-b border-slate-100 pb-4">
     <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
@@ -235,6 +234,20 @@
         Change Password
       </button>
     </div>
+  </div>
+
+  <!-- SPODAJ POD GESLOM IN UPORABNIŠKIM IMENOM (ČEZ CELO ŠIRINO) -->
+  <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+    <div class="space-y-0.5 pr-4">
+      <label class="text-xs font-bold text-slate-800 cursor-pointer block" for="subscribed_to_mailing">
+        Subscribe to platform news & updates
+      </label>
+      <p class="text-[11px] text-slate-500">Receive system updates, announcements, and platform news via email.</p>
+    </div>
+    <label class="relative inline-flex items-center cursor-pointer shrink-0">
+      <input type="checkbox" id="subscribed_to_mailing" class="sr-only peer">
+      <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-enterprise-600"></div>
+    </label>
   </div>
 </div>
 
@@ -764,7 +777,7 @@ let savedBannerUrl = '';
           banner_url: savedBannerUrl,
           license_url: savedLicenseUrl,
           insurance_url: savedInsuranceUrl,
-          username: document.getElementById('company_username').value.trim()
+          username: document.getElementById('company_username').value.trim(),
           subscribed_to_mailing: document.getElementById('subscribed_to_mailing').checked
         };
 
