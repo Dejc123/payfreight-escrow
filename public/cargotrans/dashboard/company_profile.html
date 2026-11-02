@@ -544,10 +544,14 @@ if (companyRecord) {
         setValue('fleetDescription', companyRecord.fleet_description);
         setValue('activeMarkets', companyRecord.active_markets);
 
-        // Dopolnitev za polnjenje imena, priimka in mobilne številke iz baze
-        setValue('contact_first_name', member ? member.first_name : '');
-        setValue('contact_last_name', member ? member.last_name : '');
-        setValue('mobile_phone', companyRecord.mobile_phone || (member ? member.mobile_phone : ''));
+// Varno povleci ime in priimek iz memberja ali companyRecord-a
+        const firstName = (member && member.first_name) ? member.first_name : (companyRecord.first_name || '');
+        const lastName = (member && member.last_name) ? member.last_name : (companyRecord.last_name || '');
+        const mobilePhone = (companyRecord.mobile_phone) ? companyRecord.mobile_phone : (member ? member.mobile_phone : '');
+
+        setValue('contact_first_name', firstName);
+        setValue('contact_last_name', lastName);
+        setValue('mobile_phone', mobilePhone);
 
         if (companyRecord.banner_url) {
           savedBannerUrl = companyRecord.banner_url;
