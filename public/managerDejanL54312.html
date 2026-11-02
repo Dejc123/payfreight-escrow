@@ -179,10 +179,11 @@
     </main>
   </div>
 
-  <!-- EDIT / DETAILS MODAL (Vključuje urejanje, člane, dokumente in brisanje) -->
+  <!-- EDIT / DETAILS MODAL (Optimizirano z drsnim oknom in vgrajenim predogledom dokumentov) -->
   <div id="editModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+    <!-- Popravljena višina in pomikanje (max-h in overflow-y-auto) -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl space-y-6 my-12 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-4 sticky top-0 bg-slate-900 z-10">
         <div class="flex items-center gap-2">
           <i data-lucide="edit-3" class="w-5 h-5 text-purple-400"></i>
           <h3 class="text-base font-bold text-white">Master HQ: Urejanje Podatkov & Dokumenti Podjetja</h3>
@@ -260,27 +261,37 @@
           <input type="text" id="editActiveMarkets" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white">
         </div>
 
-        <!-- PREGLED NALOŽENIH DOKUMENTOV IN DATOTEK (CMR, Licence, Banner) -->
-        <div class="md:col-span-2 pt-4 border-t border-slate-800 space-y-2">
+        <!-- DOKUMENTI Z VGRAJENIM PREDOGLEDOM NA SAMI STRANI -->
+        <div class="md:col-span-2 pt-4 border-t border-slate-800 space-y-3">
           <h4 class="text-sm font-bold text-sky-400 flex items-center gap-2">
-            <i data-lucide="file-check" class="w-4 h-4"></i> Naloženi Dokumenti & Datoteke Podjetja
+            <i data-lucide="file-check" class="w-4 h-4"></i> Naloženi Dokumenti & Prikaz Predogleda
           </h4>
           <div id="modalDocumentsList" class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex flex-wrap gap-2 text-xs">
             <span class="text-slate-500 italic">Ni naloženih dokumentov.</span>
+          </div>
+          <!-- Vgrajen prostor za predogled dokumenta/slike -->
+          <div id="documentPreviewContainer" class="hidden mt-2 p-3 bg-slate-950 rounded-xl border border-slate-800 text-center">
+            <div class="flex items-center justify-between mb-2">
+              <span id="previewTitle" class="text-xs font-bold text-slate-300">Predogled dokumenta</span>
+              <button type="button" onclick="closeDocumentPreview()" class="text-xs text-rose-400 hover:underline">Zapri predogled</button>
+            </div>
+            <div id="previewContent" class="flex justify-center overflow-auto max-h-60">
+              <!-- Dinamični vsebovalnik za sliko ali iframe -->
+            </div>
           </div>
         </div>
 
         <!-- PRIKAZ ČLANOV EKIPE (COMPANY MEMBERS) -->
         <div class="md:col-span-2 pt-4 border-t border-slate-800 space-y-3">
           <h4 class="text-sm font-bold text-purple-400 flex items-center gap-2">
-            <i data-lucide="users" class="w-4 h-4"></i> Povezani Člani Ekipe / Dispečerji (company_members)[cite: 8]
+            <i data-lucide="users" class="w-4 h-4"></i> Povezani Člani Ekipe / Dispečerji (company_members)
           </h4>
-          <div id="modalTeamMembersList" class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 max-h-40 overflow-y-auto text-xs">
+          <div id="modalTeamMembersList" class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2 max-h-48 overflow-y-auto text-xs">
             <span class="text-slate-500 italic">Nalaganje članov...</span>
           </div>
         </div>
 
-        <div class="md:col-span-2 flex items-center justify-between pt-4 border-t border-slate-800">
+        <div class="md:col-span-2 flex items-center justify-between pt-4 border-t border-slate-800 sticky bottom-0 bg-slate-900 py-3">
           <button type="button" onclick="deleteCompany()" class="px-4 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-xl font-bold transition flex items-center gap-1.5">
             <i data-lucide="trash-2" class="w-4 h-4"></i>
             <span>Izbriši Račun / Podjetje</span>
@@ -541,22 +552,25 @@
       document.getElementById('editFleetDesc').value = comp.fleet_description || '';
       document.getElementById('editActiveMarkets').value = comp.active_markets || '';
 
-      // Prikaz naloženih dokumentov (CMR, licence, banner)
+      // Zapri prejšnji predogled ob odprtju novega modala
+      closeDocumentPreview();
+
+      // Prikaz gumbov za predogled dokumentov na strani
       const docContainer = document.getElementById('modalDocumentsList');
       docContainer.innerHTML = '';
       let hasDocs = false;
 
       if (comp.banner_url) {
         hasDocs = true;
-        docContainer.innerHTML += `<a href="${comp.banner_url}" target="_blank" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded text-cyan-400 hover:underline">🖼️ Banner Image</a>`;
+        docContainer.innerHTML += `<button type="button" onclick="showDocumentPreview('${comp.banner_url}', 'Banner Image')" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded text-cyan-400 hover:bg-slate-800 transition">🖼️ Predogled Bannerja</button>`;
       }
       if (comp.license_url) {
         hasDocs = true;
-        docContainer.innerHTML += `<a href="${comp.license_url}" target="_blank" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded text-emerald-400 hover:underline">📄 Transport License</a>`;
+        docContainer.innerHTML += `<button type="button" onclick="showDocumentPreview('${comp.license_url}', 'Transport License')" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded text-emerald-400 hover:bg-slate-800 transition">📄 Predogled Licence</button>`;
       }
       if (comp.insurance_url) {
         hasDocs = true;
-        docContainer.innerHTML += `<a href="${comp.insurance_url}" target="_blank" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded text-amber-400 hover:underline">🛡️ CMR Insurance Policy</a>`;
+        docContainer.innerHTML += `<button type="button" onclick="showDocumentPreview('${comp.insurance_url}', 'CMR Insurance Policy')" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded text-amber-400 hover:bg-slate-800 transition">🛡️ Predogled Zavarovanja</button>`;
       }
       if (!hasDocs) {
         docContainer.innerHTML = '<span class="text-slate-500 italic">Za to podjetje ni naloženih nobenih dokumentov.</span>';
@@ -569,7 +583,7 @@
       const membersOfCompany = allMembers.filter(m => m.cargo_trans_id === comp.cargo_trans_id || m.company_id === comp.id);
       
       if (membersOfCompany.length === 0) {
-        teamContainer.innerHTML = '<span class="text-slate-500 italic">Za to podjetje ni dodanih nobenih članov/dispečerjev[cite: 8].</span>';
+        teamContainer.innerHTML = '<span class="text-slate-500 italic">Za to podjetje ni dodanih nobenih članov/dispečerjev.</span>';
       } else {
         membersOfCompany.forEach(m => {
           teamContainer.innerHTML += `
@@ -591,6 +605,31 @@
 
     function closeEditModal() {
       document.getElementById('editModal').classList.add('hidden');
+      closeDocumentPreview();
+    }
+
+    // Funkcija za prikaz predogleda dokumenta na sami strani
+    function showDocumentPreview(url, title) {
+      const container = document.getElementById('documentPreviewContainer');
+      const content = document.getElementById('previewContent');
+      const titleEl = document.getElementById('previewTitle');
+
+      titleEl.textContent = `Predogled: ${title}`;
+      container.classList.remove('hidden');
+
+      // Preverimo ali gre za sliko ali PDF/dokument
+      if (url.match(/\.(jpeg|jpg|gif|png)$/i)) {
+        content.innerHTML = `<img src="${url}" alt="${title}" class="max-h-56 rounded border border-slate-800 object-contain">`;
+      } else {
+        content.innerHTML = `<iframe src="${url}" class="w-full h-56 rounded border border-slate-800 bg-white"></iframe>`;
+      }
+    }
+
+    function closeDocumentPreview() {
+      const container = document.getElementById('documentPreviewContainer');
+      const content = document.getElementById('previewContent');
+      container.classList.add('hidden');
+      content.innerHTML = '';
     }
 
     async function saveCompanyChanges(e) {
