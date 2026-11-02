@@ -10,9 +10,6 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <!-- Supabase JS Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Cropper.js za urejanje in zoomiranje pasice -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -41,7 +38,7 @@
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
 
-  <!-- TOP NAVIGATION (Enterprise  HQ) -->
+  <!-- TOP NAVIGATION (Enterprise HQ) -->
   <header class="bg-[#0b0f19] text-white border-b border-slate-800 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-18 py-3">
@@ -49,7 +46,6 @@
         <!-- Nov 2D CargoNet Logo & Status -->
         <a href="index.html" class="flex items-center space-x-3 group">
           <div class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-700/80 flex items-center justify-center p-2 shadow-md">
-            <!-- Minimalist 2D Globe SVG -->
             <svg viewBox="0 0 100 100" class="w-full h-full text-cyan-400 fill-current">
               <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="8" opacity="0.2"/>
               <ellipse cx="50" cy="50" rx="42" ry="16" fill="none" stroke="currentColor" stroke-width="8"/>
@@ -115,7 +111,7 @@
     <!-- FORM START -->
     <form id="ProfileForm" onsubmit="event.preventDefault(); saveProfile();" class="space-y-8">
 
-    <!-- SECTION 1: CORPORATE BANNER -->
+      <!-- SECTION 1: CORPORATE BANNER -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
           <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
@@ -141,118 +137,116 @@
         </div>
       </div>
 
-  <!-- SECTION 2: CORE DETAILS & TAX / REGISTRATION ID -->
-<div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
-  <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
-      <i data-lucide="file-text" class="w-5 h-5 text-enterprise-600"></i>
-      <span>Global Legal Registration & Tax Identification</span>
-    </h2>
-    <span class="text-xs text-enterprise-600 font-semibold bg-enterprise-50 px-2.5 py-1 rounded-md border border-enterprise-100">B2B Settlement Ready</span>
-  </div>
+      <!-- SECTION 2: CORE DETAILS & TAX / REGISTRATION ID -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="file-text" class="w-5 h-5 text-enterprise-600"></i>
+            <span>Global Legal Registration & Tax Identification</span>
+          </h2>
+          <span class="text-xs text-enterprise-600 font-semibold bg-enterprise-50 px-2.5 py-1 rounded-md border border-enterprise-100">B2B Settlement Ready</span>
+        </div>
 
-  <!-- COMPANY & TAX ID -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-    <div class="sm:col-span-2">
-      <label class="block text-xs font-bold text-slate-700 mb-1">Company Legal Name *</label>
-      <input type="text" id="company_name" placeholder="Enter full registered corporate name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:outline-none focus:border-enterprise-600" required>
-    </div>
-    <div>
-      <label class="block text-xs font-bold text-slate-700 mb-1">Tax / VAT / EIN Registration ID *</label>
-      <input type="text" id="vat_number" placeholder="e.g. SI12345678 or EU-VAT-98765" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 focus:outline-none focus:border-enterprise-600" required>
-    </div>
-  </div>
+        <!-- COMPANY & TAX ID -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Company Legal Name *</label>
+            <input type="text" id="company_name" placeholder="Enter full registered corporate name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-semibold text-slate-900 focus:outline-none focus:border-enterprise-600" required>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Tax / VAT / EIN Registration ID *</label>
+            <input type="text" id="vat_number" placeholder="e.g. SI12345678 or EU-VAT-98765" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 focus:outline-none focus:border-enterprise-600" required>
+          </div>
+        </div>
 
+        <!-- CONTACT PERSON & CORPORATE STREET ADDRESS -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Contact Person *</label>
+            <input type="text" id="contact_first_name" placeholder="Contact Name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-medium text-slate-600 mb-1">Corporate Street Address *</label>
+            <input type="text" id="address" placeholder="Street address and suite number" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
+          </div>
+        </div>
 
+        <!-- POSTAL CODE & COUNTRY -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Postal Code *</label>
+            <input type="text" id="postalCode" placeholder="ZIP / Postcode" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Country *</label>
+            <input type="text" id="country" placeholder="Country" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
+          </div>
+        </div>
 
-  <!-- CONTACT PERSON & CORPORATE STREET ADDRESS -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-    <div>
-      <label class="block text-xs font-medium text-slate-600 mb-1">Contact Person *</label>
-      <input type="text" id="contact_first_name" placeholder="Contact Name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
-    </div>
-    <div class="sm:col-span-2">
-      <label class="block text-xs font-medium text-slate-600 mb-1">Corporate Street Address *</label>
-      <input type="text" id="address" placeholder="Street address and suite number" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
-    </div>
-  </div>
-
-  <!-- POSTAL CODE & COUNTRY -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-    <div>
-      <label class="block text-xs font-medium text-slate-600 mb-1">Postal Code *</label>
-      <input type="text" id="postalCode" placeholder="ZIP / Postcode" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600">
-    </div>
-    <div>
-      <label class="block text-xs font-medium text-slate-600 mb-1">Country *</label>
-      <input type="text" id="country" placeholder="Country" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
-    </div>
-  </div>
-
-  <!-- COMMUNICATION & CONTACT NUMBERS -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-    <div>
-      <label class="block text-xs font-medium text-slate-600 mb-1">Main Telephone *</label>
-      <input type="text" id="phone" placeholder="+386 1 000 000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
-    </div>
-    <div>
-      <label class="block text-xs font-medium text-slate-600 mb-1">Mobile / Cell Phone</label>
-      <input type="text" id="mobile_phone" placeholder="+386 40 000 000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
-    </div>
-    <div>
-      <label class="block text-xs font-medium text-slate-600 mb-1">Fax Number</label>
-      <input type="text" id="faxNumber" placeholder="Fax number (optional)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
-    </div>
-    <div>
-      <label class="block text-xs font-medium text-slate-600 mb-1">General Inquiries Email *</label>
-      <input type="email" id="contact_email" placeholder="contact@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
-    </div>
-    <div class="sm:col-span-2">
-      <label class="block text-xs font-medium text-slate-600 mb-1">Official Website URL</label>
-      <input type="text" id="websiteUrl" placeholder="https://www.company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
-    </div>
-  </div>
-</div>
-<!-- SECTION: PLATFORM LOGIN CREDENTIALS -->
-<div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
-  <div class="flex items-center justify-between border-b border-slate-100 pb-4">
-    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
-      <i data-lucide="key" class="w-5 h-5 text-enterprise-600"></i>
-      <span>Platform Login Credentials</span>
-    </h2>
-    <span class="text-xs text-slate-400">Admin Account Access</span>
-  </div>
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-end">
-    <div>
-      <label class="block text-xs font-bold text-slate-700 mb-1">Admin Username *</label>
-      <input type="text" id="company_username" class="w-full bg-slate-100 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-slate-500 cursor-not-allowed" readonly>
-    </div>
-    <div class="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5">
-      <div>
-        <span class="block text-xs font-bold text-slate-700">Password Security</span>
-        <span class="text-[11px] text-slate-500 font-mono">••••••••••••</span>
+        <!-- COMMUNICATION & CONTACT NUMBERS -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Main Telephone *</label>
+            <input type="text" id="phone" placeholder="+386 1 000 000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Mobile / Cell Phone</label>
+            <input type="text" id="mobile_phone" placeholder="+386 40 000 000" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Fax Number</label>
+            <input type="text" id="faxNumber" placeholder="Fax number (optional)" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">General Inquiries Email *</label>
+            <input type="email" id="contact_email" placeholder="contact@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600" required>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-medium text-slate-600 mb-1">Official Website URL</label>
+            <input type="text" id="websiteUrl" placeholder="https://www.company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-enterprise-600">
+          </div>
+        </div>
       </div>
-      <button type="button" onclick="openPasswordModal()" class="px-3.5 py-1.5 bg-enterprise-50 hover:bg-enterprise-100 text-enterprise-700 text-xs font-bold rounded-lg border border-enterprise-200 transition">
-        Change Password
-      </button>
-    </div>
-  </div>
 
-  <!-- SPODAJ POD GESLOM IN UPORABNIŠKIM IMENOM (ČEZ CELO ŠIRINO) -->
-  <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
-    <div class="space-y-0.5 pr-4">
-      <label class="text-xs font-bold text-slate-800 cursor-pointer block" for="subscribed_to_mailing">
-        Subscribe to platform news & updates
-      </label>
-      <p class="text-[11px] text-slate-500">Receive system updates, announcements, and platform news via email.</p>
-    </div>
-    <label class="relative inline-flex items-center cursor-pointer shrink-0">
-      <input type="checkbox" id="subscribed_to_mailing" class="sr-only peer">
-      <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-enterprise-600"></div>
-    </label>
-  </div>
-</div>
+      <!-- SECTION: PLATFORM LOGIN CREDENTIALS -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+          <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+            <i data-lucide="key" class="w-5 h-5 text-enterprise-600"></i>
+            <span>Platform Login Credentials</span>
+          </h2>
+          <span class="text-xs text-slate-400">Admin Account Access</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-end">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Admin Username *</label>
+            <input type="text" id="company_username" class="w-full bg-slate-100 border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-slate-500 cursor-not-allowed" readonly>
+          </div>
+          <div class="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg px-4 py-2.5">
+            <div>
+              <span class="block text-xs font-bold text-slate-700">Password Security</span>
+              <span class="text-[11px] text-slate-500 font-mono">••••••••••••</span>
+            </div>
+            <button type="button" onclick="openPasswordModal()" class="px-3.5 py-1.5 bg-enterprise-50 hover:bg-enterprise-100 text-enterprise-700 text-xs font-bold rounded-lg border border-enterprise-200 transition">
+              Change Password
+            </button>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+          <div class="space-y-0.5 pr-4">
+            <label class="text-xs font-bold text-slate-800 cursor-pointer block" for="subscribed_to_mailing">
+              Subscribe to platform news & updates
+            </label>
+            <p class="text-[11px] text-slate-500">Receive system updates, announcements, and platform news via email.</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer shrink-0">
+            <input type="checkbox" id="subscribed_to_mailing" class="sr-only peer">
+            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-enterprise-600"></div>
+          </label>
+        </div>
+      </div>
 
       <!-- SECTION 3: FLEET OVERVIEW & OPERATIONAL PRESENCE -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
@@ -277,7 +271,7 @@
         </div>
       </div>
 
-    <!-- SECTION 4: REAL COMPLIANCE FILE UPLOADS -->
+      <!-- SECTION 4: REAL COMPLIANCE FILE UPLOADS -->
       <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
         <div class="flex items-center justify-between border-b border-slate-100 pb-4">
           <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
@@ -347,12 +341,8 @@
           <span id="teamSeatCount" class="text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1 rounded-lg">0 Active Team Members</span>
         </div>
 
-        <!-- Dynamic Team List Container -->
-        <div id="teamMembersContainer" class="space-y-4">
-          <!-- Dynamically populated via JavaScript -->
-        </div>
+        <div id="teamMembersContainer" class="space-y-4"></div>
 
-        <!-- Add Team Member Action Button -->
         <div class="pt-2">
           <button type="button" onclick="openAddMemberModal()" class="px-4 py-2.5 bg-enterprise-50 hover:bg-enterprise-100 text-enterprise-700 text-xs font-bold rounded-xl border border-enterprise-200 transition flex items-center gap-2 shadow-sm">
             <i data-lucide="user-plus" class="w-4 h-4"></i>
@@ -375,7 +365,7 @@
     </form>
   </main>
 
-  <!-- MODAL DIALOG: ADD / EDIT TEAM MEMBER (VKLJUČUJE USERNAME & PASSWORD) -->
+  <!-- MODAL DIALOG: ADD / EDIT TEAM MEMBER -->
   <div id="memberModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 space-y-6 border border-slate-100 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -392,11 +382,11 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block font-semibold text-slate-700 mb-1">First Name *</label>
-            <input type="text" id="mFirstName" placeholder="First name" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600" onkeyup="autoGenerateCredentials()">
+            <input type="text" id="mFirstName" placeholder="First name" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
           </div>
           <div>
             <label class="block font-semibold text-slate-700 mb-1">Last Name *</label>
-            <input type="text" id="mLastName" placeholder="Last name" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600" onkeyup="autoGenerateCredentials()">
+            <input type="text" id="mLastName" placeholder="Last name" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
           </div>
         </div>
 
@@ -420,15 +410,11 @@
           <input type="email" id="mEmail" placeholder="dispatcher@company.com" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
         </div>
 
-        <!-- NEW: LOGIN CREDENTIALS SECTION -->
         <div class="p-3.5 bg-slate-900 rounded-xl space-y-3 text-white border border-slate-800">
           <div class="flex items-center justify-between">
             <span class="font-bold text-xs text-sky-400 flex items-center gap-1.5">
               <i data-lucide="key" class="w-3.5 h-3.5"></i> Generated Login Credentials
             </span>
-            <button type="button" onclick="generateNewPassword()" class="text-[10px] text-slate-300 hover:text-white bg-slate-800 px-2 py-1 rounded border border-slate-700 transition">
-              🔄 Regenerate
-            </button>
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
@@ -461,33 +447,114 @@
     </div>
   </div>
 
-// SCRIPT LOGIC & SUPABASE
+  <!-- PASSWORD CHANGE MODAL -->
+  <div id="passwordModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-5 border border-slate-100">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <i data-lucide="key" class="w-5 h-5 text-enterprise-600"></i>
+          <span>Change Admin Password</span>
+        </h3>
+        <button type="button" onclick="closePasswordModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">New Password *</label>
+          <input type="password" id="newPasswordInput" placeholder="Enter new secure password" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+        </div>
+        <div>
+          <label class="block font-semibold text-slate-700 mb-1">Confirm New Password *</label>
+          <input type="password" id="confirmPasswordInput" placeholder="Repeat new password" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-3 pt-3 border-t border-slate-100">
+        <button type="button" onclick="closePasswordModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg">Cancel</button>
+        <button type="button" onclick="submitNewPassword()" class="px-5 py-2 bg-enterprise-600 hover:bg-enterprise-700 text-white text-xs font-bold rounded-lg shadow-sm">Update Password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BANNER CROPPER MODAL (PAN & ZOOM) -->
+  <div id="cropperModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 space-y-5 border border-slate-100 flex flex-col">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <i data-lucide="move" class="w-5 h-5 text-enterprise-600"></i>
+          <span>Position & Zoom Corporate Banner</span>
+        </h3>
+        <button type="button" onclick="closeCropperModal()" class="text-slate-400 hover:text-slate-600">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Glavno območje za premikanje slike -->
+      <div id="cropViewport" class="relative w-full h-80 bg-slate-900 rounded-xl overflow-hidden cursor-grab active:cursor-grabbing flex items-center justify-center select-none border border-slate-800">
+        <img id="imageToCrop" src="" alt="Banner to crop" class="absolute max-none transform-gpu origin-center">
+        <!-- Fiksni okvir za pasico v sredini -->
+        <div class="absolute inset-x-6 inset-y-12 border-2 border-dashed border-cyan-400/80 rounded-lg pointer-events-none shadow-2xl bg-black/10 flex items-center justify-center">
+          <span class="bg-black/60 text-cyan-300 text-[10px] font-mono px-2 py-1 rounded backdrop-blur-sm">Banner View Area (1200 x 300)</span>
+        </div>
+      </div>
+
+      <!-- Nadzorna plošča za Zoom (Drsnik) -->
+      <div class="flex items-center space-x-4 px-2">
+        <span class="text-xs font-semibold text-slate-600 flex items-center gap-1"><i data-lucide="zoom-out" class="w-4 h-4"></i> Zoom</span>
+        <input type="range" id="zoomRange" min="0.1" max="3" step="0.01" value="1" class="w-full accent-enterprise-600 cursor-pointer" oninput="onZoomChange(this.value)">
+        <span class="text-xs font-semibold text-slate-600 flex items-center gap-1"><i data-lucide="zoom-in" class="w-4 h-4"></i></span>
+      </div>
+
+      <p class="text-xs text-slate-500 text-center">Povleci sliko z miško za premikanje levo/desno/gor/dol ter uporabi drsnik za povečavo.</p>
+
+      <div class="flex items-center justify-end space-x-3 pt-3 border-t border-slate-100">
+        <button type="button" onclick="closeCropperModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg">Cancel</button>
+        <button type="button" onclick="saveCroppedBanner()" class="px-5 py-2 bg-enterprise-600 hover:bg-enterprise-700 text-white text-xs font-bold rounded-lg shadow-sm">Apply & Save Banner</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT LOGIC & SUPABASE -->
   <script>
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// CargoTrans user identity
-const urlParams = new URLSearchParams(window.location.search);
+    // CargoTrans user identity
+    const urlParams = new URLSearchParams(window.location.search);
 
-let cargoTransId =
-  urlParams.get('CargoTransID') ||
-  urlParams.get('cargotrans_id') ||
-  localStorage.getItem('cargotrans_id') ||
-  '';
+    let cargoTransId =
+      urlParams.get('CargoTransID') ||
+      urlParams.get('cargotrans_id') ||
+      localStorage.getItem('cargotrans_id') ||
+      '';
 
-const usernameParam =
-  urlParams.get('UporabniskoIme') ||
-  urlParams.get('username') ||
-  localStorage.getItem('cargotrans_user') ||
-  '';
+    const usernameParam =
+      urlParams.get('UporabniskoIme') ||
+      urlParams.get('username') ||
+      localStorage.getItem('cargotrans_user') ||
+      '';
 
-let companyId = localStorage.getItem('cargotrans_company_id') || '';
-let companyRecord = null;
-let teamMembers = [];
-let savedLicenseUrl = '';
-let savedInsuranceUrl = '';
-let savedBannerUrl = '';
+    let companyId = localStorage.getItem('cargotrans_company_id') || '';
+    let companyRecord = null;
+    let teamMembers = [];
+    let savedLicenseUrl = '';
+    let savedInsuranceUrl = '';
+    let savedBannerUrl = '';
+
+    // Spremenljivke za premikanje in zoomiranje pasice
+    let currentImg = {
+      src: '',
+      x: 0,
+      y: 0,
+      scale: 1,
+      naturalWidth: 0,
+      naturalHeight: 0
+    };
+    let isDragging = false;
+    let startX = 0, startY = 0;
 
     document.addEventListener("DOMContentLoaded", async () => {
       try {
@@ -523,7 +590,6 @@ let savedBannerUrl = '';
           companyRecord = result.data;
         }
 
-        // Iskanje obstoječega podjetja po CargoTrans ID.
         if (!companyRecord && cargoTransId) {
           const result = await sb.from('companies')
             .select('*')
@@ -534,7 +600,6 @@ let savedBannerUrl = '';
           companyRecord = result.data;
         }
 
-        // Dodatno iskanje po uporabniškem imenu.
         if (!companyRecord && usernameParam) {
           const result = await sb.from('companies')
             .select('*')
@@ -545,36 +610,28 @@ let savedBannerUrl = '';
           companyRecord = result.data;
         }
 
-        // Shrani povezavo z obstoječim podjetjem.
         if (companyRecord) {
           companyId = String(companyRecord.id);
           localStorage.setItem('cargotrans_company_id', companyId);
-
           cargoTransId = companyRecord.cargo_trans_id || cargoTransId;
-
           if (cargoTransId) {
             localStorage.setItem('cargotrans_id', String(cargoTransId));
           }
-        }
 
-        // Ko je companyRecord uspešno najden in naložen:
-        if (companyRecord) {
-          // 1. Predizpolni zaklenjeno uporabniško ime
           const usernameInput = document.getElementById('company_username');
           if (usernameInput) {
-              usernameInput.value = companyRecord.username || '';
+            usernameInput.value = companyRecord.username || '';
           }
 
-          // 2. Zgoraj v glavi nastavi pravo CT številko namesto PENDING
           const ctDisplay = document.getElementById('displayCargoTransID');
           if (ctDisplay) {
-              ctDisplay.textContent = companyRecord.cargo_trans_id || cargoTransId || '—';
+            ctDisplay.textContent = companyRecord.cargo_trans_id || cargoTransId || '—';
           }
         }
 
         if (!companyRecord) {
           document.getElementById('displayCargoTransID').textContent = cargoTransId || 'NOT LINKED';
-          console.error('No linked company found for this CargoTrans member. No new company record was created.');
+          console.error('No linked company found for this CargoTrans member.');
           alert('Your CargoTrans account was recognized, but its company record could not be found. Please contact support.');
           return;
         }
@@ -597,13 +654,11 @@ let savedBannerUrl = '';
         setValue('activeMarkets', companyRecord.active_markets);
         setValue('company_username', companyRecord.username);
 
-        // Nastavi stanje stikala za e-novičke iz baze
         const subCheckbox = document.getElementById('subscribed_to_mailing');
         if (subCheckbox) {
-            subCheckbox.checked = !!companyRecord.subscribed_to_mailing;
+          subCheckbox.checked = !!companyRecord.subscribed_to_mailing;
         }
 
-        // Točno usklajeno s Supabase shemo:
         const firstName = (member && member.first_name) ? member.first_name : (companyRecord.contact_person || '');
         const lastName = (member && member.last_name) ? member.last_name : '';
         const mobilePhone = (companyRecord.mobile) ? companyRecord.mobile : (member ? member.phone : '');
@@ -640,9 +695,157 @@ let savedBannerUrl = '';
         alert('Could not load your company profile: ' + err.message);
       }
       renderTeamMembers();
+      setupBannerDragEvents();
       lucide.createIcons();
     });
 
+    // ----------------------------------------------------
+    // POPRAVLJENA LOGIKA ZA PREMIKANJE & ZOOM PASICE (PAN & ZOOM)
+    // ----------------------------------------------------
+    function handleBannerUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const imgObj = new Image();
+        imgObj.onload = function() {
+          currentImg.naturalWidth = imgObj.naturalWidth;
+          currentImg.naturalHeight = imgObj.naturalHeight;
+          currentImg.src = e.target.result;
+
+          const imgElement = document.getElementById('imageToCrop');
+          imgElement.src = currentImg.src;
+
+          currentImg.x = 0;
+          currentImg.y = 0;
+          currentImg.scale = 1;
+          document.getElementById('zoomRange').value = 1;
+
+          updateImageTransform();
+          document.getElementById('cropperModal').classList.remove('hidden');
+          lucide.createIcons();
+        };
+        imgObj.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function setupBannerDragEvents() {
+      const viewport = document.getElementById('cropViewport');
+      if (!viewport) return;
+
+      viewport.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX - currentImg.x;
+        startY = e.clientY - currentImg.y;
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        currentImg.x = e.clientX - startX;
+        currentImg.y = e.clientY - startY;
+        updateImageTransform();
+      });
+
+      window.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+
+      viewport.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].clientX - currentImg.x;
+        startY = e.touches[0].clientY - currentImg.y;
+      });
+
+      window.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        currentImg.x = e.touches[0].clientX - startX;
+        currentImg.y = e.touches[0].clientY - startY;
+        updateImageTransform();
+      });
+
+      window.addEventListener('touchend', () => {
+        isDragging = false;
+      });
+    }
+
+    function onZoomChange(val) {
+      currentImg.scale = parseFloat(val);
+      updateImageTransform();
+    }
+
+    function updateImageTransform() {
+      const imgEl = document.getElementById('imageToCrop');
+      if (imgEl) {
+        imgEl.style.transform = `translate(${currentImg.x}px, ${currentImg.y}px) scale(${currentImg.scale})`;
+      }
+    }
+
+    function closeCropperModal() {
+      document.getElementById('cropperModal').classList.add('hidden');
+      document.getElementById('bannerFileInput').value = '';
+    }
+
+    async function saveCroppedBanner() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1200;
+      canvas.height = 300;
+      const ctx = canvas.getContext('2d');
+
+      const imgObj = new Image();
+      imgObj.src = currentImg.src;
+      imgObj.onload = async function() {
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, 1200, 300);
+
+        const viewport = document.getElementById('cropViewport');
+        const viewportW = viewport ? viewport.clientWidth : 600;
+        const viewportH = viewport ? viewport.clientHeight : 300;
+
+        const ratioX = 1200 / (viewportW * 0.8);
+        const ratioY = 300 / (viewportH * 0.6);
+
+        ctx.save();
+        ctx.translate(600 + (currentImg.x * ratioX), 150 + (currentImg.y * ratioY));
+        ctx.scale(currentImg.scale, currentImg.scale);
+        
+        const drawW = imgObj.naturalWidth * 0.4;
+        const drawH = imgObj.naturalHeight * 0.4;
+        ctx.drawImage(imgObj, -drawW / 2, -drawH / 2, drawW, drawH);
+        ctx.restore();
+
+        canvas.toBlob(async (blob) => {
+          if (!blob) return;
+
+          const fileName = `banners/${companyId || 'company'}_${Date.now()}.png`;
+          const file = new File([blob], fileName, { type: 'image/png' });
+
+          const previewBox = document.getElementById('bannerPreviewBox');
+          const dataUrl = canvas.toDataURL('image/png');
+          previewBox.style.backgroundImage = `url('${dataUrl}')`;
+          previewBox.style.backgroundSize = 'cover';
+          previewBox.style.backgroundPosition = 'center';
+          document.getElementById('bannerStatusText').textContent = "Banner customized & uploading...";
+
+          closeCropperModal();
+
+          const { data, error } = await sb.storage.from('company-files').upload(fileName, file);
+          if (error) {
+            alert("Napaka pri shranjevanju pasice: " + error.message);
+            return;
+          }
+
+          const { data: publicUrlData } = sb.storage.from('company-files').getPublicUrl(fileName);
+          savedBannerUrl = publicUrlData.publicUrl;
+
+          await saveProfile(true);
+          document.getElementById('bannerStatusText').textContent = "Banner successfully updated & saved!";
+        }, 'image/png');
+      };
+    }
+
+    // Ostale pomožne funkcije za datoteke, člane in modalno geslo
     function handleFileUpload(event, badgeId, fileNameId) {
       const file = event.target.files[0];
       if (file) {
@@ -650,21 +853,6 @@ let savedBannerUrl = '';
         document.getElementById(badgeId).className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200";
         document.getElementById(fileNameId).textContent = file.name;
         document.getElementById(fileNameId).className = "text-xs font-mono font-bold text-slate-800";
-      }
-    }
-
-    function handleBannerUpload(event) {
-      const f = event.target.files[0];
-      if (f) {
-        const previewBox = document.getElementById('bannerPreviewBox');
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          previewBox.style.backgroundImage = `url('${e.target.result}')`;
-          previewBox.style.backgroundSize = 'cover';
-          previewBox.style.backgroundPosition = 'center';
-          document.getElementById('bannerStatusText').textContent = "Banner Attached: " + f.name;
-        };
-        reader.readAsDataURL(f);
       }
     }
 
@@ -702,7 +890,6 @@ let savedBannerUrl = '';
         document.getElementById('insuranceDeleteBtn').classList.add('hidden');
         document.getElementById('insuranceFileInput').value = '';
       }
-      
       await saveProfile(true);
     }
 
@@ -747,11 +934,9 @@ let savedBannerUrl = '';
       }
 
       try {
-        const newBannerUrl = await uploadToStorage('bannerFileInput', 'banners');
         const newLicenseUrl = await uploadToStorage('licenseFileInput', 'licenses');
         const newInsuranceUrl = await uploadToStorage('insuranceFileInput', 'insurances');
 
-        if (newBannerUrl) savedBannerUrl = newBannerUrl;
         if (newLicenseUrl) {
           savedLicenseUrl = newLicenseUrl;
           document.getElementById('licenseBadge').textContent = "Uploaded";
@@ -784,7 +969,7 @@ let savedBannerUrl = '';
           subscribed_to_mailing: document.getElementById('subscribed_to_mailing').checked
         };
 
-        if (!companyId) throw new Error('Company record is not linked. Profile update cancelled to prevent creating or changing the wrong company.');
+        if (!companyId) throw new Error('Company record is not linked. Profile update cancelled.');
         const { error } = await sb.from('companies').update(updateData).eq('id', companyId);
         if (error) {
           if (!silent) alert("Error saving profile: " + error.message);
@@ -801,40 +986,7 @@ let savedBannerUrl = '';
         }
       }
     }
-  </script>
 
-<!-- PASSWORD CHANGE MODAL -->
-  <div id="passwordModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-5 border border-slate-100">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-          <i data-lucide="key" class="w-5 h-5 text-enterprise-600"></i>
-          <span>Change Admin Password</span>
-        </h3>
-        <button type="button" onclick="closePasswordModal()" class="text-slate-400 hover:text-slate-600">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <div class="space-y-4 text-xs">
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">New Password *</label>
-          <input type="password" id="newPasswordInput" placeholder="Enter new secure password" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
-        </div>
-        <div>
-          <label class="block font-semibold text-slate-700 mb-1">Confirm New Password *</label>
-          <input type="password" id="confirmPasswordInput" placeholder="Repeat new password" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:border-enterprise-600">
-        </div>
-      </div>
-
-      <div class="flex items-center justify-end space-x-3 pt-3 border-t border-slate-100">
-        <button type="button" onclick="closePasswordModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg">Cancel</button>
-        <button type="button" onclick="submitNewPassword()" class="px-5 py-2 bg-enterprise-600 hover:bg-enterprise-700 text-white text-xs font-bold rounded-lg shadow-sm">Update Password</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
     function openPasswordModal() {
       document.getElementById('passwordModal').classList.remove('hidden');
     }
@@ -870,46 +1022,5 @@ let savedBannerUrl = '';
       }
     }
   </script>
-
-  <!-- ========================================== -->
-  <!-- TUKAJ DODAMO NOVO BANNER CROPPER MODAL       -->
-  <!-- ========================================== -->
-  <div id="cropperModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full p-6 space-y-5 border border-slate-100 flex flex-col">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
-          <i data-lucide="move" class="w-5 h-5 text-enterprise-600"></i>
-          <span>Position & Zoom Corporate Banner</span>
-        </h3>
-        <button type="button" onclick="closeCropperModal()" class="text-slate-400 hover:text-slate-600">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <!-- Glavno območje za premikanje slike -->
-      <div id="cropViewport" class="relative w-full h-80 bg-slate-900 rounded-xl overflow-hidden cursor-grab active:cursor-grabbing flex items-center justify-center select-none border border-slate-800">
-        <img id="imageToCrop" src="" alt="Banner to crop" class="absolute max-none transform-gpu origin-center">
-        <!-- Fiksni okvir za pasico v sredini -->
-        <div class="absolute inset-x-6 inset-y-12 border-2 border-dashed border-cyan-400/80 rounded-lg pointer-events-none shadow-2xl bg-black/10 flex items-center justify-center">
-          <span class="bg-black/60 text-cyan-300 text-[10px] font-mono px-2 py-1 rounded backdrop-blur-sm">Banner View Area (1200 x 300)</span>
-        </div>
-      </div>
-
-      <!-- Nadzorna plošča za Zoom (Drsnik) -->
-      <div class="flex items-center space-x-4 px-2">
-        <span class="text-xs font-semibold text-slate-600 flex items-center gap-1"><i data-lucide="zoom-out" class="w-4 h-4"></i> Zoom</span>
-        <input type="range" id="zoomRange" min="0.1" max="3" step="0.01" value="1" class="w-full accent-enterprise-600 cursor-pointer" oninput="onZoomChange(this.value)">
-        <span class="text-xs font-semibold text-slate-600 flex items-center gap-1"><i data-lucide="zoom-in" class="w-4 h-4"></i></span>
-      </div>
-
-      <p class="text-xs text-slate-500 text-center">Povleci sliko z miško za premikanje levo/desno/gor/dol ter uporabi drsnik za povečavo.</p>
-
-      <div class="flex items-center justify-end space-x-3 pt-3 border-t border-slate-100">
-        <button type="button" onclick="closeCropperModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg">Cancel</button>
-        <button type="button" onclick="saveCroppedBanner()" class="px-5 py-2 bg-enterprise-600 hover:bg-enterprise-700 text-white text-xs font-bold rounded-lg shadow-sm">Apply & Save Banner</button>
-      </div>
-    </div>
-  </div>
-
 </body>
 </html>
