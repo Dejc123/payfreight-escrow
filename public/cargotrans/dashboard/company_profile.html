@@ -544,6 +544,11 @@ if (companyRecord) {
         setValue('fleetDescription', companyRecord.fleet_description);
         setValue('activeMarkets', companyRecord.active_markets);
 
+        // Dopolnitev za polnjenje imena, priimka in mobilne številke iz baze
+        setValue('contact_first_name', member ? member.first_name : '');
+        setValue('contact_last_name', member ? member.last_name : '');
+        setValue('mobile_phone', companyRecord.mobile_phone || (member ? member.mobile_phone : ''));
+
         if (companyRecord.banner_url) {
           savedBannerUrl = companyRecord.banner_url;
           const pb = document.getElementById('bannerPreviewBox');
