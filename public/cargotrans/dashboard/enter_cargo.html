@@ -823,5 +823,58 @@
       if (deadlineDateEl) deadlineDateEl.value = deadlineStr;
     });
   </script>
+
+      <!-- SUPABASE SKRIPTA IN POVEZAVA -->
+  <script>
+    // 1. Definicija tvojih podatkov iz Supabase nastavitvah
+    const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
+    
+    // 2. Inicializacija Supabase odjemalca
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 3. Poslušalec za oddajo obrazca (ob kliku na gumb "Publish Freight Offer")
+    document.querySelector('form').addEventListener('submit', async function(e) {
+      e.preventDefault(); // Prepreči običajno osvežitev strani
+
+      // Preberemo vrednosti iz vnosnih polj v obrazcu
+      const transportMode = document.getElementById('btnModeRoad').classList.contains('border-blue-600') ? 'Road' : 
+                            document.getElementById('btnModeOcean').classList.contains('border-blue-600') ? 'Ocean' : 'Air';
+      
+      const originContinent = document.getElementById('originContinent').value;
+      const originCountry = document.getElementById('originCountry').value;
+      const destContinent = document.getElementById('destContinent').value;
+      const destCountry = document.getElementById('destCountry').value;
+      const loadingDate = document.getElementById('loadingDateInput').value;
+
+      // Pripravimo objekt s podatki za tabelo 'enter_cargo' v Supabase
+      const cargoData = {
+        transport_mode: transportMode,
+        origin_continent: originContinent,
+        origin_country: originCountry,
+        dest_continent: destContinent,
+        dest_country: destCountry,
+        loading_date: loadingDate || null
+      };
+
+      try {
+        // Pošiljanje podatkov v Supabase bazo
+        const { data, error } = await supabaseClient
+          .from('enter_cargo')
+          .insert([cargoData]);
+
+        if (error) {
+          console.error('Napaka pri shranjevanju:', error.message);
+          alert('Napaka pri objavi tovora: ' + error.message);
+        } else {
+          alert('Tovor je uspešno objavljen in shranjen v bazo!');
+          // Tukaj lahko dodaš preusmeritev nazaj na dashboard ali osvežitev
+          window.location.href = 'index.html';
+        }
+      } catch (err) {
+        console.error('Prišlo je do nepričakovane napake:', err);
+      }
+    });
+  </script>
 </body>
 </html>
