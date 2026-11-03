@@ -485,152 +485,116 @@
     </div>
   </footer>
 
-  <!-- SUPABASE INITIALIZATION & APP LOGIC -->
-  <script>
-    lucide.createIcons();
+  
+<script>
+  lucide.createIcons();
 
-    // Supabase Credentials
-    const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
-    
-    // Inicijalizacija Supabase odjemalca s pravim ključem
-    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    function openAuthModal() {
-      document.getElementById('authModal').classList.remove('hidden');
-    }
+  function openAuthModal() {
+    document.getElementById('authModal').classList.remove('hidden');
+  }
 
-    function closeAuthModal() {
-      document.getElementById('authModal').classList.add('hidden');
-    }
+  function closeAuthModal() {
+    document.getElementById('authModal').classList.add('hidden');
+  }
 
-    // Prava prijava direktno preko Supabase baze
-    async function submitAuthForm(event) {
-      event.preventDefault();
-      
-      const userInput = document.getElementById('authUsername').value.trim();
-      const passwordInput = document.getElementById('authPassword').value.trim();
-      const errorBox = document.getElementById('loginErrorMessage');
-      const submitBtn = document.getElementById('authSubmitBtn');
+  async function submitAuthForm(event) {
+    event.preventDefault();
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Authenticating...";
-      errorBox.classList.add('hidden');
+    const userInput = document.getElementById('authUsername').value.trim();
+    const passwordInput = document.getElementById('authPassword').value;
+    const errorBox = document.getElementById('loginErrorMessage');
+    const submitBtn = document.getElementById('authSubmitBtn');
 
-      try {
-        // Preverimo vseh uporabnikov v tabeli 'companies', da najdemo ustrezen račun
-        const { data: companies, error } = await sb
+    errorBox.classList.add('hidden');
+    errorBox.textContent = '';
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Authenticating...';
+
+    try {
+      let user = null;
+      let lastError = null;
+
+      // Iskanje po uporabniškem imenu
+      let result = await sb
+        .from('companies')
+        .select('id,cargo_trans_id,company_name,username,contact_email')
+        .eq('username', userInput)
+        .eq('password', passwordInput)
+        .limit(1)
+        .maybeSingle();
+
+      if (result.error) throw result.error;
+      user = result.data;
+
+      // Če ni zadetka, poskusimo po e-pošti
+      if (!user && userInput.includes('@')) {
+        result = await sb
           .from('companies')
-          .select('*');
+          .select('id,cargo_trans_id,company_name,username,contact_email')
+          .ilike('contact_email', userInput)
+          .eq('password', passwordInput)
+          .limit(1)
+          .maybeSingle();
 
-        if (error) throw error;
-
-        // Poiščemo uporabnika po uporabniškem imenu, e-pošti ali cargo_trans_id
-        const user = (companies || []).find(c => 
-          (c.username === userInput || c.contact_email === userInput || c.cargo_trans_id === userInput) &&
-          String(c.password) === String(passwordInput)
-        );
-
-        if (!user) {
-          errorBox.textContent = "Neveljavno uporabniško ime, e-pošta ali geslo!";
-          errorBox.classList.remove('hidden');
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Sign In to Dashboard";
-          return;
-        }
-
-        // Shranimo podatke v localStorage
-        localStorage.setItem('cargotrans_user', user.username || '');
-        localStorage.setItem('cargotrans_token', 'active_session_' + user.id);
-
-        // Preusmeritev na dashboard z ustreznimi URL parametri, da dashboard takoj prepozna uporabnika in podjetje
-        window.location.href = `dashboard/index.html?UporabniskoIme=${encodeURIComponent(user.username)}&Podjetje=${encodeURIComponent(user.company_name)}`;
-
-      } catch (err) {
-        console.error('Login error:', err);
-        errorBox.textContent = "Prišlo je do sistemske napake pri povezavi z bazo.";
-        errorBox.classList.remove('hidden');
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Sign In to Dashboard";
+        if (result.error) throw result.error;
+        user = result.data;
       }
-    }
-  </script>
 
-  <!-- MODAL: FORGOT PASSWORD -->
-  <div id="forgotPasswordModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 max-w-md w-full shadow-2xl space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-700 pb-3">
-        <h3 class="text-base font-bold text-white flex items-center gap-2">
-          <i data-lucide="key-round" class="w-5 h-5 text-sky-400"></i> Account Password Recovery
-        </h3>
-        <button type="button" onclick="closeForgotPasswordModal()" class="text-slate-400 hover:text-white">✕</button>
-      </div>
-      
-      <p class="text-xs text-slate-300">Enter your registered Corporate Email or System Username below. We will send your login credentials to your inbox.</p>
+      // Če ni zadetka, poskusimo še po CargoTrans ID
+      if (!user && userInput.toUpperCase().startsWith('CT-')) {
+        result = await sb
+          .from('companies')
+          .select('id,cargo_trans_id,company_name,username,contact_email')
+          .eq('cargo_trans_id', userInput.toUpperCase())
+          .eq('password', passwordInput)
+          .limit(1)
+          .maybeSingle();
 
-      <div>
-        <label class="block text-xs font-semibold text-slate-300 mb-1">Email or Username</label>
-        <input type="text" id="recoveryIdentifier" placeholder="e.g. mark@company.com " class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-sky-500">
-      </div>
+        if (result.error) throw result.error;
+        user = result.data;
+      }
 
-      <div id="recoveryStatus" class="text-xs hidden p-2.5 rounded-lg"></div>
-
-      <div class="flex justify-end gap-2 pt-2">
-        <button type="button" onclick="closeForgotPasswordModal()" class="px-4 py-2 bg-slate-700 text-slate-300 text-xs font-semibold rounded-xl hover:bg-slate-600 transition">Cancel</button>
-        <button type="button" id="sendRecoveryBtn" onclick="submitPasswordRecovery()" class="px-5 py-2 bg-sky-600 text-white text-xs font-bold rounded-xl hover:bg-sky-500 transition">Send Recovery Email</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function openForgotPasswordModal() {
-      document.getElementById('recoveryIdentifier').value = '';
-      document.getElementById('recoveryStatus').className = 'text-xs hidden p-2.5 rounded-lg';
-      document.getElementById('forgotPasswordModal').classList.remove('hidden');
-    }
-
-    function closeForgotPasswordModal() {
-      document.getElementById('forgotPasswordModal').classList.add('hidden');
-    }
-
-    async function submitPasswordRecovery() {
-      const identifier = document.getElementById('recoveryIdentifier').value.trim();
-      const statusBox = document.getElementById('recoveryStatus');
-      const sendBtn = document.getElementById('sendRecoveryBtn');
-
-      if (!identifier) {
-        statusBox.textContent = "Please enter an email or username.";
-        statusBox.className = "text-xs p-2.5 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 block";
+      if (!user) {
+        errorBox.textContent =
+          'Invalid username, email, CargoTrans ID or password.';
+        errorBox.classList.remove('hidden');
         return;
       }
 
-      sendBtn.disabled = true;
-      sendBtn.textContent = "Sending...";
+      // Shrani podatke prijavljenega uporabnika
+      localStorage.setItem('cargotrans_user', user.username || '');
+      localStorage.setItem('cargotrans_token', 'active_session_' + user.id);
+      localStorage.setItem('CargoTransID', user.cargo_trans_id || '');
+      localStorage.setItem('cargotrans_id', user.cargo_trans_id || '');
+      localStorage.setItem('cargotrans_company', user.company_name || '');
 
-      try {
-        const res = await fetch("/api/forgot_password_cargonet", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ identifier: identifier })
-        });
+      // Preusmeritev na dashboard
+      const params = new URLSearchParams({
+        UporabniskoIme: user.username || '',
+        Podjetje: user.company_name || '',
+        CargoTransID: user.cargo_trans_id || ''
+      });
 
-        const data = await res.json();
+      window.location.href = 'dashboard/index.html?' + params.toString();
 
-        if (res.ok) {
-          statusBox.textContent = "✓ Recovery email sent! Check your inbox.";
-          statusBox.className = "text-xs p-2.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 block";
-        } else {
-          statusBox.textContent = data.error || "Failed to recover account.";
-          statusBox.className = "text-xs p-2.5 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 block";
-        }
-      } catch (err) {
-        statusBox.textContent = "Server error. Please try again later.";
-        statusBox.className = "text-xs p-2.5 rounded-lg bg-red-500/20 text-red-300 border border-red-500/30 block";
-      } finally {
-        sendBtn.disabled = false;
-        sendBtn.textContent = "Send Recovery Email";
-      }
+    } catch (err) {
+      console.error('CargoNet login error:', err);
+
+      errorBox.textContent =
+        'Login error: ' + (err.message || 'Database connection failed.');
+
+      errorBox.classList.remove('hidden');
+
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Sign In to Dashboard';
     }
-  </script>
+  }
+</script>
+
 </body>
 </html>
