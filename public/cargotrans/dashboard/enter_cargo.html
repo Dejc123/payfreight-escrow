@@ -423,6 +423,32 @@
         </div>
       </div>
 
+      <!-- CONTACT DETAILS (Pre-filled from database / editable) -->
+      <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+          <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+            <i data-lucide="user-check" class="w-4 h-4 text-blue-600"></i>
+            <span>Contact Person / Dispatcher Details</span>
+          </h4>
+          <span class="text-[11px] text-slate-400">Default from profile (Editable for duty substitution)</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Contact Name *</label>
+            <input type="text" id="contactNameInput" placeholder="e.g. Dejan Luzar" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold text-slate-800 focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Contact Email *</label>
+            <input type="email" id="contactEmailInput" placeholder="e.g. info@cargotrans.net" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold text-slate-800 focus:outline-none focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Contact Phone / Mobile *</label>
+            <input type="text" id="contactPhoneInput" placeholder="e.g. +386 41 000 000" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold text-slate-800 focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+      </div>
+
       <!-- REMARKS & ADR LICENSES -->
       <div class="space-y-4 pt-2">
         <div>
@@ -752,18 +778,39 @@
         formUserEl.textContent = `User / CT ID: ${userName} [${cargoTransId}]`;
       }
 
+      // 2. Samodejno nalaganje kontaktnih podatkov iz baze / localStorage z možnostjo urejanja
+      const savedUserStr = localStorage.getItem('cargotrans_user');
+      let userData = {};
+      if (savedUserStr) {
+        try {
+          userData = JSON.parse(savedUserStr);
+        } catch (e) {
+          userData = { username: savedUserStr };
+        }
+      }
+
+      const nameInput = document.getElementById('contactNameInput');
+      const emailInput = document.getElementById('contactEmailInput');
+      const phoneInput = document.getElementById('contactPhoneInput');
+
+      if (nameInput) nameInput.value = userData.contact_name || userData.username || userName || "Dejan Luzar";
+      if (emailInput) emailInput.value = userData.contact_email || userData.email || "info@cargotrans.net";
+      if (phoneInput) phoneInput.value = userData.contact_phone || userData.phone || "+386 41 123 456";
+
       // Inicializacija padajočih menijev in datuma
       handleRegionChange('origin');
       updateCountryDropdown('dest');
 
       const today = new Date();
       const todayStr = today.toISOString().split('T')[0];
-      document.getElementById('loadingDateInput').value = todayStr;
+      const loadingDateEl = document.getElementById('loadingDateInput');
+      if (loadingDateEl) loadingDateEl.value = todayStr;
 
       const deadline = new Date();
       deadline.setDate(today.getDate() + 2);
       const deadlineStr = deadline.toISOString().split('T')[0];
-      document.getElementById('deadlineDateInput').value = deadlineStr;
+      const deadlineDateEl = document.getElementById('deadlineDateInput');
+      if (deadlineDateEl) deadlineDateEl.value = deadlineStr;
     });
   </script>
 </body>
