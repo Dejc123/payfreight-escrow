@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <title>CargoNet Dashboard | Post Available Transport Capacity</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              800: '#075985',
+              900: '#0f172a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
+  <!-- TOP NAVIGATION (Navbar) -->
+  <header class="bg-[#0b0f19] text-white border-b border-slate-800 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-18 py-3">
+        
+        <!-- Logo & Dashboard Title -->
+        <a href="index.html" class="flex items-center space-x-3 group">
+          <div class="w-10 h-10 rounded-xl bg-slate-900 border border-slate-700/80 flex items-center justify-center p-2 shadow-md">
+            <!-- Minimalist 2D Globe SVG -->
+            <svg viewBox="0 0 100 100" class="w-full h-full text-cyan-400 fill-current">
+              <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="8" opacity="0.2"/>
+              <ellipse cx="50" cy="50" rx="42" ry="16" fill="none" stroke="currentColor" stroke-width="8"/>
+              <ellipse cx="50" cy="50" rx="16" ry="42" fill="none" stroke="currentColor" stroke-width="8"/>
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xl font-black tracking-tight text-white leading-none">Cargo<span class="text-cyan-400">Net</span></span>
+            <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-1">Dashboard</span>
+          </div>
+        </a>
+
+        <!-- Navigation Menu -->
+        <nav class="hidden md:flex items-center space-x-2">
+          <a href="index.html" class="px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">Live Board</a>
+          <a href="enter_cargo.html" class="px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">Post Cargo</a>
+          <a href="enter_truck.html" class="px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm">Post Transport Space</a>
+          <a href="layout1.asp?stran=Transport_Order_CargoNet" class="px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">Transport Orders (e-CMR)</a>
+          
+          <!-- PayFreight Protocol -->
+          <a href="https://www.payfreight.io" target="_blank" class="px-3 py-2 rounded-lg text-xs font-bold text-purple-300 hover:text-white bg-purple-900/30 hover:bg-purple-900/60 flex items-center gap-1.5 border border-purple-500/30 transition shadow-sm ml-2">
+            <i data-lucide="shield-check" class="w-4 h-4 text-purple-400"></i>
+            <span>PayFreight Protocol</span>
+            <i data-lucide="external-link" class="w-3 h-3 text-purple-400 opacity-60"></i>
+          </a>
+        </nav>
+
+        <!-- Right Side: USER Status -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span id="navUsername" class="text-xs font-bold text-emerald-400 tracking-wide font-mono">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+    <!-- Header Form Title & Back Button -->
+    <div class="flex items-center justify-between bg-white px-6 py-4 rounded-xl border border-slate-200 shadow-sm">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+          <i data-lucide="truck" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold text-slate-900">Post Available Transport Capacity</h1>
+          <p class="text-xs text-slate-500">Offer free vehicle space, empty containers, or flight cargo allocations worldwide</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-3">
+        <a href="index.html" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>Back to Dashboard</span>
+        </a>
+        <span id="formUserLabel" class="text-xs text-slate-400 font-medium hidden sm:inline">User: Loading...</span>
+      </div>
+    </div>
+
+    <!-- MAIN FORM CARD -->
+    <form id="postTransportForm" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
+      
+      <!-- STEP 1: MULTIMODAL TRANSPORT MODE SELECTOR -->
+      <div class="space-y-3 pb-6 border-b border-slate-100">
+        <label class="block text-xs font-bold text-slate-900 uppercase tracking-wider">Select Transport Mode *</label>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          
+          <button type="button" id="btnModeRoad" onclick="setTransportMode('road')" class="flex items-center space-x-3 p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50/60 text-blue-900 transition font-semibold text-sm shadow-sm">
+            <div id="iconBoxRoad" class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center transition-colors shadow-sm">
+              <i data-lucide="truck" class="w-4 h-4"></i>
+            </div>
+            <span>Road Fleet / Vehicle</span>
+          </button>
+          
+          <button type="button" id="btnModeOcean" onclick="setTransportMode('ocean')" class="flex items-center space-x-3 p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700 transition font-semibold text-sm">
+            <div id="iconBoxOcean" class="w-8 h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center transition-colors">
+              <i data-lucide="ship" class="w-4 h-4"></i>
+            </div>
+            <span>Vessel & Ocean Capacity</span>
+          </button>
+          
+          <button type="button" id="btnModeAir" onclick="setTransportMode('air')" class="flex items-center space-x-3 p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700 transition font-semibold text-sm">
+            <div id="iconBoxAir" class="w-8 h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center transition-colors">
+              <i data-lucide="plane" class="w-4 h-4"></i>
+            </div>
+            <span>Air Cargo Allocation</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ROUTE SECTION -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-slate-100">
+        
+        <!-- Available From (Origin) -->
+        <div class="space-y-4">
+          <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+            <i data-lucide="map-pin" class="w-4 h-4 text-blue-600"></i>
+            <span id="originHeaderLabel">Available From Location (Origin) *</span>
+          </h3>
+          
+          <!-- Continent Selector -->
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Origin Continent / Region *</label>
+            <select id="originContinent" onchange="handleRegionChange('origin')" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+              <option value="EU" selected>Europe</option>
+              <option value="NA">North America (USA & Canada)</option>
+              <option value="CA">Central America & Caribbean</option>
+              <option value="SA">South America</option>
+              <option value="AS">Asia & Far East</option>
+              <option value="ME">Middle East</option>
+              <option value="AF">Africa</option>
+              <option value="OC">Australia & Oceania</option>
+            </select>
+          </div>
+          <!-- Country Dynamic Dropdown -->
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Country / State / Territory *</label>
+            <select id="originCountry" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">City / Terminal</label>
+              <input type="text" id="originCity" placeholder="Enter city or port" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Zip / Post / IATA Code</label>
+              <input type="text" id="originZip" placeholder="Postal code" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+          </div>
+        </div>
+
+        <!-- Heading To (Destination) -->
+        <div class="space-y-4">
+          <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
+            <i data-lucide="navigation" class="w-4 h-4 text-emerald-600"></i>
+            <span id="destHeaderLabel">Heading To Location (Destination) *</span>
+          </h3>
+          
+          <!-- Continent Selector -->
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Destination Continent / Region *</label>
+            <select id="destContinent" onchange="handleRegionChange('dest')" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+              <option value="EU" selected>Europe</option>
+              <option value="NA">North America (USA & Canada)</option>
+              <option value="CA">Central America & Caribbean</option>
+              <option value="SA">South America</option>
+              <option value="AS">Asia & Far East</option>
+              <option value="ME">Middle East</option>
+              <option value="AF">Africa</option>
+              <option value="OC">Australia & Oceania</option>
+            </select>
+          </div>
+          <!-- Country Dynamic Dropdown -->
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Country / State / Territory *</label>
+            <select id="destCountry" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">City / Terminal</label>
+              <input type="text" id="destCity" placeholder="Enter city or port" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Zip / Post / IATA Code</label>
+              <input type="text" id="destZip" placeholder="Postal code" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DATES, DEADLINE & ASKING RATE -->
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 pb-6 border-b border-slate-100">
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Available Date From *</label>
+          <input type="date" id="availableFromInput" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Available Till Date</label>
+          <input type="date" id="availableTillInput" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Asking Freight Rate (€/USD)</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-sm">€/$</span>
+            <input type="number" id="askingRateInput" placeholder="e.g. 1400" class="w-full bg-slate-50 border border-slate-200 rounded-lg pl-10 pr-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-semibold text-slate-900">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Space Availability</label>
+          <select id="spaceAvailabilitySelect" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+            <option value="Complete">Complete Fleet / Full Container</option>
+            <option value="Partial">Partial Space (LTL / LCL)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- DYNAMIC VEHICLE / CONTAINER / AIR SPECS -->
+      <div class="space-y-4 pb-6 border-b border-slate-100">
+        <h3 class="text-sm font-bold text-slate-900" id="specsHeader">Vehicle & Transport Specifications</h3>
+        
+        <!-- ROAD SPECIFIC SETUP -->
+        <div id="roadSection" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Vehicle Setup Type (Superstructure) *</label>
+              <select id="vehicleTypeSelect" onchange="handleVehicleTypeChange()" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+              </select>
+            </div>
+            
+            <div class="flex flex-col justify-end">
+              <label class="flex items-center space-x-2 cursor-pointer mb-2">
+                <input type="checkbox" id="otherSetupCheck" onchange="toggleOtherSetup()" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+                <span class="text-xs font-semibold text-slate-700">Other set-up</span>
+              </label>
+              <input type="text" id="otherSetupInput" disabled placeholder="Specify custom setup (e.g. Mega, Silo...)" class="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+          </div>
+          <!-- STANDARD SPECS -->
+          <div id="standardSpecs" class="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-2">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1" id="labelWeight">Payload Capacity (t)</label>
+              <input type="text" id="inputWeight" value="24" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-semibold">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1" id="labelLength">Deck / Trailer Length (m)</label>
+              <input type="text" id="inputLength" value="13.6" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-semibold">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1" id="labelHeight">Internal Height (m/ft)</label>
+              <input type="text" id="inputHeight" placeholder="e.g. 2.7" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+          </div>
+          <!-- CAR TRANSPORTER MODE -->
+          <div id="carTransporterSpecs" class="hidden p-4 bg-purple-50 border border-purple-200 rounded-xl space-y-3">
+            <div class="flex items-center gap-2 text-purple-900 font-semibold text-xs">
+              <i data-lucide="truck" class="w-4 h-4 text-purple-600"></i>
+              <span>Car Transporter Fleet Mode Active</span>
+            </div>
+            <div class="max-w-xs">
+              <label class="block text-xs font-medium text-purple-900 mb-1">Load Factor Capacity (LF: 1 to 15 vehicle slots)</label>
+              <select id="loadFactorSelect" class="w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-sm font-bold text-purple-900 focus:outline-none focus:border-purple-600">
+                <option value="1">1 Car (LF 1)</option>
+                <option value="2">2 Cars (LF 2)</option>
+                <option value="3">3 Cars (LF 3)</option>
+                <option value="4">4 Cars (LF 4)</option>
+                <option value="5">5 Cars (LF 5)</option>
+                <option value="6">6 Cars (LF 6)</option>
+                <option value="7">7 Cars (LF 7)</option>
+                <option value="8">8 Cars (LF 8)</option>
+                <option value="9" selected>9 Cars (LF 9 - Default)</option>
+                <option value="10">10 Cars (LF 10)</option>
+                <option value="11">11 Cars (LF 11)</option>
+                <option value="12">12 Cars (LF 12)</option>
+                <option value="13">13 Cars (LF 13)</option>
+                <option value="14">14 Cars (LF 14)</option>
+                <option value="15">15 Cars (LF 15)</option>
+              </select>
+            </div>
+            <p class="text-[11px] text-purple-700">Weight and trailer length are substituted by the vehicle slot Load Factor (LF).</p>
+          </div>
+          <!-- PASSENGER BUS CHARTER MODE -->
+          <div id="busCharterSpecs" class="hidden p-4 bg-blue-50 border border-blue-200 rounded-xl space-y-3">
+            <div class="flex items-center gap-2 text-blue-900 font-semibold text-xs">
+              <i data-lucide="users" class="w-4 h-4 text-blue-600"></i>
+              <span>Passenger Bus & Coach Charter Active</span>
+            </div>
+            <div class="max-w-xs">
+              <label class="block text-xs font-medium text-blue-900 mb-1">Available Passenger Seats / Capacity *</label>
+              <input type="number" id="busSeatsInput" placeholder="e.g. 50 seats" class="w-full bg-white border border-blue-300 rounded-lg px-3 py-2 text-sm font-bold text-blue-900 focus:outline-none focus:border-blue-600">
+            </div>
+            <p class="text-[11px] text-blue-700">For passenger transport, weight/length are replaced by seat capacity.</p>
+          </div>
+        </div>
+
+        <!-- OCEAN / VESSEL SPECIFIC SETUP (Includes Free Time & Rate Validity) -->
+        <div id="oceanSection" class="hidden space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Container Equipment Type</label>
+              <select id="oceanContainerType" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+                <option value="20ft">20' Standard Dry Van (20ft)</option>
+                <option value="40HC">40' High Cube (40HC)</option>
+                <option value="40ft">40' Standard Dry Van (40ft)</option>
+                <option value="40RF">Reefer Container (40RF)</option>
+                <option value="LCL">LCL (Less than Container Load)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Port of Loading (POL)</label>
+              <input type="text" id="oceanPOL" placeholder="e.g. SHANGHAI / NINGBO" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Port of Discharge (POD)</label>
+              <input type="text" id="oceanPOD" placeholder="e.g. MANZANILLO, MX" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
+            </div>
+          </div>
+
+          <!-- OCEAN SPECIAL FIELDS: FREE TIME, VALIDITY, CUT-OFF -->
+          <div class="p-4 bg-blue-50/60 border border-blue-200 rounded-xl grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-blue-900 mb-1">Free Time at Destination (Days) *</label>
+              <input type="number" id="oceanFreeTime" value="21" placeholder="e.g. 21 days" class="w-full bg-white border border-blue-300 rounded-lg px-3 py-2 text-sm font-bold text-blue-900 focus:outline-none focus:border-blue-600">
+              <span class="text-[10px] text-blue-700">Demurrage / Detention free window</span>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-blue-900 mb-1">Rate Validity (Valid Until) *</label>
+              <input type="date" id="oceanRateValidity" class="w-full bg-white border border-blue-300 rounded-lg px-3 py-2 text-sm font-medium text-blue-900 focus:outline-none focus:border-blue-600">
+              <span class="text-[10px] text-blue-700">Expiration date for offered ocean rate</span>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-blue-900 mb-1">Cargo Cut-Off / ETD Date *</label>
+              <input type="date" id="oceanCutOffDate" class="w-full bg-white border border-blue-300 rounded-lg px-3 py-2 text-sm font-medium text-blue-900 focus:outline-none focus:border-blue-600">
+              <span class="text-[10px] text-blue-700">Latest gate-in date at port terminal</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- AIR SPECIFIC SETUP -->
+        <div id="airSection" class="hidden space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Max Payload Capacity (kg/lbs)</label>
+              <input type="number" id="airWeight" placeholder="Payload weight" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Max Volume Capacity (CBM)</label>
+              <input type="text" id="airVolume" placeholder="Available volume" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Airport Code (IATA)</label>
+              <input type="text" id="airIATA" placeholder="e.g. FRA, JFK" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAYMENT TERMS & PAYFREIGHT ESCROW -->
+      <div class="space-y-4 pt-2">
+        <!-- Standard Payment Terms -->
+        <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
+          <label class="block text-xs font-bold text-slate-900 uppercase tracking-wider">Accepted Payment Terms *</label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <label class="flex items-center space-x-2 p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500 transition">
+              <input type="radio" name="paymentTerm" value="30" checked class="text-blue-600 focus:ring-blue-500">
+              <div class="text-xs font-bold text-slate-800">30 Days (Standard)</div>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500 transition">
+              <input type="radio" name="paymentTerm" value="45" class="text-blue-600 focus:ring-blue-500">
+              <div class="text-xs font-bold text-slate-800">45 Days</div>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500 transition">
+              <input type="radio" name="paymentTerm" value="60" class="text-blue-600 focus:ring-blue-500">
+              <div class="text-xs font-bold text-slate-800">60 Days</div>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500 transition">
+              <input type="radio" name="paymentTerm" value="custom" onclick="focusCustomDays()" class="text-blue-600 focus:ring-blue-500">
+              <div class="text-xs font-bold text-slate-800 flex items-center gap-1">
+                <input type="number" id="customDaysInput" placeholder="___" class="w-10 bg-slate-100 border border-slate-300 rounded px-1 py-0.5 text-xs text-center font-bold">
+                <span>days</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- PAYFREIGHT ESCROW MODULE -->
+        <div class="p-5 bg-gradient-to-r from-purple-900/5 to-slate-900/5 border border-purple-300/80 rounded-xl space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <div class="w-9 h-9 rounded-lg bg-purple-600 text-white flex items-center justify-center shadow-sm">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-purple-950 flex items-center gap-2">
+                  <span>PayFreight Smart Escrow Settlement</span>
+                  <span class="text-[10px] font-semibold bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full border border-purple-200">Optional Web3 Module</span>
+                </h4>
+                <p class="text-xs text-slate-500">Enable automated freight payment release on Solana upon e-CMR verification</p>
+              </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="payfreightToggle" class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- REMARKS & LICENSES -->
+      <div class="space-y-4 pt-2">
+        <div>
+          <label class="block text-xs font-medium text-slate-600 mb-1">Remarks / Special Conditions</label>
+          <textarea id="remarksInput" rows="3" placeholder="Enter vehicle equipment details, custom clearance options, route preferences..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"></textarea>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+          <label class="flex items-center space-x-2 cursor-pointer p-2.5 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100">
+            <input type="checkbox" id="adrCheck" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+            <span class="text-xs font-medium text-slate-700">ADR Hazardous / Chemicals</span>
+          </label>
+          <label class="flex items-center space-x-2 cursor-pointer p-2.5 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100">
+            <input type="checkbox" id="wasteCheck" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+            <span class="text-xs font-medium text-slate-700">Waste Transport License</span>
+          </label>
+          <label class="flex items-center space-x-2 cursor-pointer p-2.5 bg-slate-50 rounded-lg border border-slate-200 hover:bg-slate-100">
+            <input type="checkbox" id="oversizeCheck" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+            <span class="text-xs font-medium text-slate-700">Oversized / Heavy Transport</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- FORM ACTIONS -->
+      <div class="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-slate-200 gap-4">
+        <div class="flex items-center space-x-2 w-full sm:w-auto">
+          <button type="button" class="w-full sm:w-auto px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-lg border border-rose-200 transition flex items-center justify-center gap-1.5">
+            <i data-lucide="trash-2" class="w-4 h-4"></i>
+            <span>Removal / Delete Listing</span>
+          </button>
+        </div>
+        <div class="flex items-center space-x-3 w-full sm:w-auto justify-end">
+          <button type="button" onclick="document.getElementById('postTransportForm').reset();" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition text-center">
+            Cancel / Reset
+          </button>
+          <a href="index.html" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition border border-slate-200 flex items-center gap-1.5">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>Back to Dashboard</span>
+          </a>
+          <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center gap-1.5">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>Publish Transport Offer</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    const fullWorldData = {
+      EU: [
+        "Albania (AL)", "Andorra (AD)", "Armenia (AM)", "Austria (AT)", "Azerbaijan (AZ)", 
+        "Belarus (BY)", "Belgium (BE)", "Bosnia & Herzegovina (BA)", "Bulgaria (BG)", 
+        "Croatia (HR)", "Cyprus (CY)", "Czech Republic (CZ)", "Denmark (DK)", "Estonia (EE)", 
+        "Finland (FI)", "France (FR)", "Georgia (GE)", "Germany (DE)", "Greece (GR)", 
+        "Hungary (HU)", "Iceland (IS)", "Ireland (IE)", "Italy (IT)", "Kosovo (XK)", 
+        "Latvia (LV)", "Liechtenstein (LI)", "Lithuania (LT)", "Luxembourg (LU)", 
+        "Malta (MT)", "Moldova (MD)", "Monaco (MC)", "Montenegro (ME)", "Netherlands (NL)", 
+        "North Macedonia (MK)", "Norway (NO)", "Poland (PL)", "Portugal (PT)", "Romania (RO)", 
+        "Russia (RU)", "San Marino (SM)", "Serbia (RS)", "Slovakia (SK)", "Slovenia (SI)", 
+        "Spain (ES)", "Sweden (SE)", "Switzerland (CH)", "Turkey (TR)", "Ukraine (UA)", "United Kingdom (UK)"
+      ],
+      NA: [
+        "Canada - Alberta", "Canada - British Columbia", "Canada - Manitoba", "Canada - New Brunswick", 
+        "Canada - Nova Scotia", "Canada - Ontario", "Canada - Quebec", "Canada - Saskatchewan", 
+        "USA - Alabama (AL)", "USA - Alaska (AK)", "USA - Arizona (AZ)", "USA - Arkansas (AR)", 
+        "USA - California (CA)", "USA - Colorado (CO)", "USA - Connecticut (CT)", "USA - Delaware (DE)", 
+        "USA - Florida (FL)", "USA - Georgia (GA)", "USA - Hawaii (HI)", "USA - Idaho (ID)", 
+        "USA - Illinois (IL)", "USA - Indiana (IN)", "USA - Iowa (IA)", "USA - Kansas (KS)", 
+        "USA - Kentucky (KY)", "USA - Louisiana (LA)", "USA - Maine (ME)", "USA - Maryland (MD)", 
+        "USA - Massachusetts (MA)", "USA - Michigan (MI)", "USA - Minnesota (MN)", "USA - Mississippi (MS)", 
+        "USA - Missouri (MO)", "USA - Montana (MT)", "USA - Nebraska (NE)", "USA - Nevada (NV)", 
+        "USA - New Hampshire (NH)", "USA - New Jersey (NJ)", "USA - New Mexico (NM)", "USA - New York (NY)", 
+        "USA - North Carolina (NC)", "USA - North Dakota (ND)", "USA - Ohio (OH)", "USA - Oklahoma (OK)", 
+        "USA - Oregon (OR)", "USA - Pennsylvania (PA)", "USA - Puerto Rico (PR)", "USA - Rhode Island (RI)", 
+        "USA - South Carolina (SC)", "USA - South Dakota (SD)", "USA - Tennessee (TN)", "USA - Texas (TX)", 
+        "USA - Utah (UT)", "USA - Vermont (VT)", "USA - Virginia (VA)", "USA - Washington (WA)", 
+        "USA - Washington D.C.", "USA - West Virginia (WV)", "USA - Wisconsin (WI)", "USA - Wyoming (WY)"
+      ],
+      CA: [
+        "Bahamas", "Barbados", "Belize", "Costa Rica", "Cuba", "Dominican Republic", "El Salvador", 
+        "Guatemala", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Trinidad & Tobago"
+      ],
+      SA: [
+        "Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela"
+      ],
+      AS: [
+        "Afghanistan", "Armenia (AM)", "Azerbaijan (AZ)", "Bangladesh", "China", "Georgia (GE)", "India", 
+        "Indonesia", "Japan", "Kazakhstan", "Kyrgyzstan", "Malaysia", "Mongolia", "Pakistan", "Philippines", 
+        "Russia (RU)", "Singapore", "South Korea", "Sri Lanka", "Taiwan", "Tajikistan", "Thailand", 
+        "Turkmenistan", "Turkey (TR)", "Uzbekistan", "Vietnam"
+      ],
+      ME: [
+        "Bahrain", "Iran", "Iraq", "Israel", "Jordan", "Kuwait", "Lebanon", "Oman", "Qatar", "Saudi Arabia", "Syria", "Turkey (TR)", "United Arab Emirates (UAE)", "Yemen"
+      ],
+      AF: [
+        "Algeria", "Angola", "Benin", "Botswana", "Cameroon", "Egypt", "Ethiopia", "Gabon", "Ghana", "Ivory Coast", 
+        "Kenya", "Libya", "Madagascar", "Mali", "Morocco", "Mozambique", "Namibia", "Nigeria", "Senegal", 
+        "South Africa", "Sudan", "Tanzania", "Tunisia", "Uganda", "Zambia", "Zimbabwe"
+      ],
+      OC: [
+        "Australia", "Fiji", "New Zealand", "Papua New Guinea"
+      ]
+    };
+
+    const euVehicleTypesHTML = `
+      <optgroup label="Standard & Curtainsiders">
+        <option value="Tarpauling" selected>Tarpauling / Curtainsider</option>
+        <option value="Tautliner">Tautliner</option>
+        <option value="Mega">Mega Trailer</option>
+        <option value="Box">Box Trailer</option>
+        <option value="Jumbo">Jumbo Trailer</option>
+        <option value="Swap body">Swap body</option>
+      </optgroup>
+      <optgroup label="Refrigerated & Temp-Controlled">
+        <option value="Refrigerator">Refrigerator / Reefer</option>
+        <option value="Multi-temp">Multi-temp / Bi-thermo</option>
+        <option value="Meat hanging">Meat hanging / Hooks</option>
+        <option value="Thermo">Thermo</option>
+      </optgroup>
+      <optgroup label="Bulk, Silos & Tankers">
+        <option value="Silo">Silo</option>
+        <option value="Silobas">Silobas / Pressurized silo</option>
+        <option value="Tanker">Liquid Tanker</option>
+        <option value="Food tanker">Food / Milk Tanker</option>
+        <option value="Gas tanker">Gas Tanker</option>
+        <option value="Walking floor">Walking floor (Moving floor)</option>
+        <option value="Dumper">Tipper / Dumper</option>
+      </optgroup>
+      <optgroup label="Flatbeds & Open Trailers">
+        <option value="Flat">Flatbed</option>
+        <option value="Stepdeck">Stepdeck</option>
+        <option value="Coil hollow">Coil Well / Trough</option>
+        <option value="Container">Container Chassis</option>
+      </optgroup>
+      <optgroup label="Heavy Haulage & Oversized">
+        <option value="Lowloader">Lowbed / Lowloader</option>
+        <option value="Heavy machinery">Heavy Machinery Transport</option>
+        <option value="Oversized">Oversized / Heavy Transport</option>
+        <option value="Yacht transport">Yacht & Boat Transport</option>
+      </optgroup>
+      <optgroup label="Specialized & Niche">
+        <option value="Car transporter">Car Transporter</option>
+        <option value="Enclosed Car Transporter">Enclosed Car Carrier</option>
+        <option value="Road train">Road train</option>
+        <option value="Timber carrier">Timber / Log carrier</option>
+        <option value="Livestock">Livestock Transporter</option>
+      </optgroup>
+      <optgroup label="Passenger Transport">
+        <option value="Passenger Bus">Passenger Bus / Coach Charter</option>
+      </optgroup>
+    `;
+
+    const usVehicleTypesHTML = `
+      <optgroup label="US Standard Freight">
+        <option value="Dry Van 53ft" selected>Dry Van (53ft Box)</option>
+        <option value="Reefer 53ft">Reefer / Refrigerated (53ft)</option>
+        <option value="Dry Van 48ft">Dry Van (48ft Box)</option>
+      </optgroup>
+      <optgroup label="Flatbeds & Heavy Haul">
+        <option value="Flatbed 53ft">Standard Flatbed (53ft)</option>
+        <option value="Step Deck">Step Deck / Single Drop</option>
+        <option value="RGN Lowboy">RGN Lowboy (Removable Gooseneck)</option>
+        <option value="Conestoga">Conestoga (Rolling Tarp)</option>
+        <option value="Double Drop">Double Drop / Heavy Specialized</option>
+      </optgroup>
+      <optgroup label="Specialized US Fleet">
+        <option value="Car Hauler">Car Hauler / Stinger-Steered</option>
+        <option value="Intermodal Container">Intermodal Chassis (40ft/53ft)</option>
+        <option value="Tanker US">Liquid / Bulk Tanker</option>
+      </optgroup>
+      <optgroup label="Passenger Fleet">
+        <option value="Passenger Bus">Charter Motorcoach / Bus</option>
+      </optgroup>
+    `;
+
+    function handleRegionChange(type) {
+      updateCountryDropdown(type);
+      updateUnitsAndVehicles();
+    }
+
+    function updateCountryDropdown(type) {
+      const continent = document.getElementById(type + 'Continent').value;
+      const select = document.getElementById(type + 'Country');
+      select.innerHTML = '';
+      (fullWorldData[continent] || []).forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        if (continent === 'EU' && c.startsWith('Germany')) {
+          opt.selected = true;
+        }
+        select.appendChild(opt);
+      });
+    }
+
+    function updateUnitsAndVehicles() {
+      const originCont = document.getElementById('originContinent').value;
+      const vehicleSelect = document.getElementById('vehicleTypeSelect');
+      const labelWeight = document.getElementById('labelWeight');
+      const labelLength = document.getElementById('labelLength');
+      const labelHeight = document.getElementById('labelHeight');
+      const inputWeight = document.getElementById('inputWeight');
+      const inputLength = document.getElementById('inputLength');
+      const isUS = (originCont === 'NA');
+      const isAU = (originCont === 'OC');
+
+      if (isUS) {
+        vehicleSelect.innerHTML = usVehicleTypesHTML;
+        labelWeight.textContent = "Payload Capacity (lbs)";
+        labelLength.textContent = "Deck Length (ft)";
+        labelHeight.textContent = "Internal Height (ft)";
+        inputWeight.value = "45000";
+        inputLength.value = "53";
+      } else {
+        vehicleSelect.innerHTML = euVehicleTypesHTML;
+        labelWeight.textContent = "Payload Capacity (t)";
+        labelLength.textContent = "Trailer Length (m)";
+        labelHeight.textContent = "Internal Height (m)";
+        
+        if (isAU) {
+          inputWeight.value = "";
+          inputLength.value = "";
+          inputWeight.placeholder = "e.g. 80t";
+          inputLength.placeholder = "e.g. 36m";
+        } else {
+          inputWeight.value = "24";
+          inputLength.value = "13.6";
+        }
+      }
+      handleVehicleTypeChange();
+    }
+
+    function handleVehicleTypeChange() {
+      const select = document.getElementById('vehicleTypeSelect');
+      const standardSpecs = document.getElementById('standardSpecs');
+      const carTransporterSpecs = document.getElementById('carTransporterSpecs');
+      const busCharterSpecs = document.getElementById('busCharterSpecs');
+      const inputWeight = document.getElementById('inputWeight');
+      const inputLength = document.getElementById('inputLength');
+      const originCont = document.getElementById('originContinent').value;
+      const val = select.value;
+
+      standardSpecs.classList.remove('hidden');
+      carTransporterSpecs.classList.add('hidden');
+      busCharterSpecs.classList.add('hidden');
+
+      if (val === 'Car transporter' || val === 'Car Hauler' || val === 'Enclosed Car Transporter') {
+        standardSpecs.classList.add('hidden');
+        carTransporterSpecs.classList.remove('hidden');
+      } else if (val === 'Passenger Bus') {
+        standardSpecs.classList.add('hidden');
+        busCharterSpecs.classList.remove('hidden');
+      } else if (val === 'Road train' || originCont === 'OC') {
+        if (inputWeight.value === "24") inputWeight.value = "";
+        if (inputLength.value === "13.6") inputLength.value = "";
+      }
+    }
+
+    /* POSODOBLJENA FUNKCIJA ZA DINAMIČNO MODRO BARVANJE IZBRANEGA MODA */
+    function setTransportMode(mode) {
+      const modes = ['road', 'ocean', 'air'];
+      modes.forEach(m => {
+        const btn = document.getElementById('btnMode' + m.charAt(0).toUpperCase() + m.slice(1));
+        const iconBox = document.getElementById('iconBox' + m.charAt(0).toUpperCase() + m.slice(1));
+        const sec = document.getElementById(m + 'Section');
+        
+        if (m === mode) {
+          btn.className = "flex items-center space-x-3 p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50/60 text-blue-900 transition font-semibold text-sm shadow-sm";
+          if (iconBox) iconBox.className = "w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center transition-colors shadow-sm";
+          sec.classList.remove('hidden');
+        } else {
+          btn.className = "flex items-center space-x-3 p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700 transition font-semibold text-sm";
+          if (iconBox) iconBox.className = "w-8 h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center transition-colors";
+          sec.classList.add('hidden');
+        }
+      });
+    }
+
+    function toggleOtherSetup() {
+      const chk = document.getElementById('otherSetupCheck');
+      const inp = document.getElementById('otherSetupInput');
+      inp.disabled = !chk.checked;
+      if (chk.checked) {
+        inp.classList.remove('bg-slate-100');
+        inp.classList.add('bg-white');
+        inp.focus();
+      } else {
+        inp.classList.add('bg-slate-100');
+        inp.classList.remove('bg-white');
+      }
+    }
+
+    function focusCustomDays() {
+      document.getElementById('customDaysInput').focus();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+
+      // 1. Zanesljivo branje uporabniških podatkov iz URL ali LocalStorage
+      const urlParams = new URLSearchParams(window.location.search);
+      let cargoTransId = urlParams.get('CargoTransID') || urlParams.get('cargotrans_id') || localStorage.getItem('cargotrans_id');
+      let userName = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user');
+
+      if (!cargoTransId || cargoTransId === 'null') cargoTransId = "CT-2026";
+      if (!userName || userName === 'null') userName = "DejanLuzar";
+
+      localStorage.setItem('cargotrans_id', cargoTransId);
+      localStorage.setItem('cargotrans_user', userName);
+
+      const navUserEl = document.getElementById('navUsername');
+      if (navUserEl) {
+        navUserEl.textContent = `CT ID: ${cargoTransId} (${userName})`;
+      }
+
+      const formUserEl = document.getElementById('formUserLabel');
+      if (formUserEl) {
+        formUserEl.textContent = `User / CT ID: ${userName} [${cargoTransId}]`;
+      }
+
+      // Inicializacija padajočih menijev in datuma
+      handleRegionChange('origin');
+      updateCountryDropdown('dest');
+
+      const today = new Date();
+      const todayStr = today.toISOString().split('T')[0];
+      document.getElementById('availableFromInput').value = todayStr;
+
+      const tillDate = new Date();
+      tillDate.setDate(today.getDate() + 5);
+      const tillStr = tillDate.toISOString().split('T')[0];
+      document.getElementById('availableTillInput').value = tillStr;
+
+      // Nastavitev prednastavljenih datuma za Ocean
+      const oceanVal = new Date();
+      oceanVal.setDate(today.getDate() + 14);
+      document.getElementById('oceanRateValidity').value = oceanVal.toISOString().split('T')[0];
+
+      const oceanCut = new Date();
+      oceanCut.setDate(today.getDate() + 7);
+      document.getElementById('oceanCutOffDate').value = oceanCut.toISOString().split('T')[0];
+    });
+  </script>
+</body>
+</html>
