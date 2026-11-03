@@ -135,7 +135,7 @@
       </button>
     </div>
   </div>
-  <!-- PRIMARY ACTIONS GRID (5 Core Modules - Always Visible)[cite: 3] -->
+  <!-- PRIMARY ACTIONS GRID (5 Core Modules - Always Visible) -->
   <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
     <div class="max-w-3xl mb-6">
       <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
@@ -220,7 +220,7 @@
             <i data-lucide="search" class="w-4 h-4"></i>
           </div>
           <h3 class="font-bold text-slate-900 text-sm">Find Freight</h3>
-          <p class="text-[11px] text-slate-500 mt-1">Search global loads for your fleet</p>
+          <p class="text-[11px] text-slate-500 sf-1 mt-1">Search global loads for your fleet</p>
         </div>
         <div class="mt-3 flex items-center text-[11px] font-semibold text-slate-700 group-hover:translate-x-1 transition-transform">
           <span>Open Exchange</span> <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
@@ -228,8 +228,7 @@
       </a>
     </div>
   </div>
-
-  <!-- FREIGHT EXCHANGE 4.0: ADVANCED MULTI-COUNTRY GLOBAL SEARCH (ALL 200+ WORLD COUNTRIES, UP TO 5 SELECT & AUTO-MATCH) -->
+  <!-- FREIGHT EXCHANGE 4.0: ADVANCED PRO SEARCH ENGINE -->
   <div class="bg-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-xl border border-slate-800 relative overflow-hidden">
     <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
     
@@ -237,75 +236,134 @@
       <div>
         <div class="flex items-center gap-2">
           <span class="px-2.5 py-1 bg-blue-500/20 text-cyan-400 border border-cyan-500/30 text-[10px] font-bold rounded uppercase tracking-wider">Freight Exchange 4.0</span>
-          <h2 class="text-xl font-black tracking-tight">Active Multi-Country Global Search & Match Engine</h2>
+          <h2 class="text-xl font-black tracking-tight">Pro Multi-Country Global Search & Match Engine</h2>
         </div>
-        <p class="text-xs text-slate-400 mt-1">Select up to 5 origin and destination countries simultaneously across all world continents, transport modes, and cargo types.</p>
+        <p class="text-xs text-slate-400 mt-1">Select Search Type, Transport Mode, Equipment/Cargo specs, and up to 5 Origin/Destination countries with checkboxes.</p>
+      </div>
+      <!-- AUTO-REFRESH & MANUAL REFRESH CONTROLS (ON THE RIGHT) -->
+      <div class="flex items-center space-x-3 bg-slate-950 px-3 py-2 rounded-xl border border-slate-800">
+        <label class="flex items-center space-x-2 cursor-pointer">
+          <input type="checkbox" id="autoRefreshToggle" checked class="w-4 h-4 text-cyan-500 bg-slate-900 border-slate-700 rounded focus:ring-cyan-400">
+          <span class="text-[11px] font-medium text-slate-300">Auto-refresh (30s)</span>
+        </label>
+        <button type="button" onclick="manualRefreshData()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded-lg text-xs font-bold transition flex items-center gap-1 border border-slate-700" title="Refresh Live Data">
+          <i data-lucide="rotate-cw" class="w-3.5 h-3.5" id="refreshIcon"></i>
+          <span>Refresh</span>
+        </button>
       </div>
     </div>
 
-    <!-- SEARCH FORM WITH ALL 200+ COUNTRIES (MAX 5 SELECTION WITH CHECKBOXES / MULTI-SELECT) -->
-    <form id="exchangeSearchForm" onsubmit="executeGlobalSearch(event)" class="space-y-4">
+    <!-- PRO SEARCH FORM -->
+    <form id="exchangeSearchForm" onsubmit="executeGlobalSearch(event)" class="space-y-6">
+      
+      <!-- TOP SELECTORS: SEARCH TYPE & TRANSPORT MODE -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-950/80 p-4 rounded-xl border border-slate-800">
+        <div>
+          <label class="block text-[11px] font-bold text-cyan-300 uppercase mb-1.5">Search / Post Type</label>
+          <select id="searchTypeMode" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+            <option value="cargo">Cargo (Iščem tovor / Objavljam pošiljko)</option>
+            <option value="transport">Transport (Iščem kamion / Prosta kapaciteta)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-cyan-300 uppercase mb-1.5">Transport Medium</label>
+          <select id="transportMedium" onchange="updateVehicleDropdowns()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+            <option value="road">Road (Cestni transport)</option>
+            <option value="ocean">Ocean (Pomorski / Container)</option>
+            <option value="air">Air (Letalski cargo)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-cyan-300 uppercase mb-1.5">Vehicle / Cargo Specification</label>
+          <select id="vehicleCargoSpec" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-400">
+            <optgroup label="Standard & Curtainsiders">
+              <option value="Tarpauling" selected>Tarpauling / Curtainsider</option>
+              <option value="Tautliner">Tautliner</option>
+              <option value="Mega">Mega Trailer</option>
+              <option value="Box">Box Trailer</option>
+            </optgroup>
+            <optgroup label="Refrigerated">
+              <option value="Refrigerator">Refrigerator / Reefer</option>
+              <option value="Multi-temp">Multi-temp</option>
+            </optgroup>
+            <optgroup label="Specialized">
+              <option value="Walking floor">Walking floor</option>
+              <option value="Tanker">Liquid Tanker</option>
+              <option value="Flatbed">Flatbed / Open</option>
+              <option value="Car transporter">Car Transporter</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+
+      <!-- COUNTRIES SELECTION WITH CHECKBOXES (MAX 5) -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        <!-- ORIGIN COUNTRIES (ALL WORLD COUNTRIES - MAX 5) -->
+        <!-- ORIGIN COUNTRIES CONTAINER (CHECKBOXES) -->
         <div class="space-y-2 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
-          <label class="block text-xs font-bold text-cyan-300 uppercase tracking-wide flex items-center justify-between">
-            <span>Origin Countries (Select up to 5)</span>
-            <span class="text-[10px] text-slate-400 font-normal">Full Global Coverage (200+ Countries)</span>
-          </label>
-          <select id="searchOriginCountries" multiple class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-400 h-48">
-            <optgroup label="Europe (EU & Non-EU)">
-              <option value="AL">Albania (AL)</option><option value="AD">Andorra (AD)</option><option value="AT">Austria (AT)</option><option value="BY">Belarus (BY)</option><option value="BE">Belgium (BE)</option><option value="BA">Bosnia & Herzegovina (BA)</option><option value="BG">Bulgaria (BG)</option><option value="HR">Croatia (HR)</option><option value="CY">Cyprus (CY)</option><option value="CZ">Czech Republic (CZ)</option><option value="DK">Denmark (DK)</option><option value="EE">Estonia (EE)</option><option value="FI">Finland (FI)</option><option value="FR">France (FR)</option><option value="DE">Germany (DE)</option><option value="GR">Greece (GR)</option><option value="HU">Hungary (HU)</option><option value="IS">Iceland (IS)</option><option value="IE">Ireland (IE)</option><option value="IT">Italy (IT)</option><option value="XK">Kosovo (XK)</option><option value="LV">Latvia (LV)</option><option value="LI">Liechtenstein (LI)</option><option value="LT">Lithuania (LT)</option><option value="LU">Luxembourg (LU)</option><option value="MT">Malta (MT)</option><option value="MD">Moldova (MD)</option><option value="MC">Monaco (MC)</option><option value="ME">Montenegro (ME)</option><option value="NL">Netherlands (NL)</option><option value="MK">North Macedonia (MK)</option><option value="NO">Norway (NO)</option><option value="PL">Poland (PL)</option><option value="PT">Portugal (PT)</option><option value="RO">Romania (RO)</option><option value="RU">Russia (RU)</option><option value="SM">San Marino (SM)</option><option value="RS">Serbia (RS)</option><option value="SK">Slovakia (SK)</option><option value="SI" selected>Slovenia (SI)</option><option value="ES">Spain (ES)</option><option value="SE">Sweden (SE)</option><option value="CH">Switzerland (CH)</option><option value="TR">Turkey (TR)</option><option value="UA">Ukraine (UA)</option><option value="UK">United Kingdom (UK)</option><option value="VA">Vatican City (VA)</option>
-            </optgroup>
-            <optgroup label="North America">
-              <option value="AG">Antigua & Barbuda</option><option value="BS">Bahamas</option><option value="BB">Barbados</option><option value="BZ">Belize</option><option value="CA">Canada (CA)</option><option value="CR">Costa Rica</option><option value="CU">Cuba</option><option value="DM">Dominica</option><option value="DO">Dominican Republic</option><option value="SV">El Salvador</option><option value="GD">Grenada</option><option value="GT">Guatemala</option><option value="HT">Haiti</option><option value="HN">Honduras</option><option value="JM">Jamaica</option><option value="MX">Mexico (MX)</option><option value="NI">Nicaragua</option><option value="PA">Panama</option><option value="KN">Saint Kitts & Nevis</option><option value="LC">Saint Lucia</option><option value="VC">Saint Vincent</option><option value="TT">Trinidad & Tobago</option><option value="US">United States (US)</option>
-            </optgroup>
-            <optgroup label="South & Central America">
-              <option value="AR">Argentina (AR)</option><option value="BO">Bolivia</option><option value="BR">Brazil (BR)</option><option value="CL">Chile (CL)</option><option value="CO">Colombia (CO)</option><option value="EC">Ecuador</option><option value="GY">Guyana</option><option value="PY">Paraguay</option><option value="PE">Peru (PE)</option><option value="SR">Suriname</option><option value="UY">Uruguay</option><option value="VE">Venezuela</option>
-            </optgroup>
-            <optgroup label="Asia & Middle East">
-              <option value="AF">Afghanistan</option><option value="AM">Armenia</option><option value="AZ">Azerbaijan</option><option value="BH">Bahrain</option><option value="BD">Bangladesh</option><option value="BT">Bhutan</option><option value="BN">Brunei</option><option value="KH">Cambodia</option><option value="CN">China (CN)</option><option value="GE">Georgia</option><option value="IN">India (IN)</option><option value="ID">Indonesia (ID)</option><option value="IR">Iran</option><option value="IQ">Iraq</option><option value="IL">Israel</option><option value="JP">Japan (JP)</option><option value="JO">Jordan</option><option value="KZ">Kazakhstan</option><option value="KW">Kuwait</option><option value="KG">Kyrgyzstan</option><option value="LA">Laos</option><option value="LB">Lebanon</option><option value="MY">Malaysia (MY)</option><option value="MV">Maldives</option><option value="MN">Mongolia</option><option value="MM">Myanmar</option><option value="NP">Nepal</option><option value="KP">North Korea</option><option value="OM">Oman</option><option value="PK">Pakistan (PK)</option><option value="PS">Palestine</option><option value="PH">Philippines (PH)</option><option value="QA">Qatar</option><option value="SA">Saudi Arabia (SA)</option><option value="SG">Singapore (SG)</option><option value="KR">South Korea (KR)</option><option value="LK">Sri Lanka</option><option value="SY">Syria</option><option value="TW">Taiwan (TW)</option><option value="TJ">Tajikistan</option><option value="TH">Thailand (TH)</option><option value="TL">Timor-Leste</option><option value="TM">Turkmenistan</option><option value="AE">United Arab Emirates (UAE)</option><option value="UZ">Uzbekistan</option><option value="VN">Vietnam (VN)</option><option value="YE">Yemen</option>
-            </optgroup>
-            <optgroup label="Africa">
-              <option value="DZ">Algeria</option><option value="AO">Angola</option><option value="BJ">Benin</option><option value="BW">Botswana</option><option value="BF">Burkina Faso</option><option value="BI">Burundi</option><option value="CV">Cabo Verde</option><option value="CM">Cameroon</option><option value="CF">Central African Republic</option><option value="TD">Chad</option><option value="KM">Comoros</option><option value="CG">Congo</option><option value="CD">Congo (DRC)</option><option value="DJ">Djibouti</option><option value="EG">Egypt (EG)</option><option value="GQ">Equatorial Guinea</option><option value="ER">Eritrea</option><option value="SZ">Eswatini</option><option value="ET">Ethiopia</option><option value="GA">Gabon</option><option value="GM">Gambia</option><option value="GH">Ghana</option><option value="GN">Guinea</option><option value="GW">Guinea-Bissau</option><option value="CI">Ivory Coast</option><option value="KE">Kenya</option><option value="LS">Lesotho</option><option value="LR">Liberia</option><option value="LY">Libya</option><option value="MG">Madagascar</option><option value="MW">Malawi</option><option value="ML">Mali</option><option value="MR">Mauritania</option><option value="MU">Mauritius</option><option value="MA">Morocco (MA)</option><option value="MZ">Mozambique</option><option value="NA">Namibia</option><option value="NE">Niger</option><option value="NG">Nigeria</option><option value="RW">Rwanda</option><option value="ST">Sao Tome & Principe</option><option value="SN">Senegal</option><option value="SC">Seychelles</option><option value="SL">Sierra Leone</option><option value="SO">Somalia</option><option value="ZA">South Africa (ZA)</option><option value="SS">South Sudan</option><option value="SD">Sudan</option><option value="TZ">Tanzania</option><option value="TG">Togo</option><option value="TN">Tunisia</option><option value="UG">Uganda</option><option value="ZM">Zambia</option><option value="ZW">Zimbabwe</option>
-            </optgroup>
-            <optgroup label="Oceania">
-              <option value="AU">Australia (AU)</option><option value="FJ">Fiji</option><option value="KI">Kiribati</option><option value="MH">Marshall Islands</option><option value="FM">Micronesia</option><option value="NR">Nauru</option><option value="NZ">New Zealand (NZ)</option><option value="PW">Palau</option><option value="PG">Papua New Guinea</option><option value="WS">Samoa</option><option value="SB">Solomon Islands</option><option value="TO">Tonga</option><option value="TV">Tuvalu</option><option value="VU">Vanuatu</option>
-            </optgroup>
-          </select>
-          <p class="text-[10px] text-slate-400">Hold Ctrl / Cmd to select up to 5 origin countries.</p>
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <span class="text-xs font-bold text-cyan-300 uppercase tracking-wide">Origin Countries (Select up to 5)</span>
+            <span id="originCountBadge" class="text-[10px] bg-blue-500/20 text-cyan-400 px-2 py-0.5 rounded font-mono">0 / 5 selected</span>
+          </div>
+          <div class="max-h-52 overflow-y-auto space-y-1 pr-2 custom-scrollbar text-xs">
+            <!-- EU & World Checkboxes List -->
+            <div class="font-bold text-slate-400 text-[10px] uppercase mt-2 mb-1">Europe & Global Hubs</div>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="SI" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Slovenia (SI)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="DE" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Germany (DE)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="HR" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Croatia (HR)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="AT" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Austria (AT)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="IT" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Italy (IT)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="FR" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>France (FR)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="RS" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Serbia (RS)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="BA" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Bosnia & Herzegovina (BA)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="PL" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Poland (PL)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="CZ" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Czech Republic (CZ)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="SK" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Slovakia (SK)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="HU" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Hungary (HU)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="NL" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Netherlands (NL)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="BE" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Belgium (BE)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="ES" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Spain (ES)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="UK" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>United Kingdom (UK)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="TR" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Turkey (TR)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="US" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>United States (US)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="origin_country" value="CN" class="origin-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>China (CN)</span></label>
+          </div>
         </div>
 
-        <!-- DESTINATION COUNTRIES (ALL WORLD COUNTRIES - MAX 5) -->
+        <!-- DESTINATION COUNTRIES CONTAINER (CHECKBOXES) -->
         <div class="space-y-2 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
-          <label class="block text-xs font-bold text-cyan-300 uppercase tracking-wide flex items-center justify-between">
-            <span>Destination Countries (Select up to 5)</span>
-            <span class="text-[10px] text-slate-400 font-normal">Full Global Coverage (200+ Countries)</span>
-          </label>
-          <select id="searchDestCountries" multiple class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-400 h-48">
-            <optgroup label="Europe (EU & Non-EU)">
-              <option value="AL">Albania (AL)</option><option value="AT">Austria (AT)</option><option value="BE">Belgium (BE)</option><option value="BA">Bosnia & Herzegovina (BA)</option><option value="BG">Bulgaria (BG)</option><option value="HR" selected>Croatia (HR)</option><option value="CZ">Czech Republic (CZ)</option><option value="DK">Denmark (DK)</option><option value="FR">France (FR)</option><option value="DE" selected>Germany (DE)</option><option value="GR">Greece (GR)</option><option value="HU">Hungary (HU)</option><option value="IE">Ireland (IE)</option><option value="IT" selected>Italy (IT)</option><option value="NL">Netherlands (NL)</option><option value="PL">Poland (PL)</option><option value="PT">Portugal (PT)</option><option value="RO">Romania (RO)</option><option value="RS" selected>Serbia (RS)</option><option value="SK">Slovakia (SK)</option><option value="SI">Slovenia (SI)</option><option value="ES">Spain (ES)</option><option value="SE">Sweden (SE)</option><option value="CH">Switzerland (CH)</option><option value="TR">Turkey (TR)</option><option value="UK">United Kingdom (UK)</option>
-            </optgroup>
-            <optgroup label="North America">
-              <option value="CA">Canada (CA)</option><option value="MX">Mexico (MX)</option><option value="US">United States (US)</option><option value="CR">Costa Rica</option><option value="PA">Panama</option>
-            </optgroup>
-            <optgroup label="South & Central America">
-              <option value="AR">Argentina (AR)</option><option value="BR">Brazil (BR)</option><option value="CL">Chile (CL)</option><option value="CO">Colombia (CO)</option><option value="PE">Peru (PE)</option>
-            </optgroup>
-            <optgroup label="Asia & Middle East">
-              <option value="CN">China (CN)</option><option value="IN">India (IN)</option><option value="JP">Japan (JP)</option><option value="SG">Singapore (SG)</option><option value="KR">South Korea (KR)</option><option value="TH">Thailand (TH)</option><option value="VN">Vietnam (VN)</option><option value="IL">Israel (IL)</option><option value="QA">Qatar (QA)</option><option value="SA">Saudi Arabia (SA)</option><option value="AE">United Arab Emirates (UAE)</option>
-            </optgroup>
-            <optgroup label="Africa & Oceania">
-              <option value="EG">Egypt (EG)</option><option value="MA">Morocco (MA)</option><option value="ZA">South Africa (ZA)</option><option value="AU">Australia (AU)</option><option value="NZ">New Zealand (NZ)</option>
-            </optgroup>
-          </select>
-          <p class="text-[10px] text-slate-400">Hold Ctrl / Cmd to select up to 5 destination countries.</p>
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <span class="text-xs font-bold text-cyan-300 uppercase tracking-wide">Destination Countries (Select up to 5)</span>
+            <span id="destCountBadge" class="text-[10px] bg-blue-500/20 text-cyan-400 px-2 py-0.5 rounded font-mono">0 / 5 selected</span>
+          </div>
+          <div class="max-h-52 overflow-y-auto space-y-1 pr-2 custom-scrollbar text-xs">
+            <div class="font-bold text-slate-400 text-[10px] uppercase mt-2 mb-1">Europe & Global Hubs</div>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="SI" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Slovenia (SI)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="DE" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Germany (DE)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="HR" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Croatia (HR)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="AT" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Austria (AT)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="IT" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Italy (IT)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="FR" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>France (FR)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="RS" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Serbia (RS)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="BA" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Bosnia & Herzegovina (BA)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="PL" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Poland (PL)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="CZ" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Czech Republic (CZ)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="SK" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Slovakia (SK)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="HU" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Hungary (HU)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="NL" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Netherlands (NL)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="BE" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Belgium (BE)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="ES" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Spain (ES)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="UK" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>United Kingdom (UK)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="TR" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>Turkey (TR)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="US" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>United States (US)</span></label>
+            <label class="flex items-center space-x-2 py-1 px-2 hover:bg-slate-900 rounded cursor-pointer"><input type="checkbox" name="dest_country" value="CN" class="dest-chk w-3.5 h-3.5 text-cyan-500 rounded bg-slate-900 border-slate-700"><span>China (CN)</span></label>
+          </div>
         </div>
 
       </div>
 
-      <!-- BOTTOM SEARCH ACTIONS & SMART MATCH CHECKBOX (DEFAULT CHECKED) -->
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+      <!-- BOTTOM ACTIONS & AUTO-MATCH CHECKBOX (CHECKED BY DEFAULT) -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2 border-t border-slate-800">
         <div class="flex items-center space-x-3">
           <label class="relative flex items-center cursor-pointer">
             <input type="checkbox" id="autoPublishSearch" class="sr-only peer" checked>
@@ -323,7 +381,6 @@
       </div>
     </form>
   </div>
-
   <!-- "MY OFFERS" SECTION (User's Active Cargo & Transport Postings from Supabase) -->
   <div id="myOffersSection" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
     <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
@@ -417,6 +474,8 @@
   const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  let autoRefreshTimer = null;
+
   document.addEventListener("DOMContentLoaded", async () => {
     if (typeof lucide !== 'undefined') lucide.createIcons();
 
@@ -453,14 +512,89 @@
       console.error('Supabase company lookup error:', err);
     }
 
+    // Initialize Checkbox listeners for max 5 limitation counters
+    initCheckboxCounters();
+
     // Load User's Offers ("My Offers")
     loadMyOffers();
+
+    // Setup 30s Auto-Refresh Interval
+    setupAutoRefresh();
   });
+
+  // Checkbox limiters (Max 5 for Origin and Destination)
+  function initCheckboxCounters() {
+    const originCheckboxes = document.querySelectorAll('.origin-chk');
+    const destCheckboxes = document.querySelectorAll('.dest-chk');
+
+    originCheckboxes.forEach(chk => {
+      chk.addEventListener('change', () => {
+        const checkedCount = document.querySelectorAll('.origin-chk:checked').length;
+        document.getElementById('originCountBadge').textContent = `${checkedCount} / 5 selected`;
+        if (checkedCount > 5) {
+          chk.checked = false;
+          alert("Maximum 5 origin countries can be selected simultaneously.");
+          document.getElementById('originCountBadge').textContent = `${document.querySelectorAll('.origin-chk:checked').length} / 5 selected`;
+        }
+      });
+    });
+
+    destCheckboxes.forEach(chk => {
+      chk.addEventListener('change', () => {
+        const checkedCount = document.querySelectorAll('.dest-chk:checked').length;
+        document.getElementById('destCountBadge').textContent = `${checkedCount} / 5 selected`;
+        if (checkedCount > 5) {
+          chk.checked = false;
+          alert("Maximum 5 destination countries can be selected simultaneously.");
+          document.getElementById('destCountBadge').textContent = `${document.querySelectorAll('.dest-chk:checked').length} / 5 selected`;
+        }
+      });
+    });
+  }
+
+  // Vehicle specification templates based on transport medium
+  function updateVehicleDropdowns() {
+    const medium = document.getElementById('transportMedium').value;
+    const specSelect = document.getElementById('vehicleCargoSpec');
+    if (medium === 'road') {
+      specSelect.innerHTML = `
+        <optgroup label="Standard & Curtainsiders">
+          <option value="Tarpauling" selected>Tarpauling / Curtainsider</option>
+          <option value="Tautliner">Tautliner</option>
+          <option value="Mega">Mega Trailer</option>
+          <option value="Box">Box Trailer</option>
+        </optgroup>
+        <optgroup label="Refrigerated">
+          <option value="Refrigerator">Refrigerator / Reefer</option>
+          <option value="Multi-temp">Multi-temp</option>
+        </optgroup>
+        <optgroup label="Specialized">
+          <option value="Walking floor">Walking floor</option>
+          <option value="Tanker">Liquid Tanker</option>
+          <option value="Flatbed">Flatbed / Open</option>
+          <option value="Car transporter">Car Transporter</option>
+        </optgroup>`;
+    } else if (medium === 'ocean') {
+      specSelect.innerHTML = `
+        <option value="20ft Container (FCL)" selected>20ft Dry Container (FCL)</option>
+        <option value="40ft Container (FCL)">40ft Dry Container (FCL)</option>
+        <option value="40ft High Cube Reefer">40ft High Cube Reefer</option>
+        <option value="LCL Cargo">LCL (Less than Container Load)</option>
+        <option value="Open Top / Flat Rack">Open Top / Flat Rack</option>`;
+    } else if (medium === 'air') {
+      specSelect.innerHTML = `
+        <option value="Standard Air Cargo" selected>Standard Air Cargo</option>
+        <option value="Express Courier Box">Express Courier Box</option>
+        <option value="Dangerous Goods (DG)">Dangerous Goods (DG)</option>
+        <option value="Temperature Controlled Air">Temperature Controlled Air</option>`;
+    }
+  }
 
   // Function to load user's cargo & transport postings from Supabase
   async function loadMyOffers() {
     const tbody = document.getElementById('myOffersTableBody');
     try {
+      const companyId = localStorage.getItem('cargotrans_company_id');
       const [cargoRes, transportRes] = await Promise.all([
         sb.from('enter_cargo').select('*').order('created_at', { ascending: false }).limit(5),
         sb.from('enter_transport').select('*').order('created_at', { ascending: false }).limit(5)
@@ -508,31 +642,73 @@
     }
   }
 
-  // Multi-country global search execution with Auto-Match logic check
-  function executeGlobalSearch(e) {
+  // Global Pro Search execution with Auto-Match / Teleroute logic & Supabase insert
+  async function executeGlobalSearch(e) {
     e.preventDefault();
-    const originSelect = document.getElementById('searchOriginCountries');
-    const destSelect = document.getElementById('searchDestCountries');
-    const autoPublish = document.getElementById('autoPublishSearch').checked;
     
-    const selectedOrigins = Array.from(originSelect.selectedOptions).map(opt => opt.value);
-    const selectedDests = Array.from(destSelect.selectedOptions).map(opt => opt.value);
+    const searchType = document.getElementById('searchTypeMode').value;
+    const transportMedium = document.getElementById('transportMedium').value;
+    const vehicleSpec = document.getElementById('vehicleCargoSpec').value;
+    const autoPublish = document.getElementById('autoPublishSearch').checked;
 
-    if (selectedOrigins.length > 5 || selectedDests.length > 5) {
-      alert("You can select a maximum of 5 countries for Origin and 5 for Destination.");
-      return;
-    }
+    const selectedOrigins = Array.from(document.querySelectorAll('.origin-chk:checked')).map(chk => chk.value);
+    const selectedDests = Array.from(document.querySelectorAll('.dest-chk:checked')).map(chk => chk.value);
 
     if (selectedOrigins.length === 0 || selectedDests.length === 0) {
-      alert("Please select at least one origin and one destination country.");
+      alert("Please select at least 1 origin and 1 destination country.");
       return;
     }
 
-    let msg = `Searching global corridors from [${selectedOrigins.join(', ')}] to [${selectedDests.join(', ')}].`;
-    if (autoPublish) {
-      msg += ` \n[Auto-Match / Teleroute Logic]: Search successfully published as an active offer in Supabase!`;
+    if (selectedOrigins.length > 5 || selectedDests.length > 5) {
+      alert("Maximum 5 countries allowed for Origin and Destination.");
+      return;
     }
-    alert(msg);
+
+    const payload = {
+      search_type: searchType,
+      transport_mode: transportMedium,
+      equipment: vehicleSpec,
+      origin_country: selectedOrigins.join(', '),
+      dest_country: selectedDests.join(', '),
+      loading_date: new Date().toISOString().split('T')[0],
+      company_id: localStorage.getItem('cargotrans_company_id') || null,
+      created_at: new Date()
+    };
+
+    if (autoPublish) {
+      try {
+        const tableName = searchType === 'cargo' ? 'enter_cargo' : 'enter_transport';
+        const { error } = await sb.from(tableName).insert([payload]);
+        if (error) throw error;
+        loadMyOffers();
+        alert(`Search executed successfully!\n[Auto-Match / Teleroute Logic]: Your ${searchType} corridor from [${selectedOrigins.join(', ')}] to [${selectedDests.join(', ')}] was successfully published to Supabase.`);
+      } catch (err) {
+        console.error('Auto-publish error:', err);
+        alert("Search executed, but failed to auto-publish to database.");
+      }
+    } else {
+      alert(`Private search executed successfully for corridors from [${selectedOrigins.join(', ')}] to [${selectedDests.join(', ')}]. (Auto-publish was unchecked).`);
+    }
+  }
+
+  // Manual refresh button action
+  function manualRefreshData() {
+    const icon = document.getElementById('refreshIcon');
+    icon.classList.add('animate-spin');
+    loadMyOffers();
+    setTimeout(() => {
+      icon.classList.remove('animate-spin');
+    }, 800);
+  }
+
+  // 30 seconds Auto-Refresh timer setup
+  function setupAutoRefresh() {
+    const toggle = document.getElementById('autoRefreshToggle');
+    autoRefreshTimer = setInterval(() => {
+      if (toggle && toggle.checked) {
+        loadMyOffers();
+      }
+    }, 30000);
   }
 
   function executeAiSearch() {
