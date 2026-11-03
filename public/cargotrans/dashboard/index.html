@@ -28,6 +28,28 @@
       }
     }
   </script>
+
+  <style id="cargonet-dashboard-refresh">
+    body { background:#f5f8fc !important; color:#243247 !important; font-family:Arial,Helvetica,sans-serif !important; }
+    header { background:#ffffff !important; color:#243247 !important; border-color:#dbe5f0 !important; box-shadow:0 2px 12px rgba(15,45,80,.06); }
+    header a, header span { color:#334b68; }
+    header a:hover { background:#eef5fc !important; color:#075985 !important; }
+    header .text-white { color:#17365d !important; }
+    header .text-cyan-400 { color:#087eae !important; }
+    header .bg-slate-900, header .bg-slate-800 { background:#f1f6fb !important; }
+    header .border-slate-800, header .border-slate-700 { border-color:#dce6f0 !important; }
+    header .text-slate-300, header .text-slate-400 { color:#60748c !important; }
+    #exchangeSearchPanel { background:#ffffff !important; color:#243247 !important; border:1px solid #dbe5f0 !important; box-shadow:0 8px 24px rgba(20,55,90,.07) !important; }
+    #exchangeSearchPanel .text-white { color:#203650 !important; }
+    #exchangeSearchPanel .text-slate-400, #exchangeSearchPanel .text-slate-300 { color:#60748c !important; }
+    #exchangeSearchPanel .bg-slate-950, #exchangeSearchPanel .bg-slate-950\/80, #exchangeSearchPanel .bg-slate-950\/60, #exchangeSearchPanel .bg-slate-900 { background:#f4f8fc !important; }
+    #exchangeSearchPanel .border-slate-800, #exchangeSearchPanel .border-slate-700 { border-color:#d9e4ef !important; }
+    #exchangeSearchPanel select { color:#243247 !important; background:#fff !important; border-color:#cbd8e6 !important; }
+    #exchangeSearchPanel label { color:#35516f; }
+    #exchangeSearchPanel .text-cyan-300, #exchangeSearchPanel .text-cyan-400 { color:#087eae !important; }
+    #exchangeSearchPanel button[type="submit"] { background:#087eae !important; color:#fff !important; }
+    #exchangeSearchPanel button[type="submit"]:hover { background:#066b95 !important; }
+  </style>
 </head>
 <script>
   (function checkAccess() {
@@ -74,16 +96,16 @@
           <a href="index.html" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm flex items-center gap-1.5">
             <span>Live Board</span>
           </a>
-          <a href="enter_cargo.html" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">Post Freight</a>
+          <a href="https://www.payfreight.io/cargotrans/dashboard/enter_cargo.html" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">Post Freight</a>
           <a href="company_profile.html" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-purple-300 hover:text-white hover:bg-purple-900/30 flex items-center gap-1.5 border border-purple-500/30 transition">
             <i data-lucide="building-2" class="w-4 h-4 text-purple-400"></i>
             <span>Company HQ</span>
           </a>
-          <a href="directory.html" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
+          <a href="https://www.payfreight.io/cargotrans/dashboard/directory.html" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center gap-1.5">
             <i data-lucide="search" class="w-4 h-4 text-amber-400"></i>
             <span>Search Company</span>
           </a>
-          <a href="layout1.asp?stran=Transport_Order_CargoNet" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">Transport Orders (e-CMR)</a>
+          <a href="https://www.payfreight.io/cargotrans/dashboard/layout1.asp?stran=Transport_Order_CargoNet" class="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">Transport Orders (e-CMR)</a>
           
           <a href="https://www.payfreight.io" target="_blank" class="px-3.5 py-2 rounded-lg text-xs font-bold text-purple-300 hover:text-white bg-purple-900/30 hover:bg-purple-900/60 flex items-center gap-1.5 border border-purple-500/30 transition shadow-sm">
             <i data-lucide="shield-check" class="w-4 h-4 text-purple-400"></i>
@@ -114,22 +136,22 @@
 <!-- MAIN CONTENT -->
 <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
   <!-- AI INTELLIGENT GLOBAL SEARCH BAR -->
-  <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-2xl p-6 shadow-lg border border-blue-500/30 text-white relative overflow-hidden">
+  <div class="bg-gradient-to-r from-blue-50 via-white to-blue-50 rounded-2xl p-6 shadow-lg border border-blue-200 text-slate-800 relative overflow-hidden">
     <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
       <div>
         <div class="flex items-center gap-2">
           <span class="px-2 py-0.5 bg-blue-500/20 text-cyan-400 border border-cyan-500/30 text-[10px] font-bold rounded uppercase tracking-wider">AI Powered</span>
-          <h2 class="text-lg font-bold">CargoNet Intelligent Global Search</h2>
+          <h2 class="text-lg font-bold text-slate-900">CargoNet Intelligent Global Search</h2>
         </div>
-        <p class="text-xs text-slate-300 mt-1">Instantly query Member Directory, active freight offers, and multi-region interests.</p>
+        <p class="text-xs text-slate-600 mt-1">Instantly query Member Directory, active freight offers, and multi-region interests.</p>
       </div>
     </div>
     
     <div class="relative flex items-center">
-      <i data-lucide="sparkles" class="absolute left-4 w-5 h-5 text-cyan-400"></i>
-      <input type="text" id="aiGlobalSearchInput" placeholder="Search company name, route (e.g., Munich to Novo Mesto), or continent corridors..." class="w-full bg-slate-900/90 border border-slate-700 rounded-xl pl-12 pr-32 py-3.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-cyan-400 shadow-inner">
-      <button onclick="executeAiSearch()" class="absolute right-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold px-5 py-2 rounded-lg text-xs transition flex items-center gap-1.5 shadow">
+      <i data-lucide="sparkles" class="absolute left-4 w-5 h-5 text-blue-600"></i>
+      <input type="text" id="aiGlobalSearchInput" placeholder="Search company name, route (e.g., Munich to Novo Mesto), or continent corridors..." class="w-full bg-white border border-slate-300 rounded-xl pl-12 pr-32 py-3.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-cyan-400 shadow-inner">
+      <button onclick="executeAiSearch()" class="absolute right-2 bg-blue-600 hover:bg-blue-700 text-white font-bold px-5 py-2 rounded-lg text-xs transition flex items-center gap-1.5 shadow">
         <span>Smart Search</span>
         <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
       </button>
@@ -148,7 +170,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       
       <!-- 1. Post Freight -->
-      <a href="enter_cargo.html" class="flex flex-col justify-between p-4 bg-gradient-to-br from-blue-50 to-slate-50 hover:from-blue-100 hover:to-blue-50 border border-blue-200/80 rounded-xl transition-all duration-200 group text-left shadow-sm">
+      <a href="https://www.payfreight.io/cargotrans/dashboard/enter_cargo.html" class="flex flex-col justify-between p-4 bg-gradient-to-br from-blue-50 to-slate-50 hover:from-blue-100 hover:to-blue-50 border border-blue-200/80 rounded-xl transition-all duration-200 group text-left shadow-sm">
         <div>
           <div class="flex items-center justify-between mb-3">
             <div class="w-9 h-9 bg-blue-600 text-white rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -168,7 +190,7 @@
         </div>
       </a>
       <!-- 2. Post Empty Space -->
-      <a href="enter_transport.html" class="flex flex-col justify-between p-4 bg-gradient-to-br from-emerald-50 to-slate-50 hover:from-emerald-100 hover:to-emerald-50 border border-emerald-200/80 rounded-xl transition-all duration-200 group text-left shadow-sm">
+      <a href="https://www.payfreight.io/cargotrans/dashboard/enter_transport.html" class="flex flex-col justify-between p-4 bg-gradient-to-br from-emerald-50 to-slate-50 hover:from-emerald-100 hover:to-emerald-50 border border-emerald-200/80 rounded-xl transition-all duration-200 group text-left shadow-sm">
         <div>
           <div class="flex items-center justify-between mb-3">
             <div class="w-9 h-9 bg-emerald-600 text-white rounded-lg flex items-center justify-center group-hover:scale-105 transition-transform">
@@ -188,7 +210,7 @@
         </div>
       </a>
       <!-- 3. Search Companies -->
-      <a href="directory.html" class="flex flex-col justify-between p-4 bg-gradient-to-br from-amber-50 to-slate-50 hover:from-amber-100 hover:to-amber-50 border border-amber-200/80 rounded-xl transition-all duration-200 group text-left shadow-sm">
+      <a href="https://www.payfreight.io/cargotrans/dashboard/directory.html" class="flex flex-col justify-between p-4 bg-gradient-to-br from-amber-50 to-slate-50 hover:from-amber-100 hover:to-amber-50 border border-amber-200/80 rounded-xl transition-all duration-200 group text-left shadow-sm">
         <div>
           <div class="w-9 h-9 bg-amber-600 text-white rounded-lg flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
             <i data-lucide="building-2" class="w-4 h-4"></i>
@@ -201,7 +223,7 @@
         </div>
       </a>
       <!-- 4. Create Transport Order -->
-      <a href="layout1.asp?stran=Transport_Order_CargoNet" class="flex flex-col justify-between p-4 bg-gradient-to-br from-indigo-50 to-slate-50 hover:from-indigo-100 hover:to-indigo-50 border border-indigo-200/80 rounded-xl transition-all duration-200 group text-left shadow-sm">
+      <a href="https://www.payfreight.io/cargotrans/dashboard/layout1.asp?stran=Transport_Order_CargoNet" class="flex flex-col justify-between p-4 bg-gradient-to-br from-indigo-50 to-slate-50 hover:from-indigo-100 hover:to-indigo-50 border border-indigo-200/80 rounded-xl transition-all duration-200 group text-left shadow-sm">
         <div>
           <div class="w-9 h-9 bg-indigo-600 text-white rounded-lg flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
             <i data-lucide="file-text" class="w-4 h-4"></i>
@@ -214,13 +236,13 @@
         </div>
       </a>
       <!-- 5. Find Freight -->
-      <a href="#myOffersSection" class="flex flex-col justify-between p-4 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-all duration-200 group text-left shadow-sm">
+      <a href="https://www.payfreight.io/cargotrans/dashboard/index.html#myOffersSection" class="flex flex-col justify-between p-4 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-all duration-200 group text-left shadow-sm">
         <div>
           <div class="w-9 h-9 bg-slate-100 text-slate-700 rounded-lg flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
             <i data-lucide="search" class="w-4 h-4"></i>
           </div>
           <h3 class="font-bold text-slate-900 text-sm">Find Freight</h3>
-          <p class="text-[11px] text-slate-500 sf-1 mt-1">Search global loads for your fleet</p>
+          <p class="text-[11px] text-slate-500 mt-1">Search global loads for your fleet</p>
         </div>
         <div class="mt-3 flex items-center text-[11px] font-semibold text-slate-700 group-hover:translate-x-1 transition-transform">
           <span>Open Exchange</span> <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
@@ -228,8 +250,70 @@
       </a>
     </div>
   </div>
+  <!-- "MY OFFERS" SECTION (User's Active Cargo & Transport Postings from Supabase) -->
+  <div id="myOffersSection" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+      <div>
+        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <i data-lucide="layers" class="w-4 h-4 text-blue-600"></i>
+          <span>Live Search Results & My Active Offers</span>
+        </h2>
+        <p class="text-xs text-slate-500 mt-0.5">Latest freight and available-capacity postings currently returned by CargoNet Exchange.</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="https://www.payfreight.io/cargotrans/dashboard/enter_cargo.html" class="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-semibold hover:bg-blue-100 transition">+ Post Freight</a>
+        <a href="https://www.payfreight.io/cargotrans/dashboard/enter_transport.html" class="px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-semibold hover:bg-emerald-100 transition">+ Post Transport</a>
+      </div>
+    </div>
+
+    <!-- TABLE FOR USER OFFERS -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-100/80 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            <th class="py-3.5 px-4">Type</th>
+            <th class="py-3.5 px-4">Route (Origin → Destination)</th>
+            <th class="py-3.5 px-4">Loading Date</th>
+            <th class="py-3.5 px-4">Details / Equipment</th>
+            <th class="py-3.5 px-4 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="myOffersTableBody" class="divide-y divide-slate-100 text-sm">
+          <tr>
+            <td colspan="5" class="py-8 text-center text-xs text-slate-400 font-medium">
+              Loading your active offers from Supabase...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- QUICK POST ACCESS -->
+  <section id="quickPostSection" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Quick Post</span>
+        <h2 class="text-lg font-bold text-slate-900 mt-1">Publish a new freight or capacity offer</h2>
+        <p class="text-sm text-slate-500 mt-1">Choose the relevant form to publish complete shipment or available transport details.</p>
+      </div>
+      <span class="text-xs text-slate-500">Road · Ocean · Air</span>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <a href="https://www.payfreight.io/cargotrans/dashboard/enter_cargo.html" class="flex items-center justify-between gap-3 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 px-4 py-3 transition">
+        <span><strong class="block text-sm text-slate-900">Post Freight (Cargo)</strong><small class="text-xs text-slate-600">Publish a shipment</small></span>
+        <span class="text-sm font-semibold text-blue-700">New Listing →</span>
+      </a>
+      <a href="https://www.payfreight.io/cargotrans/dashboard/enter_transport.html" class="flex items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 px-4 py-3 transition">
+        <span><strong class="block text-sm text-slate-900">Post Empty Space</strong><small class="text-xs text-slate-600">Offer available capacity</small></span>
+        <span class="text-sm font-semibold text-emerald-700">Offer Capacity →</span>
+      </a>
+    </div>
+  </section>
+
   <!-- FREIGHT EXCHANGE 4.0: ADVANCED PRO SEARCH ENGINE -->
-  <div class="bg-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-xl border border-slate-800 relative overflow-hidden">
+  <div id="exchangeSearchPanel" class="bg-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-xl border border-slate-800 relative overflow-hidden">
     <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
     
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-800">
@@ -261,16 +345,16 @@
         <div>
           <label class="block text-[11px] font-bold text-cyan-300 uppercase mb-1.5">Search / Post Type</label>
           <select id="searchTypeMode" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-400">
-            <option value="cargo">Cargo (Iščem tovor / Objavljam pošiljko)</option>
-            <option value="transport">Transport (Iščem kamion / Prosta kapaciteta)</option>
+            <option value="cargo">Cargo</option>
+            <option value="transport">Transport capacity</option>
           </select>
         </div>
         <div>
           <label class="block text-[11px] font-bold text-cyan-300 uppercase mb-1.5">Transport Medium</label>
           <select id="transportMedium" onchange="updateVehicleDropdowns()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-400">
-            <option value="road">Road (Cestni transport)</option>
-            <option value="ocean">Ocean (Pomorski / Container)</option>
-            <option value="air">Air (Letalski cargo)</option>
+            <option value="road">Road</option>
+            <option value="ocean">Ocean</option>
+            <option value="air">Air</option>
           </select>
         </div>
         <div>
@@ -381,45 +465,6 @@
       </div>
     </form>
   </div>
-  <!-- "MY OFFERS" SECTION (User's Active Cargo & Transport Postings from Supabase) -->
-  <div id="myOffersSection" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-    <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
-      <div>
-        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
-          <i data-lucide="layers" class="w-4 h-4 text-blue-600"></i>
-          <span>My Active Offers & Postings ("My Offers")</span>
-        </h2>
-        <p class="text-xs text-slate-500 mt-0.5">Manage your active freight and empty transport capacity published on CargoNet Exchange 4.0.</p>
-      </div>
-      <div class="flex items-center gap-2">
-        <a href="enter_cargo.html" class="px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-lg text-xs font-semibold hover:bg-blue-100 transition">+ Post Freight</a>
-        <a href="enter_transport.html" class="px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-semibold hover:bg-emerald-100 transition">+ Post Transport</a>
-      </div>
-    </div>
-
-    <!-- TABLE FOR USER OFFERS -->
-    <div class="overflow-x-auto">
-      <table class="w-full text-left border-collapse">
-        <thead>
-          <tr class="bg-slate-100/80 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
-            <th class="py-3.5 px-4">Type</th>
-            <th class="py-3.5 px-4">Route (Origin → Destination)</th>
-            <th class="py-3.5 px-4">Loading Date</th>
-            <th class="py-3.5 px-4">Details / Equipment</th>
-            <th class="py-3.5 px-4 text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody id="myOffersTableBody" class="divide-y divide-slate-100 text-sm">
-          <tr>
-            <td colspan="5" class="py-8 text-center text-xs text-slate-400 font-medium">
-              Loading your active offers from Supabase...
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
   <!-- QUICK COMPANY DIRECTORY & e-CMR ACCESS -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
@@ -432,7 +477,7 @@
           <p class="text-xs text-slate-500">Find verified global transport partners</p>
         </div>
       </div>
-      <a href="directory.html" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-lg transition text-center block">
+      <a href="https://www.payfreight.io/cargotrans/dashboard/directory.html" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold rounded-lg transition text-center block">
         Open Company Directory
       </a>
     </div>
@@ -447,7 +492,7 @@
           <p class="text-xs text-slate-500">Manage electronic consignment notes and digital dispatches</p>
         </div>
       </div>
-      <a href="layout1.asp?stran=Transport_Order_CargoNet" class="w-full py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg transition text-center block border border-indigo-200">
+      <a href="https://www.payfreight.io/cargotrans/dashboard/layout1.asp?stran=Transport_Order_CargoNet" class="w-full py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg transition text-center block border border-indigo-200">
         Open e-CMR Portal
       </a>
     </div>
@@ -462,7 +507,7 @@
       © 2026 CargoNet Enterprise & Freight Exchange 4.0. All rights reserved.
     </div>
     <div class="flex items-center space-x-6">
-      <a href="directory.html" class="hover:text-slate-800 transition">Search Company</a>
+      <a href="https://www.payfreight.io/cargotrans/dashboard/directory.html" class="hover:text-slate-800 transition">Search Company</a>
       <a href="company_profile.html" class="hover:text-slate-800 transition">Company HQ</a>
     </div>
   </div>
