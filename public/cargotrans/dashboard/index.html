@@ -31,14 +31,6 @@
 
   <style id="cargonet-dashboard-refresh">
     body { background:#f5f8fc !important; color:#243247 !important; font-family:Arial,Helvetica,sans-serif !important; }
-    header { background:#ffffff !important; color:#243247 !important; border-color:#dbe5f0 !important; box-shadow:0 2px 12px rgba(15,45,80,.06); }
-    header a, header span { color:#334b68; }
-    header a:hover { background:#eef5fc !important; color:#075985 !important; }
-    header .text-white { color:#17365d !important; }
-    header .text-cyan-400 { color:#087eae !important; }
-    header .bg-slate-900, header .bg-slate-800 { background:#f1f6fb !important; }
-    header .border-slate-800, header .border-slate-700 { border-color:#dce6f0 !important; }
-    header .text-slate-300, header .text-slate-400 { color:#60748c !important; }
     #exchangeSearchPanel { background:#ffffff !important; color:#243247 !important; border:1px solid #dbe5f0 !important; box-shadow:0 8px 24px rgba(20,55,90,.07) !important; }
     #exchangeSearchPanel .text-white { color:#203650 !important; }
     #exchangeSearchPanel .text-slate-400, #exchangeSearchPanel .text-slate-300 { color:#60748c !important; }
@@ -348,7 +340,7 @@
         </div>
         <div class="md:col-span-2">
           <label class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Vehicle / Cargo Specifications – select multiple</label>
-          <div id="equipmentSelection" class="max-h-64 overflow-y-auto bg-white border border-slate-200 rounded-lg p-3 space-y-3 text-sm"></div>
+          <div id="equipmentSelection" class="max-h-80 overflow-y-auto bg-white border border-slate-200 rounded-lg p-3 space-y-3 text-sm"></div>
           <p id="equipmentCount" class="text-[11px] text-slate-500 mt-1">No equipment types selected</p>
         </div>
       </div>
@@ -544,8 +536,8 @@
       ]
     };
   const regionNames = {EU:'Europe', NA:'North America (USA & Canada)', CA:'Central America & Caribbean', SA:'South America', AS:'Asia & Far East', ME:'Middle East', AF:'Africa', OC:'Australia & Oceania'};
-  const roadEquipmentGroups = [{"label": "Standard & Curtainsiders", "items": [("Tarpauling", "Tarpauling / Curtainsider"), ("Tautliner", "Tautliner"), ("Mega", "Mega Trailer"), ("Box", "Box Trailer"), ("Jumbo", "Jumbo Trailer"), ("Swap body", "Swap body")]}, {"label": "Refrigerated & Temp-Controlled", "items": [("Refrigerator", "Refrigerator / Reefer"), ("Multi-temp", "Multi-temp / Bi-thermo"), ("Meat hanging", "Meat hanging / Hooks"), ("Thermo", "Thermo")]}, {"label": "Bulk, Silos & Tankers", "items": [("Silo", "Silo"), ("Silobas", "Silobas / Pressurized silo"), ("Tanker", "Liquid Tanker"), ("Food tanker", "Food / Milk Tanker"), ("Gas tanker", "Gas Tanker"), ("Walking floor", "Walking floor (Moving floor)"), ("Dumper", "Tipper / Dumper")]}, {"label": "Flatbeds & Open Trailers", "items": [("Flat", "Flatbed"), ("Stepdeck", "Stepdeck"), ("Coil hollow", "Coil Well / Trough"), ("Container", "Container Chassis")]}, {"label": "Heavy Haulage & Oversized", "items": [("Lowloader", "Lowbed / Lowloader"), ("Heavy machinery", "Heavy Machinery Transport"), ("Oversized", "Oversized / Heavy Transport"), ("Yacht transport", "Yacht & Boat Transport")]}, {"label": "Specialized & Niche", "items": [("Car transporter", "Car Transporter"), ("Enclosed Car Transporter", "Enclosed Car Carrier"), ("Road train", "Road train"), ("Timber carrier", "Timber / Log carrier"), ("Livestock", "Livestock Transporter")]}, {"label": "Passenger Transport", "items": [("Passenger Bus", "Passenger Bus / Coach Charter")]}];
-const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [("Dry Van 53ft", "Dry Van (53ft Box)"), ("Reefer 53ft", "Reefer / Refrigerated (53ft)"), ("Dry Van 48ft", "Dry Van (48ft Box)")]}, {"label": "Flatbeds & Heavy Haul", "items": [("Flatbed 53ft", "Standard Flatbed (53ft)"), ("Step Deck", "Step Deck / Single Drop"), ("RGN Lowboy", "RGN Lowboy (Removable Gooseneck)"), ("Conestoga", "Conestoga (Rolling Tarp)"), ("Double Drop", "Double Drop / Heavy Specialized")]}, {"label": "Specialized US Fleet", "items": [("Car Hauler", "Car Hauler / Stinger-Steered"), ("Intermodal Container", "Intermodal Chassis (40ft/53ft)"), ("Tanker US", "Liquid / Bulk Tanker")]}, {"label": "Passenger Fleet", "items": [("Passenger Bus", "Charter Motorcoach / Bus")]}];
+  const roadEquipmentGroups = [{"label": "Standard & Curtainsiders", "items": [["Tarpauling", "Tarpauling / Curtainsider"], ["Tautliner", "Tautliner"], ["Mega", "Mega Trailer"], ["Box", "Box Trailer"], ["Jumbo", "Jumbo Trailer"], ["Swap body", "Swap body"]]}, {"label": "Refrigerated & Temp-Controlled", "items": [["Refrigerator", "Refrigerator / Reefer"], ["Multi-temp", "Multi-temp / Bi-thermo"], ["Meat hanging", "Meat hanging / Hooks"], ["Thermo", "Thermo"]]}, {"label": "Bulk, Silos & Tankers", "items": [["Silo", "Silo"], ["Silobas", "Silobas / Pressurized silo"], ["Tanker", "Liquid Tanker"], ["Food tanker", "Food / Milk Tanker"], ["Gas tanker", "Gas Tanker"], ["Walking floor", "Walking floor (Moving floor)"], ["Dumper", "Tipper / Dumper"]]}, {"label": "Flatbeds & Open Trailers", "items": [["Flat", "Flatbed"], ["Stepdeck", "Stepdeck"], ["Coil hollow", "Coil Well / Trough"], ["Container", "Container Chassis"]]}, {"label": "Heavy Haulage & Oversized", "items": [["Lowloader", "Lowbed / Lowloader"], ["Heavy machinery", "Heavy Machinery Transport"], ["Oversized", "Oversized / Heavy Transport"], ["Yacht transport", "Yacht & Boat Transport"]]}, {"label": "Specialized & Niche", "items": [["Car transporter", "Car Transporter"], ["Enclosed Car Transporter", "Enclosed Car Carrier"], ["Road train", "Road train"], ["Timber carrier", "Timber / Log carrier"], ["Livestock", "Livestock Transporter"]]}, {"label": "Passenger Transport", "items": [["Passenger Bus", "Passenger Bus / Coach Charter"]]}];
+const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dry Van 53ft", "Dry Van (53ft Box)"], ["Reefer 53ft", "Reefer / Refrigerated (53ft)"], ["Dry Van 48ft", "Dry Van (48ft Box)"]]}, {"label": "Flatbeds & Heavy Haul", "items": [["Flatbed 53ft", "Standard Flatbed (53ft)"], ["Step Deck", "Step Deck / Single Drop"], ["RGN Lowboy", "RGN Lowboy (Removable Gooseneck)"], ["Conestoga", "Conestoga (Rolling Tarp)"], ["Double Drop", "Double Drop / Heavy Specialized"]]}, {"label": "Specialized US Fleet", "items": [["Car Hauler", "Car Hauler / Stinger-Steered"], ["Intermodal Container", "Intermodal Chassis (40ft/53ft)"], ["Tanker US", "Liquid / Bulk Tanker"]]}, {"label": "Passenger Fleet", "items": [["Passenger Bus", "Charter Motorcoach / Bus"]]}];
   const oceanEquipmentGroups = [
     {label:"Container Equipment",items:[["20ft","20' Standard Dry Container"],["40ft","40' Standard Dry Container"],["40HC","40' High Cube Container"],["45HC","45' High Cube Container"],["Reefer","Reefer Container"],["LCL","LCL (Less than Container Load)"],["Open Top","Open Top Container"],["Flat Rack","Flat Rack Container"],["Tank Container","Tank Container"],["Bulk Container","Bulk Container"],["Ro-Ro","Ro-Ro / Vehicle Shipping"],["Breakbulk","Breakbulk / General Cargo"]]},
     {label:"Vessel & Special Cargo",items:[["Bulk Vessel","Bulk Vessel"],["Tanker Vessel","Tanker Vessel"],["General Cargo Vessel","General Cargo Vessel"],["Heavy Lift","Heavy Lift / Project Cargo"]]}
@@ -604,20 +596,26 @@ const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [("Dr
       heading.className = 'text-[11px] font-bold uppercase tracking-wide text-slate-600 border-b border-slate-100 pb-1';
       heading.textContent = group.label;
       const grid = document.createElement('div');
-      grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1 pt-1';
-      group.items.forEach(([value,label]) => {
+      grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2';
+      group.items.forEach(entry => {
+        // Accept both [value, label] pairs and plain text entries. This prevents
+        // JavaScript from splitting a plain string into its first two letters.
+        const value = Array.isArray(entry) ? String(entry[0]) : String(entry);
+        const label = Array.isArray(entry) ? String(entry[1] ?? entry[0]) : String(entry);
         const item = document.createElement('label');
-        item.className = 'flex items-center gap-2 px-2 py-1 rounded hover:bg-blue-50 cursor-pointer text-slate-700';
+        item.className = 'flex items-start gap-2 px-2.5 py-2 rounded-lg border border-slate-100 bg-white hover:bg-blue-50 hover:border-blue-200 cursor-pointer text-slate-700 min-h-[40px]';
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox'; checkbox.name = 'equipment_type'; checkbox.value = value;
-        checkbox.className = 'equipment-chk w-4 h-4 rounded border-slate-300 text-sky-600';
+        checkbox.className = 'equipment-chk mt-0.5 w-4 h-4 shrink-0 rounded border-slate-300 text-sky-600';
         checkbox.checked = selectedEquipment[mode].includes(value);
         checkbox.addEventListener('change', () => {
           if (checkbox.checked && !selectedEquipment[mode].includes(value)) selectedEquipment[mode].push(value);
           if (!checkbox.checked) selectedEquipment[mode] = selectedEquipment[mode].filter(item => item !== value);
           updateEquipmentCounter();
         });
-        const text = document.createElement('span'); text.textContent = label;
+        const text = document.createElement('span');
+        text.className = 'leading-5';
+        text.textContent = label;
         item.append(checkbox,text); grid.appendChild(item);
       });
       section.append(heading,grid); container.appendChild(section);
