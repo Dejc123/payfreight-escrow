@@ -113,7 +113,7 @@
     </div>
   </div>
 
-  <!-- COMPANIES LIST FEED (Kompaktne kartice z možnostjo razširitve) -->
+  <!-- COMPANIES LIST FEED -->
   <div class="space-y-4" id="companiesFeedContainer">
     <div class="bg-white rounded-xl p-8 text-center text-slate-400 font-mono text-xs border border-slate-200">
       Loading database entries...
@@ -153,7 +153,6 @@
 
       let companies = data || [];
 
-      // Živo filtriranje po mestu ali nazivu podjetja
       if (searchQuery) {
         companies = companies.filter(c => 
           (c.company_name && c.company_name.toLowerCase().includes(searchQuery)) ||
@@ -190,11 +189,12 @@
         card.className = "bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden transition hover:shadow-md";
         
         card.innerHTML = `
-          <!-- Kompaktna vrstica (glavni prikaz) -->
+          <!-- Kompaktna vrstica z logotipom iz pasice in CT številko spodaj -->
           <div class="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer bg-white hover:bg-slate-50/80 transition" onclick="toggleCompanyDetails(${index})">
             <div class="flex items-center space-x-4">
-              <div class="w-10 h-10 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
-                #${cargoId}
+              <!-- Logotip podjetja povlečen direktno iz pasice (brez flasha, čista mini slika) -->
+              <div class="w-12 h-12 rounded-xl overflow-hidden border border-slate-200 shrink-0 bg-slate-900 shadow-sm relative">
+                <img src="${bannerUrl}" alt="Logo" class="w-full h-full object-cover">
               </div>
               <div>
                 <h3 class="font-bold text-slate-900 text-sm sm:text-base">${companyName}</h3>
@@ -204,6 +204,10 @@
                   </span>
                   <span>•</span>
                   <span>Contact: ${contactPerson}</span>
+                </div>
+                <!-- CargoTrans ID številka lepo spodaj -->
+                <div class="mt-1 font-mono text-[11px] text-blue-600 font-bold">
+                  CargoTrans ID: #${cargoId}
                 </div>
               </div>
             </div>
@@ -217,7 +221,7 @@
             </div>
           </div>
 
-          <!-- Razširljiv profil podjetja (Skrit dokler se ne klikne) -->
+          <!-- Razširljiv profil podjetja -->
           <div id="details-${index}" class="hidden border-t border-slate-100 bg-slate-50/50 p-6 space-y-6">
             
             <!-- 1. Corporate Banner -->
@@ -228,7 +232,7 @@
               <div class="w-full h-36 rounded-xl overflow-hidden border border-slate-200 relative bg-slate-900">
                 <img src="${bannerUrl}" alt="Banner" class="w-full h-full object-cover opacity-90">
                 <div class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur text-white px-3 py-1 rounded-lg text-xs font-bold border border-slate-700">
-                  ${companyName}
+                  ${companyName} (CargoTrans #${cargoId})
                 </div>
               </div>
             </div>
@@ -315,7 +319,6 @@
     }
   }
 
-  // Funkcija za odpiranje/zapiranje posamezne kartice podjetja
   function toggleCompanyDetails(index) {
     const details = document.getElementById(`details-${index}`);
     const btnText = document.getElementById(`btnText-${index}`);
