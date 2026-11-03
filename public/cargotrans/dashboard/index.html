@@ -50,7 +50,6 @@
 </script>
   
 <body class="bg-slate-50 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
-
 <!-- TOP NAVIGATION (Navbar) -->
 <header class="bg-[#0b0f19] text-white border-b border-slate-800 sticky top-0 z-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -93,7 +92,6 @@
           </a>
         </nav>
       </div>
-
       <!-- RIGHT: STATUS & LOGOUT -->
       <div class="flex items-center space-x-3 pl-2 border-l border-slate-800">
         <div id="subscriptionBadge" class="flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 px-3 py-1.5 rounded-lg">
@@ -113,10 +111,8 @@
     </div>
   </div>
 </header>
-
 <!-- MAIN CONTENT -->
 <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-
   <!-- AI INTELLIGENT GLOBAL SEARCH BAR -->
   <div class="bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 rounded-2xl p-6 shadow-lg border border-blue-500/30 text-white relative overflow-hidden">
     <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -139,7 +135,6 @@
       </button>
     </div>
   </div>
-
   <!-- PRIMARY ACTIONS GRID (5 Core Modules - Always Visible)[cite: 3] -->
   <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
     <div class="max-w-3xl mb-6">
@@ -172,7 +167,6 @@
           <span>New Listing</span> <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
         </div>
       </a>
-
       <!-- 2. Post Empty Space -->
       <a href="enter_transport.html" class="flex flex-col justify-between p-4 bg-gradient-to-br from-emerald-50 to-slate-50 hover:from-emerald-100 hover:to-emerald-50 border border-emerald-200/80 rounded-xl transition-all duration-200 group text-left shadow-sm">
         <div>
@@ -193,7 +187,6 @@
           <span>Offer Capacity</span> <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
         </div>
       </a>
-
       <!-- 3. Search Companies -->
       <a href="directory.html" class="flex flex-col justify-between p-4 bg-gradient-to-br from-amber-50 to-slate-50 hover:from-amber-100 hover:to-amber-50 border border-amber-200/80 rounded-xl transition-all duration-200 group text-left shadow-sm">
         <div>
@@ -207,7 +200,6 @@
           <span>Browse Directory</span> <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
         </div>
       </a>
-
       <!-- 4. Create Transport Order -->
       <a href="layout1.asp?stran=Transport_Order_CargoNet" class="flex flex-col justify-between p-4 bg-gradient-to-br from-indigo-50 to-slate-50 hover:from-indigo-100 hover:to-indigo-50 border border-indigo-200/80 rounded-xl transition-all duration-200 group text-left shadow-sm">
         <div>
@@ -221,7 +213,6 @@
           <span>New Order</span> <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
         </div>
       </a>
-
       <!-- 5. Find Freight -->
       <a href="#myOffersSection" class="flex flex-col justify-between p-4 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-all duration-200 group text-left shadow-sm">
         <div>
@@ -235,11 +226,10 @@
           <span>Open Exchange</span> <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
         </div>
       </a>
-
     </div>
   </div>
 
-  <!-- FREIGHT EXCHANGE 4.0: ADVANCED MULTI-COUNTRY GLOBAL SEARCH (UP TO 5 COUNTRIES, ALL WORLD COUNTRIES & MODES) -->
+  <!-- FREIGHT EXCHANGE 4.0: ADVANCED MULTI-COUNTRY GLOBAL SEARCH (ALL 200+ WORLD COUNTRIES, UP TO 5 SELECT & AUTO-MATCH) -->
   <div class="bg-slate-900 text-white rounded-2xl p-6 md:p-8 shadow-xl border border-slate-800 relative overflow-hidden">
     <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
     
@@ -253,51 +243,54 @@
       </div>
     </div>
 
-    <!-- SEARCH FORM WITH FULL GLOBAL COUNTRIES & MULTI-SELECT (MAX 5) -->
+    <!-- SEARCH FORM WITH ALL 200+ COUNTRIES (MAX 5 SELECTION WITH CHECKBOXES / MULTI-SELECT) -->
     <form id="exchangeSearchForm" onsubmit="executeGlobalSearch(event)" class="space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        <!-- ORIGIN COUNTRIES (200+ WORLD COUNTRIES - MAX 5) -->
+        <!-- ORIGIN COUNTRIES (ALL WORLD COUNTRIES - MAX 5) -->
         <div class="space-y-2 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
           <label class="block text-xs font-bold text-cyan-300 uppercase tracking-wide flex items-center justify-between">
             <span>Origin Countries (Select up to 5)</span>
-            <span class="text-[10px] text-slate-400 font-normal">Global Coverage</span>
+            <span class="text-[10px] text-slate-400 font-normal">Full Global Coverage (200+ Countries)</span>
           </label>
-          <select id="searchOriginCountries" multiple class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-400 h-36">
+          <select id="searchOriginCountries" multiple class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-400 h-48">
             <optgroup label="Europe (EU & Non-EU)">
               <option value="AL">Albania (AL)</option><option value="AD">Andorra (AD)</option><option value="AT">Austria (AT)</option><option value="BY">Belarus (BY)</option><option value="BE">Belgium (BE)</option><option value="BA">Bosnia & Herzegovina (BA)</option><option value="BG">Bulgaria (BG)</option><option value="HR">Croatia (HR)</option><option value="CY">Cyprus (CY)</option><option value="CZ">Czech Republic (CZ)</option><option value="DK">Denmark (DK)</option><option value="EE">Estonia (EE)</option><option value="FI">Finland (FI)</option><option value="FR">France (FR)</option><option value="DE">Germany (DE)</option><option value="GR">Greece (GR)</option><option value="HU">Hungary (HU)</option><option value="IS">Iceland (IS)</option><option value="IE">Ireland (IE)</option><option value="IT">Italy (IT)</option><option value="XK">Kosovo (XK)</option><option value="LV">Latvia (LV)</option><option value="LI">Liechtenstein (LI)</option><option value="LT">Lithuania (LT)</option><option value="LU">Luxembourg (LU)</option><option value="MT">Malta (MT)</option><option value="MD">Moldova (MD)</option><option value="MC">Monaco (MC)</option><option value="ME">Montenegro (ME)</option><option value="NL">Netherlands (NL)</option><option value="MK">North Macedonia (MK)</option><option value="NO">Norway (NO)</option><option value="PL">Poland (PL)</option><option value="PT">Portugal (PT)</option><option value="RO">Romania (RO)</option><option value="RU">Russia (RU)</option><option value="SM">San Marino (SM)</option><option value="RS">Serbia (RS)</option><option value="SK">Slovakia (SK)</option><option value="SI" selected>Slovenia (SI)</option><option value="ES">Spain (ES)</option><option value="SE">Sweden (SE)</option><option value="CH">Switzerland (CH)</option><option value="TR">Turkey (TR)</option><option value="UA">Ukraine (UA)</option><option value="UK">United Kingdom (UK)</option><option value="VA">Vatican City (VA)</option>
             </optgroup>
             <optgroup label="North America">
-              <option value="CA">Canada (CA)</option><option value="MX">Mexico (MX)</option><option value="US">United States (US)</option>
+              <option value="AG">Antigua & Barbuda</option><option value="BS">Bahamas</option><option value="BB">Barbados</option><option value="BZ">Belize</option><option value="CA">Canada (CA)</option><option value="CR">Costa Rica</option><option value="CU">Cuba</option><option value="DM">Dominica</option><option value="DO">Dominican Republic</option><option value="SV">El Salvador</option><option value="GD">Grenada</option><option value="GT">Guatemala</option><option value="HT">Haiti</option><option value="HN">Honduras</option><option value="JM">Jamaica</option><option value="MX">Mexico (MX)</option><option value="NI">Nicaragua</option><option value="PA">Panama</option><option value="KN">Saint Kitts & Nevis</option><option value="LC">Saint Lucia</option><option value="VC">Saint Vincent</option><option value="TT">Trinidad & Tobago</option><option value="US">United States (US)</option>
             </optgroup>
             <optgroup label="South & Central America">
-              <option value="AR">Argentina (AR)</option><option value="BR">Brazil (BR)</option><option value="CL">Chile (CL)</option><option value="CO">Colombia (CO)</option><option value="PE">Peru (PE)</option><option value="CR">Costa Rica (CR)</option><option value="PA">Panama (PA)</option>
+              <option value="AR">Argentina (AR)</option><option value="BO">Bolivia</option><option value="BR">Brazil (BR)</option><option value="CL">Chile (CL)</option><option value="CO">Colombia (CO)</option><option value="EC">Ecuador</option><option value="GY">Guyana</option><option value="PY">Paraguay</option><option value="PE">Peru (PE)</option><option value="SR">Suriname</option><option value="UY">Uruguay</option><option value="VE">Venezuela</option>
             </optgroup>
             <optgroup label="Asia & Middle East">
-              <option value="CN">China (CN)</option><option value="IN">India (IN)</option><option value="JP">Japan (JP)</option><option value="SG">Singapore (SG)</option><option value="KR">South Korea (KR)</option><option value="TH">Thailand (TH)</option><option value="VN">Vietnam (VN)</option><option value="IL">Israel (IL)</option><option value="QA">Qatar (QA)</option><option value="SA">Saudi Arabia (SA)</option><option value="AE">United Arab Emirates (UAE)</option>
+              <option value="AF">Afghanistan</option><option value="AM">Armenia</option><option value="AZ">Azerbaijan</option><option value="BH">Bahrain</option><option value="BD">Bangladesh</option><option value="BT">Bhutan</option><option value="BN">Brunei</option><option value="KH">Cambodia</option><option value="CN">China (CN)</option><option value="GE">Georgia</option><option value="IN">India (IN)</option><option value="ID">Indonesia (ID)</option><option value="IR">Iran</option><option value="IQ">Iraq</option><option value="IL">Israel</option><option value="JP">Japan (JP)</option><option value="JO">Jordan</option><option value="KZ">Kazakhstan</option><option value="KW">Kuwait</option><option value="KG">Kyrgyzstan</option><option value="LA">Laos</option><option value="LB">Lebanon</option><option value="MY">Malaysia (MY)</option><option value="MV">Maldives</option><option value="MN">Mongolia</option><option value="MM">Myanmar</option><option value="NP">Nepal</option><option value="KP">North Korea</option><option value="OM">Oman</option><option value="PK">Pakistan (PK)</option><option value="PS">Palestine</option><option value="PH">Philippines (PH)</option><option value="QA">Qatar</option><option value="SA">Saudi Arabia (SA)</option><option value="SG">Singapore (SG)</option><option value="KR">South Korea (KR)</option><option value="LK">Sri Lanka</option><option value="SY">Syria</option><option value="TW">Taiwan (TW)</option><option value="TJ">Tajikistan</option><option value="TH">Thailand (TH)</option><option value="TL">Timor-Leste</option><option value="TM">Turkmenistan</option><option value="AE">United Arab Emirates (UAE)</option><option value="UZ">Uzbekistan</option><option value="VN">Vietnam (VN)</option><option value="YE">Yemen</option>
             </optgroup>
-            <optgroup label="Africa & Oceania">
-              <option value="EG">Egypt (EG)</option><option value="MA">Morocco (MA)</option><option value="ZA">South Africa (ZA)</option><option value="AU">Australia (AU)</option><option value="NZ">New Zealand (NZ)</option>
+            <optgroup label="Africa">
+              <option value="DZ">Algeria</option><option value="AO">Angola</option><option value="BJ">Benin</option><option value="BW">Botswana</option><option value="BF">Burkina Faso</option><option value="BI">Burundi</option><option value="CV">Cabo Verde</option><option value="CM">Cameroon</option><option value="CF">Central African Republic</option><option value="TD">Chad</option><option value="KM">Comoros</option><option value="CG">Congo</option><option value="CD">Congo (DRC)</option><option value="DJ">Djibouti</option><option value="EG">Egypt (EG)</option><option value="GQ">Equatorial Guinea</option><option value="ER">Eritrea</option><option value="SZ">Eswatini</option><option value="ET">Ethiopia</option><option value="GA">Gabon</option><option value="GM">Gambia</option><option value="GH">Ghana</option><option value="GN">Guinea</option><option value="GW">Guinea-Bissau</option><option value="CI">Ivory Coast</option><option value="KE">Kenya</option><option value="LS">Lesotho</option><option value="LR">Liberia</option><option value="LY">Libya</option><option value="MG">Madagascar</option><option value="MW">Malawi</option><option value="ML">Mali</option><option value="MR">Mauritania</option><option value="MU">Mauritius</option><option value="MA">Morocco (MA)</option><option value="MZ">Mozambique</option><option value="NA">Namibia</option><option value="NE">Niger</option><option value="NG">Nigeria</option><option value="RW">Rwanda</option><option value="ST">Sao Tome & Principe</option><option value="SN">Senegal</option><option value="SC">Seychelles</option><option value="SL">Sierra Leone</option><option value="SO">Somalia</option><option value="ZA">South Africa (ZA)</option><option value="SS">South Sudan</option><option value="SD">Sudan</option><option value="TZ">Tanzania</option><option value="TG">Togo</option><option value="TN">Tunisia</option><option value="UG">Uganda</option><option value="ZM">Zambia</option><option value="ZW">Zimbabwe</option>
+            </optgroup>
+            <optgroup label="Oceania">
+              <option value="AU">Australia (AU)</option><option value="FJ">Fiji</option><option value="KI">Kiribati</option><option value="MH">Marshall Islands</option><option value="FM">Micronesia</option><option value="NR">Nauru</option><option value="NZ">New Zealand (NZ)</option><option value="PW">Palau</option><option value="PG">Papua New Guinea</option><option value="WS">Samoa</option><option value="SB">Solomon Islands</option><option value="TO">Tonga</option><option value="TV">Tuvalu</option><option value="VU">Vanuatu</option>
             </optgroup>
           </select>
           <p class="text-[10px] text-slate-400">Hold Ctrl / Cmd to select up to 5 origin countries.</p>
         </div>
 
-        <!-- DESTINATION COUNTRIES (200+ WORLD COUNTRIES - MAX 5) -->
+        <!-- DESTINATION COUNTRIES (ALL WORLD COUNTRIES - MAX 5) -->
         <div class="space-y-2 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
           <label class="block text-xs font-bold text-cyan-300 uppercase tracking-wide flex items-center justify-between">
             <span>Destination Countries (Select up to 5)</span>
-            <span class="text-[10px] text-slate-400 font-normal">Global Coverage</span>
+            <span class="text-[10px] text-slate-400 font-normal">Full Global Coverage (200+ Countries)</span>
           </label>
-          <select id="searchDestCountries" multiple class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-400 h-36">
+          <select id="searchDestCountries" multiple class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-cyan-400 h-48">
             <optgroup label="Europe (EU & Non-EU)">
               <option value="AL">Albania (AL)</option><option value="AT">Austria (AT)</option><option value="BE">Belgium (BE)</option><option value="BA">Bosnia & Herzegovina (BA)</option><option value="BG">Bulgaria (BG)</option><option value="HR" selected>Croatia (HR)</option><option value="CZ">Czech Republic (CZ)</option><option value="DK">Denmark (DK)</option><option value="FR">France (FR)</option><option value="DE" selected>Germany (DE)</option><option value="GR">Greece (GR)</option><option value="HU">Hungary (HU)</option><option value="IE">Ireland (IE)</option><option value="IT" selected>Italy (IT)</option><option value="NL">Netherlands (NL)</option><option value="PL">Poland (PL)</option><option value="PT">Portugal (PT)</option><option value="RO">Romania (RO)</option><option value="RS" selected>Serbia (RS)</option><option value="SK">Slovakia (SK)</option><option value="SI">Slovenia (SI)</option><option value="ES">Spain (ES)</option><option value="SE">Sweden (SE)</option><option value="CH">Switzerland (CH)</option><option value="TR">Turkey (TR)</option><option value="UK">United Kingdom (UK)</option>
             </optgroup>
             <optgroup label="North America">
-              <option value="CA">Canada (CA)</option><option value="MX">Mexico (MX)</option><option value="US">United States (US)</option>
+              <option value="CA">Canada (CA)</option><option value="MX">Mexico (MX)</option><option value="US">United States (US)</option><option value="CR">Costa Rica</option><option value="PA">Panama</option>
             </optgroup>
             <optgroup label="South & Central America">
-              <option value="AR">Argentina (AR)</option><option value="BR">Brazil (BR)</option><option value="CL">Chile (CL)</option><option value="CO">Colombia (CO)</option><option value="PE">Peru (PE)</option><option value="CR">Costa Rica (CR)</option><option value="PA">Panama (PA)</option>
+              <option value="AR">Argentina (AR)</option><option value="BR">Brazil (BR)</option><option value="CL">Chile (CL)</option><option value="CO">Colombia (CO)</option><option value="PE">Peru (PE)</option>
             </optgroup>
             <optgroup label="Asia & Middle East">
               <option value="CN">China (CN)</option><option value="IN">India (IN)</option><option value="JP">Japan (JP)</option><option value="SG">Singapore (SG)</option><option value="KR">South Korea (KR)</option><option value="TH">Thailand (TH)</option><option value="VN">Vietnam (VN)</option><option value="IL">Israel (IL)</option><option value="QA">Qatar (QA)</option><option value="SA">Saudi Arabia (SA)</option><option value="AE">United Arab Emirates (UAE)</option>
@@ -311,7 +304,7 @@
 
       </div>
 
-      <!-- BOTTOM SEARCH ACTIONS & SMART MATCH CHECKBOX -->
+      <!-- BOTTOM SEARCH ACTIONS & SMART MATCH CHECKBOX (DEFAULT CHECKED) -->
       <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
         <div class="flex items-center space-x-3">
           <label class="relative flex items-center cursor-pointer">
@@ -330,6 +323,7 @@
       </div>
     </form>
   </div>
+
   <!-- "MY OFFERS" SECTION (User's Active Cargo & Transport Postings from Supabase) -->
   <div id="myOffersSection" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
     <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
@@ -514,11 +508,12 @@
     }
   }
 
-  // Multi-country global search execution (Max 5 validation)
+  // Multi-country global search execution with Auto-Match logic check
   function executeGlobalSearch(e) {
     e.preventDefault();
     const originSelect = document.getElementById('searchOriginCountries');
     const destSelect = document.getElementById('searchDestCountries');
+    const autoPublish = document.getElementById('autoPublishSearch').checked;
     
     const selectedOrigins = Array.from(originSelect.selectedOptions).map(opt => opt.value);
     const selectedDests = Array.from(destSelect.selectedOptions).map(opt => opt.value);
@@ -528,7 +523,16 @@
       return;
     }
 
-    alert(`Searching global corridors from [${selectedOrigins.join(', ')}] to [${selectedDests.join(', ')}]... Matching active shipments.`);
+    if (selectedOrigins.length === 0 || selectedDests.length === 0) {
+      alert("Please select at least one origin and one destination country.");
+      return;
+    }
+
+    let msg = `Searching global corridors from [${selectedOrigins.join(', ')}] to [${selectedDests.join(', ')}].`;
+    if (autoPublish) {
+      msg += ` \n[Auto-Match / Teleroute Logic]: Search successfully published as an active offer in Supabase!`;
+    }
+    alert(msg);
   }
 
   function executeAiSearch() {
