@@ -82,7 +82,9 @@
     <div class="flex items-center justify-between bg-white px-6 py-4 rounded-xl border border-slate-200 shadow-sm">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-          <i data-lucide="truck" class="w-5 h-5"></i>
+          <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+  <i data-lucide="globe-2" class="w-5 h-5"></i>
+</div>
         </div>
         <div>
           <h1 class="text-xl font-bold text-slate-900">Post Available Transport Capacity</h1>
@@ -428,6 +430,32 @@
         </div>
       </div>
 
+      <!-- CONTACT DETAILS (Pre-filled from database / editable) -->
+<div class="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-4">
+  <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+    <h4 class="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+      <i data-lucide="user-check" class="w-4 h-4 text-blue-600"></i>
+      <span>Contact Person / Dispatcher Details</span>
+    </h4>
+    <span class="text-[11px] text-slate-400">Default from profile (Editable for duty substitution)</span>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    <div>
+      <label class="block text-xs font-medium text-slate-600 mb-1">Contact Name *</label>
+      <input type="text" id="contactNameInput" placeholder="e.g. Dejan Luzar" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold text-slate-800 focus:outline-none focus:border-blue-500">
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-slate-600 mb-1">Contact Email *</label>
+      <input type="email" id="contactEmailInput" placeholder="e.g. info@cargotrans.net" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold text-slate-800 focus:outline-none focus:border-blue-500">
+    </div>
+    <div>
+      <label class="block text-xs font-medium text-slate-600 mb-1">Contact Phone / Mobile *</label>
+      <input type="text" id="contactPhoneInput" placeholder="e.g. +386 41 000 000" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold text-slate-800 focus:outline-none focus:border-blue-500">
+    </div>
+  </div>
+</div>
+
       <!-- REMARKS & LICENSES -->
       <div class="space-y-4 pt-2">
         <div>
@@ -687,7 +715,7 @@
       }
     }
 
-    /* POSODOBLJENA FUNKCIJA ZA DINAMIČNO MODRO BARVANJE IZBRANEGA MODA */
+   /* POSODOBLJENA FUNKCIJA ZA DINAMIČNO MODRO BARVANJE IZBRANEGA MODA */
     function setTransportMode(mode) {
       const modes = ['road', 'ocean', 'air'];
       modes.forEach(m => {
@@ -751,27 +779,55 @@
         formUserEl.textContent = `User / CT ID: ${userName} [${cargoTransId}]`;
       }
 
+      // 2. Avtomatsko nalaganje kontaktnih podatkov (Ime, E-mail, Telefon) iz baze / localStorage
+      const savedUserStr = localStorage.getItem('cargotrans_user');
+      let userData = {};
+      if (savedUserStr) {
+        try {
+          userData = JSON.parse(savedUserStr);
+        } catch (e) {
+          userData = { username: savedUserStr };
+        }
+      }
+
+      // Vpis v polja, da jih je mogoče urejati (npr. med dopustom)
+      const nameInput = document.getElementById('contactNameInput');
+      const emailInput = document.getElementById('contactEmailInput');
+      const phoneInput = document.getElementById('contactPhoneInput');
+
+      if (nameInput) nameInput.value = userData.contact_name || userData.username || userName || "Dejan Luzar";
+      if (emailInput) emailInput.value = userData.contact_email || userData.email || "info@cargotrans.net";
+      if (phoneInput) phoneInput.value = userData.contact_phone || userData.phone || "+386 41 123 456";
+
       // Inicializacija padajočih menijev in datuma
       handleRegionChange('origin');
       updateCountryDropdown('dest');
 
       const today = new Date();
       const todayStr = today.toISOString().split('T')[0];
-      document.getElementById('availableFromInput').value = todayStr;
+      const availInput = document.getElementById('availableFromInput');
+      if (availInput) availInput.value = todayStr;
 
       const tillDate = new Date();
       tillDate.setDate(today.getDate() + 5);
       const tillStr = tillDate.toISOString().split('T')[0];
-      document.getElementById('availableTillInput').value = tillStr;
+      const tillInput = document.getElementById('availableTillInput');
+      if (tillInput) tillInput.value = tillStr;
 
-      // Nastavitev prednastavljenih datuma za Ocean
-      const oceanVal = new Date();
-      oceanVal.setDate(today.getDate() + 14);
-      document.getElementById('oceanRateValidity').value = oceanVal.toISOString().split('T')[0];
+      // Nastavitev prednastavljenih datumov za Ocean (če obstajajo v formi)
+      const oceanValEl = document.getElementById('oceanRateValidity');
+      if (oceanValEl) {
+        const oceanVal = new Date();
+        oceanVal.setDate(today.getDate() + 14);
+        oceanValEl.value = oceanVal.toISOString().split('T')[0];
+      }
 
-      const oceanCut = new Date();
-      oceanCut.setDate(today.getDate() + 7);
-      document.getElementById('oceanCutOffDate').value = oceanCut.toISOString().split('T')[0];
+      const oceanCutEl = document.getElementById('oceanCutOffDate');
+      if (oceanCutEl) {
+        const oceanCut = new Date();
+        oceanCut.setDate(today.getDate() + 7);
+        oceanCutEl.value = oceanCut.toISOString().split('T')[0];
+      }
     });
   </script>
 </body>
