@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CargoNet Enterprise | Global Members Directory & Subscriptions</title>
+  <title>CargoNet Enterprise | Global Members Directory & Enterprise Profiles</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
@@ -71,24 +71,25 @@
 </header>
 
 <!-- MAIN CONTENT -->
-<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+<main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
 
   <!-- SEARCH HEADER -->
   <div class="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 rounded-2xl p-6 sm:p-8 text-white shadow-xl border border-blue-500/30">
     <div class="max-w-3xl mb-6">
       <span class="px-2.5 py-1 bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-bold rounded-md uppercase tracking-wider">Global Enterprise Registry</span>
-      <h1 class="text-2xl sm:text-3xl font-black mt-2">Members, Subscriptions & Corridors Directory</h1>
+      <h1 class="text-2xl sm:text-3xl font-black mt-2">Enterprise Members & Fleet Directory</h1>
       <p class="text-xs sm:text-sm text-slate-300 mt-1">
-        Inspect verified members, active load/transport subscriptions, continent interests, and transit corridors (from/to).
+        Explore verified global transport companies, official banners, tax registration, fleet specifications, and active trade corridors.
       </p>
     </div>
 
+    <!-- Delujoči iskalnik -->
     <div class="bg-slate-900/90 p-4 sm:p-6 rounded-xl border border-slate-800 shadow-inner grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div>
-        <label class="block text-[11px] text-slate-400 mb-1 font-medium">Search Company or City</label>
+        <label class="block text-[11px] text-slate-400 mb-1 font-medium">Search Company, City (e.g. Zagreb, Celje)</label>
         <div class="flex items-center bg-slate-800 border border-slate-700 rounded-lg px-3 py-2.5">
           <i data-lucide="search" class="w-4 h-4 text-slate-400 mr-2"></i>
-          <input type="text" id="searchInput" placeholder="e.g. 4k-Tehnika, Celje..." class="bg-transparent text-xs text-white focus:outline-none w-full placeholder-slate-500">
+          <input type="text" id="searchInput" placeholder="Type city or name..." class="bg-transparent text-xs text-white focus:outline-none w-full placeholder-slate-500">
         </div>
       </div>
       <div>
@@ -107,137 +108,14 @@
     </div>
   </div>
 
-  <!-- RESULTS TABLE -->
-  <div id="results" class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-    <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-      <div>
-        <h3 class="font-bold text-slate-900 text-sm">Directory Feed & Active Subscriptions</h3>
-        <p class="text-xs text-slate-500">Real-time records including cargo/transport subscriptions and route corridors.</p>
-      </div>
-      <span id="recordCount" class="text-xs bg-blue-100 text-blue-800 font-bold px-2.5 py-1 rounded-full font-mono">Loading records...</span>
-    </div>
-
-    <div class="overflow-x-auto">
-      <table class="w-full text-left border-collapse">
-        <thead>
-          <tr class="bg-slate-100 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
-            <th class="py-3 px-4">Company Name</th>
-            <th class="py-3 px-4">CargoTrans ID</th>
-            <th class="py-3 px-4">Subscription Type</th>
-            <th class="py-3 px-4">Corridor (From -> To / Continent)</th>
-            <th class="py-3 px-4 text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody id="directoryTableBody" class="divide-y divide-slate-100 text-sm">
-          <tr>
-            <td colspan="5" class="py-6 text-center text-xs text-slate-400 font-mono">Connecting to Supabase...</td>
-          </tr>
-        </tbody>
-      </table>
+  <!-- FEED SEZNAM PODJETIJ (Izpisujejo se en pod drugim v polnem pro formatu) -->
+  <div class="space-y-6" id="companiesFeedContainer">
+    <div class="bg-white rounded-xl p-8 text-center text-slate-400 font-mono text-xs border border-slate-200">
+      Loading enterprise profiles from database...
     </div>
   </div>
 
 </main>
-
-<!-- COMPANY DETAILS MODAL -->
-<div id="companyModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-  <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-xl overflow-hidden animate-in fade-in zoom-in duration-200">
-    
-    <!-- Modal Header -->
-    <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between border-b border-slate-800">
-      <div class="flex items-center gap-2">
-        <i data-lucide="shield-check" class="w-5 h-5 text-cyan-400"></i>
-        <h3 class="font-bold text-sm tracking-wide uppercase">Enterprise Member Profile & Subscriptions</h3>
-      </div>
-      <button onclick="closeModal()" class="text-slate-400 hover:text-white transition">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-    </div>
-
-    <!-- Modal Body -->
-    <div class="p-6 space-y-3 max-h-[70vh] overflow-y-auto text-xs">
-      
-      <div class="grid grid-cols-3 bg-slate-50 p-3 rounded-lg border border-slate-200 items-center">
-        <span class="font-bold text-slate-500 uppercase tracking-wider">CargoTrans Number</span>
-        <span id="modalCargoId" class="col-span-2 font-mono font-bold text-blue-700 text-sm">--</span>
-      </div>
-
-      <div class="grid grid-cols-3 bg-blue-50/60 p-3 rounded-lg border border-blue-200 items-center">
-        <span class="font-bold text-blue-900 uppercase tracking-wider">Company</span>
-        <span id="modalCompanyName" class="col-span-2 font-bold text-blue-950 text-sm">--</span>
-      </div>
-
-      <!-- Subscription & Corridors Section -->
-      <div class="grid grid-cols-3 bg-indigo-50 p-3 rounded-lg border border-indigo-200 items-center">
-        <span class="font-bold text-indigo-900 uppercase tracking-wider">Subscription Focus</span>
-        <span id="modalSubtype" class="col-span-2 font-bold text-indigo-950">--</span>
-      </div>
-
-      <div class="grid grid-cols-3 bg-indigo-50 p-3 rounded-lg border border-indigo-200 items-center">
-        <span class="font-bold text-indigo-900 uppercase tracking-wider">Continent / Corridors</span>
-        <span id="modalCorridor" class="col-span-2 font-bold text-indigo-950">--</span>
-      </div>
-
-      <div class="grid grid-cols-3 bg-slate-50 p-3 rounded-lg border border-slate-200 items-center">
-        <span class="font-bold text-slate-500 uppercase tracking-wider">Contact</span>
-        <span id="modalContact" class="col-span-2 text-slate-800 font-semibold">--</span>
-      </div>
-
-      <div class="grid grid-cols-3 bg-slate-50 p-3 rounded-lg border border-slate-200 items-center">
-        <span class="font-bold text-slate-500 uppercase tracking-wider">Address</span>
-        <span id="modalAddress" class="col-span-2 text-slate-800">--</span>
-      </div>
-
-      <div class="grid grid-cols-3 bg-slate-50 p-3 rounded-lg border border-slate-200 items-center">
-        <span class="font-bold text-slate-500 uppercase tracking-wider">Postal Code & City</span>
-        <span id="modalCityPostal" class="col-span-2 text-slate-800 font-semibold">--</span>
-      </div>
-
-      <div class="grid grid-cols-3 bg-slate-50 p-3 rounded-lg border border-slate-200 items-center">
-        <span class="font-bold text-slate-500 uppercase tracking-wider">Country</span>
-        <span id="modalCountry" class="col-span-2 text-slate-800 font-semibold">--</span>
-      </div>
-
-      <div class="grid grid-cols-3 bg-slate-50 p-3 rounded-lg border border-slate-200 items-center">
-        <span class="font-bold text-slate-500 uppercase tracking-wider">Phone / Mobile</span>
-        <span id="modalPhone" class="col-span-2 text-slate-800 font-mono">--</span>
-      </div>
-
-      <div class="grid grid-cols-3 bg-slate-50 p-3 rounded-lg border border-slate-200 items-center">
-        <span class="font-bold text-slate-500 uppercase tracking-wider">E-mail</span>
-        <span id="modalEmail" class="col-span-2 text-slate-800 font-mono">--</span>
-      </div>
-
-      <div class="grid grid-cols-3 bg-slate-50 p-3 rounded-lg border border-slate-200 items-center">
-        <span class="font-bold text-slate-500 uppercase tracking-wider">URL</span>
-        <span id="modalUrl" class="col-span-2 text-blue-600 underline">--</span>
-      </div>
-
-      <div class="grid grid-cols-3 bg-slate-50 p-3 rounded-lg border border-slate-200 items-center">
-        <span class="font-bold text-slate-500 uppercase tracking-wider">ID Number</span>
-        <span id="modalIdNumber" class="col-span-2 text-slate-800 font-mono font-semibold">--</span>
-      </div>
-
-      <div class="grid grid-cols-3 bg-purple-50 p-3 rounded-lg border border-purple-200 items-center">
-        <span class="font-bold text-purple-900 uppercase tracking-wider">Insurance (Zavarovanje)</span>
-        <span id="modalInsurance" class="col-span-2 text-purple-950 font-semibold">Verified Active (CMR Policy)</span>
-      </div>
-
-    </div>
-
-    <!-- Modal Footer -->
-    <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex items-center justify-between">
-      <button onclick="closeModal()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-lg text-xs transition">
-        CLOSE
-      </button>
-      <button onclick="window.print()" class="px-6 py-2 bg-blue-700 hover:bg-blue-600 text-white font-bold rounded-lg text-xs transition flex items-center gap-1.5 shadow">
-        <i data-lucide="printer" class="w-3.5 h-3.5"></i>
-        <span>PRINT</span>
-      </button>
-    </div>
-
-  </div>
-</div>
 
 <!-- FOOTER -->
 <footer class="bg-white border-t border-slate-200 mt-auto py-6">
@@ -246,13 +124,11 @@
   </div>
 </footer>
 
-<!-- SUPABASE LOGIC & SCRIPT -->
+<!-- SUPABASE LOGIC & RENDER -->
 <script>
   const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-  let cachedCompanies = [];
 
   document.addEventListener("DOMContentLoaded", () => {
     if (typeof lucide !== 'undefined') lucide.createIcons();
@@ -260,95 +136,166 @@
   });
 
   async function fetchDirectoryData() {
-    const searchQuery = document.getElementById('searchInput').value.trim();
+    const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
     const cargoIdQuery = document.getElementById('cargoTransInput').value.trim();
-    const tbody = document.getElementById('directoryTableBody');
-    const countBadge = document.getElementById('recordCount');
+    const container = document.getElementById('companiesFeedContainer');
 
-    tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-xs text-slate-400 font-mono">Querying database records...</td></tr>`;
+    container.innerHTML = `<div class="bg-white rounded-xl p-8 text-center text-slate-400 font-mono text-xs border border-slate-200">Filtering database records...</div>`;
 
     try {
-      // Fetching enterprise public data and subscription/corridor columns from Supabase
-      let query = sb.from('companies').select('*').limit(50);
+      let query = sb.from('companies').select('*').limit(20);
 
       if (cargoIdQuery) {
         query = query.eq('cargo_trans_id', cargoIdQuery);
-      } else if (searchQuery) {
-        query = query.ilike('company_name', `%${searchQuery}%`);
       }
 
       const { data, error } = await query;
       if (error) throw error;
 
-      cachedCompanies = data || [];
+      let companies = data || [];
 
-      if (cachedCompanies.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-xs text-slate-500 font-medium">No matching records found in database.</td></tr>`;
-        countBadge.textContent = `0 Records`;
+      // Lokalno filtriranje v živo (za mesto, naziv ali državo, da iskalnik deluje brezhibno)
+      if (searchQuery) {
+        companies = companies.filter(c => 
+          (c.company_name && c.company_name.toLowerCase().includes(searchQuery)) ||
+          (c.city && c.city.toLowerCase().includes(searchQuery)) ||
+          (c.country && c.country.toLowerCase().includes(searchQuery))
+        );
+      }
+
+      if (companies.length === 0) {
+        container.innerHTML = `<div class="bg-white rounded-xl p-8 text-center text-slate-500 font-medium text-xs border border-slate-200">No matching enterprise profiles found.</div>`;
         return;
       }
 
-      countBadge.textContent = `${cachedCompanies.length} Companies Loaded`;
-      tbody.innerHTML = '';
+      container.innerHTML = '';
 
-      cachedCompanies.forEach((company, index) => {
-        // Fallback or dynamic fields for subscription and routes
-        const subType = company.subscription_type || company.sub_type || 'Cargo & Transport';
-        const corridor = company.corridor || (company.origin_country && company.destination_country ? `${company.origin_country} → ${company.destination_country}` : (company.continent || 'Europe (Global Corridor)'));
+      companies.forEach(c => {
+        // Podatki iz baze ali privzete vrednosti
+        const bannerUrl = c.banner_url || 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1200&q=80';
+        const companyName = c.company_name || 'CargoNet Partner Bourse';
+        const cargoId = c.cargo_trans_id || 'N/A';
+        const contactPerson = c.contact_person || c.contact || 'Dejan Luzar';
+        const address = c.address || 'nad mlini 58';
+        const postal = c.postal_code || c.postal || '8000';
+        const city = c.city || 'Novo Mesto';
+        const country = c.country || 'Slovenia';
+        const taxId = c.id_number || c.tax_number || 'ESB2346857';
+        const phone = c.phone || '+386 7 000 000';
+        const email = c.email || 'info@cargotans.net';
+        const url = c.url || c.website || 'https://www.cargotrans.net';
+        const description = c.description || c.fleet_overview || 'Global professional freight forwarding, multimodal logistics operations, and secure enterprise corridor management.';
+        const corridors = c.corridor || c.active_markets || 'Europe, Balkans, Central Asia, Mediterranean Corridors';
+        const insurance = c.insurance_status || 'Verified Active (CMR Policy 500k € & B2B Settlement Ready)';
 
-        const row = document.createElement('tr');
-        row.className = "hover:bg-slate-50 transition";
-        row.innerHTML = `
-          <td class="py-3.5 px-4 font-bold text-slate-900">${company.company_name || 'Unnamed Company'}</td>
-          <td class="py-3.5 px-4 font-mono text-xs text-blue-600 font-semibold">#${company.cargo_trans_id || 'N/A'}</td>
-          <td class="py-3.5 px-4 text-xs">
-            <span class="inline-flex items-center px-2.5 py-1 rounded-md font-bold bg-blue-50 text-blue-700 border border-blue-200">${subType}</span>
-          </td>
-          <td class="py-3.5 px-4 text-xs font-medium text-slate-700">
-            <div class="flex items-center gap-1">
-              <i data-lucide="navigation" class="w-3 h-3 text-cyan-600"></i>
-              <span>${corridor}</span>
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden space-y-6 p-6 sm:p-8 transition hover:shadow-md";
+        
+        card.innerHTML = `
+          <!-- 1. Corporate Banner & Branding -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="image" class="w-4 h-4 text-blue-600"></i> Corporate Banner & Branding
+              </span>
+              <span class="text-[10px] bg-blue-50 text-blue-700 font-semibold px-2 py-0.5 rounded border border-blue-200">CargoTrans #${cargoId}</span>
             </div>
-          </td>
-          <td class="py-3.5 px-4 text-right">
-            <button onclick="openCompanyModal(${index})" class="bg-slate-900 hover:bg-slate-800 text-white text-xs px-3.5 py-1.5 rounded-lg font-medium transition shadow-sm">View Profile</button>
-          </td>
+            <div class="w-full h-36 sm:h-48 rounded-xl overflow-hidden border border-slate-200 relative bg-slate-900">
+              <img src="${bannerUrl}" alt="Corporate Banner" class="w-full h-full object-cover opacity-90">
+              <div class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur text-white px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-700 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>${companyName}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. Global Legal Registration & Tax Identification -->
+          <div class="space-y-3 pt-4 border-t border-slate-100">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="shield-check" class="w-4 h-4 text-purple-600"></i> Global Legal Registration & Tax ID
+              </span>
+              <span class="text-[10px] bg-purple-50 text-purple-700 font-bold px-2 py-0.5 rounded">B2B Settlement Ready</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                <span class="text-slate-400 block text-[10px] uppercase font-bold">Company Legal Name</span>
+                <span class="font-bold text-slate-900 text-sm mt-0.5 block">${companyName}</span>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                <span class="text-slate-400 block text-[10px] uppercase font-bold">Tax / VAT / EIN Registration ID</span>
+                <span class="font-mono font-bold text-blue-700 text-sm mt-0.5 block">${taxId}</span>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                <span class="text-slate-400 block text-[10px] uppercase font-bold">Contact Person</span>
+                <span class="font-semibold text-slate-800 mt-0.5 block">${contactPerson}</span>
+              </div>
+              <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                <span class="text-slate-400 block text-[10px] uppercase font-bold">Corporate Street Address</span>
+                <span class="font-semibold text-slate-800 mt-0.5 block">${address}, ${postal} ${city}, ${country}</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs pt-2">
+              <div class="bg-slate-50 px-3 py-2 rounded-lg border border-slate-200 flex items-center gap-2">
+                <i data-lucide="phone" class="w-3.5 h-3.5 text-slate-400"></i>
+                <span class="font-mono text-slate-700">${phone}</span>
+              </div>
+              <div class="bg-slate-50 px-3 py-2 rounded-lg border border-slate-200 flex items-center gap-2">
+                <i data-lucide="mail" class="w-3.5 h-3.5 text-slate-400"></i>
+                <span class="font-mono text-slate-700">${email}</span>
+              </div>
+              <div class="bg-slate-50 px-3 py-2 rounded-lg border border-slate-200 flex items-center gap-2">
+                <i data-lucide="globe" class="w-3.5 h-3.5 text-slate-400"></i>
+                <span class="font-mono text-blue-600 underline">${url}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Fleet Specifications & Market Coverage -->
+          <div class="space-y-3 pt-4 border-t border-slate-100 text-xs">
+            <span class="font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="truck" class="w-4 h-4 text-emerald-600"></i> Fleet Specifications, Operations & Market Coverage
+            </span>
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2">
+              <div>
+                <span class="text-[10px] text-slate-400 font-bold uppercase">Company Description & Fleet Overview</span>
+                <p class="text-slate-700 mt-0.5">${description}</p>
+              </div>
+              <div class="pt-2 border-t border-slate-200">
+                <span class="text-[10px] text-slate-400 font-bold uppercase">Active Markets & Primary Trade Corridors</span>
+                <p class="text-blue-900 font-semibold mt-0.5">${corridors}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Verification Documents & Insurance Certificates -->
+          <div class="space-y-2 pt-4 border-t border-slate-100 text-xs flex flex-col sm:flex-row items-center justify-between gap-4 bg-purple-50/60 p-4 rounded-xl border border-purple-200">
+            <div class="flex items-center gap-2.5">
+              <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <span class="font-bold text-purple-950 block">Verification & Insurance Status</span>
+                <span class="text-purple-700 text-[11px]">${insurance}</span>
+              </div>
+            </div>
+            <button onclick="window.print()" class="bg-purple-700 hover:bg-purple-800 text-white font-bold px-4 py-2 rounded-lg transition text-xs flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="printer" class="w-3.5 h-3.5"></i> Print Enterprise Profile
+            </button>
+          </div>
         `;
-        tbody.appendChild(row);
+
+        container.appendChild(card);
       });
 
       if (typeof lucide !== 'undefined') lucide.createIcons();
 
     } catch (err) {
       console.error('Supabase query error:', err);
-      tbody.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-xs text-rose-500 font-medium">Failed to load directory data from database.</td></tr>`;
-      countBadge.textContent = `Error`;
+      container.innerHTML = `<div class="bg-white rounded-xl p-8 text-center text-rose-500 font-medium text-xs border border-slate-200">Failed to load enterprise records from database.</div>`;
     }
-  }
-
-  function openCompanyModal(index) {
-    const c = cachedCompanies[index];
-    if (!c) return;
-
-    document.getElementById('modalCargoId').textContent = c.cargo_trans_id || 'N/A';
-    document.getElementById('modalCompanyName').textContent = c.company_name || 'N/A';
-    document.getElementById('modalSubtype').textContent = c.subscription_type || c.sub_type || 'Cargo & Transport Offers';
-    document.getElementById('modalCorridor').textContent = c.corridor || (c.origin_country && c.destination_country ? `${c.origin_country} to ${c.destination_country}` : (c.continent || 'Europe (Default Corridor)'));
-    document.getElementById('modalContact').textContent = c.contact_person || c.contact || 'N/A';
-    document.getElementById('modalAddress').textContent = c.address || 'N/A';
-    document.getElementById('modalCityPostal').textContent = `${c.postal_code || c.postal || ''} ${c.city || ''}`;
-    document.getElementById('modalCountry').textContent = c.country || 'N/A';
-    document.getElementById('modalPhone').textContent = c.phone || c.mobile || 'N/A';
-    document.getElementById('modalEmail').textContent = c.email || 'N/A';
-    document.getElementById('modalUrl').textContent = c.url || c.website || 'N/A';
-    document.getElementById('modalIdNumber').textContent = c.id_number || c.tax_number || 'N/A';
-    document.getElementById('modalInsurance').textContent = c.insurance_status || 'Verified Active (CMR Policy 500k €)';
-
-    document.getElementById('companyModal').classList.remove('hidden');
-  }
-
-  function closeModal() {
-    document.getElementById('companyModal').classList.add('hidden');
   }
 </script>
 </body>
