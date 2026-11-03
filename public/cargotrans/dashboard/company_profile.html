@@ -333,15 +333,10 @@
           </button>
         </div>
       </div>
-     <!-- FORM SAVE ACTIONS -->
+      <!-- FORM SAVE ACTIONS -->
       <div class="flex items-center justify-end pt-4 gap-3">
-        <button type="button" onclick="resetProfileForm()" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition flex items-center gap-1.5">
-          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-          <span>Cancel & Reset</span>
-        </button>
-        <a href="index.html" class="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition flex items-center gap-1.5">
-          <i data-lucide="arrow-left" class="w-4 h-4"></i>
-          <span>Back to Main Page</span>
+        <a href="index.html" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">
+          Cancel
         </a>
         <button type="submit" id="saveProfileBtn" class="px-8 py-3 bg-enterprise-600 hover:bg-enterprise-700 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center gap-2">
           <i data-lucide="save" class="w-4 h-4"></i>
@@ -977,82 +972,201 @@
         }, 'image/png');
       };
     }
-function resetProfileForm() {
-      if (!confirm("Ali želiš preklicati spremembe in ponastaviti vsa polja na zadnje shranjeno stanje?")) return;
-      
-      if (companyRecord) {
-        // Ponastavitev tekstovnih polj
-        const setValue = (id, value) => { const el = document.getElementById(id); if (el) el.value = value || ''; };
-        setValue('company_name', companyRecord.company_name);
-        setValue('vat_number', companyRecord.vat_number);
-        setValue('address', companyRecord.address);
-        setValue('postalCode', companyRecord.postal_code);
-        if (document.getElementById('city')) setValue('city', companyRecord.city);
-        setValue('country', companyRecord.country);
-        setValue('contact_email', companyRecord.contact_email);
-        setValue('phone', companyRecord.phone);
-        setValue('websiteUrl', companyRecord.website);
-        setValue('fleetDescription', companyRecord.fleet_description);
-        setValue('activeMarkets', companyRecord.active_markets);
-        setValue('company_username', companyRecord.username);
-        
-        const subCheckbox = document.getElementById('subscribed_to_mailing');
-        if (subCheckbox) subCheckbox.checked = !!companyRecord.subscribed_to_mailing;
 
-        // Ponastavitev pasice (Banner) na shranjeno v bazi
-        savedBannerUrl = companyRecord.banner_url || '';
-        const pb = document.getElementById('bannerPreviewBox');
-        if (savedBannerUrl) {
-          pb.style.backgroundImage = `url('${savedBannerUrl}')`;
-          pb.style.backgroundSize = 'cover';
-          pb.style.backgroundPosition = 'center';
-          document.getElementById('bannerStatusText').textContent = 'Banner loaded from database';
-          document.getElementById('bannerPreviewBtn').classList.remove('hidden');
-          document.getElementById('bannerPreviewBtn').classList.add('flex');
-        } else {
-          pb.style.backgroundImage = 'none';
-          document.getElementById('bannerStatusText').textContent = 'Click to upload or change corporate banner';
-          document.getElementById('bannerPreviewBtn').classList.add('hidden');
-        }
+    // --- INSTANT UPLOAD & MODAL PREVIEW ---
+    async function handleFileUpload(event, type) {
+      const file = event.target.files[0];
+      if (!file) return;
 
-        // Ponastavitev Transport License statusa
-        savedLicenseUrl = companyRecord.license_url || '';
-        const licBadge = document.getElementById('licenseBadge');
-        if (savedLicenseUrl) {
-          licBadge.textContent = 'Uploaded';
-          licBadge.className = 'text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200';
-          document.getElementById('licenseFileName').textContent = savedLicenseUrl.split('/').pop().split('?')[0];
-          document.getElementById('licenseDeleteBtn').classList.remove('hidden');
-          document.getElementById('licenseViewBtn').classList.remove('hidden');
-        } else {
-          licBadge.textContent = 'Not Uploaded';
-          licBadge.className = 'text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded';
-          document.getElementById('licenseFileName').textContent = 'No file selected';
-          document.getElementById('licenseDeleteBtn').classList.add('hidden');
-          document.getElementById('licenseViewBtn').classList.add('hidden');
-        }
+      const badgeId = type === 'license' ? 'licenseBadge' : 'insuranceBadge';
+      const fileNameId = type === 'license' ? 'licenseFileName' : 'insuranceFileName';
+      const viewBtnId = type === 'license' ? 'licenseViewBtn' : 'insuranceViewBtn';
+      const deleteBtnId = type === 'license' ? 'licenseDeleteBtn' : 'insuranceDeleteBtn';
 
-        // Ponastavitev Insurance statusa
-        savedInsuranceUrl = companyRecord.insurance_url || '';
-        const insBadge = document.getElementById('insuranceBadge');
-        if (savedInsuranceUrl) {
-          insBadge.textContent = 'Uploaded';
-          insBadge.className = 'text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200';
-          document.getElementById('insuranceFileName').textContent = savedInsuranceUrl.split('/').pop().split('?')[0];
-          document.getElementById('insuranceDeleteBtn').classList.remove('hidden');
-          document.getElementById('insuranceViewBtn').classList.remove('hidden');
-        } else {
-          insBadge.textContent = 'Not Uploaded';
-          insBadge.className = 'text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded';
-          document.getElementById('insuranceFileName').textContent = 'No file selected';
-          document.getElementById('insuranceDeleteBtn').classList.add('hidden');
-          document.getElementById('insuranceViewBtn').classList.add('hidden');
-        }
+      const badge = document.getElementById(badgeId);
+      const fileName = document.getElementById(fileNameId);
 
-      } else {
-        document.getElementById('ProfileForm').reset();
+      badge.textContent = "Uploading...";
+      badge.className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 animate-pulse";
+      fileName.textContent = file.name;
+
+      const folderName = type === 'license' ? 'licenses' : 'insurances';
+      const fileExt = file.name.split('.').pop();
+      const storagePath = `${folderName}/${companyId || 'company'}_${Date.now()}.${fileExt}`;
+
+      const { data, error } = await sb.storage.from('company-files').upload(storagePath, file);
+
+      if (error) {
+        alert("Upload failed: " + error.message);
+        badge.textContent = "Not Uploaded";
+        badge.className = "text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded";
+        return;
       }
+
+      const { data: publicUrlData } = sb.storage.from('company-files').getPublicUrl(storagePath);
+      const uploadedUrl = publicUrlData.publicUrl;
+
+      if (type === 'license') savedLicenseUrl = uploadedUrl;
+      if (type === 'insurance') savedInsuranceUrl = uploadedUrl;
+
+      badge.textContent = "Uploaded";
+      badge.className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
+      document.getElementById(viewBtnId).classList.remove('hidden');
+      document.getElementById(deleteBtnId).classList.remove('hidden');
+
+      await saveProfile(true);
+    }
+
+    function viewDocument(type) {
+      let url = '';
+      let title = 'Document Preview';
+
+      if (type === 'license') {
+        url = savedLicenseUrl;
+        title = 'Carrier / Transport License Preview';
+      } else if (type === 'insurance') {
+        url = savedInsuranceUrl;
+        title = 'CMR / Cargo Insurance Certificate Preview';
+      } else if (type === 'banner') {
+        url = savedBannerUrl;
+        title = 'Corporate Banner Preview';
+      }
+
+      if (!url) {
+        alert("Please fulfill and upload document first.");
+        return;
+      }
+
+      const container = document.getElementById('docPreviewContainer');
+      document.getElementById('docPreviewTitle').querySelector('span').textContent = title;
+
+      const isPdf = url.toLowerCase().includes('.pdf');
+
+      if (isPdf) {
+        container.innerHTML = `<iframe src="${url}" class="w-full h-[550px] rounded-lg border-0"></iframe>`;
+      } else {
+        container.innerHTML = `<img src="${url}" class="max-h-[550px] w-auto object-contain rounded-lg shadow-md">`;
+      }
+
+      document.getElementById('docPreviewModal').classList.remove('hidden');
       lucide.createIcons();
     }
+
+    function previewBanner() {
+      viewDocument('banner');
+    }
+
+    function closeDocPreviewModal() {
+      document.getElementById('docPreviewModal').classList.add('hidden');
+      document.getElementById('docPreviewContainer').innerHTML = '';
+    }
+
+    async function deleteFile(type) {
+      if (!confirm("Are you sure you want to delete this document?")) return;
+      
+      if (type === 'license') {
+        savedLicenseUrl = '';
+        document.getElementById('licenseBadge').textContent = "Not Uploaded";
+        document.getElementById('licenseBadge').className = "text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded";
+        document.getElementById('licenseFileName').textContent = "No file selected";
+        document.getElementById('licenseDeleteBtn').classList.add('hidden');
+        document.getElementById('licenseViewBtn').classList.add('hidden');
+        document.getElementById('licenseFileInput').value = '';
+      } else if (type === 'insurance') {
+        savedInsuranceUrl = '';
+        document.getElementById('insuranceBadge').textContent = "Not Uploaded";
+        document.getElementById('insuranceBadge').className = "text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded";
+        document.getElementById('insuranceFileName').textContent = "No file selected";
+        document.getElementById('insuranceDeleteBtn').classList.add('hidden');
+        document.getElementById('insuranceViewBtn').classList.add('hidden');
+        document.getElementById('insuranceFileInput').value = '';
+      }
+      await saveProfile(true);
+    }
+
+    async function saveProfile(silent = false) {
+      const btn = document.getElementById('saveProfileBtn');
+      
+      if (!silent) {
+        const companyName = document.getElementById('company_name')?.value.trim();
+        const vatNumber = document.getElementById('vat_number')?.value.trim();
+        const address = document.getElementById('address')?.value.trim();
+        const email = document.getElementById('contact_email')?.value.trim();
+
+        if (!companyName || !vatNumber || !address || !email) {
+          alert("Please fulfill all required corporate details before saving.");
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = "Saving profile & uploading files...";
+      }
+
+      try {
+        const updateData = {
+          company_name: document.getElementById('company_name')?.value.trim() || '',
+          vat_number: document.getElementById('vat_number')?.value.trim() || '',
+          address: document.getElementById('address')?.value.trim() || '',
+          postal_code: document.getElementById('postalCode')?.value.trim() || '',
+          city: document.getElementById('city') ? document.getElementById('city').value.trim() : '',
+          country: document.getElementById('country')?.value.trim() || '',
+          contact_email: document.getElementById('contact_email')?.value.trim() || '',
+          phone: document.getElementById('phone')?.value.trim() || '',
+          website: document.getElementById('websiteUrl')?.value.trim() || '',
+          fleet_description: document.getElementById('fleetDescription')?.value.trim() || '',
+          active_markets: document.getElementById('activeMarkets')?.value.trim() || '',
+          banner_url: savedBannerUrl,
+          license_url: savedLicenseUrl,
+          insurance_url: savedInsuranceUrl,
+          username: document.getElementById('company_username')?.value.trim() || '',
+          subscribed_to_mailing: document.getElementById('subscribed_to_mailing')?.checked || false
+        };
+
+        if (!companyId) throw new Error('Company record is not linked. Profile update cancelled.');
+        
+        const { error } = await sb.from('companies').update(updateData).eq('id', companyId);
+        if (error) {
+          if (!silent) alert("Error saving profile: " + error.message);
+        } else {
+          if (!silent) alert("Company profile successfully updated and visible in manager HQ!");
+        }
+      } catch (err) {
+        if (!silent) alert("Error: " + err.message);
+      } finally {
+        if (!silent) {
+          btn.disabled = false;
+          btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Enterprise Profile Changes';
+          lucide.createIcons();
+        }
+      }
+    }
+
+    function openPasswordModal() { document.getElementById('passwordModal').classList.remove('hidden'); }
+    function closePasswordModal() {
+      document.getElementById('passwordModal').classList.add('hidden');
+      document.getElementById('newPasswordInput').value = '';
+      document.getElementById('confirmPasswordInput').value = '';
+    }
+    async function submitNewPassword() {
+      const p1 = document.getElementById('newPasswordInput').value;
+      const p2 = document.getElementById('confirmPasswordInput').value;
+      if (!p1 || p1.length < 5) {
+        alert('Geslo mora vsebovati vsaj 5 znakov.');
+        return;
+      }
+      if (p1 !== p2) {
+        alert('Gesli se ne ujemata!');
+        return;
+      }
+      const { error } = await sb.from('companies').update({ password: p1 }).eq('id', companyId);
+      if (error) {
+        alert('Napaka pri posodobitvi gesla: ' + error.message);
+      } else {
+        alert('Geslo je bilo uspešno spremenjeno!');
+        closePasswordModal();
+      }
+    }
+  </script>
 </body>
 </html>
+
