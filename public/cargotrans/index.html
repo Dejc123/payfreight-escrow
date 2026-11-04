@@ -420,7 +420,7 @@
     </div>
   </section>
 
-  <!-- AUTHENTICATION MODAL (LOGIN) -->
+ <!-- AUTHENTICATION MODAL (LOGIN) -->
   <div id="authModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 sm:p-8 border border-slate-200 relative">
       
@@ -428,7 +428,7 @@
       <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
-
+      
       <!-- Modal Header -->
       <div class="mb-6 text-center">
         <h3 class="text-2xl font-bold text-slate-900">Welcome Back</h3>
@@ -439,21 +439,15 @@
       <form id="authForm" onsubmit="submitAuthForm(event)" class="space-y-4">
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1">Username, Email or CT ID</label>
-          <input type="text" id="authUsername" required placeholder=Insert Username" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 transition">
+          <input type="text" id="authUsername" required placeholder="Enter Username, Email or CT-ID" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 transition">
         </div>
-
         <div>
-          <div class="flex items-center justify-between mb-1">
-            <label class="block text-xs font-semibold text-slate-700">Password</label>
-            <button type="button" onclick="openForgotPasswordModal()" class="text-[11px] text-blue-600 hover:text-blue-500 font-semibold underline transition">
-              Forgot Password or Username?
-            </button>
-          </div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
           <input type="password" id="authPassword" required placeholder="••••••••" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-blue-600 transition">
         </div>
 
-        <!-- Napaka pri prijavi -->
-        <div id="loginErrorMessage" class="text-xs hidden p-2.5 rounded-lg bg-red-500/20 text-red-600 border border-red-500/30"></div>
+        <!-- Error Message Box -->
+        <div id="loginErrorMessage" class="text-xs hidden p-2.5 rounded-lg bg-red-50 text-red-600 border border-red-200"></div>
 
         <button type="submit" id="authSubmitBtn" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition">
           Sign In to Dashboard
@@ -470,131 +464,103 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="bg-white border-t border-slate-200 mt-auto py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-      <div>
-        © 2001 - 2026 CargoNet Global, TransNet & PayFreight Escrow Protocol. All rights reserved.
-      </div>
-      <div class="flex items-center space-x-6">
-        <a href="#ecosystem" class="hover:text-slate-800 transition">CargoNet Exchange</a>
-        <a href="#payfreight" class="hover:text-slate-800 transition">PayFreight.io</a>
-        <a href="#" class="hover:text-slate-800 transition">Terms of Service</a>
-        <a href="#" class="hover:text-slate-800 transition">Privacy Policy</a>
-      </div>
-    </div>
-  </footer>
+  <!-- SCRIPT LOGIC -->
+  <script>
+    lucide.createIcons();
+    const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  
-<script>
-  lucide.createIcons();
-
-  const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-  function openAuthModal() {
-    document.getElementById('authModal').classList.remove('hidden');
-  }
-
-  function closeAuthModal() {
-    document.getElementById('authModal').classList.add('hidden');
-  }
-
-  async function submitAuthForm(event) {
-    event.preventDefault();
-
-    const userInput = document.getElementById('authUsername').value.trim();
-    const passwordInput = document.getElementById('authPassword').value;
-    const errorBox = document.getElementById('loginErrorMessage');
-    const submitBtn = document.getElementById('authSubmitBtn');
-
-    errorBox.classList.add('hidden');
-    errorBox.textContent = '';
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Authenticating...';
-
-    try {
-      let user = null;
-      let lastError = null;
-
-      // Iskanje po uporabniškem imenu
-      let result = await sb
-        .from('companies')
-        .select('id,cargo_trans_id,company_name,username,contact_email')
-        .eq('username', userInput)
-        .eq('password', passwordInput)
-        .limit(1)
-        .maybeSingle();
-
-      if (result.error) throw result.error;
-      user = result.data;
-
-      // Če ni zadetka, poskusimo po e-pošti
-      if (!user && userInput.includes('@')) {
-        result = await sb
-          .from('companies')
-          .select('id,cargo_trans_id,company_name,username,contact_email')
-          .ilike('contact_email', userInput)
-          .eq('password', passwordInput)
-          .limit(1)
-          .maybeSingle();
-
-        if (result.error) throw result.error;
-        user = result.data;
-      }
-
-      // Če ni zadetka, poskusimo še po CargoTrans ID
-      if (!user && userInput.toUpperCase().startsWith('CT-')) {
-        result = await sb
-          .from('companies')
-          .select('id,cargo_trans_id,company_name,username,contact_email')
-          .eq('cargo_trans_id', userInput.toUpperCase())
-          .eq('password', passwordInput)
-          .limit(1)
-          .maybeSingle();
-
-        if (result.error) throw result.error;
-        user = result.data;
-      }
-
-      if (!user) {
-        errorBox.textContent =
-          'Invalid username, email, CargoTrans ID or password.';
-        errorBox.classList.remove('hidden');
-        return;
-      }
-
-      // Shrani podatke prijavljenega uporabnika
-      localStorage.setItem('cargotrans_user', user.username || '');
-      localStorage.setItem('cargotrans_token', 'active_session_' + user.id);
-      localStorage.setItem('CargoTransID', user.cargo_trans_id || '');
-      localStorage.setItem('cargotrans_id', user.cargo_trans_id || '');
-      localStorage.setItem('cargotrans_company', user.company_name || '');
-
-      // Preusmeritev na dashboard
-      const params = new URLSearchParams({
-        UporabniskoIme: user.username || '',
-        Podjetje: user.company_name || '',
-        CargoTransID: user.cargo_trans_id || ''
-      });
-
-      window.location.href = 'dashboard/index.html?' + params.toString();
-
-    } catch (err) {
-      console.error('CargoNet login error:', err);
-
-      errorBox.textContent =
-        'Login error: ' + (err.message || 'Database connection failed.');
-
-      errorBox.classList.remove('hidden');
-
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Sign In to Dashboard';
+    function openAuthModal() {
+      document.getElementById('authModal').classList.remove('hidden');
     }
-  }
-</script>
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.add('hidden');
+    }
+
+    async function submitAuthForm(event) {
+      event.preventDefault();
+      const userInput = document.getElementById('authUsername').value.trim();
+      const passwordInput = document.getElementById('authPassword').value;
+      const errorBox = document.getElementById('loginErrorMessage');
+      const submitBtn = document.getElementById('authSubmitBtn');
+
+      errorBox.classList.add('hidden');
+      errorBox.textContent = '';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Authenticating...';
+
+      try {
+        let user = null;
+
+        // 1. Iskanje po uporabniškem imenu
+        let result = await sb
+          .from('companies')
+          .select('id, cargo_trans_id, company_name, username, contact_email')
+          .eq('username', userInput)
+          .eq('password', passwordInput)
+          .limit(1)
+          .maybeSingle();
+        if (result.error) throw result.error;
+        user = result.data;
+
+        // 2. Če ni zadetka, poskusimo po e-pošti
+        if (!user && userInput.includes('@')) {
+          result = await sb
+            .from('companies')
+            .select('id, cargo_trans_id, company_name, username, contact_email')
+            .ilike('contact_email', userInput)
+            .eq('password', passwordInput)
+            .limit(1)
+            .maybeSingle();
+          if (result.error) throw result.error;
+          user = result.data;
+        }
+
+        // 3. Če ni zadetka, poskusimo še po CargoTrans ID (npr. CT-123456)
+        if (!user && userInput.toUpperCase().startsWith('CT-')) {
+          result = await sb
+            .from('companies')
+            .select('id, cargo_trans_id, company_name, username, contact_email')
+            .eq('cargo_trans_id', userInput.toUpperCase())
+            .eq('password', passwordInput)
+            .limit(1)
+            .maybeSingle();
+          if (result.error) throw result.error;
+          user = result.data;
+        }
+
+        if (!user) {
+          errorBox.textContent = 'Invalid username, email, CargoTrans ID or password.';
+          errorBox.classList.remove('hidden');
+          return;
+        }
+
+        // Shrani podatke v localStorage za dashboard
+        localStorage.setItem('cargotrans_user', user.username || '');
+        localStorage.setItem('cargotrans_token', 'active_session_' + user.id);
+        localStorage.setItem('CargoTransID', user.cargo_trans_id || '');
+        localStorage.setItem('cargotrans_id', user.cargo_trans_id || '');
+        localStorage.setItem('cargotrans_company', user.company_name || '');
+
+        // Preusmeritev na dashboard z vsemi ustreznimi parametri
+        const params = new URLSearchParams({
+          UporabniskoIme: user.username || '',
+          Podjetje: user.company_name || '',
+          CargoTransID: user.cargo_trans_id || ''
+        });
+        window.location.href = 'dashboard/index.html?' + params.toString();
+
+      } catch (err) {
+        console.error('CargoNet login error:', err);
+        errorBox.textContent = 'Login error: ' + (err.message || 'Database connection failed.');
+        errorBox.classList.remove('hidden');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Sign In to Dashboard';
+      }
+    }
+  </script>
 
 </body>
 </html>
