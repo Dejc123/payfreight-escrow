@@ -761,7 +761,7 @@ const euVehicleTypesHTML = `
       document.getElementById('customDaysInput').focus();
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", async function() {
       if (typeof lucide !== 'undefined') {
         lucide.createIcons();
       }
@@ -820,8 +820,63 @@ const euVehicleTypesHTML = `
       const deadlineStr = deadline.toISOString().split('T')[0];
       const deadlineDateEl = document.getElementById('deadlineDateInput');
       if (deadlineDateEl) deadlineDateEl.value = deadlineStr;
+
+      // ==========================================
+      // 3. DODANO ZA UREJANJE: Nalaganje obstoječih podatkov ponudbe iz baze
+      // ==========================================
+      const editCargoId = urlParams.get('id') || urlParams.get('edit_id');
+      if (editCargoId) {
+        // Spremenimo naslov in gumbe, če obstajajo v HTML
+        const titleEl = document.getElementById('pageMainTitle');
+        if (titleEl) titleEl.textContent = "Edit Freight Offer & Escrow Settings";
+        
+        const submitBtnText = document.getElementById('submitBtnText');
+        if (submitBtnText) submitBtnText.textContent = "Save Changes";
+
+        const topDel = document.getElementById('topDeleteBtn');
+        if (topDel) topDel.classList.remove('hidden');
+
+        const botDel = document.getElementById('bottomDeleteBtn');
+        if (botDel) botDel.classList.remove('hidden');
+
+        // Povlečemo podatke iz Supabase za ta ID
+        const { data, error } = await supabaseClient
+          .from('enter_cargo')
+          .select('*')
+          .eq('id', editCargoId)
+          .maybeSingle();
+
+        if (error) {
+          console.error("Napaka pri pridobivanju ponudbe:", error);
+        } else if (data) {
+          // A) Escrow stikalo
+          const escrowToggle = document.getElementById('payfreightToggle');
+          if (escrowToggle) {
+            escrowToggle.checked = !!data.payfreight_escrow;
+          }
+
+          // B) Lokacije (Mesta, pošte, države)
+          if (data.origin_continent) document.getElementById('originContinent').value = data.origin_continent;
+          handleRegionChange('origin');
+          if (data.origin_country) document.getElementById('originCountry').value = data.origin_country;
+          if (data.origin_city) document.getElementById('originCity').value = data.origin_city;
+          if (data.origin_zip) document.getElementById('originZip').value = data.origin_zip;
+
+          if (data.dest_continent) document.getElementById('destContinent').value = data.dest_continent;
+          updateCountryDropdown('dest');
+          if (data.dest_country) document.getElementById('destCountry').value = data.dest_country;
+          if (data.dest_city) document.getElementById('destCity'].value = data.dest_city;
+          if (data.dest_zip) document.getElementById('destZip').value = data.dest_zip;
+
+          // C) Teža, dolžina, cena in datum
+          if (data.weight) document.getElementById('inputWeight').value = data.weight;
+          if (data.length) document.getElementById('inputLength').value = data.length;
+          if (data.price) document.getElementById('freightPriceInput').value = data.price;
+          if (data.loading_date) document.getElementById('loadingDateInput').value = data.loading_date;
+        }
+      }
     });
-  </script>
+    
 <!-- SUPABASE SCRIPT & CONNECTION -->
   <script>
     // 1. Supabase configuration credentials
@@ -897,18 +952,26 @@ const euVehicleTypesHTML = `
       const escrowToggle = document.getElementById('payfreightToggle');
       const isEscrowEnabled = escrowToggle ? escrowToggle.checked : false;
 
+      // Preberemo vrednosti teže, dolžine in cene iz vnosnih polj
+      const weightVal = document.getElementById('inputWeight') ? document.getElementById('inputWeight').value : null;
+      const lengthVal = document.getElementById('inputLength') ? document.getElementById('inputLength').value : null;
+      const priceVal = document.getElementById('freightPriceInput') ? document.getElementById('freightPriceInput').value : null;
+
       // Prepare payload object for 'enter_cargo' table in Supabase
       const cargoData = {
         cargotrans_id: currentCargoTransId,
         transport_mode: transportMode,
         origin_continent: originContinent,
         origin_country: originCountry,
-        origin_city: originCity,       // <--- DODANO: Mesto naklada
-        origin_zip: originZip,         // <--- DODANO: Poštna št. naklada
+        origin_city: originCity,           // Mesto naklada
+        origin_zip: originZip,             // Poštna št. naklada
         dest_continent: destContinent,
         dest_country: destCountry,
-        dest_city: destCity,           // <--- DODANO: Mesto razklad
-        dest_zip: destZip,             // <--- DODANO: Poštna št. razklad
+        dest_city: destCity,               // Mesto razklad
+        dest_zip: destZip,                 // Poštna št. razklad
+        weight: weightVal ? parseFloat(weightVal) : null,     // <--- DODANO: Teža
+        length: lengthVal ? parseFloat(lengthVal) : null,     // <--- DODANO: Dolžina
+        price: priceVal ? parseFloat(priceVal) : null,         // <--- DODANO: Cena
         loading_date: loadingDate || null,
         payfreight_escrow: isEscrowEnabled
       };
