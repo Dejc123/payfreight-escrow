@@ -873,8 +873,8 @@
       const lengthVal = document.getElementById('inputLength') ? document.getElementById('inputLength').value : null;
       const priceVal = document.getElementById('freightPriceInput') ? document.getElementById('freightPriceInput').value : null;
 
-      const cargoData = {
-        cargo_trans_id: currentCargoTransId,
+const cargoData = {
+        cargotrans_id: currentCargoTransId, // Popravljeno brez podčrtaja
         transport_mode: transportMode,
         origin_continent: originContinent,
         origin_country: originCountry,
