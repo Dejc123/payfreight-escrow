@@ -513,7 +513,7 @@
     </div>
   </div>
 
-  <!-- SCRIPT LOGIC & SUPABASE -->
+ <!-- SCRIPT LOGIC & SUPABASE -->
   <script>
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
@@ -551,20 +551,29 @@
         if (usernameParam) localStorage.setItem('cargotrans_user', usernameParam);
         if (cargoTransId) localStorage.setItem('cargotrans_id', cargoTransId);
         let member = null;
+
         if (usernameParam) {
           const result = await sb.from('company_members')
             .select('id, company_id, cargo_trans_id, username, email, first_name, last_name, role, is_active')
-            .ilike('username', usernameParam).maybeSingle();
+            .ilike('username', usernameParam)
+            .limit(1);
           if (result.error) throw result.error;
-          member = result.data;
+          if (result.data && result.data.length > 0) {
+            member = result.data[0];
+          }
         }
+
         if (!member && cargoTransId) {
           const result = await sb.from('company_members')
             .select('id, company_id, cargo_trans_id, username, email, first_name, last_name, role, is_active')
-            .eq('cargo_trans_id', cargoTransId).maybeSingle();
+            .eq('cargo_trans_id', cargoTransId)
+            .limit(1);
           if (result.error) throw result.error;
-          member = result.data;
+          if (result.data && result.data.length > 0) {
+            member = result.data[0];
+          }
         }
+
         if (member && member.company_id) {
           companyId = String(member.company_id);
           localStorage.setItem('cargotrans_company_id', companyId);
@@ -575,6 +584,7 @@
           if (result.error) throw result.error;
           companyRecord = result.data;
         }
+
         if (!companyRecord && cargoTransId) {
           const result = await sb.from('companies')
             .select('*')
@@ -583,6 +593,7 @@
           if (result.error) throw result.error;
           companyRecord = result.data;
         }
+
         if (!companyRecord && usernameParam) {
           const result = await sb.from('companies')
             .select('*')
@@ -591,6 +602,7 @@
           if (result.error) throw result.error;
           companyRecord = result.data;
         }
+
         if (companyRecord) {
           companyId = String(companyRecord.id);
           localStorage.setItem('cargotrans_company_id', companyId);
@@ -607,15 +619,18 @@
             ctDisplay.textContent = companyRecord.cargo_trans_id || cargoTransId || '—';
           }
         }
+
         if (!companyRecord) {
           document.getElementById('displayCargoTransID').textContent = cargoTransId || 'NOT LINKED';
           console.error('No linked company found for this CargoTrans member.');
           alert('Your CargoTrans account was recognized, but its company record could not be found. Please contact support.');
           return;
         }
+
         cargoTransId = companyRecord.cargo_trans_id || cargoTransId;
         if (cargoTransId) localStorage.setItem('cargotrans_id', String(cargoTransId));
         document.getElementById('displayCargoTransID').textContent = cargoTransId || '—';
+        
         const setValue = (id, value) => { const el = document.getElementById(id); if (el && value != null) el.value = value; };
         setValue('company_name', companyRecord.company_name);
         setValue('vat_number', companyRecord.vat_number);
@@ -629,10 +644,12 @@
         setValue('fleetDescription', companyRecord.fleet_description);
         setValue('activeMarkets', companyRecord.active_markets);
         setValue('company_username', companyRecord.username);
+
         const subCheckbox = document.getElementById('subscribed_to_mailing');
         if (subCheckbox) {
           subCheckbox.checked = !!companyRecord.subscribed_to_mailing;
         }
+
         const firstName = (member && member.first_name) ? member.first_name : (companyRecord.contact_person || '');
         const lastName = (member && member.last_name) ? member.last_name : '';
         const mobilePhone = (companyRecord.mobile) ? companyRecord.mobile : (member ? member.phone : '');
@@ -691,6 +708,7 @@
         console.error('Error loading team members:', err);
       }
     }
+  </script>
 
     function openAddMemberModal() {
       document.getElementById('editingMemberId').value = "";
