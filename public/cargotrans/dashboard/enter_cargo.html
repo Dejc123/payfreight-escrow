@@ -331,7 +331,7 @@
         </div>
         <!-- OCEAN SPECIFIC SETUP -->
         <div id="oceanSection" class="hidden space-y-4">
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
             <div>
               <label class="block text-xs font-medium text-slate-600 mb-1">Container Equipment Type</label>
               <select id="oceanContainerType" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
@@ -341,6 +341,10 @@
                 <option value="40RF">Reefer Container (40RF)</option>
                 <option value="LCL">LCL (Less than Container Load)</option>
               </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-600 mb-1">Gross Weight (t)</label>
+              <input type="number" id="oceanWeight" placeholder="e.g. 21.5" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-semibold">
             </div>
             <div>
               <label class="block text-xs font-medium text-slate-600 mb-1">Port of Loading (POL)</label>
