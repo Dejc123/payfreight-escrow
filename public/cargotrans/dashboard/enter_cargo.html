@@ -830,7 +830,7 @@ const euVehicleTypesHTML = `
     
     // 2. Initialize Supabase client
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
+    
     // Preveri, ali v URL-ju obstaja ID za urejanje (npr. ?id=123)
     const urlParams = new URLSearchParams(window.location.search);
     const editCargoId = urlParams.get('id') || urlParams.get('edit_id');
@@ -838,7 +838,7 @@ const euVehicleTypesHTML = `
     // Ob nalaganju strani preveri, ali urejamo obstoječo ponudbo
     document.addEventListener("DOMContentLoaded", async function() {
       if (editCargoId) {
-        // Povleci podatke iz baze za vnos escrow stikala
+        // Povleci podatke iz baze za izbrani ID ponudbe
         const { data, error } = await supabaseClient
           .from('enter_cargo')
           .select('*')
@@ -851,7 +851,21 @@ const euVehicleTypesHTML = `
           if (escrowToggle) {
             escrowToggle.checked = !!data.payfreight_escrow;
           }
-          // Tukaj lahko nastaviš še ostala polja, če je potrebno
+
+          // **NALAGANJE MEST IN POŠTNIH ŠTEVILK V POLJA**
+          if (data.origin_continent) document.getElementById('originContinent').value = data.origin_continent;
+          handleRegionChange('origin');
+          if (data.origin_country) document.getElementById('originCountry').value = data.origin_country;
+          if (data.origin_city) document.getElementById('originCity').value = data.origin_city;
+          if (data.origin_zip) document.getElementById('originZip').value = data.origin_zip;
+
+          if (data.dest_continent) document.getElementById('destContinent').value = data.dest_continent;
+          updateCountryDropdown('dest');
+          if (data.dest_country) document.getElementById('destCountry').value = data.dest_country;
+          if (data.dest_city) document.getElementById('destCity').value = data.dest_city;
+          if (data.dest_zip) document.getElementById('destZip').value = data.dest_zip;
+
+          if (data.loading_date) document.getElementById('loadingDateInput').value = data.loading_date;
         }
       }
     });
@@ -869,8 +883,14 @@ const euVehicleTypesHTML = `
       
       const originContinent = document.getElementById('originContinent').value;
       const originCountry = document.getElementById('originCountry').value;
+      const originCity = document.getElementById('originCity').value;
+      const originZip = document.getElementById('originZip').value;
+
       const destContinent = document.getElementById('destContinent').value;
       const destCountry = document.getElementById('destCountry').value;
+      const destCity = document.getElementById('destCity').value;
+      const destZip = document.getElementById('destZip').value;
+
       const loadingDate = document.getElementById('loadingDateInput').value;
 
       // Preveri, ali je escrow stikalo (payfreightToggle) vklopljeno
@@ -883,8 +903,12 @@ const euVehicleTypesHTML = `
         transport_mode: transportMode,
         origin_continent: originContinent,
         origin_country: originCountry,
+        origin_city: originCity,       // <--- DODANO: Mesto naklada
+        origin_zip: originZip,         // <--- DODANO: Poštna št. naklada
         dest_continent: destContinent,
         dest_country: destCountry,
+        dest_city: destCity,           // <--- DODANO: Mesto razklad
+        dest_zip: destZip,             // <--- DODANO: Poštna št. razklad
         loading_date: loadingDate || null,
         payfreight_escrow: isEscrowEnabled
       };
