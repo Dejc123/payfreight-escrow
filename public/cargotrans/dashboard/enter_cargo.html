@@ -499,7 +499,7 @@
           </a>
           <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center gap-1.5">
             <i data-lucide="send" class="w-4 h-4"></i>
-            <span>Publish Freight Offer</span>
+            <span></span>
           </button>
         </div>
       </div>
@@ -822,8 +822,7 @@ const euVehicleTypesHTML = `
       if (deadlineDateEl) deadlineDateEl.value = deadlineStr;
     });
   </script>
-
-  <!-- SUPABASE SCRIPT & CONNECTION -->
+<!-- SUPABASE SCRIPT & CONNECTION -->
   <script>
     // 1. Supabase configuration credentials
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
@@ -849,7 +848,11 @@ const euVehicleTypesHTML = `
       const destCountry = document.getElementById('destCountry').value;
       const loadingDate = document.getElementById('loadingDateInput').value;
 
-      // Prepare payload object for 'enter_cargo' table in Supabase (only existing schema columns)
+      // Preveri, ali je escrow stikalo (payfreightToggle) vklopljeno
+      const escrowToggle = document.getElementById('payfreightToggle');
+      const isEscrowEnabled = escrowToggle ? escrowToggle.checked : false;
+
+      // Prepare payload object for 'enter_cargo' table in Supabase
       const cargoData = {
         cargotrans_id: currentCargoTransId,
         transport_mode: transportMode,
@@ -857,7 +860,8 @@ const euVehicleTypesHTML = `
         origin_country: originCountry,
         dest_continent: destContinent,
         dest_country: destCountry,
-        loading_date: loadingDate || null
+        loading_date: loadingDate || null,
+        payfreight_escrow: isEscrowEnabled
       };
 
       try {
