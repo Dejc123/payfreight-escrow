@@ -279,6 +279,29 @@
     </div>
   </div>
 
+  <!-- QUICK POST ACCESS -->
+  <section id="quickPostSection" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Quick Post</span>
+        <h2 class="text-lg font-bold text-slate-900 mt-1">Publish a new freight or capacity offer</h2>
+        <p class="text-sm text-slate-500 mt-1">Choose the relevant form to publish complete shipment or available transport details.</p>
+      </div>
+      <span class="text-xs text-slate-500">Road · Ocean · Air</span>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <a href="https://www.payfreight.io/cargotrans/dashboard/enter_cargo.html" class="flex items-center justify-between gap-3 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 px-4 py-3 transition">
+        <span><strong class="block text-sm text-slate-900">Post Freight (Cargo)</strong><small class="text-xs text-slate-600">Publish a shipment</small></span>
+        <span class="text-sm font-semibold text-blue-700">New Listing →</span>
+      </a>
+      <a href="https://www.payfreight.io/cargotrans/dashboard/enter_transport.html" class="flex items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 px-4 py-3 transition">
+        <span><strong class="block text-sm text-slate-900">Post Empty Space</strong><small class="text-xs text-slate-600">Offer available capacity</small></span>
+        <span class="text-sm font-semibold text-emerald-700">Offer Capacity →</span>
+      </a>
+    </div>
+  </section>
+
+
   <!-- 2. LIVE SEARCH RESULTS SECTION -->
   <div id="myOffersSection" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
     <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
@@ -317,28 +340,6 @@
       </table>
     </div>
   </div>
-
-  <!-- QUICK POST ACCESS -->
-  <section id="quickPostSection" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-      <div>
-        <span class="text-xs font-bold uppercase tracking-wider text-blue-700">Quick Post</span>
-        <h2 class="text-lg font-bold text-slate-900 mt-1">Publish a new freight or capacity offer</h2>
-        <p class="text-sm text-slate-500 mt-1">Choose the relevant form to publish complete shipment or available transport details.</p>
-      </div>
-      <span class="text-xs text-slate-500">Road · Ocean · Air</span>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <a href="https://www.payfreight.io/cargotrans/dashboard/enter_cargo.html" class="flex items-center justify-between gap-3 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 px-4 py-3 transition">
-        <span><strong class="block text-sm text-slate-900">Post Freight (Cargo)</strong><small class="text-xs text-slate-600">Publish a shipment</small></span>
-        <span class="text-sm font-semibold text-blue-700">New Listing →</span>
-      </a>
-      <a href="https://www.payfreight.io/cargotrans/dashboard/enter_transport.html" class="flex items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 px-4 py-3 transition">
-        <span><strong class="block text-sm text-slate-900">Post Empty Space</strong><small class="text-xs text-slate-600">Offer available capacity</small></span>
-        <span class="text-sm font-semibold text-emerald-700">Offer Capacity →</span>
-      </a>
-    </div>
-  </section>
 
   <!-- FREIGHT EXCHANGE 4.0: ADVANCED PRO SEARCH ENGINE -->
   <div id="exchangeSearchPanel" class="bg-white text-slate-800 rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 relative overflow-hidden">
@@ -697,7 +698,7 @@
     const row = button.closest('tr');
     const detailId = 'offer-detail-' + String(item.id || item.cargo_id || Math.random()).replace(/[^a-zA-Z0-9_-]/g, '');
     const existing = document.getElementById(detailId);
-    if (existing) { existing.remove(); button.textContent = 'Details'; return; }
+    if (existing) { existing.remove(); button.textContent = 'Info'; return; }
     button.textContent = 'Loading…';
     let company = null;
     const ownerId = item.cargotrans_id || item.cargo_trans_id || '';
@@ -722,7 +723,7 @@
     ].filter(Boolean).join('');
     detailRow.innerHTML = `<td colspan="6" class="px-4 py-3 text-xs text-slate-700"><div class="grid grid-cols-1 md:grid-cols-2 gap-2"><div><strong class="text-slate-900">Posted by:</strong> ${escapeHtml(companyName)}${ownerId && companyName !== ownerId ? ` <span class="text-slate-400">(${escapeHtml(ownerId)})</span>` : ''}</div><div>${contactHtml || '<span class="text-slate-500">Direct contact details are not stored on this offer record.</span>'}</div></div></td>`;
     row.insertAdjacentElement('afterend', detailRow);
-    button.textContent = 'Hide details';
+    button.textContent = 'Hide info';
   }
 
   function renderEquipmentOptions() {
@@ -866,7 +867,10 @@
         tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-500">No active offers found. Post your first cargo or transport capacity above!</td></tr>`;
         return;
       }
+      window.__offerRows = window.__offerRows || {};
       cargos.forEach(c => {
+        const cargoKey = 'cargo-' + String(c.id || c.cargo_id || '').replace(/[^a-zA-Z0-9_-]/g, '');
+        window.__offerRows[cargoKey] = c;
         const isEscrowEnabled = Boolean(c.payfreight_escrow || c.enable_payfreight_escrow || c.escrow_enabled);
         const escrowBadgeHtml = isEscrowEnabled 
           ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i><span>PayFreight Escrow</span></span>`
@@ -879,10 +883,12 @@
             <td class="py-3 px-4 text-xs text-slate-600">${c.loading_date || 'Immediate'}</td>
             <td class="py-3 px-4 text-xs text-slate-600">${c.transport_mode || 'Road'} Freight Offer</td>
             <td class="py-3 px-4">${escrowBadgeHtml}</td>
-            <td class="py-3 px-4 text-right"><span class="text-xs text-blue-600 font-semibold">Active</span></td>
+            <td class="py-3 px-4 text-right"><button type="button" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded text-xs font-semibold" onclick="toggleOfferDetails(this, window.__offerRows['cargo-' + String(c.id || c.cargo_id || '').replace(/[^a-zA-Z0-9_-]/g, '')], 'cargo')">Info</button></td>
           </tr>`;
       });
       transports.forEach(t => {
+        const transportKey = 'transport-' + String(t.id || t.transport_id || '').replace(/[^a-zA-Z0-9_-]/g, '');
+        window.__offerRows[transportKey] = t;
         const isEscrowEnabled = Boolean(t.payfreight_escrow || t.enable_payfreight_escrow || t.escrow_enabled);
         const escrowBadgeHtml = isEscrowEnabled 
           ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i><span>PayFreight Escrow</span></span>`
@@ -895,7 +901,7 @@
             <td class="py-3 px-4 text-xs text-slate-600">${t.loading_date || 'Immediate'}</td>
             <td class="py-3 px-4 text-xs text-slate-600">${t.vehicle_type || 'Standard Fleet'}</td>
             <td class="py-3 px-4">${escrowBadgeHtml}</td>
-            <td class="py-3 px-4 text-right"><span class="text-xs text-emerald-600 font-semibold">Active</span></td>
+            <td class="py-3 px-4 text-right"><button type="button" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded text-xs font-semibold" onclick="toggleOfferDetails(this, window.__offerRows['transport-' + String(t.id || t.transport_id || '').replace(/[^a-zA-Z0-9_-]/g, '')], 'transport')">Info</button></td>
           </tr>`;
       });
       tbody.innerHTML = html;
@@ -1041,7 +1047,7 @@
             <td class="py-3 px-4 text-xs text-slate-600 whitespace-nowrap">${escapeHtml(dateVal)}</td>
             <td class="py-3 px-4 text-xs text-slate-600"><div>${offerWeightLength(item, searchMode)}</div><div class="mt-1"><strong>${escapeHtml(modeVal)}</strong> · ${escapeHtml(equipmentVal)}</div></td>
             <td class="py-3 px-4">${escrowBadgeHtml}</td>
-            <td class="py-3 px-4 text-right"><button type="button" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded text-xs font-semibold" onclick="toggleOfferDetails(this, window.__offerRows['${rowKey}'], '${searchMode}')">Details</button></td>
+            <td class="py-3 px-4 text-right"><button type="button" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded text-xs font-semibold" onclick="toggleOfferDetails(this, window.__offerRows['${rowKey}'], '${searchMode}')">Info</button></td>
           </tr>`;
         window.__offerRows = window.__offerRows || {};
         window.__offerRows[rowKey] = item;
