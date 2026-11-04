@@ -907,7 +907,7 @@ const euVehicleTypesHTML = `
             escrowToggle.checked = !!data.payfreight_escrow;
           }
 
-          // **NALAGANJE MEST IN POŠTNIH ŠTEVILK V POLJA**
+          // NALAGANJE MEST IN POŠTNIH ŠTEVILK V POLJA
           if (data.origin_continent) document.getElementById('originContinent').value = data.origin_continent;
           handleRegionChange('origin');
           if (data.origin_country) document.getElementById('originCountry').value = data.origin_country;
@@ -920,6 +920,10 @@ const euVehicleTypesHTML = `
           if (data.dest_city) document.getElementById('destCity').value = data.dest_city;
           if (data.dest_zip) document.getElementById('destZip').value = data.dest_zip;
 
+          // **DODANO: Nalaganje teže, dolžine, cene in datuma nazaj v polja ob urejanju**
+          if (data.weight) document.getElementById('inputWeight').value = data.weight;
+          if (data.length) document.getElementById('inputLength').value = data.length;
+          if (data.price) document.getElementById('freightPriceInput').value = data.price;
           if (data.loading_date) document.getElementById('loadingDateInput').value = data.loading_date;
         }
       }
@@ -963,15 +967,15 @@ const euVehicleTypesHTML = `
         transport_mode: transportMode,
         origin_continent: originContinent,
         origin_country: originCountry,
-        origin_city: originCity,           // Mesto naklada
-        origin_zip: originZip,             // Poštna št. naklada
+        origin_city: originCity,            // Mesto naklada
+        origin_zip: originZip,              // Poštna št. naklada
         dest_continent: destContinent,
         dest_country: destCountry,
-        dest_city: destCity,               // Mesto razklad
-        dest_zip: destZip,                 // Poštna št. razklad
-        weight: weightVal ? parseFloat(weightVal) : null,     // <--- DODANO: Teža
-        length: lengthVal ? parseFloat(lengthVal) : null,     // <--- DODANO: Dolžina
-        price: priceVal ? parseFloat(priceVal) : null,         // <--- DODANO: Cena
+        dest_city: destCity,                // Mesto razklad
+        dest_zip: destZip,                  // Poštna št. razklad
+        weight: weightVal ? parseFloat(weightVal) : null,     // Teža
+        length: lengthVal ? parseFloat(lengthVal) : null,     // Dolžina
+        price: priceVal ? parseFloat(priceVal) : null,         // Cena
         loading_date: loadingDate || null,
         payfreight_escrow: isEscrowEnabled
       };
@@ -1003,7 +1007,3 @@ const euVehicleTypesHTML = `
       }
     });
   </script>
-  
-</body>
-</html>
-
