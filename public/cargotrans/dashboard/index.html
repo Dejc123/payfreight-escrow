@@ -593,10 +593,10 @@
   const selectedCountries = {origin: [], dest: []};
   const selectedEquipment = {road: [], ocean: [], air: []};
   
-  function renderCountryCheckboxes(side) {
+ function renderCountryCheckboxes(side) {
     const continent = document.getElementById(side + 'Continent').value;
     const container = document.getElementById(side + 'Countries');
-    const className = side + '-chk';
+    const className = side === 'origin' ? 'origin-chk' : 'dest-chk';
     container.innerHTML = '';
     (fullWorldData[continent] || []).forEach(country => {
       const label = document.createElement('label');
