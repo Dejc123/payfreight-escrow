@@ -867,15 +867,15 @@
         tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-500">No active offers found. Post your first cargo or transport capacity above!</td></tr>`;
         return;
       }
-      window.__offerRows = window.__offerRows || {};
       cargos.forEach(c => {
-        const cargoKey = 'cargo-' + String(c.id || c.cargo_id || '').replace(/[^a-zA-Z0-9_-]/g, '');
-        window.__offerRows[cargoKey] = c;
         const isEscrowEnabled = Boolean(c.payfreight_escrow || c.enable_payfreight_escrow || c.escrow_enabled);
         const escrowBadgeHtml = isEscrowEnabled 
           ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i><span>PayFreight Escrow</span></span>`
           : `<span class="text-xs text-slate-400 font-normal">Standard</span>`;
 
+        const rowKey = `my-cargo-${String(c.id || c.cargo_id || Math.random()).replace(/[^a-zA-Z0-9_-]/g, '')}`;
+        window.__offerRows = window.__offerRows || {};
+        window.__offerRows[rowKey] = c;
         html += `
           <tr class="hover:bg-slate-50 transition">
             <td class="py-3 px-4"><span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded border border-blue-200">Cargo</span></td>
@@ -883,17 +883,18 @@
             <td class="py-3 px-4 text-xs text-slate-600">${c.loading_date || 'Immediate'}</td>
             <td class="py-3 px-4 text-xs text-slate-600">${c.transport_mode || 'Road'} Freight Offer</td>
             <td class="py-3 px-4">${escrowBadgeHtml}</td>
-            <td class="py-3 px-4 text-right"><button type="button" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded text-xs font-semibold" onclick="toggleOfferDetails(this, window.__offerRows['cargo-' + String(c.id || c.cargo_id || '').replace(/[^a-zA-Z0-9_-]/g, '')], 'cargo')">Info</button></td>
+            <td class="py-3 px-4 text-right"><button type="button" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded text-xs font-semibold" onclick="toggleOfferDetails(this, window.__offerRows['${rowKey}'], 'cargo')">Info</button></td>
           </tr>`;
       });
       transports.forEach(t => {
-        const transportKey = 'transport-' + String(t.id || t.transport_id || '').replace(/[^a-zA-Z0-9_-]/g, '');
-        window.__offerRows[transportKey] = t;
         const isEscrowEnabled = Boolean(t.payfreight_escrow || t.enable_payfreight_escrow || t.escrow_enabled);
         const escrowBadgeHtml = isEscrowEnabled 
           ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i><span>PayFreight Escrow</span></span>`
           : `<span class="text-xs text-slate-400 font-normal">Standard</span>`;
 
+        const rowKey = `my-transport-${String(t.id || t.transport_id || Math.random()).replace(/[^a-zA-Z0-9_-]/g, '')}`;
+        window.__offerRows = window.__offerRows || {};
+        window.__offerRows[rowKey] = t;
         html += `
           <tr class="hover:bg-slate-50 transition">
             <td class="py-3 px-4"><span class="px-2 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded border border-emerald-200">Transport</span></td>
@@ -901,7 +902,7 @@
             <td class="py-3 px-4 text-xs text-slate-600">${t.loading_date || 'Immediate'}</td>
             <td class="py-3 px-4 text-xs text-slate-600">${t.vehicle_type || 'Standard Fleet'}</td>
             <td class="py-3 px-4">${escrowBadgeHtml}</td>
-            <td class="py-3 px-4 text-right"><button type="button" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded text-xs font-semibold" onclick="toggleOfferDetails(this, window.__offerRows['transport-' + String(t.id || t.transport_id || '').replace(/[^a-zA-Z0-9_-]/g, '')], 'transport')">Info</button></td>
+            <td class="py-3 px-4 text-right"><button type="button" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded text-xs font-semibold" onclick="toggleOfferDetails(this, window.__offerRows['${rowKey}'], 'transport')">Info</button></td>
           </tr>`;
       });
       tbody.innerHTML = html;
@@ -1076,3 +1077,4 @@
 </script>
 </body>
 </html>
+
