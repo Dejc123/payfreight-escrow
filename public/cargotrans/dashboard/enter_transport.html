@@ -892,21 +892,21 @@
         payfreight_escrow: isEscrowEnabled
       };
 
-      try {
+try {
         const { error } = await supabaseClient
           .from('enter_transport')
           .insert([transportData]);
 
         if (error) {
-          console.error('Napaka pri shranjevanju:', error.message);
-          alert('Napaka pri objavi transporta: ' + error.message);
+          console.error('Error saving data:', error.message);
+          alert('Error publishing transport: ' + error.message);
         } else {
-          alert('Transport je uspešno objavljen in shranjen v bazo!');
+          alert('Transport successfully published and saved to the database!');
           window.location.href = 'index.html';
         }
       } catch (err) {
-        console.error('Prišlo je do nepričakovane napake:', err);
-        alert('Napaka: ' + err.message);
+        console.error('An unexpected error occurred:', err);
+        alert('Error: ' + err.message);
       }
     });
   </script>
