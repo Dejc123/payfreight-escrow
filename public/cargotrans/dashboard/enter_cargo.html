@@ -561,7 +561,7 @@
       ]
     };
 
-    const euVehicleTypesHTML = `
+const euVehicleTypesHTML = `
       <optgroup label="Standard & Curtainsiders">
         <option value="Tarpauling" selected>Tarpauling / Curtainsider</option>
         <option value="Tautliner">Tautliner</option>
@@ -767,13 +767,13 @@
         lucide.createIcons();
       }
 
-      // 1. Zanesljivo branje uporabniških podatkov iz URL ali LocalStorage
+      // 1. Reliable reading of user data from URL or LocalStorage
       const urlParams = new URLSearchParams(window.location.search);
       let cargoTransId = urlParams.get('CargoTransID') || urlParams.get('cargotrans_id') || localStorage.getItem('cargotrans_id');
       let userName = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user');
 
-if (!cargoTransId || cargoTransId === 'null') cargoTransId = "loading";
-if (!userName || userName === 'null') userName = "loading";
+      if (!cargoTransId || cargoTransId === 'null') cargoTransId = "loading";
+      if (!userName || userName === 'null') userName = "loading";
 
       localStorage.setItem('cargotrans_id', cargoTransId);
       localStorage.setItem('cargotrans_user', userName);
@@ -788,7 +788,7 @@ if (!userName || userName === 'null') userName = "loading";
         formUserEl.textContent = `User / CT ID: ${userName} [${cargoTransId}]`;
       }
 
-      // 2. Samodejno nalaganje kontaktnih podatkov iz baze / localStorage z možnostjo urejanja
+      // 2. Automatic loading of contact details from database / localStorage
       const savedUserStr = localStorage.getItem('cargotrans_user');
       let userData = {};
       if (savedUserStr) {
@@ -803,11 +803,11 @@ if (!userName || userName === 'null') userName = "loading";
       const emailInput = document.getElementById('contactEmailInput');
       const phoneInput = document.getElementById('contactPhoneInput');
 
-    if (nameInput) nameInput.value = userData.contact_name || userData.username || userName || "John Doe";
-if (emailInput) emailInput.value = userData.contact_email || userData.email || "john.doe@example.com";
-if (phoneInput) phoneInput.value = userData.contact_phone || userData.phone || "+1 555 123 4567";
+      if (nameInput) nameInput.value = userData.contact_name || userData.username || userName || "John Doe";
+      if (emailInput) emailInput.value = userData.contact_email || userData.email || "john.doe@example.com";
+      if (phoneInput) phoneInput.value = userData.contact_phone || userData.phone || "+1 555 123 4567";
 
-      // Inicializacija padajočih menijev in datuma
+      // Initialize dropdowns and dates
       handleRegionChange('origin');
       updateCountryDropdown('dest');
 
@@ -824,20 +824,24 @@ if (phoneInput) phoneInput.value = userData.contact_phone || userData.phone || "
     });
   </script>
 
-      <!-- SUPABASE SKRIPTA IN POVEZAVA -->
+  <!-- SUPABASE SCRIPT & CONNECTION -->
   <script>
-    // 1. Definicija tvojih podatkov iz Supabase nastavitvah
+    // 1. Supabase configuration credentials
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     
-    // 2. Inicializacija Supabase odjemalca
+    // 2. Initialize Supabase client
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // 3. Poslušalec za oddajo obrazca (ob kliku na gumb "Publish Freight Offer")
+    // 3. Form submit listener ("Publish Freight Offer")
     document.querySelector('form').addEventListener('submit', async function(e) {
-      e.preventDefault(); // Prepreči običajno osvežitev strani
+      e.preventDefault(); // Prevent default form refresh
 
-      // Preberemo vrednosti iz vnosnih polj v obrazcu
+      // Dynamically fetch logged-in user ID from localStorage for any authenticated user
+      const currentCargoTransId = localStorage.getItem('CargoTransID') || localStorage.getItem('cargotrans_id') || '';
+      const currentUser = localStorage.getItem('cargotrans_user') || '';
+
+      // Read values from form fields
       const transportMode = document.getElementById('btnModeRoad').classList.contains('border-blue-600') ? 'Road' : 
                             document.getElementById('btnModeOcean').classList.contains('border-blue-600') ? 'Ocean' : 'Air';
       
@@ -847,8 +851,11 @@ if (phoneInput) phoneInput.value = userData.contact_phone || userData.phone || "
       const destCountry = document.getElementById('destCountry').value;
       const loadingDate = document.getElementById('loadingDateInput').value;
 
-      // Pripravimo objekt s podatki za tabelo 'enter_cargo' v Supabase
+      // Prepare payload object for 'enter_cargo' table in Supabase
       const cargoData = {
+        cargotrans_id: currentCargoTransId,
+        cargo_trans_id: currentCargoTransId,
+        created_by: currentUser,
         transport_mode: transportMode,
         origin_continent: originContinent,
         origin_country: originCountry,
@@ -858,21 +865,20 @@ if (phoneInput) phoneInput.value = userData.contact_phone || userData.phone || "
       };
 
       try {
-        // Pošiljanje podatkov v Supabase bazo
+        // Send data to Supabase database
         const { data, error } = await supabaseClient
           .from('enter_cargo')
           .insert([cargoData]);
 
         if (error) {
-          console.error('Napaka pri shranjevanju:', error.message);
-          alert('Napaka pri objavi tovora: ' + error.message);
+          console.error('Database insertion error:', error.message);
+          alert('Error publishing freight offer: ' + error.message);
         } else {
-          alert('Tovor je uspešno objavljen in shranjen v bazo!');
-          // Tukaj lahko dodaš preusmeritev nazaj na dashboard ali osvežitev
+          alert('Freight offer successfully published and saved to database!');
           window.location.href = 'index.html';
         }
       } catch (err) {
-        console.error('Prišlo je do nepričakovane napake:', err);
+        console.error('An unexpected error occurred:', err);
       }
     });
   </script>
