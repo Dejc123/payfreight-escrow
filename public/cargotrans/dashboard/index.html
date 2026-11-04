@@ -806,30 +806,64 @@
     }
   }
 
-async function executeGlobalSearch(e) {
-    e.preventDefault();
-    const origins = Array.from(document.querySelectorAll('.origin-chk:checked')).map(chk => chk.value);
-    const destinations = Array.from(document.querySelectorAll('.dest-chk:checked')).map(chk => chk.value);
-    const equipment = Array.from(document.querySelectorAll('.equipment-chk:checked')).map(chk => chk.value);
-    
-    if (!origins.length || !destinations.length) { 
-      alert('Please select at least one origin and one destination country.'); 
-      return; 
-    }
-    if (origins.length > 5 || destinations.length > 5) { 
-      alert('A maximum of 5 countries is allowed on each side.'); 
-      return; 
-    }
+// 30 seconds Auto-Refresh timer setup & state management
+  let lastSearchCriteria = null;
 
-    const transportMedium = document.getElementById('transportMedium').value; // 'road', 'ocean', 'air'
-    const adrChecked = document.getElementById('adrSearch').checked;
-    const wasteChecked = document.getElementById('wasteSearch').checked;
+  function setupAutoRefresh() {
+    const toggle = document.getElementById('autoRefreshToggle');
+    autoRefreshTimer = setInterval(() => {
+      if (toggle && toggle.checked) {
+        if (lastSearchCriteria) {
+          // Če je bilo izvedeno iskanje, ponovno izvedi isto iskanje v ozadju
+          executeGlobalSearch(null, true);
+        } else {
+          // Sicer naloži privzete zadnje ponudbe
+          loadMyOffers();
+        }
+      }
+    }, 30000);
+  }
+
+  async function executeGlobalSearch(e, isAutoRefresh = false) {
+    if (e) e.preventDefault();
+    
+    let origins, destinations, equipment, transportMedium, adrChecked, wasteChecked;
+
+    if (isAutoRefresh && lastSearchCriteria) {
+      origins = lastSearchCriteria.origins;
+      destinations = lastSearchCriteria.destinations;
+      equipment = lastSearchCriteria.equipment;
+      transportMedium = lastSearchCriteria.transportMedium;
+      adrChecked = lastSearchCriteria.adrChecked;
+      wasteChecked = lastSearchCriteria.wasteChecked;
+    } else {
+      origins = Array.from(document.querySelectorAll('.origin-chk:checked')).map(chk => chk.value);
+      destinations = Array.from(document.querySelectorAll('.dest-chk:checked')).map(chk => chk.value);
+      equipment = Array.from(document.querySelectorAll('.equipment-chk:checked')).map(chk => chk.value);
+      
+      if (!origins.length || !destinations.length) { 
+        alert('Please select at least one origin and one destination country.'); 
+        return; 
+      }
+      if (origins.length > 5 || destinations.length > 5) { 
+        alert('A maximum of 5 countries is allowed on each side.'); 
+        return; 
+      }
+
+      transportMedium = document.getElementById('transportMedium').value;
+      adrChecked = document.getElementById('adrSearch').checked;
+      wasteChecked = document.getElementById('wasteSearch').checked;
+
+      // Shranimo kriterije za kasnejši auto-refresh
+      lastSearchCriteria = { origins, destinations, equipment, transportMedium, adrChecked, wasteChecked };
+    }
 
     const tbody = document.getElementById('myOffersTableBody');
-    tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-400">Searching global exchange database...</td></tr>`;
+    if (!isAutoRefresh) {
+      tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-400">Searching global exchange database...</td></tr>`;
+    }
 
     try {
-      // 1. Poizvedba za tovore (enter_cargo) z uporabo Supabase filter metrik (.in, .eq)
       let cargoQuery = sb.from('enter_cargo').select('*')
         .in('origin_country', origins)
         .in('dest_country', destinations);
@@ -847,7 +881,6 @@ async function executeGlobalSearch(e) {
         cargoQuery = cargoQuery.eq('waste_transport', true);
       }
 
-      // 2. Poizvedba za transporte (enter_transport)
       let transportQuery = sb.from('enter_transport').select('*')
         .in('origin_country', origins)
         .in('dest_country', destinations);
@@ -865,7 +898,6 @@ async function executeGlobalSearch(e) {
         transportQuery = transportQuery.eq('waste_transport', true);
       }
 
-      // Izvedemo obe poizvedbi vzporedno
       const [cargoRes, transportRes] = await Promise.all([cargoQuery, transportQuery]);
 
       if (cargoRes.error) throw cargoRes.error;
@@ -880,7 +912,6 @@ async function executeGlobalSearch(e) {
         return;
       }
 
-      // Izris tovornih ponudb v tabelo
       cargos.forEach(c => {
         const isEscrowEnabled = Boolean(c.payfreight_escrow || c.enable_payfreight_escrow || c.escrow_enabled);
         const escrowBadgeHtml = isEscrowEnabled 
@@ -898,7 +929,6 @@ async function executeGlobalSearch(e) {
           </tr>`;
       });
 
-      // Izris transportnih ponudb v tabelo
       transports.forEach(t => {
         const isEscrowEnabled = Boolean(t.payfreight_escrow || t.enable_payfreight_escrow || t.escrow_enabled);
         const escrowBadgeHtml = isEscrowEnabled 
@@ -919,12 +949,13 @@ async function executeGlobalSearch(e) {
       tbody.innerHTML = html;
       if (typeof lucide !== 'undefined') lucide.createIcons();
       
-      // Avtomatski pomik zaslona (scroll) navzdol do rezultatov
-      document.getElementById('myOffersSection').scrollIntoView({ behavior: 'smooth' });
+      if (!isAutoRefresh) {
+        document.getElementById('myOffersSection').scrollIntoView({ behavior: 'smooth' });
+      }
 
     } catch (err) {
       console.error('Search error:', err);
-      alert('Error performing global search: ' + err.message);
+      if (!isAutoRefresh) alert('Error performing global search: ' + err.message);
       tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-rose-500">Error querying database.</td></tr>`;
     }
   }
