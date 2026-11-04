@@ -352,6 +352,22 @@
         </div>
         <p class="text-xs text-slate-500 mt-1">Search worldwide by transport mode, multiple equipment types, continents and countries.</p>
       </div>
+
+      <!-- SEARCH TYPE SWITCHER (CARGO / TRANSPORT) -->
+<div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-200">
+  <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Search Target:</span>
+  <div class="inline-flex rounded-xl p-1 bg-slate-100 border border-slate-200">
+    <button type="button" id="searchModeCargo" onclick="setSearchMode('cargo')" class="px-4 py-2 text-xs font-bold rounded-lg transition bg-blue-600 text-white shadow-sm">
+      Search Cargo (Loads)
+    </button>
+    <button type="button" id="searchModeTransport" onclick="setSearchMode('transport')" class="px-4 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900">
+      Search Transport (Capacity)
+    </button>
+  </div>
+  <input type="hidden" id="activeSearchMode" value="cargo">
+</div>
+
+      
       <!-- AUTO-REFRESH & MANUAL REFRESH CONTROLS (ON THE RIGHT) -->
       <div class="flex items-center space-x-3 bg-slate-950 px-3 py-2 rounded-xl border border-slate-800">
         <label class="flex items-center space-x-2 cursor-pointer">
@@ -806,7 +822,24 @@
     }
   }
 
-// 30 seconds Auto-Refresh timer setup & state management
+// Global search mode state ('cargo' or 'transport')
+  function setSearchMode(mode) {
+    const cargoBtn = document.getElementById('searchModeCargo');
+    const transportBtn = document.getElementById('searchModeTransport');
+    const modeInput = document.getElementById('activeSearchMode');
+    
+    modeInput.value = mode;
+    
+    if (mode === 'cargo') {
+      cargoBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition bg-blue-600 text-white shadow-sm";
+      transportBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900";
+    } else {
+      transportBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition bg-emerald-600 text-white shadow-sm";
+      cargoBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900";
+    }
+  }
+
+  // 30 seconds Auto-Refresh timer setup & state management
   let lastSearchCriteria = null;
 
   function setupAutoRefresh() {
@@ -814,10 +847,8 @@
     autoRefreshTimer = setInterval(() => {
       if (toggle && toggle.checked) {
         if (lastSearchCriteria) {
-          // Če je bilo izvedeno iskanje, ponovno izvedi isto iskanje v ozadju
           executeGlobalSearch(null, true);
         } else {
-          // Sicer naloži privzete zadnje ponudbe
           loadMyOffers();
         }
       }
@@ -827,7 +858,7 @@
   async function executeGlobalSearch(e, isAutoRefresh = false) {
     if (e) e.preventDefault();
     
-    let origins, destinations, equipment, transportMedium, adrChecked, wasteChecked;
+    let origins, destinations, equipment, transportMedium, adrChecked, wasteChecked, searchMode;
 
     if (isAutoRefresh && lastSearchCriteria) {
       origins = lastSearchCriteria.origins;
@@ -836,6 +867,7 @@
       transportMedium = lastSearchCriteria.transportMedium;
       adrChecked = lastSearchCriteria.adrChecked;
       wasteChecked = lastSearchCriteria.wasteChecked;
+      searchMode = lastSearchCriteria.searchMode;
     } else {
       origins = Array.from(document.querySelectorAll('.origin-chk:checked')).map(chk => chk.value);
       destinations = Array.from(document.querySelectorAll('.dest-chk:checked')).map(chk => chk.value);
@@ -853,9 +885,9 @@
       transportMedium = document.getElementById('transportMedium').value;
       adrChecked = document.getElementById('adrSearch').checked;
       wasteChecked = document.getElementById('wasteSearch').checked;
+      searchMode = document.getElementById('activeSearchMode').value;
 
-      // Shranimo kriterije za kasnejši auto-refresh
-      lastSearchCriteria = { origins, destinations, equipment, transportMedium, adrChecked, wasteChecked };
+      lastSearchCriteria = { origins, destinations, equipment, transportMedium, adrChecked, wasteChecked, searchMode };
     }
 
     const tbody = document.getElementById('myOffersTableBody');
@@ -864,85 +896,59 @@
     }
 
     try {
-      let cargoQuery = sb.from('enter_cargo').select('*')
+      let targetTable = searchMode === 'cargo' ? 'enter_cargo' : 'enter_transport';
+      
+      let query = sb.from(targetTable).select('*')
         .in('origin_country', origins)
         .in('dest_country', destinations);
       
       if (transportMedium) {
-        cargoQuery = cargoQuery.ilike('transport_mode', transportMedium);
+        query = query.ilike('transport_mode', transportMedium);
       }
       if (equipment.length > 0) {
-        cargoQuery = cargoQuery.in('vehicle_type', equipment);
+        query = query.in('vehicle_type', equipment);
       }
       if (adrChecked) {
-        cargoQuery = cargoQuery.eq('adr_hazardous', true);
+        query = query.eq('adr_hazardous', true);
       }
       if (wasteChecked) {
-        cargoQuery = cargoQuery.eq('waste_transport', true);
+        query = query.eq('waste_transport', true);
       }
 
-      let transportQuery = sb.from('enter_transport').select('*')
-        .in('origin_country', origins)
-        .in('dest_country', destinations);
+      const { data, error } = await query;
+      if (error) throw error;
 
-      if (transportMedium) {
-        transportQuery = transportQuery.ilike('transport_mode', transportMedium);
-      }
-      if (equipment.length > 0) {
-        transportQuery = transportQuery.in('vehicle_type', equipment);
-      }
-      if (adrChecked) {
-        transportQuery = transportQuery.eq('adr_hazardous', true);
-      }
-      if (wasteChecked) {
-        transportQuery = transportQuery.eq('waste_transport', true);
-      }
-
-      const [cargoRes, transportRes] = await Promise.all([cargoQuery, transportQuery]);
-
-      if (cargoRes.error) throw cargoRes.error;
-      if (transportRes.error) throw transportRes.error;
-
-      const cargos = cargoRes.data || [];
-      const transports = transportRes.data || [];
-
+      const results = data || [];
       let html = '';
-      if (cargos.length === 0 && transports.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-500">No matching offers found for the selected search criteria.</td></tr>`;
+
+      if (results.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-500">No matching ${searchMode} offers found for the selected search criteria.</td></tr>`;
         return;
       }
 
-      cargos.forEach(c => {
-        const isEscrowEnabled = Boolean(c.payfreight_escrow || c.enable_payfreight_escrow || c.escrow_enabled);
+      results.forEach(item => {
+        const isEscrowEnabled = Boolean(item.payfreight_escrow || item.enable_payfreight_escrow || item.escrow_enabled);
         const escrowBadgeHtml = isEscrowEnabled 
           ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i><span>PayFreight Escrow</span></span>`
           : `<span class="text-xs text-slate-400 font-normal">Standard</span>`;
 
-        html += `
-          <tr class="hover:bg-slate-50 transition">
-            <td class="py-3 px-4"><span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded border border-blue-200">Cargo</span></td>
-            <td class="py-3 px-4 font-medium text-slate-900">${c.origin_country || c.origin_continent || 'N/A'} → ${c.dest_country || c.dest_continent || 'N/A'}</td>
-            <td class="py-3 px-4 text-xs text-slate-600">${c.loading_date || 'Immediate'}</td>
-            <td class="py-3 px-4 text-xs text-slate-600">${c.transport_mode || 'Road'} Freight (${c.vehicle_type || 'General'})</td>
-            <td class="py-3 px-4">${escrowBadgeHtml}</td>
-            <td class="py-3 px-4 text-right"><span class="text-xs text-blue-600 font-semibold">Active Match</span></td>
-          </tr>`;
-      });
+        const typeBadge = searchMode === 'cargo' 
+          ? `<span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded border border-blue-200">Cargo</span>`
+          : `<span class="px-2 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded border border-emerald-200">Transport</span>`;
 
-      transports.forEach(t => {
-        const isEscrowEnabled = Boolean(t.payfreight_escrow || t.enable_payfreight_escrow || t.escrow_enabled);
-        const escrowBadgeHtml = isEscrowEnabled 
-          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i><span>PayFreight Escrow</span></span>`
-          : `<span class="text-xs text-slate-400 font-normal">Standard</span>`;
+        const dateVal = item.loading_date || item.available_from || 'Immediate';
+        const detailsVal = searchMode === 'cargo' 
+          ? `${item.transport_mode || 'Road'} Freight (${item.vehicle_type || 'General'})` 
+          : `${item.vehicle_type || 'Standard Fleet'}`;
 
         html += `
           <tr class="hover:bg-slate-50 transition">
-            <td class="py-3 px-4"><span class="px-2 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded border border-emerald-200">Transport</span></td>
-            <td class="py-3 px-4 font-medium text-slate-900">${t.origin_country || t.origin_continent || 'N/A'} → ${t.dest_country || t.dest_continent || 'N/A'}</td>
-            <td class="py-3 px-4 text-xs text-slate-600">${t.available_from || t.loading_date || 'Immediate'}</td>
-            <td class="py-3 px-4 text-xs text-slate-600">${t.vehicle_type || 'Standard Fleet'}</td>
+            <td class="py-3 px-4">${typeBadge}</td>
+            <td class="py-3 px-4 font-medium text-slate-900">${item.origin_country || item.origin_continent || 'N/A'} → ${item.dest_country || item.dest_continent || 'N/A'}</td>
+            <td class="py-3 px-4 text-xs text-slate-600">${dateVal}</td>
+            <td class="py-3 px-4 text-xs text-slate-600">${detailsVal}</td>
             <td class="py-3 px-4">${escrowBadgeHtml}</td>
-            <td class="py-3 px-4 text-right"><span class="text-xs text-emerald-600 font-semibold">Active Match</span></td>
+            <td class="py-3 px-4 text-right"><span class="text-xs ${searchMode === 'cargo' ? 'text-blue-600' : 'text-emerald-600'} font-semibold">Active Match</span></td>
           </tr>`;
       });
 
