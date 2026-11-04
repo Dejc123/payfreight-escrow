@@ -344,45 +344,46 @@
   <div id="exchangeSearchPanel" class="bg-white text-slate-800 rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 relative overflow-hidden">
     <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-blue-600/5 rounded-full blur-3xl pointer-events-none"></div>
     
-    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-200">
+    <div class="flex flex-col gap-3 mb-4 pb-3 border-b border-slate-200">
       <div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
           <span class="px-2.5 py-1 bg-blue-50 text-sky-700 border border-blue-100 text-[10px] font-bold rounded uppercase tracking-wider">Freight Exchange 4.0</span>
           <h2 class="text-xl font-bold tracking-tight text-slate-900">Global Freight & Transport Search</h2>
         </div>
         <p class="text-xs text-slate-500 mt-1">Search worldwide by transport mode, multiple equipment types, continents and countries.</p>
       </div>
-
-      <!-- SEARCH TYPE SWITCHER (CARGO / TRANSPORT) -->
-<div class="flex items-center space-x-3 mb-6 pb-4 border-b border-slate-200">
-  <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Search Target:</span>
-  <div class="inline-flex rounded-xl p-1 bg-slate-100 border border-slate-200">
-    <button type="button" id="searchModeCargo" onclick="setSearchMode('cargo')" class="px-4 py-2 text-xs font-bold rounded-lg transition bg-blue-600 text-white shadow-sm">
-      Search Cargo (Loads)
-    </button>
-    <button type="button" id="searchModeTransport" onclick="setSearchMode('transport')" class="px-4 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900">
-      Search Transport (Capacity)
-    </button>
-  </div>
-  <input type="hidden" id="activeSearchMode" value="cargo">
-</div>
-
-      
-      <!-- AUTO-REFRESH & MANUAL REFRESH CONTROLS (ON THE RIGHT) -->
-      <div class="flex items-center space-x-3 bg-slate-950 px-3 py-2 rounded-xl border border-slate-800">
-        <label class="flex items-center space-x-2 cursor-pointer">
-          <input type="checkbox" id="autoRefreshToggle" checked class="w-4 h-4 text-cyan-500 bg-slate-900 border-slate-700 rounded focus:ring-cyan-400">
-          <span class="text-[11px] font-medium text-slate-300">Auto-refresh (30s)</span>
-        </label>
-        <button type="button" onclick="manualRefreshData()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-cyan-400 rounded-lg text-xs font-bold transition flex items-center gap-1 border border-slate-700" title="Refresh Live Data">
-          <i data-lucide="rotate-cw" class="w-3.5 h-3.5" id="refreshIcon"></i>
-          <span>Refresh</span>
-        </button>
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Search:</span>
+          <div class="inline-flex rounded-lg p-1 bg-slate-100 border border-slate-200">
+            <button type="button" id="searchModeCargo" onclick="setSearchMode('cargo')" class="px-3 py-1.5 text-xs font-bold rounded-md transition bg-blue-600 text-white shadow-sm">Cargo</button>
+            <button type="button" id="searchModeTransport" onclick="setSearchMode('transport')" class="px-3 py-1.5 text-xs font-bold rounded-md transition text-slate-600 hover:text-slate-900">Transport</button>
+          </div>
+          <input type="hidden" id="activeSearchMode" value="cargo">
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="flex items-center gap-2 bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-800">
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" id="autoRefreshToggle" checked class="w-3.5 h-3.5 text-cyan-500 bg-slate-800 border-slate-600 rounded focus:ring-cyan-400">
+              <span class="text-[11px] font-medium text-slate-200">Auto</span>
+            </label>
+            <select id="autoRefreshInterval" aria-label="Auto-refresh interval" class="bg-slate-800 border border-slate-700 text-slate-200 text-[11px] rounded px-1.5 py-1 focus:outline-none">
+              <option value="5">5 sec</option><option value="10">10 sec</option><option value="15">15 sec</option><option value="30" selected>30 sec</option><option value="60">60 sec</option>
+            </select>
+            <button type="button" onclick="manualRefreshData()" id="manualRefreshButton" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-cyan-300 rounded-md text-[11px] font-bold transition flex items-center gap-1" title="Refresh once">
+              <i data-lucide="rotate-cw" class="w-3.5 h-3.5" id="refreshIcon"></i><span>Refresh</span>
+            </button>
+          </div>
+          <button type="submit" form="exchangeSearchForm" id="globalSearchButton" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-lg transition shadow-sm flex items-center justify-center gap-2 whitespace-nowrap">
+            <i data-lucide="search" class="w-3.5 h-3.5" id="globalSearchIcon"></i><span id="globalSearchButtonText">Search Global Exchange</span>
+          </button>
+          <span id="searchResultCount" class="text-[11px] text-slate-500 min-w-[72px] text-right" aria-live="polite"></span>
+        </div>
       </div>
     </div>
     <!-- GLOBAL SEARCH FORM -->
-    <form id="exchangeSearchForm" onsubmit="executeGlobalSearch(event)" class="space-y-6">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-blue-50/60 p-4 rounded-xl border border-blue-100">
+    <form id="exchangeSearchForm" onsubmit="executeGlobalSearch(event)" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 bg-blue-50/60 p-3 rounded-xl border border-blue-100">
         <div>
           <label class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Transport Medium</label>
           <select id="transportMedium" onchange="updateVehicleDropdowns()" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800 focus:outline-none focus:border-sky-500">
@@ -391,28 +392,28 @@
         </div>
         <div class="md:col-span-2">
           <label class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Vehicle / Cargo Specifications – select multiple</label>
-          <div id="equipmentSelection" class="max-h-80 overflow-y-auto bg-white border border-slate-200 rounded-lg p-3 space-y-3 text-sm"></div>
+          <div id="equipmentSelection" class="max-h-64 overflow-y-auto bg-white border border-slate-200 rounded-lg p-2 space-y-2 text-sm"></div>
           <p id="equipmentCount" class="text-[11px] text-slate-500 mt-1">No equipment types selected</p>
         </div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <section class="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <section class="rounded-xl border border-slate-200 bg-white p-3 space-y-2">
           <div class="flex items-center justify-between border-b border-slate-100 pb-2">
             <h3 class="text-xs font-bold uppercase tracking-wide text-sky-700">Origin – select up to 5 countries</h3>
             <span id="originCountBadge" class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded font-mono">0 / 5 selected</span>
           </div>
           <div><label for="originContinent" class="block text-[11px] font-semibold text-slate-600 mb-1">Select continent / region</label>
             <select id="originContinent" onchange="renderCountryCheckboxes('origin')" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"><option value="EU" selected>Europe</option><option value="NA">North America (USA & Canada)</option><option value="CA">Central America & Caribbean</option><option value="SA">South America</option><option value="AS">Asia & Far East</option><option value="ME">Middle East</option><option value="AF">Africa</option><option value="OC">Australia & Oceania</option></select></div>
-          <div id="originCountries" class="max-h-64 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1 rounded-lg bg-slate-50 border border-slate-100 p-2 text-xs"></div>
+          <div id="originCountries" class="max-h-56 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-0.5 rounded-lg bg-slate-50 border border-slate-100 p-1.5 text-xs"></div>
         </section>
-        <section class="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+        <section class="rounded-xl border border-slate-200 bg-white p-3 space-y-2">
           <div class="flex items-center justify-between border-b border-slate-100 pb-2">
             <h3 class="text-xs font-bold uppercase tracking-wide text-sky-700">Destination – select up to 5 countries</h3>
             <span id="destCountBadge" class="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded font-mono">0 / 5 selected</span>
           </div>
           <div><label for="destContinent" class="block text-[11px] font-semibold text-slate-600 mb-1">Select continent / region</label>
             <select id="destContinent" onchange="renderCountryCheckboxes('dest')" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"><option value="EU" selected>Europe</option><option value="NA">North America (USA & Canada)</option><option value="CA">Central America & Caribbean</option><option value="SA">South America</option><option value="AS">Asia & Far East</option><option value="ME">Middle East</option><option value="AF">Africa</option><option value="OC">Australia & Oceania</option></select></div>
-          <div id="destCountries" class="max-h-64 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1 rounded-lg bg-slate-50 border border-slate-100 p-2 text-xs"></div>
+          <div id="destCountries" class="max-h-56 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-0.5 rounded-lg bg-slate-50 border border-slate-100 p-1.5 text-xs"></div>
         </section>
       </div>
       <div class="flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-slate-200 pt-4">
@@ -420,9 +421,8 @@
         <label class="inline-flex items-center gap-2 text-sm text-slate-700 cursor-pointer"><input type="checkbox" id="wasteSearch" class="w-4 h-4 rounded border-slate-300 text-sky-600"><span>Waste Transport</span></label>
         <span class="text-xs text-slate-500">Select these only when the search must include special cargo requirements.</span>
       </div>
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-slate-200 pt-4">
-        <p class="text-xs text-slate-500">Choose one or more equipment types and up to five origin and destination countries.</p>
-        <button type="submit" class="w-full sm:w-auto px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-lg transition shadow-sm flex items-center justify-center gap-2"><i data-lucide="search" class="w-4 h-4"></i><span>Search Global Exchange</span></button>
+      <div class="border-t border-slate-200 pt-3">
+        <p class="text-[11px] text-slate-500">Choose one or more equipment types and up to five origin and destination countries.</p>
       </div>
     </form>
   </div>
@@ -531,21 +531,20 @@
     window.location.href = '../index.html?status=logged_out';
   }
 
-  // Global manual refresh function
-  function manualRefreshData() {
+  // Manual refresh runs one request only and never overwrites filtered search results.
+  async function manualRefreshData() {
     const icon = document.getElementById('refreshIcon');
+    const button = document.getElementById('manualRefreshButton');
+    if (button) button.disabled = true;
     if (icon) icon.classList.add('animate-spin');
-    
-    if (lastSearchCriteria) {
-      executeGlobalSearch(null, true);
-    } else {
-      loadMyOffers();
-    }
-    loadMyCargoOffers();
-    
-    setTimeout(() => {
+    try {
+      if (lastSearchCriteria) await executeGlobalSearch(null, true);
+      else await loadMyOffers();
+      await loadMyCargoOffers();
+    } finally {
       if (icon) icon.classList.remove('animate-spin');
-    }, 800);
+      if (button) button.disabled = false;
+    }
   }
 
   // Global location data copied from the existing CargoTrans Post Cargo form.
@@ -625,7 +624,7 @@
     container.innerHTML = '';
     (fullWorldData[continent] || []).forEach(country => {
       const label = document.createElement('label');
-      label.className = 'flex items-center gap-2 px-2 py-1.5 rounded hover:bg-blue-50 cursor-pointer text-slate-700';
+      label.className = 'flex items-center gap-1.5 px-1.5 py-1 rounded hover:bg-blue-50 cursor-pointer text-slate-700';
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox'; checkbox.name = side + '_country'; checkbox.value = country;
       checkbox.className = className + ' w-4 h-4 rounded border-slate-300 text-sky-600';
@@ -664,15 +663,15 @@
       heading.className = 'text-[11px] font-bold uppercase tracking-wide text-slate-600 border-b border-slate-100 pb-1';
       heading.textContent = group.label;
       const grid = document.createElement('div');
-      grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2';
+      grid.className = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-1.5 pt-1.5';
       group.items.forEach(entry => {
         const value = Array.isArray(entry) ? String(entry[0]) : String(entry);
         const label = Array.isArray(entry) ? String(entry[1] ?? entry[0]) : String(entry);
         const item = document.createElement('label');
-        item.className = 'flex items-start gap-2 px-2.5 py-2 rounded-lg border border-slate-100 bg-white hover:bg-blue-50 hover:border-blue-200 cursor-pointer text-slate-700 min-h-[40px] text-xs';
+        item.className = 'flex items-center gap-1.5 px-2 py-1.5 rounded-md border border-slate-100 bg-white hover:bg-blue-50 hover:border-blue-200 cursor-pointer text-slate-700 min-h-[32px] text-[11px]';
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox'; checkbox.name = 'equipment_type'; checkbox.value = value;
-        checkbox.className = 'equipment-chk mt-0.5 w-4 h-4 shrink-0 rounded border-slate-300 text-sky-600';
+        checkbox.className = 'equipment-chk w-3.5 h-3.5 shrink-0 rounded border-slate-300 text-sky-600';
         checkbox.checked = selectedEquipment[mode].includes(value);
         checkbox.addEventListener('change', () => {
           if (checkbox.checked && !selectedEquipment[mode].includes(value)) selectedEquipment[mode].push(value);
@@ -680,7 +679,7 @@
           updateEquipmentCounter();
         });
         const text = document.createElement('span');
-        text.className = 'leading-5';
+        text.className = 'leading-4';
         text.textContent = label;
         item.append(checkbox, text); grid.appendChild(item);
       });
@@ -853,15 +852,19 @@
 
   function setupAutoRefresh() {
     const toggle = document.getElementById('autoRefreshToggle');
-    autoRefreshTimer = setInterval(() => {
-      if (toggle && toggle.checked) {
-        if (lastSearchCriteria) {
-          executeGlobalSearch(null, true);
-        } else {
-          loadMyOffers();
-        }
-      }
-    }, 30000);
+    const interval = document.getElementById('autoRefreshInterval');
+    const restart = () => {
+      if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+      autoRefreshTimer = null;
+      if (!toggle || !toggle.checked) return;
+      const seconds = Math.max(5, Number(interval && interval.value) || 30);
+      autoRefreshTimer = setInterval(() => {
+        if (lastSearchCriteria) executeGlobalSearch(null, true);
+      }, seconds * 1000);
+    };
+    if (toggle) toggle.addEventListener('change', restart);
+    if (interval) interval.addEventListener('change', restart);
+    restart();
   }
 
   async function executeGlobalSearch(e, isAutoRefresh = false) {
@@ -898,7 +901,15 @@
     }
 
     const tbody = document.getElementById('myOffersTableBody');
+    const searchButton = document.getElementById('globalSearchButton');
+    const searchButtonText = document.getElementById('globalSearchButtonText');
+    const resultCount = document.getElementById('searchResultCount');
     if (!isAutoRefresh) {
+      if (searchButton) searchButton.disabled = true;
+      if (searchButtonText) searchButtonText.textContent = 'Searching…';
+      if (resultCount) resultCount.textContent = '';
+      const searchIcon = document.getElementById('globalSearchIcon');
+      if (searchIcon) searchIcon.classList.add('animate-spin');
       tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-400">Searching global exchange database...</td></tr>`;
     }
 
@@ -929,6 +940,7 @@
       const results = data || [];
       let html = '';
 
+      if (resultCount) resultCount.textContent = `${results.length} result${results.length === 1 ? '' : 's'}`;
       if (results.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-500">No matching ${searchMode} offers found for the selected search criteria.</td></tr>`;
         return;
@@ -970,7 +982,15 @@
     } catch (err) {
       console.error('Search error:', err);
       if (!isAutoRefresh) alert('Error performing global search: ' + err.message);
+      if (resultCount) resultCount.textContent = 'Search failed';
       tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-rose-500">Error querying database.</td></tr>`;
+    } finally {
+      if (!isAutoRefresh) {
+        if (searchButton) searchButton.disabled = false;
+        if (searchButtonText) searchButtonText.textContent = 'Search Global Exchange';
+        const searchIcon = document.getElementById('globalSearchIcon');
+        if (searchIcon) searchIcon.classList.remove('animate-spin');
+      }
     }
   }
 </script>
