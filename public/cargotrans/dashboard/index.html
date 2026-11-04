@@ -806,61 +806,126 @@
     }
   }
 
-  async function executeGlobalSearch(e) {
+async function executeGlobalSearch(e) {
     e.preventDefault();
     const origins = Array.from(document.querySelectorAll('.origin-chk:checked')).map(chk => chk.value);
     const destinations = Array.from(document.querySelectorAll('.dest-chk:checked')).map(chk => chk.value);
     const equipment = Array.from(document.querySelectorAll('.equipment-chk:checked')).map(chk => chk.value);
-    if (!origins.length || !destinations.length) { alert('Please select at least one origin and one destination country.'); return; }
-    if (origins.length > 5 || destinations.length > 5) { alert('A maximum of 5 countries is allowed on each side.'); return; }
-    const criteria = {
-      transport_mode: document.getElementById('transportMedium').value,
-      equipment_types: equipment,
-      origin_countries: origins,
-      destination_countries: destinations,
-      adr_dangerous_goods: document.getElementById('adrSearch').checked,
-      waste_transport: document.getElementById('wasteSearch').checked
-    };
-    console.log('CargoNet global search criteria:', criteria);
-    alert('Your search criteria are ready. The selected filters are shown in the browser console. Live database matching still needs to be connected to the confirmed CargoNet search schema.');
-  }
-
-  // Manual refresh button action
-  function manualRefreshData() {
-    const icon = document.getElementById('refreshIcon');
-    icon.classList.add('animate-spin');
-    loadMyCargoOffers();
-    loadMyOffers();
-    setTimeout(() => {
-      icon.classList.remove('animate-spin');
-    }, 800);
-  }
-
-  // 30 seconds Auto-Refresh timer setup
-  function setupAutoRefresh() {
-    const toggle = document.getElementById('autoRefreshToggle');
-    autoRefreshTimer = setInterval(() => {
-      if (toggle && toggle.checked) {
-        loadMyCargoOffers();
-        loadMyOffers();
-      }
-    }, 30000);
-  }
-
-  function executeAiSearch() {
-    const query = document.getElementById('aiGlobalSearchInput').value.trim();
-    if (!query) {
-      alert("Please enter a company name, route, or continent corridor to search.");
-      return;
+    
+    if (!origins.length || !destinations.length) { 
+      alert('Please select at least one origin and one destination country.'); 
+      return; 
     }
-    window.location.href = `directory.html?search=${encodeURIComponent(query)}`;
-  }
+    if (origins.length > 5 || destinations.length > 5) { 
+      alert('A maximum of 5 countries is allowed on each side.'); 
+      return; 
+    }
 
-  function handleLogout() {
-    if (confirm("Are you sure you want to log out of CargoNet?")) {
-      localStorage.clear();
-      sessionStorage.clear();
-      window.location.href = "../index.html";
+    const transportMedium = document.getElementById('transportMedium').value; // 'road', 'ocean', 'air'
+    const adrChecked = document.getElementById('adrSearch').checked;
+    const wasteChecked = document.getElementById('wasteSearch').checked;
+
+    const tbody = document.getElementById('myOffersTableBody');
+    tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-400">Searching global exchange database...</td></tr>`;
+
+    try {
+      // 1. Poizvedba za tovore (enter_cargo) z uporabo Supabase filter metrik (.in, .eq)
+      let cargoQuery = sb.from('enter_cargo').select('*')
+        .in('origin_country', origins)
+        .in('dest_country', destinations);
+      
+      if (transportMedium) {
+        cargoQuery = cargoQuery.ilike('transport_mode', transportMedium);
+      }
+      if (equipment.length > 0) {
+        cargoQuery = cargoQuery.in('vehicle_type', equipment);
+      }
+      if (adrChecked) {
+        cargoQuery = cargoQuery.eq('adr_hazardous', true);
+      }
+      if (wasteChecked) {
+        cargoQuery = cargoQuery.eq('waste_transport', true);
+      }
+
+      // 2. Poizvedba za transporte (enter_transport)
+      let transportQuery = sb.from('enter_transport').select('*')
+        .in('origin_country', origins)
+        .in('dest_country', destinations);
+
+      if (transportMedium) {
+        transportQuery = transportQuery.ilike('transport_mode', transportMedium);
+      }
+      if (equipment.length > 0) {
+        transportQuery = transportQuery.in('vehicle_type', equipment);
+      }
+      if (adrChecked) {
+        transportQuery = transportQuery.eq('adr_hazardous', true);
+      }
+      if (wasteChecked) {
+        transportQuery = transportQuery.eq('waste_transport', true);
+      }
+
+      // Izvedemo obe poizvedbi vzporedno
+      const [cargoRes, transportRes] = await Promise.all([cargoQuery, transportQuery]);
+
+      if (cargoRes.error) throw cargoRes.error;
+      if (transportRes.error) throw transportRes.error;
+
+      const cargos = cargoRes.data || [];
+      const transports = transportRes.data || [];
+
+      let html = '';
+      if (cargos.length === 0 && transports.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-500">No matching offers found for the selected search criteria.</td></tr>`;
+        return;
+      }
+
+      // Izris tovornih ponudb v tabelo
+      cargos.forEach(c => {
+        const isEscrowEnabled = Boolean(c.payfreight_escrow || c.enable_payfreight_escrow || c.escrow_enabled);
+        const escrowBadgeHtml = isEscrowEnabled 
+          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i><span>PayFreight Escrow</span></span>`
+          : `<span class="text-xs text-slate-400 font-normal">Standard</span>`;
+
+        html += `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3 px-4"><span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded border border-blue-200">Cargo</span></td>
+            <td class="py-3 px-4 font-medium text-slate-900">${c.origin_country || c.origin_continent || 'N/A'} → ${c.dest_country || c.dest_continent || 'N/A'}</td>
+            <td class="py-3 px-4 text-xs text-slate-600">${c.loading_date || 'Immediate'}</td>
+            <td class="py-3 px-4 text-xs text-slate-600">${c.transport_mode || 'Road'} Freight (${c.vehicle_type || 'General'})</td>
+            <td class="py-3 px-4">${escrowBadgeHtml}</td>
+            <td class="py-3 px-4 text-right"><span class="text-xs text-blue-600 font-semibold">Active Match</span></td>
+          </tr>`;
+      });
+
+      // Izris transportnih ponudb v tabelo
+      transports.forEach(t => {
+        const isEscrowEnabled = Boolean(t.payfreight_escrow || t.enable_payfreight_escrow || t.escrow_enabled);
+        const escrowBadgeHtml = isEscrowEnabled 
+          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i><span>PayFreight Escrow</span></span>`
+          : `<span class="text-xs text-slate-400 font-normal">Standard</span>`;
+
+        html += `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3 px-4"><span class="px-2 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded border border-emerald-200">Transport</span></td>
+            <td class="py-3 px-4 font-medium text-slate-900">${t.origin_country || t.origin_continent || 'N/A'} → ${t.dest_country || t.dest_continent || 'N/A'}</td>
+            <td class="py-3 px-4 text-xs text-slate-600">${t.available_from || t.loading_date || 'Immediate'}</td>
+            <td class="py-3 px-4 text-xs text-slate-600">${t.vehicle_type || 'Standard Fleet'}</td>
+            <td class="py-3 px-4">${escrowBadgeHtml}</td>
+            <td class="py-3 px-4 text-right"><span class="text-xs text-emerald-600 font-semibold">Active Match</span></td>
+          </tr>`;
+      });
+
+      tbody.innerHTML = html;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      
+      // Avtomatski pomik zaslona (scroll) navzdol do rezultatov
+      document.getElementById('myOffersSection').scrollIntoView({ behavior: 'smooth' });
+
+    } catch (err) {
+      console.error('Search error:', err);
+      alert('Error performing global search: ' + err.message);
+      tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-rose-500">Error querying database.</td></tr>`;
     }
   }
 </script>
