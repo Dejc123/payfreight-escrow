@@ -489,7 +489,7 @@
     </form>
   </main>
 
-  <!-- JAVASCRIPT & SUPABASE LOGIC -->
+<!-- JAVASCRIPT & SUPABASE LOGIC -->
   <script>
     const fullWorldData = {
       EU: [
@@ -751,13 +751,12 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // GLAVNA DOM LOADED SKRIPA (Nalaganje, Uporabniki, Urejanje)
+    // GLAVNA DOM LOADED SKRIPA
     document.addEventListener("DOMContentLoaded", async function() {
       if (typeof lucide !== 'undefined') {
         lucide.createIcons();
       }
 
-      // 1. Uporabniški podatki
       const urlParams = new URLSearchParams(window.location.search);
       let cargoTransId = urlParams.get('CargoTransID') || urlParams.get('cargotrans_id') || localStorage.getItem('cargotrans_id');
       let userName = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user');
@@ -774,7 +773,6 @@
       const formUserEl = document.getElementById('formUserLabel');
       if (formUserEl) formUserEl.textContent = `User / CT ID: ${userName} [${cargoTransId}]`;
 
-      // 2. Kontaktni podatki
       const savedUserStr = localStorage.getItem('cargotrans_user');
       let userData = {};
       if (savedUserStr) {
@@ -789,7 +787,6 @@
       if (emailInput) emailInput.value = userData.contact_email || userData.email || "john.doe@example.com";
       if (phoneInput) phoneInput.value = userData.contact_phone || userData.phone || "+1 555 123 4567";
 
-      // 3. Inicializacija regij in datumi
       handleRegionChange('origin');
       updateCountryDropdown('dest');
 
@@ -804,7 +801,6 @@
       const deadlineDateEl = document.getElementById('deadlineDateInput');
       if (deadlineDateEl) deadlineDateEl.value = deadlineStr;
 
-      // 4. Preverjanje za urejanje ponudbe (editCargoId) in naložitev podatkov iz baze
       const editCargoId = urlParams.get('id') || urlParams.get('edit_id');
       if (editCargoId) {
         const titleEl = document.getElementById('pageMainTitle');
@@ -828,11 +824,9 @@
         if (error) {
           console.error("Napaka pri pridobivanju ponudbe:", error);
         } else if (data) {
-          // A) Escrow stikalo
           const escrowToggle = document.getElementById('payfreightToggle');
           if (escrowToggle) escrowToggle.checked = !!data.payfreight_escrow;
 
-          // B) Lokacije (Mesta, pošte, države)
           if (data.origin_continent) document.getElementById('originContinent').value = data.origin_continent;
           handleRegionChange('origin');
           if (data.origin_country) document.getElementById('originCountry').value = data.origin_country;
@@ -845,16 +839,14 @@
           if (data.dest_city) document.getElementById('destCity').value = data.dest_city;
           if (data.dest_zip) document.getElementById('destZip').value = data.dest_zip;
 
-          // C) Teža, dolžina, cena in datum
           if (data.weight) document.getElementById('inputWeight').value = data.weight;
-          if (data.length) document.getElementById('inputLength').value = data.length;
           if (data.price) document.getElementById('freightPriceInput').value = data.price;
           if (data.loading_date) document.getElementById('loadingDateInput').value = data.loading_date;
         }
       }
     });
 
-    // 5. Poslušalec za shranjevanje / objavo obrazca (Submit: Insert ali Update)
+    // SUBMIT POSLUŠALEC (Brez neobstoječega polja 'length', da ne ruši baze)
     document.querySelector('form').addEventListener('submit', async function(e) {
       e.preventDefault();
 
@@ -877,7 +869,6 @@
       const isEscrowEnabled = escrowToggle ? escrowToggle.checked : false;
 
       const weightVal = document.getElementById('inputWeight') ? document.getElementById('inputWeight').value : null;
-      const lengthVal = document.getElementById('inputLength') ? document.getElementById('inputLength').value : null;
       const priceVal = document.getElementById('freightPriceInput') ? document.getElementById('freightPriceInput').value : null;
 
       const cargoData = {
@@ -892,7 +883,6 @@
         dest_city: destCity,
         dest_zip: destZip,
         weight: weightVal ? parseFloat(weightVal) : null,
-        length: lengthVal ? parseFloat(lengthVal) : null,
         price: priceVal ? parseFloat(priceVal) : null,
         loading_date: loadingDate || null,
         payfreight_escrow: isEscrowEnabled
@@ -926,7 +916,6 @@
       }
     });
 
-    // 6. Funkcija za brisanje ponudbe
     async function deleteCurrentListing() {
       const urlParams = new URLSearchParams(window.location.search);
       const editCargoId = urlParams.get('id') || urlParams.get('edit_id');
