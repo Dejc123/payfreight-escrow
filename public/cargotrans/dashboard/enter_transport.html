@@ -759,7 +759,7 @@
       }
     }
 
-    function focusCustomDays() {
+   function focusCustomDays() {
       document.getElementById('customDaysInput').focus();
     }
 
@@ -789,7 +789,7 @@
         formUserEl.textContent = `User / CT ID: ${userName} [${cargoTransId}]`;
       }
 
-      // 2. Avtomatsko nalaganje kontaktnih podatkov (Ime, E-mail, Telefon) iz baze / localStorage
+      // 2. Avtomatsko nalaganje kontaktnih podatkov iz baze / localStorage
       const savedUserStr = localStorage.getItem('cargotrans_user');
       let userData = {};
       if (savedUserStr) {
@@ -800,7 +800,6 @@
         }
       }
 
-      // Vpis v polja, da jih je mogoče urejati (npr. med dopustom)
       const nameInput = document.getElementById('contactNameInput');
       const emailInput = document.getElementById('contactEmailInput');
       const phoneInput = document.getElementById('contactPhoneInput');
@@ -824,7 +823,6 @@
       const tillInput = document.getElementById('availableTillInput');
       if (tillInput) tillInput.value = tillStr;
 
-      // Nastavitev prednastavljenih datumov za Ocean (če obstajajo v formi)
       const oceanValEl = document.getElementById('oceanRateValidity');
       if (oceanValEl) {
         const oceanVal = new Date();
@@ -839,41 +837,58 @@
         oceanCutEl.value = oceanCut.toISOString().split('T')[0];
       }
     });
-  
-<!-- SUPABASE SKRIPTA IN POVEZAVA ZA TRANSPORT -->
-  <script>
-    // 1. Definicija tvojih podatkov iz Supabase nastavitvah
+
+    // SUPABASE KONFIGURACIJA IN POVEZAVA ZA TRANSPORT
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
-    
-    // 2. Inicializacija Supabase odjemalca
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // 3. Poslušalec za oddajo obrazca (ob kliku na gumb za objavo transporta)
+    // Poslušalec za oddajo obrazca za transport
     document.querySelector('form').addEventListener('submit', async function(e) {
-      e.preventDefault(); // Prepreči običajno osvežitev strani
+      e.preventDefault();
 
-      // Preberemo osnovne vrednosti iz vnosnih polj
+      const currentCargoTransId = localStorage.getItem('cargotrans_id') || localStorage.getItem('cargo_trans_id') || 'CT-2026';
+      
       const originContinent = document.getElementById('originContinent').value;
       const originCountry = document.getElementById('originCountry').value;
+      const originCity = document.getElementById('originCity') ? document.getElementById('originCity').value : '';
+      const originZip = document.getElementById('originZip') ? document.getElementById('originZip').value : '';
+
       const destContinent = document.getElementById('destContinent').value;
       const destCountry = document.getElementById('destCountry').value;
-      const loadingDate = document.getElementById('loadingDateInput').value;
-      const vehicleType = document.getElementById('vehicleTypeSelect').value;
+      const destCity = document.getElementById('destCity') ? document.getElementById('destCity').value : '';
+      const destZip = document.getElementById('destZip') ? document.getElementById('destZip').value : '';
 
-      // Pripravimo objekt s podatki za tabelo 'enter_transport' v Supabase
+      const availableFrom = document.getElementById('availableFromInput').value;
+      const availableTill = document.getElementById('availableTillInput') ? document.getElementById('availableTillInput').value : null;
+      const askingRate = document.getElementById('askingRateInput') ? document.getElementById('askingRateInput').value : null;
+      const vehicleType = document.getElementById('vehicleTypeSelect').value;
+      const payloadWeight = document.getElementById('inputWeight') ? document.getElementById('inputWeight').value : null;
+      const trailerLength = document.getElementById('inputLength') ? document.getElementById('inputLength').value : null;
+      const isEscrowEnabled = document.getElementById('payfreightToggle') ? document.getElementById('payfreightToggle').checked : false;
+
+      // Pripravimo objekt za tabelo 'enter_transport'
       const transportData = {
+        cargotrans_id: currentCargoTransId,
         origin_continent: originContinent,
         origin_country: originCountry,
+        origin_city: originCity,
+        origin_zip: originZip,
         dest_continent: destContinent,
         dest_country: destCountry,
-        loading_date: loadingDate || null,
-        vehicle_type: vehicleType
+        dest_city: destCity,
+        dest_zip: destZip,
+        available_from: availableFrom || null,
+        available_till: availableTill || null,
+        asking_rate: askingRate ? parseFloat(askingRate) : null,
+        vehicle_type: vehicleType,
+        payload_capacity: payloadWeight ? parseFloat(payloadWeight) : null,
+        trailer_length: trailerLength ? parseFloat(trailerLength) : null,
+        payfreight_escrow: isEscrowEnabled
       };
 
       try {
-        // Pošiljanje podatkov v Supabase bazo
-        const { data, error } = await supabaseClient
+        const { error } = await supabaseClient
           .from('enter_transport')
           .insert([transportData]);
 
@@ -886,9 +901,9 @@
         }
       } catch (err) {
         console.error('Prišlo je do nepričakovane napake:', err);
+        alert('Napaka: ' + err.message);
       }
     });
   </script>
-  
 </body>
 </html>
