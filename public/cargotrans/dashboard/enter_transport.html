@@ -843,12 +843,16 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Poslušalec za oddajo obrazca za transport
+  // Poslušalec za oddajo obrazca za transport
     document.querySelector('form').addEventListener('submit', async function(e) {
       e.preventDefault();
 
       const currentCargoTransId = localStorage.getItem('cargotrans_id') || localStorage.getItem('cargo_trans_id') || 'CT-2026';
       
+      // Določitev izbranega transportnega načina
+      const transportMode = document.getElementById('btnModeRoad').classList.contains('border-blue-600') ? 'Road' : 
+                            document.getElementById('btnModeOcean').classList.contains('border-blue-600') ? 'Ocean' : 'Air';
+
       const originContinent = document.getElementById('originContinent').value;
       const originCountry = document.getElementById('originCountry').value;
       const originCity = document.getElementById('originCity') ? document.getElementById('originCity').value : '';
@@ -867,9 +871,10 @@
       const trailerLength = document.getElementById('inputLength') ? document.getElementById('inputLength').value : null;
       const isEscrowEnabled = document.getElementById('payfreightToggle') ? document.getElementById('payfreightToggle').checked : false;
 
-      // Pripravimo objekt za tabelo 'enter_transport'
+      // Pripravimo objekt za tabelo 'enter_transport' z vključenim transport_mode
       const transportData = {
         cargotrans_id: currentCargoTransId,
+        transport_mode: transportMode,
         origin_continent: originContinent,
         origin_country: originCountry,
         origin_city: originCity,
