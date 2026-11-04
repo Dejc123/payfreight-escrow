@@ -560,7 +560,6 @@
         "Australia", "Fiji", "New Zealand", "Papua New Guinea"
       ]
     };
-
 const euVehicleTypesHTML = `
       <optgroup label="Standard & Curtainsiders">
         <option value="Tarpauling" selected>Tarpauling / Curtainsider</option>
@@ -851,10 +850,9 @@ const euVehicleTypesHTML = `
       const destCountry = document.getElementById('destCountry').value;
       const loadingDate = document.getElementById('loadingDateInput').value;
 
-      // Prepare payload object for 'enter_cargo' table in Supabase
+      // Prepare payload object for 'enter_cargo' table in Supabase (only cargotrans_id)
       const cargoData = {
         cargotrans_id: currentCargoTransId,
-        cargo_trans_id: currentCargoTransId,
         created_by: currentUser,
         transport_mode: transportMode,
         origin_continent: originContinent,
