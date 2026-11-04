@@ -124,6 +124,7 @@
     </div>
   </div>
 </header>
+
 <!-- MAIN CONTENT -->
 <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
   <!-- AI INTELLIGENT GLOBAL SEARCH BAR -->
@@ -148,6 +149,7 @@
       </button>
     </div>
   </div>
+
   <!-- PRIMARY ACTIONS GRID (5 Core Modules - Always Visible) -->
   <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
     <div class="max-w-3xl mb-6">
@@ -262,12 +264,13 @@
             <th class="py-3.5 px-4">Origin (Country, Postal, City)</th>
             <th class="py-3.5 px-4">Destination (Country, Postal, City)</th>
             <th class="py-3.5 px-4">Weight & Length</th>
+            <th class="py-3.5 px-4">PayFreight Escrow</th>
             <th class="py-3.5 px-4 text-right">Actions</th>
           </tr>
         </thead>
         <tbody id="myCargoTableBody" class="divide-y divide-slate-100 text-sm">
           <tr>
-            <td colspan="5" class="py-8 text-center text-xs text-slate-400 font-medium">
+            <td colspan="6" class="py-8 text-center text-xs text-slate-400 font-medium">
               Loading your cargo offers...
             </td>
           </tr>
@@ -300,12 +303,13 @@
             <th class="py-3.5 px-4">Route (Origin → Destination)</th>
             <th class="py-3.5 px-4">Loading Date</th>
             <th class="py-3.5 px-4">Details / Equipment</th>
+            <th class="py-3.5 px-4">Escrow Option</th>
             <th class="py-3.5 px-4 text-right">Status</th>
           </tr>
         </thead>
         <tbody id="myOffersTableBody" class="divide-y divide-slate-100 text-sm">
           <tr>
-            <td colspan="5" class="py-8 text-center text-xs text-slate-400 font-medium">
+            <td colspan="6" class="py-8 text-center text-xs text-slate-400 font-medium">
               Loading active exchange offers from Supabase...
             </td>
           </tr>
@@ -335,6 +339,7 @@
       </a>
     </div>
   </section>
+
   <!-- FREIGHT EXCHANGE 4.0: ADVANCED PRO SEARCH ENGINE -->
   <div id="exchangeSearchPanel" class="bg-white text-slate-800 rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 relative overflow-hidden">
     <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-blue-600/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -405,6 +410,7 @@
       </div>
     </form>
   </div>
+
   <!-- QUICK COMPANY DIRECTORY & e-CMR ACCESS -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
@@ -437,6 +443,7 @@
     </div>
   </div>
 </main>
+
 <!-- FOOTER -->
 <footer class="bg-white border-t border-slate-200 mt-auto py-6">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
@@ -449,12 +456,14 @@
     </div>
   </div>
 </footer>
+
 <!-- JAVASCRIPT LOGIC -->
 <script>
   const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   let autoRefreshTimer = null;
+
   document.addEventListener("DOMContentLoaded", async () => {
     if (typeof lucide !== 'undefined') lucide.createIcons();
     // Check user & subscription validity
@@ -497,6 +506,7 @@
     // Setup 30s Auto-Refresh Interval
     setupAutoRefresh();
   });
+
   // Global location data copied from the existing CargoTrans Post Cargo form.
   const fullWorldData = {
       EU: [
@@ -553,6 +563,7 @@
         "Australia", "Fiji", "New Zealand", "Papua New Guinea"
       ]
     };
+
   const regionNames = {EU:'Europe', NA:'North America (USA & Canada)', CA:'Central America & Caribbean', SA:'South America', AS:'Asia & Far East', ME:'Middle East', AF:'Africa', OC:'Australia & Oceania'};
   const roadEquipmentGroups = [{"label": "Standard & Curtainsiders", "items": [["Tarpauling", "Tarpauling / Curtainsider"], ["Tautliner", "Tautliner"], ["Mega", "Mega Trailer"], ["Box", "Box Trailer"], ["Jumbo", "Jumbo Trailer"], ["Swap body", "Swap body"]]}, {"label": "Refrigerated & Temp-Controlled", "items": [["Refrigerator", "Refrigerator / Reefer"], ["Multi-temp", "Multi-temp / Bi-thermo"], ["Meat hanging", "Meat hanging / Hooks"], ["Thermo", "Thermo"]]}, {"label": "Bulk, Silos & Tankers", "items": [["Silo", "Silo"], ["Silobas", "Silobas / Pressurized silo"], ["Tanker", "Liquid Tanker"], ["Food tanker", "Food / Milk Tanker"], ["Gas tanker", "Gas Tanker"], ["Walking floor", "Walking floor (Moving floor)"], ["Dumper", "Tipper / Dumper"]]}, {"label": "Flatbeds & Open Trailers", "items": [["Flat", "Flatbed"], ["Stepdeck", "Stepdeck"], ["Coil hollow", "Coil Well / Trough"], ["Container", "Container Chassis"]]}, {"label": "Heavy Haulage & Oversized", "items": [["Lowloader", "Lowbed / Lowloader"], ["Heavy machinery", "Heavy Machinery Transport"], ["Oversized", "Oversized / Heavy Transport"], ["Yacht transport", "Yacht & Boat Transport"]]}, {"label": "Specialized & Niche", "items": [["Car transporter", "Car Transporter"], ["Enclosed Car Transporter", "Enclosed Car Carrier"], ["Road train", "Road train"], ["Timber carrier", "Timber / Log carrier"], ["Livestock", "Livestock Transporter"]]}, {"label": "Passenger Transport", "items": [["Passenger Bus", "Passenger Bus / Coach Charter"]]}];
   const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dry Van 53ft", "Dry Van (53ft Box)"], ["Reefer 53ft", "Reefer / Refrigerated (53ft)"], ["Dry Van 48ft", "Dry Van (48ft Box)"]]}, {"label": "Flatbeds & Heavy Haul", "items": [["Flatbed 53ft", "Standard Flatbed (53ft)"], ["Step Deck", "Step Deck / Single Drop"], ["RGN Lowboy", "RGN Lowboy (Removable Gooseneck)"], ["Conestoga", "Conestoga (Rolling Tarp)"], ["Double Drop", "Double Drop / Heavy Specialized"]]}, {"label": "Specialized US Fleet", "items": [["Car Hauler", "Car Hauler / Stinger-Steered"], ["Intermodal Container", "Intermodal Chassis (40ft/53ft)"], ["Tanker US", "Liquid / Bulk Tanker"]]}, {"label": "Passenger Fleet", "items": [["Passenger Bus", "Charter Motorcoach / Bus"]]}];
@@ -651,7 +662,7 @@
 
   function updateVehicleDropdowns() { renderEquipmentOptions(); }
 
-  // 1. DEDICATED "MY CARGO OFFERS" FUNCTION WITH EDIT & DELETE
+  // 1. DEDICATED "MY CARGO OFFERS" FUNCTION WITH PAYFREIGHT ESCROW BADGE
   async function loadMyCargoOffers() {
     const tbody = document.getElementById('myCargoTableBody');
     const currentId = localStorage.getItem('cargotrans_id') || '';
@@ -665,7 +676,7 @@
       const cargos = data || [];
 
       if (cargos.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-xs text-slate-500">You have no active cargo offers. Post a new cargo above!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-500">You have no active cargo offers. Post a new cargo above!</td></tr>`;
         return;
       }
 
@@ -677,12 +688,24 @@
         const lengthText = c.length ? `${c.length} m` : (c.length_ft ? `${c.length_ft} ft` : 'N/A');
         const rowId = c.id || c.cargo_id;
 
+        // Check if PayFreight Escrow is enabled in DB
+        const isEscrowEnabled = Boolean(c.payfreight_escrow || c.enable_payfreight_escrow || c.escrow_enabled);
+        const escrowBadgeHtml = isEscrowEnabled 
+          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold">
+               <i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i>
+               <span>PayFreight Escrow</span>
+             </span>`
+          : `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 text-slate-500 border border-slate-200 rounded-md text-xs font-medium">
+               <span>Standard</span>
+             </span>`;
+
         html += `
           <tr class="hover:bg-slate-50 transition" id="cargo-row-${rowId}">
             <td class="py-3 px-4 text-xs font-semibold text-slate-700">${c.loading_date || 'Immediate'}</td>
             <td class="py-3 px-4 font-medium text-slate-900 text-xs">${originText}</td>
             <td class="py-3 px-4 font-medium text-slate-900 text-xs">${destText}</td>
             <td class="py-3 px-4 text-xs text-slate-600">Weight: <strong>${weightText}</strong> | Length: <strong>${lengthText}</strong></td>
+            <td class="py-3 px-4">${escrowBadgeHtml}</td>
             <td class="py-3 px-4 text-right space-x-2">
               <button type="button" onclick="editCargoOffer('${rowId}')" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded text-xs font-semibold transition">Edit</button>
               <button type="button" onclick="deleteCargoOffer('${rowId}')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded text-xs font-semibold transition">Delete</button>
@@ -690,9 +713,10 @@
           </tr>`;
       });
       tbody.innerHTML = html;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     } catch (err) {
       console.error('Error loading my cargo offers:', err);
-      tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-xs text-rose-500">Error loading your cargo offers from database.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-rose-500">Error loading your cargo offers from database.</td></tr>`;
     }
   }
 
@@ -717,7 +741,7 @@
     window.location.href = `enter_cargo.html?edit_id=${id}`;
   }
 
-  // 2. LOAD RECENT OFFERS FOR LIVE EXCHANGE TABLE
+  // 2. LOAD RECENT OFFERS FOR LIVE EXCHANGE TABLE WITH PAYFREIGHT ESCROW BADGE
   async function loadMyOffers() {
     const tbody = document.getElementById('myOffersTableBody');
     try {
@@ -729,37 +753,56 @@
       const cargos = cargoRes.data || [];
       const transports = transportRes.data || [];
       if (cargos.length === 0 && transports.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-xs text-slate-500">No active offers found. Post your first cargo or transport capacity above!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-500">No active offers found. Post your first cargo or transport capacity above!</td></tr>`;
         return;
       }
       cargos.forEach(c => {
+        const isEscrowEnabled = Boolean(c.payfreight_escrow || c.enable_payfreight_escrow || c.escrow_enabled);
+        const escrowBadgeHtml = isEscrowEnabled 
+          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold">
+               <i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i>
+               <span>PayFreight Escrow</span>
+             </span>`
+          : `<span class="text-xs text-slate-400 font-normal">Standard</span>`;
+
         html += `
           <tr class="hover:bg-slate-50 transition">
             <td class="py-3 px-4"><span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded border border-blue-200">Cargo</span></td>
             <td class="py-3 px-4 font-medium text-slate-900">${c.origin_country || c.origin_continent || 'N/A'} → ${c.dest_country || c.dest_continent || 'N/A'}</td>
             <td class="py-3 px-4 text-xs text-slate-600">${c.loading_date || 'Immediate'}</td>
             <td class="py-3 px-4 text-xs text-slate-600">${c.transport_mode || 'Road'} Freight Offer</td>
+            <td class="py-3 px-4">${escrowBadgeHtml}</td>
             <td class="py-3 px-4 text-right">
               <span class="text-xs text-blue-600 font-semibold">Active</span>
             </td>
           </tr>`;
       });
       transports.forEach(t => {
+        const isEscrowEnabled = Boolean(t.payfreight_escrow || t.enable_payfreight_escrow || t.escrow_enabled);
+        const escrowBadgeHtml = isEscrowEnabled 
+          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold">
+               <i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i>
+               <span>PayFreight Escrow</span>
+             </span>`
+          : `<span class="text-xs text-slate-400 font-normal">Standard</span>`;
+
         html += `
           <tr class="hover:bg-slate-50 transition">
             <td class="py-3 px-4"><span class="px-2 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded border border-emerald-200">Transport</span></td>
             <td class="py-3 px-4 font-medium text-slate-900">${t.origin_country || t.origin_continent || 'N/A'} → ${t.dest_country || t.dest_continent || 'N/A'}</td>
             <td class="py-3 px-4 text-xs text-slate-600">${t.loading_date || 'Immediate'}</td>
             <td class="py-3 px-4 text-xs text-slate-600">${t.vehicle_type || 'Standard Fleet'}</td>
+            <td class="py-3 px-4">${escrowBadgeHtml}</td>
             <td class="py-3 px-4 text-right">
               <span class="text-xs text-emerald-600 font-semibold">Active</span>
             </td>
           </tr>`;
       });
       tbody.innerHTML = html;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     } catch (err) {
       console.error('Error loading live exchange offers:', err);
-      tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-xs text-rose-500">Error loading exchange offers from database.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-rose-500">Error loading exchange offers from database.</td></tr>`;
     }
   }
 
