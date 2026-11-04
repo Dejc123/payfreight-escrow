@@ -838,7 +838,6 @@ const euVehicleTypesHTML = `
 
       // Dynamically fetch logged-in user ID from localStorage for any authenticated user
       const currentCargoTransId = localStorage.getItem('CargoTransID') || localStorage.getItem('cargotrans_id') || '';
-      const currentUser = localStorage.getItem('cargotrans_user') || '';
 
       // Read values from form fields
       const transportMode = document.getElementById('btnModeRoad').classList.contains('border-blue-600') ? 'Road' : 
@@ -850,10 +849,9 @@ const euVehicleTypesHTML = `
       const destCountry = document.getElementById('destCountry').value;
       const loadingDate = document.getElementById('loadingDateInput').value;
 
-      // Prepare payload object for 'enter_cargo' table in Supabase (only cargotrans_id)
+      // Prepare payload object for 'enter_cargo' table in Supabase (only existing schema columns)
       const cargoData = {
         cargotrans_id: currentCargoTransId,
-        created_by: currentUser,
         transport_mode: transportMode,
         origin_continent: originContinent,
         origin_country: originCountry,
