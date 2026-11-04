@@ -379,11 +379,24 @@
             <i data-lucide="search" class="w-3.5 h-3.5" id="globalSearchIcon"></i><span id="globalSearchButtonText">Search Global Exchange</span>
           </button>
           <span id="searchResultCount" class="text-[11px] text-slate-500 min-w-[72px] text-right" aria-live="polite"></span>
+          <button type="button" id="toggleSearchFormButton" onclick="toggleSearchForm()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 rounded-lg text-xs font-semibold whitespace-nowrap">Hide</button>
         </div>
       </div>
     </div>
     <!-- GLOBAL SEARCH FORM -->
+    <div id="searchCriteriaSummary" class="hidden mb-4 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-xs text-slate-700">
+      <div class="font-semibold text-slate-900 mb-1">Current search criteria</div>
+      <div id="searchCriteriaSummaryText" class="leading-6"></div>
+    </div>
     <form id="exchangeSearchForm" onsubmit="executeGlobalSearch(event)" class="space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 bg-slate-50 p-3 rounded-xl border border-slate-200">
+        <div><label for="loadingDateFrom" class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Loading date from</label><input type="date" id="loadingDateFrom" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"></div>
+        <div><label for="loadingDateTo" class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Loading date to</label><input type="date" id="loadingDateTo" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"></div>
+        <div><label for="weightMin" class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Weight from (t)</label><input type="number" id="weightMin" min="0" step="0.1" placeholder="Min. tonnes" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"></div>
+        <div><label for="weightMax" class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Weight to (t)</label><input type="number" id="weightMax" min="0" step="0.1" value="25" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"></div>
+        <div><label for="lengthMin" class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Length from (LDM)</label><input type="number" id="lengthMin" min="0" step="0.1" placeholder="Min. LDM" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"></div>
+        <div><label for="lengthMax" class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Length to (LDM)</label><input type="number" id="lengthMax" min="0" step="0.1" placeholder="Max. LDM" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"></div>
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3 bg-blue-50/60 p-3 rounded-xl border border-blue-100">
         <div>
           <label class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Transport Medium</label>
@@ -523,10 +536,70 @@
     }
     
     initCheckboxCounters();
+    initializeSearchDateDefaults();
     loadMyCargoOffers();
     loadMyOffers();
     setupAutoRefresh();
   });
+
+  function localDateInputValue(date) {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  function initializeSearchDateDefaults() {
+    const today = new Date();
+    const plusTwo = new Date(today);
+    plusTwo.setDate(plusTwo.getDate() + 2);
+    const from = document.getElementById('loadingDateFrom');
+    const to = document.getElementById('loadingDateTo');
+    if (from && !from.value) from.value = localDateInputValue(today);
+    if (to && !to.value) to.value = localDateInputValue(plusTwo);
+    const medium = document.getElementById('transportMedium');
+    const maxWeight = document.getElementById('weightMax');
+    if (medium && maxWeight && medium.value === 'road' && !maxWeight.value) maxWeight.value = '25';
+  }
+
+  function selectedCountryCodes(side) {
+    const codes = { 'Germany':'DE','Belgium':'BE','Netherlands':'NL','France':'FR','Slovenia':'SI','Italy':'IT','Austria':'AT','Croatia':'HR','Bosnia and Herzegovina':'BA','Spain':'ES','United Kingdom':'GB','Switzerland':'CH','Poland':'PL','Czech Republic':'CZ','Slovakia':'SK','Hungary':'HU','Romania':'RO','Bulgaria':'BG','Denmark':'DK','Sweden':'SE','Norway':'NO','Finland':'FI','Portugal':'PT','Greece':'GR','Ireland':'IE','Luxembourg':'LU' };
+    return selectedCountries[side].map(name => codes[name] || (name.match(/\(([A-Z]{2,3})\)/)?.[1] || name.slice(0,2).toUpperCase()));
+  }
+
+  function toggleSearchForm() {
+    const form = document.getElementById('exchangeSearchForm');
+    const summary = document.getElementById('searchCriteriaSummary');
+    const button = document.getElementById('toggleSearchFormButton');
+    if (!form || !summary || !button) return;
+    const hide = !form.classList.contains('hidden');
+    if (hide) {
+      updateSearchCriteriaSummary();
+      form.classList.add('hidden');
+      summary.classList.remove('hidden');
+      button.textContent = 'Edit criteria';
+    } else {
+      form.classList.remove('hidden');
+      summary.classList.add('hidden');
+      button.textContent = 'Hide';
+    }
+  }
+
+  function updateSearchCriteriaSummary() {
+    const get = id => document.getElementById(id)?.value || '—';
+    const mode = get('transportMedium').toUpperCase();
+    const searchMode = get('activeSearchMode') === 'transport' ? 'Transport' : 'Cargo';
+    const equipment = getSelectedEquipment();
+    const equipmentText = equipment.length ? equipment.join(', ') : (mode === 'ROAD' ? 'Any road equipment' : `Any ${mode.toLowerCase()} type`);
+    const wMin = get('weightMin'), wMax = get('weightMax');
+    const lMin = get('lengthMin'), lMax = get('lengthMax');
+    const weightText = `${wMin === '—' ? 'any' : wMin}–${wMax === '—' ? 'any' : wMax} t`;
+    const lengthText = `${lMin === '—' ? 'any' : lMin}–${lMax === '—' ? 'any' : lMax} LDM`;
+    const from = selectedCountryCodes('origin').join(' / ') || 'No origin selected';
+    const to = selectedCountryCodes('dest').join(' / ') || 'No destination selected';
+    const text = `${searchMode} / ${mode} · ${get('loadingDateFrom')}–${get('loadingDateTo')} · ${weightText} · ${lengthText} · ${equipmentText}<br><strong>${from} → ${to}</strong>`;
+    document.getElementById('searchCriteriaSummaryText').innerHTML = text;
+  }
 
   // Global Logout function to fix console reference error
   function handleLogout() {
@@ -775,7 +848,13 @@
     renderEquipmentOptions();
   }
 
-  function updateVehicleDropdowns() { renderEquipmentOptions(); }
+  function updateVehicleDropdowns() {
+    renderEquipmentOptions();
+    const medium = document.getElementById('transportMedium');
+    const maxWeight = document.getElementById('weightMax');
+    if (medium && maxWeight && medium.value === 'road' && !maxWeight.value) maxWeight.value = '25';
+    if (medium && maxWeight && medium.value !== 'road' && maxWeight.value === '25') maxWeight.value = '';
+  }
 
   // 1. DEDICATED "MY CARGO OFFERS" FUNCTION WITH PAYFREIGHT ESCROW BADGE
   async function loadMyCargoOffers() {
@@ -952,6 +1031,7 @@
     if (e) e.preventDefault();
     
     let origins, destinations, equipment, transportMedium, adrChecked, wasteChecked, searchMode;
+    let dateFrom = '', dateTo = '', weightMin = '', weightMax = '', lengthMin = '', lengthMax = '';
 
     if (isAutoRefresh && lastSearchCriteria) {
       origins = lastSearchCriteria.origins;
@@ -961,6 +1041,12 @@
       adrChecked = lastSearchCriteria.adrChecked;
       wasteChecked = lastSearchCriteria.wasteChecked;
       searchMode = lastSearchCriteria.searchMode;
+      dateFrom = lastSearchCriteria.dateFrom;
+      dateTo = lastSearchCriteria.dateTo;
+      weightMin = lastSearchCriteria.weightMin;
+      weightMax = lastSearchCriteria.weightMax;
+      lengthMin = lastSearchCriteria.lengthMin;
+      lengthMax = lastSearchCriteria.lengthMax;
     } else {
       origins = Array.from(document.querySelectorAll('.origin-chk:checked')).map(chk => chk.value);
       destinations = Array.from(document.querySelectorAll('.dest-chk:checked')).map(chk => chk.value);
@@ -977,8 +1063,14 @@
       
       const modeInput = document.getElementById('activeSearchMode');
       searchMode = modeInput ? modeInput.value : 'cargo';
-
-      lastSearchCriteria = { origins, destinations, equipment, transportMedium, adrChecked, wasteChecked, searchMode };
+      dateFrom = document.getElementById('loadingDateFrom').value;
+      dateTo = document.getElementById('loadingDateTo').value;
+      weightMin = document.getElementById('weightMin').value;
+      weightMax = document.getElementById('weightMax').value;
+      lengthMin = document.getElementById('lengthMin').value;
+      lengthMax = document.getElementById('lengthMax').value;
+      if (dateFrom && dateTo && dateFrom > dateTo) { alert('Loading date FROM cannot be later than loading date TO.'); return; }
+      lastSearchCriteria = { origins, destinations, equipment, transportMedium, adrChecked, wasteChecked, searchMode, dateFrom, dateTo, weightMin, weightMax, lengthMin, lengthMax };
     }
 
     const tbody = document.getElementById('myOffersTableBody');
@@ -1005,6 +1097,14 @@
       if (transportMedium) {
         query = query.ilike('transport_mode', `%${transportMedium}%`);
       }
+      if (dateFrom) query = query.gte('loading_date', dateFrom);
+      if (dateTo) query = query.lte('loading_date', dateTo);
+      const weightColumn = searchMode === 'transport' ? 'payload_capacity' : 'weight';
+      const lengthColumn = searchMode === 'transport' ? 'trailer_length' : 'length';
+      if (weightMin !== '') query = query.gte(weightColumn, Number(weightMin));
+      if (weightMax !== '') query = query.lte(weightColumn, Number(weightMax));
+      if (lengthMin !== '') query = query.gte(lengthColumn, Number(lengthMin));
+      if (lengthMax !== '') query = query.lte(lengthColumn, Number(lengthMax));
       // Cargo postings currently do not save vehicle_type in enter_cargo; only filter
       // by equipment on Transport postings, where vehicle_type is saved by the form.
       if (equipment.length > 0 && searchMode === 'transport') {
