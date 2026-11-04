@@ -851,7 +851,9 @@
       }
     });
 
-    // SUBMIT POSLUŠALEC
+
+
+// SUBMIT POSLUŠALEC
     document.querySelector('form').addEventListener('submit', async function(e) {
       e.preventDefault();
 
@@ -873,12 +875,22 @@
       const escrowToggle = document.getElementById('payfreightToggle');
       const isEscrowEnabled = escrowToggle ? escrowToggle.checked : false;
 
-      const weightVal = document.getElementById('inputWeight') ? document.getElementById('inputWeight').value : null;
+      // ==========================================
+      // TUKAJ VSTAVI KODO ZA IZBIRO TEŽE:
+      // ==========================================
+      let weightVal = null;
+      if (transportMode === 'Road') {
+        weightVal = document.getElementById('inputWeight') ? document.getElementById('inputWeight').value : null;
+      } else if (transportMode === 'Ocean') {
+        weightVal = document.getElementById('oceanWeight') ? document.getElementById('oceanWeight').value : null;
+      }
+      // ==========================================
+
       const lengthVal = document.getElementById('inputLength') ? document.getElementById('inputLength').value : null;
       const priceVal = document.getElementById('freightPriceInput') ? document.getElementById('freightPriceInput').value : null;
 
-const cargoData = {
-        cargotrans_id: currentCargoTransId, // Popravljeno brez podčrtaja
+      const cargoData = {
+        cargotrans_id: currentCargoTransId,
         transport_mode: transportMode,
         origin_continent: originContinent,
         origin_country: originCountry,
@@ -893,7 +905,7 @@ const cargoData = {
         freight_price: priceVal ? parseFloat(priceVal) : null,
         loading_date: loadingDate || null,
         payfreight_escrow: isEscrowEnabled
-      }; // <-- Tukaj je manjkal ta zaklepaj!
+      };
 
       const urlParams = new URLSearchParams(window.location.search);
       const editCargoId = urlParams.get('id') || urlParams.get('edit_id');
