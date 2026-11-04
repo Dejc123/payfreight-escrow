@@ -74,7 +74,6 @@
       </div>
     </div>
   </header>
-
   <!-- MAIN CONTENT -->
   <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
     <!-- Header Form Title & Back Button -->
@@ -84,27 +83,23 @@
           <i data-lucide="globe-2" class="w-5 h-5"></i>
         </div>
         <div>
-          <h1 class="text-xl font-bold text-slate-900">Post Global Cargo Offer</h1>
+          <h1 class="text-xl font-bold text-slate-900" id="pageMainTitle">Post Global Cargo Offer</h1>
           <p class="text-xs text-slate-500">Worldwide freight posting across Road, Ocean, Air, and Heavy Haulage corridors</p>
         </div>
       </div>
-     <div class="flex items-center space-x-3">
+      <div class="flex items-center space-x-3">
         <!-- Dodan gumb za brisanje zgoraj -->
-        <button type="button" class="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-lg border border-rose-200 transition flex items-center gap-1.5 shadow-sm">
+        <button type="button" id="topDeleteBtn" onclick="deleteCurrentListing()" class="hidden px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-lg border border-rose-200 transition flex items-center gap-1.5 shadow-sm">
           <i data-lucide="trash-2" class="w-4 h-4"></i>
           <span>Delete Listing</span>
         </button>
-
         <a href="index.html" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm">
           <i data-lucide="arrow-left" class="w-4 h-4"></i>
           <span>Back to Dashboard</span>
         </a>
         <span id="formUserLabel" class="text-xs text-slate-400 font-medium hidden sm:inline">User: Loading...</span>
       </div>
-        <span id="formUserLabel" class="text-xs text-slate-400 font-medium hidden sm:inline">User: Loading...</span>
-      </div>
     </div>
-
     <!-- MAIN FORM CARD -->
     <form id="postCargoForm" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
       
@@ -135,7 +130,6 @@
           </button>
         </div>
       </div>
-
       <!-- ROUTE SECTION -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-slate-100">
         
@@ -177,7 +171,6 @@
             </div>
           </div>
         </div>
-
         <!-- Unloading (Destination) -->
         <div class="space-y-4">
           <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
@@ -217,7 +210,6 @@
           </div>
         </div>
       </div>
-
       <!-- DATES, DEADLINE & PRICE -->
       <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 pb-6 border-b border-slate-100">
         <div>
@@ -240,7 +232,6 @@
           </div>
         </div>
       </div>
-
       <!-- BOOKING DEADLINE SECTION -->
       <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-3">
         <div class="flex items-center justify-between">
@@ -261,7 +252,6 @@
           </div>
         </div>
       </div>
-
       <!-- DYNAMIC VEHICLE / CONTAINER / AIR SPECS -->
       <div class="space-y-4 pb-6 border-b border-slate-100">
         <h3 class="text-sm font-bold text-slate-900" id="specsHeader">Vehicle & Cargo Specifications</h3>
@@ -339,7 +329,6 @@
             <p class="text-[11px] text-blue-700">For passenger transport, weight/length are replaced by seat capacity.</p>
           </div>
         </div>
-
         <!-- OCEAN SPECIFIC SETUP -->
         <div id="oceanSection" class="hidden space-y-4">
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -363,7 +352,6 @@
             </div>
           </div>
         </div>
-
         <!-- AIR SPECIFIC SETUP -->
         <div id="airSection" class="hidden space-y-4">
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -382,7 +370,6 @@
           </div>
         </div>
       </div>
-
       <!-- PAYMENT TERMS & PAYFREIGHT ESCROW -->
       <div class="space-y-4 pt-2">
         <!-- Standard Payment Terms -->
@@ -432,7 +419,6 @@
           </div>
         </div>
       </div>
-
       <!-- CONTACT DETAILS (Pre-filled from database / editable) -->
       <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl space-y-4">
         <div class="flex items-center justify-between border-b border-slate-200 pb-2">
@@ -442,7 +428,6 @@
           </h4>
           <span class="text-[11px] text-slate-400">Default from profile (Editable for duty substitution)</span>
         </div>
-
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label class="block text-xs font-medium text-slate-600 mb-1">Contact Name *</label>
@@ -458,7 +443,6 @@
           </div>
         </div>
       </div>
-
       <!-- REMARKS & ADR LICENSES -->
       <div class="space-y-4 pt-2">
         <div>
@@ -480,11 +464,10 @@
           </label>
         </div>
       </div>
-
      <!-- FORM ACTIONS -->
       <div class="flex flex-col sm:flex-row items-center justify-between pt-6 border-t border-slate-200 gap-4">
         <div class="flex items-center space-x-2 w-full sm:w-auto">
-          <button type="button" class="w-full sm:w-auto px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-lg border border-rose-200 transition flex items-center justify-center gap-1.5">
+          <button type="button" id="bottomDeleteBtn" onclick="deleteCurrentListing()" class="hidden px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-lg border border-rose-200 transition flex items-center justify-center gap-1.5">
             <i data-lucide="trash-2" class="w-4 h-4"></i>
             <span>Removal / Delete Listing</span>
           </button>
@@ -499,11 +482,14 @@
           </a>
           <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center gap-1.5">
             <i data-lucide="send" class="w-4 h-4"></i>
-            <span></span>
+            <span id="submitBtnText">Publish Offer</span>
           </button>
         </div>
       </div>
-  <!-- JAVASCRIPT LOGIC -->
+    </form>
+  </main>
+
+  <!-- JAVASCRIPT & SUPABASE LOGIC -->
   <script>
     const fullWorldData = {
       EU: [
@@ -560,7 +546,8 @@
         "Australia", "Fiji", "New Zealand", "Papua New Guinea"
       ]
     };
-const euVehicleTypesHTML = `
+
+    const euVehicleTypesHTML = `
       <optgroup label="Standard & Curtainsiders">
         <option value="Tarpauling" selected>Tarpauling / Curtainsider</option>
         <option value="Tautliner">Tautliner</option>
@@ -639,6 +626,7 @@ const euVehicleTypesHTML = `
     function updateCountryDropdown(type) {
       const continent = document.getElementById(type + 'Continent').value;
       const select = document.getElementById(type + 'Country');
+      if (!select) return;
       select.innerHTML = '';
       (fullWorldData[continent] || []).forEach(c => {
         const opt = document.createElement('option');
@@ -659,30 +647,29 @@ const euVehicleTypesHTML = `
       const labelHeight = document.getElementById('labelHeight');
       const inputWeight = document.getElementById('inputWeight');
       const inputLength = document.getElementById('inputLength');
+      if (!vehicleSelect) return;
+
       const isUS = (originCont === 'NA');
       const isAU = (originCont === 'OC');
-
       if (isUS) {
         vehicleSelect.innerHTML = usVehicleTypesHTML;
-        labelWeight.textContent = "Weight (lbs)";
-        labelLength.textContent = "Length (ft)";
-        labelHeight.textContent = "Internal Height (ft)";
-        inputWeight.value = "45000";
-        inputLength.value = "53";
+        if (labelWeight) labelWeight.textContent = "Weight (lbs)";
+        if (labelLength) labelLength.textContent = "Length (ft)";
+        if (labelHeight) labelHeight.textContent = "Internal Height (ft)";
+        if (inputWeight) inputWeight.value = "45000";
+        if (inputLength) inputLength.value = "53";
       } else {
         vehicleSelect.innerHTML = euVehicleTypesHTML;
-        labelWeight.textContent = "Weight (t)";
-        labelLength.textContent = "Length (m)";
-        labelHeight.textContent = "Internal Height (m)";
+        if (labelWeight) labelWeight.textContent = "Weight (t)";
+        if (labelLength) labelLength.textContent = "Length (m)";
+        if (labelHeight) labelHeight.textContent = "Internal Height (m)";
         
         if (isAU) {
-          inputWeight.value = "";
-          inputLength.value = "";
-          inputWeight.placeholder = "e.g. 80t";
-          inputLength.placeholder = "e.g. 36m";
+          if (inputWeight) { inputWeight.value = ""; inputWeight.placeholder = "e.g. 80t"; }
+          if (inputLength) { inputLength.value = ""; inputLength.placeholder = "e.g. 36m"; }
         } else {
-          inputWeight.value = "24";
-          inputLength.value = "13.6";
+          if (inputWeight) inputWeight.value = "24";
+          if (inputLength) inputLength.value = "13.6";
         }
       }
       handleVehicleTypeChange();
@@ -693,24 +680,19 @@ const euVehicleTypesHTML = `
       const standardSpecs = document.getElementById('standardSpecs');
       const carTransporterSpecs = document.getElementById('carTransporterSpecs');
       const busCharterSpecs = document.getElementById('busCharterSpecs');
-      const inputWeight = document.getElementById('inputWeight');
-      const inputLength = document.getElementById('inputLength');
-      const originCont = document.getElementById('originContinent').value;
-      const val = select.value;
+      if (!select || !standardSpecs) return;
 
+      const val = select.value;
       standardSpecs.classList.remove('hidden');
-      carTransporterSpecs.classList.add('hidden');
-      busCharterSpecs.classList.add('hidden');
+      if (carTransporterSpecs) carTransporterSpecs.classList.add('hidden');
+      if (busCharterSpecs) busCharterSpecs.classList.add('hidden');
 
       if (val === 'Car transporter' || val === 'Car Hauler' || val === 'Enclosed Car Transporter') {
         standardSpecs.classList.add('hidden');
-        carTransporterSpecs.classList.remove('hidden');
+        if (carTransporterSpecs) carTransporterSpecs.classList.remove('hidden');
       } else if (val === 'Passenger Bus') {
         standardSpecs.classList.add('hidden');
-        busCharterSpecs.classList.remove('hidden');
-      } else if (val === 'Road train' || originCont === 'OC') {
-        if (inputWeight.value === "24") inputWeight.value = "";
-        if (inputLength.value === "13.6") inputLength.value = "";
+        if (busCharterSpecs) busCharterSpecs.classList.remove('hidden');
       }
     }
 
@@ -722,13 +704,13 @@ const euVehicleTypesHTML = `
         const sec = document.getElementById(m + 'Section');
         
         if (m === mode) {
-          btn.className = "flex items-center space-x-3 p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50/60 text-blue-900 transition font-semibold text-sm shadow-sm";
+          if (btn) btn.className = "flex items-center space-x-3 p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50/60 text-blue-900 transition font-semibold text-sm shadow-sm";
           if (iconBox) iconBox.className = "w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center transition-colors shadow-sm";
-          sec.classList.remove('hidden');
+          if (sec) sec.classList.remove('hidden');
         } else {
-          btn.className = "flex items-center space-x-3 p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700 transition font-semibold text-sm";
+          if (btn) btn.className = "flex items-center space-x-3 p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700 transition font-semibold text-sm";
           if (iconBox) iconBox.className = "w-8 h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center transition-colors";
-          sec.classList.add('hidden');
+          if (sec) sec.classList.add('hidden');
         }
       });
     }
@@ -736,6 +718,7 @@ const euVehicleTypesHTML = `
     function toggleOtherSetup() {
       const chk = document.getElementById('otherSetupCheck');
       const inp = document.getElementById('otherSetupInput');
+      if (!chk || !inp) return;
       inp.disabled = !chk.checked;
       if (chk.checked) {
         inp.classList.remove('bg-slate-100');
@@ -750,6 +733,7 @@ const euVehicleTypesHTML = `
     function toggleBookingDeadline() {
       const chk = document.getElementById('bookingDeadlineCheck');
       const fields = document.getElementById('bookingDeadlineFields');
+      if (!chk || !fields) return;
       if (chk.checked) {
         fields.classList.remove('hidden');
       } else {
@@ -758,15 +742,22 @@ const euVehicleTypesHTML = `
     }
 
     function focusCustomDays() {
-      document.getElementById('customDaysInput').focus();
+      const customInput = document.getElementById('customDaysInput');
+      if (customInput) customInput.focus();
     }
 
+    // SUPABASE CONFIGURATION & CLIENT
+    const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // GLAVNA DOM LOADED SKRIPA (Nalaganje, Uporabniki, Urejanje)
     document.addEventListener("DOMContentLoaded", async function() {
       if (typeof lucide !== 'undefined') {
         lucide.createIcons();
       }
 
-      // 1. Reliable reading of user data from URL or LocalStorage
+      // 1. Uporabniški podatki
       const urlParams = new URLSearchParams(window.location.search);
       let cargoTransId = urlParams.get('CargoTransID') || urlParams.get('cargotrans_id') || localStorage.getItem('cargotrans_id');
       let userName = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user');
@@ -778,24 +769,16 @@ const euVehicleTypesHTML = `
       localStorage.setItem('cargotrans_user', userName);
 
       const navUserEl = document.getElementById('navUsername');
-      if (navUserEl) {
-        navUserEl.textContent = `CT ID: ${cargoTransId} (${userName})`;
-      }
+      if (navUserEl) navUserEl.textContent = `CT ID: ${cargoTransId} (${userName})`;
 
       const formUserEl = document.getElementById('formUserLabel');
-      if (formUserEl) {
-        formUserEl.textContent = `User / CT ID: ${userName} [${cargoTransId}]`;
-      }
+      if (formUserEl) formUserEl.textContent = `User / CT ID: ${userName} [${cargoTransId}]`;
 
-      // 2. Automatic loading of contact details from database / localStorage
+      // 2. Kontaktni podatki
       const savedUserStr = localStorage.getItem('cargotrans_user');
       let userData = {};
       if (savedUserStr) {
-        try {
-          userData = JSON.parse(savedUserStr);
-        } catch (e) {
-          userData = { username: savedUserStr };
-        }
+        try { userData = JSON.parse(savedUserStr); } catch (e) { userData = { username: savedUserStr }; }
       }
 
       const nameInput = document.getElementById('contactNameInput');
@@ -806,7 +789,7 @@ const euVehicleTypesHTML = `
       if (emailInput) emailInput.value = userData.contact_email || userData.email || "john.doe@example.com";
       if (phoneInput) phoneInput.value = userData.contact_phone || userData.phone || "+1 555 123 4567";
 
-      // Initialize dropdowns and dates
+      // 3. Inicializacija regij in datumi
       handleRegionChange('origin');
       updateCountryDropdown('dest');
 
@@ -821,15 +804,12 @@ const euVehicleTypesHTML = `
       const deadlineDateEl = document.getElementById('deadlineDateInput');
       if (deadlineDateEl) deadlineDateEl.value = deadlineStr;
 
-      // ==========================================
-      // 3. DODANO ZA UREJANJE: Nalaganje obstoječih podatkov ponudbe iz baze
-      // ==========================================
+      // 4. Preverjanje za urejanje ponudbe (editCargoId) in naložitev podatkov iz baze
       const editCargoId = urlParams.get('id') || urlParams.get('edit_id');
       if (editCargoId) {
-        // Spremenimo naslov in gumbe, če obstajajo v HTML
         const titleEl = document.getElementById('pageMainTitle');
         if (titleEl) titleEl.textContent = "Edit Freight Offer & Escrow Settings";
-        
+
         const submitBtnText = document.getElementById('submitBtnText');
         if (submitBtnText) submitBtnText.textContent = "Save Changes";
 
@@ -839,7 +819,6 @@ const euVehicleTypesHTML = `
         const botDel = document.getElementById('bottomDeleteBtn');
         if (botDel) botDel.classList.remove('hidden');
 
-        // Povlečemo podatke iz Supabase za ta ID
         const { data, error } = await supabaseClient
           .from('enter_cargo')
           .select('*')
@@ -851,63 +830,9 @@ const euVehicleTypesHTML = `
         } else if (data) {
           // A) Escrow stikalo
           const escrowToggle = document.getElementById('payfreightToggle');
-          if (escrowToggle) {
-            escrowToggle.checked = !!data.payfreight_escrow;
-          }
+          if (escrowToggle) escrowToggle.checked = !!data.payfreight_escrow;
 
           // B) Lokacije (Mesta, pošte, države)
-          if (data.origin_continent) document.getElementById('originContinent').value = data.origin_continent;
-          handleRegionChange('origin');
-          if (data.origin_country) document.getElementById('originCountry').value = data.origin_country;
-          if (data.origin_city) document.getElementById('originCity').value = data.origin_city;
-          if (data.origin_zip) document.getElementById('originZip').value = data.origin_zip;
-
-          if (data.dest_continent) document.getElementById('destContinent').value = data.dest_continent;
-          updateCountryDropdown('dest');
-          if (data.dest_country) document.getElementById('destCountry').value = data.dest_country;
-          if (data.dest_city) document.getElementById('destCity'].value = data.dest_city;
-          if (data.dest_zip) document.getElementById('destZip').value = data.dest_zip;
-
-          // C) Teža, dolžina, cena in datum
-          if (data.weight) document.getElementById('inputWeight').value = data.weight;
-          if (data.length) document.getElementById('inputLength').value = data.length;
-          if (data.price) document.getElementById('freightPriceInput').value = data.price;
-          if (data.loading_date) document.getElementById('loadingDateInput').value = data.loading_date;
-        }
-      }
-    });
-    
-<!-- SUPABASE SCRIPT & CONNECTION -->
-  <script>
-    // 1. Supabase configuration credentials
-    const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
-    
-    // 2. Initialize Supabase client
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
-    // Preveri, ali v URL-ju obstaja ID za urejanje (npr. ?id=123)
-    const urlParams = new URLSearchParams(window.location.search);
-    const editCargoId = urlParams.get('id') || urlParams.get('edit_id');
-
-    // Ob nalaganju strani preveri, ali urejamo obstoječo ponudbo
-    document.addEventListener("DOMContentLoaded", async function() {
-      if (editCargoId) {
-        // Povleci podatke iz baze za izbrani ID ponudbe
-        const { data, error } = await supabaseClient
-          .from('enter_cargo')
-          .select('*')
-          .eq('id', editCargoId)
-          .maybeSingle();
-
-        if (data) {
-          // Sinhronizacija escrow stikala glede na bazo
-          const escrowToggle = document.getElementById('payfreightToggle');
-          if (escrowToggle) {
-            escrowToggle.checked = !!data.payfreight_escrow;
-          }
-
-          // NALAGANJE MEST IN POŠTNIH ŠTEVILK V POLJA
           if (data.origin_continent) document.getElementById('originContinent').value = data.origin_continent;
           handleRegionChange('origin');
           if (data.origin_country) document.getElementById('originCountry').value = data.origin_country;
@@ -920,7 +845,7 @@ const euVehicleTypesHTML = `
           if (data.dest_city) document.getElementById('destCity').value = data.dest_city;
           if (data.dest_zip) document.getElementById('destZip').value = data.dest_zip;
 
-          // **DODANO: Nalaganje teže, dolžine, cene in datuma nazaj v polja ob urejanju**
+          // C) Teža, dolžina, cena in datum
           if (data.weight) document.getElementById('inputWeight').value = data.weight;
           if (data.length) document.getElementById('inputLength').value = data.length;
           if (data.price) document.getElementById('freightPriceInput').value = data.price;
@@ -929,14 +854,11 @@ const euVehicleTypesHTML = `
       }
     });
 
-    // 3. Form submit listener ("Publish" or "Save Changes")
+    // 5. Poslušalec za shranjevanje / objavo obrazca (Submit: Insert ali Update)
     document.querySelector('form').addEventListener('submit', async function(e) {
-      e.preventDefault(); // Prevent default form refresh
+      e.preventDefault();
 
-      // Dynamically fetch logged-in user ID from localStorage for any authenticated user
       const currentCargoTransId = localStorage.getItem('CargoTransID') || localStorage.getItem('cargotrans_id') || '';
-
-      // Read values from form fields
       const transportMode = document.getElementById('btnModeRoad').classList.contains('border-blue-600') ? 'Road' : 
                             document.getElementById('btnModeOcean').classList.contains('border-blue-600') ? 'Ocean' : 'Air';
       
@@ -951,38 +873,36 @@ const euVehicleTypesHTML = `
       const destZip = document.getElementById('destZip').value;
 
       const loadingDate = document.getElementById('loadingDateInput').value;
-
-      // Preveri, ali je escrow stikalo (payfreightToggle) vklopljeno
       const escrowToggle = document.getElementById('payfreightToggle');
       const isEscrowEnabled = escrowToggle ? escrowToggle.checked : false;
 
-      // Preberemo vrednosti teže, dolžine in cene iz vnosnih polj
       const weightVal = document.getElementById('inputWeight') ? document.getElementById('inputWeight').value : null;
       const lengthVal = document.getElementById('inputLength') ? document.getElementById('inputLength').value : null;
       const priceVal = document.getElementById('freightPriceInput') ? document.getElementById('freightPriceInput').value : null;
 
-      // Prepare payload object for 'enter_cargo' table in Supabase
       const cargoData = {
         cargotrans_id: currentCargoTransId,
         transport_mode: transportMode,
         origin_continent: originContinent,
         origin_country: originCountry,
-        origin_city: originCity,            // Mesto naklada
-        origin_zip: originZip,              // Poštna št. naklada
+        origin_city: originCity,
+        origin_zip: originZip,
         dest_continent: destContinent,
         dest_country: destCountry,
-        dest_city: destCity,                // Mesto razklad
-        dest_zip: destZip,                  // Poštna št. razklad
-        weight: weightVal ? parseFloat(weightVal) : null,     // Teža
-        length: lengthVal ? parseFloat(lengthVal) : null,     // Dolžina
-        price: priceVal ? parseFloat(priceVal) : null,         // Cena
+        dest_city: destCity,
+        dest_zip: destZip,
+        weight: weightVal ? parseFloat(weightVal) : null,
+        length: lengthVal ? parseFloat(lengthVal) : null,
+        price: priceVal ? parseFloat(priceVal) : null,
         loading_date: loadingDate || null,
         payfreight_escrow: isEscrowEnabled
       };
 
+      const urlParams = new URLSearchParams(window.location.search);
+      const editCargoId = urlParams.get('id') || urlParams.get('edit_id');
+
       try {
         if (editCargoId) {
-          // **ČE UREJAŠ OBSTOJEČO PONUDBO -> UPDATE**
           const { error } = await supabaseClient
             .from('enter_cargo')
             .update(cargoData)
@@ -992,7 +912,6 @@ const euVehicleTypesHTML = `
           alert('Freight offer successfully updated!');
           window.location.href = 'index.html';
         } else {
-          // **ČE DELAŠ NOVO OBJAVO -> INSERT**
           const { error } = await supabaseClient
             .from('enter_cargo')
             .insert([cargoData]);
@@ -1006,7 +925,26 @@ const euVehicleTypesHTML = `
         alert('Error saving freight offer: ' + err.message);
       }
     });
-  </script>
 
-      </body>
+    // 6. Funkcija za brisanje ponudbe
+    async function deleteCurrentListing() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const editCargoId = urlParams.get('id') || urlParams.get('edit_id');
+      if (!editCargoId) return;
+      if (!confirm("Are you sure you want to delete this listing?")) return;
+
+      const { error } = await supabaseClient
+        .from('enter_cargo')
+        .delete()
+        .eq('id', editCargoId);
+
+      if (error) {
+        alert("Error deleting listing: " + error.message);
+      } else {
+        alert("Listing successfully deleted.");
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
+</body>
 </html>
