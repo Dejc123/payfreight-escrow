@@ -300,11 +300,11 @@
         <thead>
           <tr class="bg-slate-100/80 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
             <th class="py-3.5 px-4">Type</th>
-            <th class="py-3.5 px-4">Route (Origin → Destination)</th>
-            <th class="py-3.5 px-4">Loading Date</th>
-            <th class="py-3.5 px-4">Details / Equipment</th>
-            <th class="py-3.5 px-4">Escrow Option</th>
-            <th class="py-3.5 px-4 text-right">Status</th>
+            <th class="py-3.5 px-4">Origin → Destination</th>
+            <th class="py-3.5 px-4">Date</th>
+            <th class="py-3.5 px-4">Weight / Length · Mode / Equipment</th>
+            <th class="py-3.5 px-4">Escrow</th>
+            <th class="py-3.5 px-4 text-right">Info</th>
           </tr>
         </thead>
         <tbody id="myOffersTableBody" class="divide-y divide-slate-100 text-sm">
@@ -370,7 +370,7 @@
             <select id="autoRefreshInterval" aria-label="Auto-refresh interval" class="bg-slate-800 border border-slate-700 text-slate-200 text-[11px] rounded px-1.5 py-1 focus:outline-none">
               <option value="5">5 sec</option><option value="10">10 sec</option><option value="15">15 sec</option><option value="30" selected>30 sec</option><option value="60">60 sec</option>
             </select>
-            <button type="button" onclick="manualRefreshData()" id="manualRefreshButton" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-cyan-300 rounded-md text-[11px] font-bold transition flex items-center gap-1" title="Refresh once">
+            <button type="button" onclick="manualRefreshData()" id="manualRefreshButton" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-cyan-300 rounded-md text-[11px] font-bold transition flex items-center gap-1" title="Refresh results now">
               <i data-lucide="rotate-cw" class="w-3.5 h-3.5" id="refreshIcon"></i><span>Refresh</span>
             </button>
           </div>
@@ -392,6 +392,11 @@
         </div>
         <div class="md:col-span-2">
           <label class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Vehicle / Cargo Specifications – select multiple</label>
+          <div class="flex justify-end gap-2 mb-1">
+            <button type="button" onclick="setAllEquipment(true)" class="text-[11px] font-semibold text-sky-700 hover:underline">Select all</button>
+            <span class="text-slate-300 text-[11px]">|</span>
+            <button type="button" onclick="setAllEquipment(false)" class="text-[11px] font-semibold text-slate-500 hover:underline">Deselect all</button>
+          </div>
           <div id="equipmentSelection" class="max-h-64 overflow-y-auto bg-white border border-slate-200 rounded-lg p-2 space-y-2 text-sm"></div>
           <p id="equipmentCount" class="text-[11px] text-slate-500 mt-1">No equipment types selected</p>
         </div>
@@ -651,6 +656,75 @@
     if (badge) badge.textContent = count + ' / 5 selected';
   }
 
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+
+  function setAllEquipment(checked) {
+    const mode = document.getElementById('transportMedium').value;
+    const boxes = Array.from(document.querySelectorAll('.equipment-chk'));
+    boxes.forEach(box => { box.checked = checked; });
+    selectedEquipment[mode] = checked ? boxes.map(box => box.value) : [];
+    updateEquipmentCounter();
+  }
+
+  function getSelectedEquipment() {
+    const all = Array.from(document.querySelectorAll('.equipment-chk'));
+    const selected = all.filter(box => box.checked).map(box => box.value);
+    // Selecting every available type is equivalent to no equipment restriction.
+    return all.length > 0 && selected.length === all.length ? [] : selected;
+  }
+
+  function locationLabel(item, side) {
+    const country = item[side + '_country'] || item[side + '_continent'] || '';
+    const zip = item[side + '_postal'] || item[side + '_zip'] || '';
+    const city = item[side + '_city'] || '';
+    return [country, zip, city].filter(Boolean).map(escapeHtml).join(', ') || 'Not specified';
+  }
+
+  function offerWeightLength(item, searchMode) {
+    const mode = String(item.transport_mode || document.getElementById('transportMedium')?.value || 'road').toLowerCase();
+    const weight = searchMode === 'transport' ? (item.payload_capacity ?? item.weight) : item.weight;
+    const length = searchMode === 'transport' ? (item.trailer_length ?? item.length) : item.length;
+    const weightUnit = mode.includes('air') ? (item.weight_unit || 'kg') : (mode.includes('ocean') ? (item.weight_unit || 't') : (item.weight_unit || 't'));
+    const lengthUnit = mode.includes('air') || mode.includes('ocean') ? (item.length_unit || '') : (item.length_unit || 'm');
+    const weightText = weight !== null && weight !== undefined && weight !== '' ? `${escapeHtml(weight)} ${escapeHtml(weightUnit)}` : '—';
+    const lengthText = length !== null && length !== undefined && length !== '' ? `${escapeHtml(length)} ${escapeHtml(lengthUnit)}`.trim() : '—';
+    return `Weight: <strong>${weightText}</strong><br>Length: <strong>${lengthText}</strong>`;
+  }
+
+  async function toggleOfferDetails(button, item, searchMode) {
+    const row = button.closest('tr');
+    const detailId = 'offer-detail-' + String(item.id || item.cargo_id || Math.random()).replace(/[^a-zA-Z0-9_-]/g, '');
+    const existing = document.getElementById(detailId);
+    if (existing) { existing.remove(); button.textContent = 'Details'; return; }
+    button.textContent = 'Loading…';
+    let company = null;
+    const ownerId = item.cargotrans_id || item.cargo_trans_id || '';
+    if (ownerId) {
+      try {
+        const { data } = await sb.from('companies').select('*').eq('cargo_trans_id', ownerId).maybeSingle();
+        company = data || null;
+      } catch (err) { console.warn('Company detail lookup:', err); }
+    }
+    const first = (...values) => values.find(v => v !== null && v !== undefined && String(v).trim() !== '');
+    const companyName = first(company?.company_name, item.company_name, item.company, ownerId, 'Company details unavailable');
+    const contactName = first(item.contact_name, item.contact_person, company?.contact_name, company?.contact_person, company?.contact);
+    const email = first(item.contact_email, item.email, company?.contact_email, company?.email);
+    const phone = first(item.contact_phone, item.phone, company?.contact_phone, company?.phone);
+    const detailRow = document.createElement('tr');
+    detailRow.id = detailId;
+    detailRow.className = 'bg-blue-50/60';
+    const contactHtml = [
+      contactName ? `<div><span class="text-slate-500">Contact:</span> ${escapeHtml(contactName)}</div>` : '',
+      email ? `<div><span class="text-slate-500">Email:</span> <a class="text-sky-700 underline" href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></div>` : '',
+      phone ? `<div><span class="text-slate-500">Phone:</span> <a class="text-sky-700 underline" href="tel:${escapeHtml(phone)}">${escapeHtml(phone)}</a></div>` : ''
+    ].filter(Boolean).join('');
+    detailRow.innerHTML = `<td colspan="6" class="px-4 py-3 text-xs text-slate-700"><div class="grid grid-cols-1 md:grid-cols-2 gap-2"><div><strong class="text-slate-900">Posted by:</strong> ${escapeHtml(companyName)}${ownerId && companyName !== ownerId ? ` <span class="text-slate-400">(${escapeHtml(ownerId)})</span>` : ''}</div><div>${contactHtml || '<span class="text-slate-500">Direct contact details are not stored on this offer record.</span>'}</div></div></td>`;
+    row.insertAdjacentElement('afterend', detailRow);
+    button.textContent = 'Hide details';
+  }
+
   function renderEquipmentOptions() {
     const mode = document.getElementById('transportMedium').value;
     let groups = mode === 'road' ? roadEquipmentGroups.concat(northAmericanRoadGroups) : (mode === 'ocean' ? oceanEquipmentGroups : airEquipmentGroups);
@@ -883,7 +957,7 @@
     } else {
       origins = Array.from(document.querySelectorAll('.origin-chk:checked')).map(chk => chk.value);
       destinations = Array.from(document.querySelectorAll('.dest-chk:checked')).map(chk => chk.value);
-      equipment = Array.from(document.querySelectorAll('.equipment-chk:checked')).map(chk => chk.value);
+      equipment = getSelectedEquipment();
       
       if (!origins.length || !destinations.length) { 
         if (!isAutoRefresh) alert('Please select at least one origin and one destination country.'); 
@@ -924,7 +998,9 @@
       if (transportMedium) {
         query = query.ilike('transport_mode', `%${transportMedium}%`);
       }
-      if (equipment.length > 0) {
+      // Cargo postings currently do not save vehicle_type in enter_cargo; only filter
+      // by equipment on Transport postings, where vehicle_type is saved by the form.
+      if (equipment.length > 0 && searchMode === 'transport') {
         query = query.in('vehicle_type', equipment);
       }
       if (adrChecked) {
@@ -946,32 +1022,30 @@
         return;
       }
 
-      results.forEach(item => {
+      results.forEach((item, index) => {
         const isEscrowEnabled = Boolean(item.payfreight_escrow || item.enable_payfreight_escrow || item.escrow_enabled);
-        const escrowBadgeHtml = isEscrowEnabled 
+        const escrowBadgeHtml = isEscrowEnabled
           ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i><span>PayFreight Escrow</span></span>`
           : `<span class="text-xs text-slate-400 font-normal">Standard</span>`;
-
-        const typeBadge = searchMode === 'cargo' 
+        const typeBadge = searchMode === 'cargo'
           ? `<span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded border border-blue-200">Cargo</span>`
           : `<span class="px-2 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded border border-emerald-200">Transport</span>`;
-
         const dateVal = item.loading_date || item.available_from || 'Immediate';
-        const detailsVal = searchMode === 'cargo' 
-          ? `${item.transport_mode || 'Road'} Freight (${item.vehicle_type || 'General'})` 
-          : `${item.vehicle_type || 'Standard Fleet'}`;
-
+        const equipmentVal = item.vehicle_type || item.cargo_type || item.goods_type || item.commodity || 'Not specified';
+        const modeVal = item.transport_mode || transportMedium || '—';
+        const rowKey = String(item.id || item.cargo_id || index).replace(/[^a-zA-Z0-9_-]/g, '');
         html += `
           <tr class="hover:bg-slate-50 transition">
             <td class="py-3 px-4">${typeBadge}</td>
-            <td class="py-3 px-4 font-medium text-slate-900">${item.origin_country || item.origin_continent || 'N/A'} → ${item.dest_country || item.dest_continent || 'N/A'}</td>
-            <td class="py-3 px-4 text-xs text-slate-600">${dateVal}</td>
-            <td class="py-3 px-4 text-xs text-slate-600">${detailsVal}</td>
+            <td class="py-3 px-4 text-xs text-slate-700"><div><span class="font-semibold text-slate-900">From:</span> ${locationLabel(item, 'origin')}</div><div class="mt-1"><span class="font-semibold text-slate-900">To:</span> ${locationLabel(item, 'dest')}</div></td>
+            <td class="py-3 px-4 text-xs text-slate-600 whitespace-nowrap">${escapeHtml(dateVal)}</td>
+            <td class="py-3 px-4 text-xs text-slate-600"><div>${offerWeightLength(item, searchMode)}</div><div class="mt-1"><strong>${escapeHtml(modeVal)}</strong> · ${escapeHtml(equipmentVal)}</div></td>
             <td class="py-3 px-4">${escrowBadgeHtml}</td>
-            <td class="py-3 px-4 text-right"><span class="text-xs ${searchMode === 'cargo' ? 'text-blue-600' : 'text-emerald-600'} font-semibold">Active Match</span></td>
+            <td class="py-3 px-4 text-right"><button type="button" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded text-xs font-semibold" onclick="toggleOfferDetails(this, window.__offerRows['${rowKey}'], '${searchMode}')">Details</button></td>
           </tr>`;
+        window.__offerRows = window.__offerRows || {};
+        window.__offerRows[rowKey] = item;
       });
-
       tbody.innerHTML = html;
       if (typeof lucide !== 'undefined') lucide.createIcons();
       
