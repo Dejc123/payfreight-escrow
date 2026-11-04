@@ -40,6 +40,14 @@
     #exchangeSearchPanel .text-cyan-300, #exchangeSearchPanel .text-cyan-400 { color:#087eae !important; }
     #exchangeSearchPanel button[type="submit"] { background:#087eae !important; color:#fff !important; }
     #exchangeSearchPanel button[type="submit"]:hover { background:#066b95 !important; }
+
+    #myOffersSection { border-bottom-left-radius:0 !important; border-bottom-right-radius:0 !important; margin-bottom:0 !important; }
+    #exchangeSearchPanel { border-top-left-radius:0 !important; border-top-right-radius:0 !important; margin-top:0 !important; border-top:0 !important; }
+    #exchangeSearchPanel .bg-slate-900, #exchangeSearchPanel .bg-slate-800, #exchangeSearchPanel .bg-slate-700 { background:#ffffff !important; }
+    #exchangeSearchPanel .text-slate-200, #exchangeSearchPanel .text-slate-300, #exchangeSearchPanel .text-cyan-300 { color:#334155 !important; }
+    #exchangeSearchPanel #manualRefreshButton { background:#ffffff !important; color:#334155 !important; border:1px solid #cbd5e1 !important; }
+    #exchangeSearchPanel #manualRefreshButton:hover { background:#f8fafc !important; }
+    #exchangeSearchPanel #manualRefreshButton.is-running { background:#eff6ff !important; color:#075985 !important; border-color:#93c5fd !important; }
   </style>
 </head>
 <script>
@@ -363,17 +371,13 @@
           <input type="hidden" id="activeSearchMode" value="cargo">
         </div>
         <div class="flex flex-wrap items-center gap-2">
-          <div class="flex items-center gap-2 bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-800">
-            <label class="flex items-center gap-1.5 cursor-pointer">
-              <input type="checkbox" id="autoRefreshToggle" checked class="w-3.5 h-3.5 text-cyan-500 bg-slate-800 border-slate-600 rounded focus:ring-cyan-400">
-              <span class="text-[11px] font-medium text-slate-200">Auto</span>
-            </label>
-            <select id="autoRefreshInterval" aria-label="Auto-refresh interval" class="bg-slate-800 border border-slate-700 text-slate-200 text-[11px] rounded px-1.5 py-1 focus:outline-none">
+          <div class="flex items-center gap-2 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200">
+            <button type="button" onclick="toggleAutoRefresh()" id="manualRefreshButton" aria-pressed="false" class="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-md text-[11px] font-semibold transition flex items-center gap-1.5" title="Start automatic refresh">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5" id="refreshIcon"></i><span id="refreshButtonText">Refresh: OFF</span>
+            </button>
+            <select id="autoRefreshInterval" aria-label="Refresh interval" class="bg-white border border-slate-300 text-slate-700 text-[11px] rounded px-1.5 py-1.5 focus:outline-none">
               <option value="5">5 sec</option><option value="10">10 sec</option><option value="15">15 sec</option><option value="30" selected>30 sec</option><option value="60">60 sec</option>
             </select>
-            <button type="button" onclick="manualRefreshData()" id="manualRefreshButton" class="px-2 py-1 bg-slate-700 hover:bg-slate-600 text-cyan-300 rounded-md text-[11px] font-bold transition flex items-center gap-1" title="Refresh results now">
-              <i data-lucide="rotate-cw" class="w-3.5 h-3.5" id="refreshIcon"></i><span>Refresh</span>
-            </button>
           </div>
           <button type="submit" form="exchangeSearchForm" id="globalSearchButton" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white font-bold text-xs rounded-lg transition shadow-sm flex items-center justify-center gap-2 whitespace-nowrap">
             <i data-lucide="search" class="w-3.5 h-3.5" id="globalSearchIcon"></i><span id="globalSearchButtonText">Search Global Exchange</span>
@@ -395,7 +399,7 @@
         <div><label for="weightMin" class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Weight from (t)</label><input type="number" id="weightMin" min="0" step="0.1" placeholder="Min. tonnes" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"></div>
         <div><label for="weightMax" class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Weight to (t)</label><input type="number" id="weightMax" min="0" step="0.1" value="25" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"></div>
         <div><label for="lengthMin" class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Length from (LDM)</label><input type="number" id="lengthMin" min="0" step="0.1" placeholder="Min. LDM" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"></div>
-        <div><label for="lengthMax" class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Length to (LDM)</label><input type="number" id="lengthMax" min="0" step="0.1" placeholder="Max. LDM" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"></div>
+        <div><label for="lengthMax" class="block text-[11px] font-bold text-sky-700 uppercase mb-1.5">Length to (LDM)</label><input type="number" id="lengthMax" min="0" max="13.6" step="0.1" value="13.6" placeholder="Max. LDM" class="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-sm text-slate-800"></div>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3 bg-blue-50/60 p-3 rounded-xl border border-blue-100">
         <div>
@@ -560,6 +564,8 @@
     const medium = document.getElementById('transportMedium');
     const maxWeight = document.getElementById('weightMax');
     if (medium && maxWeight && medium.value === 'road' && !maxWeight.value) maxWeight.value = '25';
+    const lengthMax = document.getElementById('lengthMax');
+    if (lengthMax && !lengthMax.value) lengthMax.value = '13.6';
   }
 
   function selectedCountryCodes(side) {
@@ -853,6 +859,8 @@
     const medium = document.getElementById('transportMedium');
     const maxWeight = document.getElementById('weightMax');
     if (medium && maxWeight && medium.value === 'road' && !maxWeight.value) maxWeight.value = '25';
+    const lengthMax = document.getElementById('lengthMax');
+    if (lengthMax && !lengthMax.value) lengthMax.value = '13.6';
     if (medium && maxWeight && medium.value !== 'road' && maxWeight.value === '25') maxWeight.value = '';
   }
 
@@ -1010,21 +1018,42 @@
 
   let lastSearchCriteria = null;
 
+  let autoRefreshEnabled = false;
+
+  function updateRefreshButton() {
+    const button = document.getElementById('manualRefreshButton');
+    const text = document.getElementById('refreshButtonText');
+    if (!button || !text) return;
+    text.textContent = autoRefreshEnabled ? 'Refresh: ON' : 'Refresh: OFF';
+    button.setAttribute('aria-pressed', autoRefreshEnabled ? 'true' : 'false');
+    button.classList.toggle('is-running', autoRefreshEnabled);
+    button.title = autoRefreshEnabled ? 'Stop automatic refresh' : 'Start automatic refresh';
+  }
+
   function setupAutoRefresh() {
-    const toggle = document.getElementById('autoRefreshToggle');
     const interval = document.getElementById('autoRefreshInterval');
-    const restart = () => {
-      if (autoRefreshTimer) clearInterval(autoRefreshTimer);
-      autoRefreshTimer = null;
-      if (!toggle || !toggle.checked) return;
-      const seconds = Math.max(5, Number(interval && interval.value) || 30);
-      autoRefreshTimer = setInterval(() => {
-        if (lastSearchCriteria) executeGlobalSearch(null, true);
-      }, seconds * 1000);
-    };
-    if (toggle) toggle.addEventListener('change', restart);
-    if (interval) interval.addEventListener('change', restart);
-    restart();
+    if (interval) interval.addEventListener('change', () => {
+      if (autoRefreshEnabled) restartAutoRefreshTimer();
+    });
+    updateRefreshButton();
+  }
+
+  function restartAutoRefreshTimer() {
+    if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+    autoRefreshTimer = null;
+    if (!autoRefreshEnabled) return;
+    const interval = document.getElementById('autoRefreshInterval');
+    const seconds = Math.max(5, Number(interval && interval.value) || 30);
+    autoRefreshTimer = setInterval(() => {
+      if (lastSearchCriteria) executeGlobalSearch(null, true);
+      else loadMyOffers();
+    }, seconds * 1000);
+  }
+
+  function toggleAutoRefresh() {
+    autoRefreshEnabled = !autoRefreshEnabled;
+    restartAutoRefreshTimer();
+    updateRefreshButton();
   }
 
   async function executeGlobalSearch(e, isAutoRefresh = false) {
@@ -1177,4 +1206,5 @@
 </script>
 </body>
 </html>
+
 
