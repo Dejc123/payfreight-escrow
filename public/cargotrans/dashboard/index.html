@@ -475,13 +475,14 @@
 
 <!-- JAVASCRIPT LOGIC -->
 <script>
-  const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
+ const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
   let autoRefreshTimer = null;
 
   document.addEventListener("DOMContentLoaded", async () => {
     if (typeof lucide !== 'undefined') lucide.createIcons();
+    
     // Check user & subscription validity
     const urlParams = new URLSearchParams(window.location.search);
     const username = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user') || '';
@@ -489,6 +490,7 @@
     
     if (username) localStorage.setItem('cargotrans_user', username);
     if (cargoTransId) localStorage.setItem('cargotrans_id', cargoTransId);
+    
     try {
       let company = null;
       if (cargoTransId) {
@@ -513,15 +515,38 @@
     } catch (err) {
       console.error('Supabase company lookup error:', err);
     }
-    // Initialize Checkbox listeners for max 5 limitation counters
+    
     initCheckboxCounters();
-    // Load User's Cargo Offers ("My Cargo")
     loadMyCargoOffers();
-    // Load Live Search Offers
     loadMyOffers();
-    // Setup 30s Auto-Refresh Interval
     setupAutoRefresh();
   });
+
+  // Global Logout function to fix console reference error
+  function handleLogout() {
+    localStorage.removeItem('cargotrans_token');
+    localStorage.removeItem('cargotrans_user');
+    localStorage.removeItem('cargotrans_id');
+    localStorage.removeItem('cargotrans_company_id');
+    window.location.href = '../index.html?status=logged_out';
+  }
+
+  // Global manual refresh function
+  function manualRefreshData() {
+    const icon = document.getElementById('refreshIcon');
+    if (icon) icon.classList.add('animate-spin');
+    
+    if (lastSearchCriteria) {
+      executeGlobalSearch(null, true);
+    } else {
+      loadMyOffers();
+    }
+    loadMyCargoOffers();
+    
+    setTimeout(() => {
+      if (icon) icon.classList.remove('animate-spin');
+    }, 800);
+  }
 
   // Global location data copied from the existing CargoTrans Post Cargo form.
   const fullWorldData = {
@@ -593,7 +618,7 @@
   const selectedCountries = {origin: [], dest: []};
   const selectedEquipment = {road: [], ocean: [], air: []};
   
- function renderCountryCheckboxes(side) {
+  function renderCountryCheckboxes(side) {
     const continent = document.getElementById(side + 'Continent').value;
     const container = document.getElementById(side + 'Countries');
     const className = side === 'origin' ? 'origin-chk' : 'dest-chk';
@@ -704,7 +729,6 @@
         const lengthText = c.length ? `${c.length} m` : (c.length_ft ? `${c.length_ft} ft` : 'N/A');
         const rowId = c.id || c.cargo_id;
 
-        // Check if PayFreight Escrow is enabled in DB
         const isEscrowEnabled = Boolean(c.payfreight_escrow || c.enable_payfreight_escrow || c.escrow_enabled);
         const escrowBadgeHtml = isEscrowEnabled 
           ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold">
@@ -736,7 +760,6 @@
     }
   }
 
-  // Delete cargo offer directly from Supabase
   async function deleteCargoOffer(id) {
     if (!confirm("Are you sure you want to delete this cargo offer?")) return;
     try {
@@ -752,12 +775,10 @@
     }
   }
 
-  // Redirect to edit cargo page
   function editCargoOffer(id) {
     window.location.href = `enter_cargo.html?edit_id=${id}`;
   }
 
-  // 2. LOAD RECENT OFFERS FOR LIVE EXCHANGE TABLE WITH PAYFREIGHT ESCROW BADGE
   async function loadMyOffers() {
     const tbody = document.getElementById('myOffersTableBody');
     try {
@@ -775,10 +796,7 @@
       cargos.forEach(c => {
         const isEscrowEnabled = Boolean(c.payfreight_escrow || c.enable_payfreight_escrow || c.escrow_enabled);
         const escrowBadgeHtml = isEscrowEnabled 
-          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold">
-               <i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i>
-               <span>PayFreight Escrow</span>
-             </span>`
+          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i><span>PayFreight Escrow</span></span>`
           : `<span class="text-xs text-slate-400 font-normal">Standard</span>`;
 
         html += `
@@ -788,18 +806,13 @@
             <td class="py-3 px-4 text-xs text-slate-600">${c.loading_date || 'Immediate'}</td>
             <td class="py-3 px-4 text-xs text-slate-600">${c.transport_mode || 'Road'} Freight Offer</td>
             <td class="py-3 px-4">${escrowBadgeHtml}</td>
-            <td class="py-3 px-4 text-right">
-              <span class="text-xs text-blue-600 font-semibold">Active</span>
-            </td>
+            <td class="py-3 px-4 text-right"><span class="text-xs text-blue-600 font-semibold">Active</span></td>
           </tr>`;
       });
       transports.forEach(t => {
         const isEscrowEnabled = Boolean(t.payfreight_escrow || t.enable_payfreight_escrow || t.escrow_enabled);
         const escrowBadgeHtml = isEscrowEnabled 
-          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold">
-               <i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i>
-               <span>PayFreight Escrow</span>
-             </span>`
+          ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 bg-purple-900/10 border border-purple-500/30 text-purple-700 rounded-md text-xs font-bold"><i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-600"></i><span>PayFreight Escrow</span></span>`
           : `<span class="text-xs text-slate-400 font-normal">Standard</span>`;
 
         html += `
@@ -809,9 +822,7 @@
             <td class="py-3 px-4 text-xs text-slate-600">${t.loading_date || 'Immediate'}</td>
             <td class="py-3 px-4 text-xs text-slate-600">${t.vehicle_type || 'Standard Fleet'}</td>
             <td class="py-3 px-4">${escrowBadgeHtml}</td>
-            <td class="py-3 px-4 text-right">
-              <span class="text-xs text-emerald-600 font-semibold">Active</span>
-            </td>
+            <td class="py-3 px-4 text-right"><span class="text-xs text-emerald-600 font-semibold">Active</span></td>
           </tr>`;
       });
       tbody.innerHTML = html;
@@ -822,24 +833,22 @@
     }
   }
 
-// Global search mode state ('cargo' or 'transport')
   function setSearchMode(mode) {
     const cargoBtn = document.getElementById('searchModeCargo');
     const transportBtn = document.getElementById('searchModeTransport');
     const modeInput = document.getElementById('activeSearchMode');
     
-    modeInput.value = mode;
+    if (modeInput) modeInput.value = mode;
     
     if (mode === 'cargo') {
-      cargoBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition bg-blue-600 text-white shadow-sm";
-      transportBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900";
+      if (cargoBtn) cargoBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition bg-blue-600 text-white shadow-sm";
+      if (transportBtn) transportBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900";
     } else {
-      transportBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition bg-emerald-600 text-white shadow-sm";
-      cargoBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900";
+      if (transportBtn) transportBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition bg-emerald-600 text-white shadow-sm";
+      if (cargoBtn) cargoBtn.className = "px-4 py-2 text-xs font-bold rounded-lg transition text-slate-600 hover:text-slate-900";
     }
   }
 
-  // 30 seconds Auto-Refresh timer setup & state management
   let lastSearchCriteria = null;
 
   function setupAutoRefresh() {
@@ -874,18 +883,16 @@
       equipment = Array.from(document.querySelectorAll('.equipment-chk:checked')).map(chk => chk.value);
       
       if (!origins.length || !destinations.length) { 
-        alert('Please select at least one origin and one destination country.'); 
-        return; 
-      }
-      if (origins.length > 5 || destinations.length > 5) { 
-        alert('A maximum of 5 countries is allowed on each side.'); 
+        if (!isAutoRefresh) alert('Please select at least one origin and one destination country.'); 
         return; 
       }
 
       transportMedium = document.getElementById('transportMedium').value;
       adrChecked = document.getElementById('adrSearch').checked;
       wasteChecked = document.getElementById('wasteSearch').checked;
-      searchMode = document.getElementById('activeSearchMode').value;
+      
+      const modeInput = document.getElementById('activeSearchMode');
+      searchMode = modeInput ? modeInput.value : 'cargo';
 
       lastSearchCriteria = { origins, destinations, equipment, transportMedium, adrChecked, wasteChecked, searchMode };
     }
@@ -898,6 +905,7 @@
     try {
       let targetTable = searchMode === 'cargo' ? 'enter_cargo' : 'enter_transport';
       
+      // Proženemo poizvedbo z uporabo .in() za natančno ujemanje držav
       let query = sb.from(targetTable).select('*')
         .in('origin_country', origins)
         .in('dest_country', destinations);
