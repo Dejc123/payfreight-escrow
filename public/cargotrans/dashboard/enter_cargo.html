@@ -872,21 +872,21 @@
       const priceVal = document.getElementById('freightPriceInput') ? document.getElementById('freightPriceInput').value : null;
 
       const cargoData = {
-        cargotrans_id: currentCargoTransId,
-        transport_mode: transportMode,
-        origin_continent: originContinent,
-        origin_country: originCountry,
-        origin_city: originCity,
-        origin_zip: originZip,
-        dest_continent: destContinent,
-        dest_country: destCountry,
-        dest_city: destCity,
-        dest_zip: destZip,
-        weight: weightVal ? parseFloat(weightVal) : null,
-        price: priceVal ? parseFloat(priceVal) : null,
-        loading_date: loadingDate || null,
-        payfreight_escrow: isEscrowEnabled
-      };
+       cargotrans_id: currentCargoTransId,
+      transport_mode: transportMode,
+      origin_continent: originContinent,
+      origin_country: originCountry,
+      origin_city: originCity,
+      origin_zip: originZip,
+      dest_continent: destContinent,
+      dest_country: destCountry,
+      dest_city: destCity,
+      dest_zip: destZip,
+      weight: weightVal ? parseFloat(weightVal) : null,
+      length: lengthVal ? parseFloat(lengthVal) : null, // Dodan manjkajoči length
+      freight_price: priceVal ? parseFloat(priceVal) : null, // Popravljeno iz price v freight_price
+      loading_date: loadingDate || null,
+      payfreight_escrow: isEscrowEnabled
 
       const urlParams = new URLSearchParams(window.location.search);
       const editCargoId = urlParams.get('id') || urlParams.get('edit_id');
