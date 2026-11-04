@@ -28,7 +28,6 @@
       }
     }
   </script>
-
   <style id="cargonet-dashboard-refresh">
     body { background:#f5f8fc !important; color:#243247 !important; font-family:Arial,Helvetica,sans-serif !important; }
     #exchangeSearchPanel { background:#ffffff !important; color:#243247 !important; border:1px solid #dbe5f0 !important; box-shadow:0 8px 24px rgba(20,55,90,.07) !important; }
@@ -228,7 +227,7 @@
         </div>
       </a>
       <!-- 5. Find Freight -->
-      <a href="https://www.payfreight.io/cargotrans/dashboard/index.html#myOffersSection" class="flex flex-col justify-between p-4 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-all duration-200 group text-left shadow-sm">
+      <a href="https://www.payfreight.io/cargotrans/dashboard/index.html#exchangeSearchPanel" class="flex flex-col justify-between p-4 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition-all duration-200 group text-left shadow-sm">
         <div>
           <div class="w-9 h-9 bg-slate-100 text-slate-700 rounded-lg flex items-center justify-center mb-3 group-hover:scale-105 transition-transform">
             <i data-lucide="search" class="w-4 h-4"></i>
@@ -242,13 +241,48 @@
       </a>
     </div>
   </div>
-  <!-- "MY OFFERS" SECTION (User's Active Cargo & Transport Postings from Supabase) -->
+
+  <!-- 1. DEDICATED "MY CARGO" MANAGEMENT SECTION -->
+  <div id="myCargoOffersSection" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-blue-50/40">
+      <div>
+        <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <i data-lucide="package" class="w-5 h-5 text-blue-600"></i>
+          <span>My Cargo Offers (Management & Control)</span>
+        </h2>
+        <p class="text-xs text-slate-500 mt-0.5">Manage, edit, or delete your active cargo listings published on CargoNet.</p>
+      </div>
+      <a href="https://www.payfreight.io/cargotrans/dashboard/enter_cargo.html" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition shadow-sm">+ Post New Cargo</a>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-slate-100/80 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase tracking-wider">
+            <th class="py-3.5 px-4">Loading Date</th>
+            <th class="py-3.5 px-4">Origin (Country, Postal, City)</th>
+            <th class="py-3.5 px-4">Destination (Country, Postal, City)</th>
+            <th class="py-3.5 px-4">Weight & Length</th>
+            <th class="py-3.5 px-4 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="myCargoTableBody" class="divide-y divide-slate-100 text-sm">
+          <tr>
+            <td colspan="5" class="py-8 text-center text-xs text-slate-400 font-medium">
+              Loading your cargo offers...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2. LIVE SEARCH RESULTS SECTION -->
   <div id="myOffersSection" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
     <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
       <div>
         <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
           <i data-lucide="layers" class="w-4 h-4 text-blue-600"></i>
-          <span>Live Search Results & My Active Offers</span>
+          <span>Live Search Results & Recent Exchange Postings</span>
         </h2>
         <p class="text-xs text-slate-500 mt-0.5">Latest freight and available-capacity postings currently returned by CargoNet Exchange.</p>
       </div>
@@ -257,8 +291,7 @@
         <a href="https://www.payfreight.io/cargotrans/dashboard/enter_transport.html" class="px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-semibold hover:bg-emerald-100 transition">+ Post Transport</a>
       </div>
     </div>
-
-    <!-- TABLE FOR USER OFFERS -->
+    <!-- TABLE FOR LIVE EXCHANGE RESULTS -->
     <div class="overflow-x-auto">
       <table class="w-full text-left border-collapse">
         <thead>
@@ -267,20 +300,19 @@
             <th class="py-3.5 px-4">Route (Origin → Destination)</th>
             <th class="py-3.5 px-4">Loading Date</th>
             <th class="py-3.5 px-4">Details / Equipment</th>
-            <th class="py-3.5 px-4 text-right">Actions</th>
+            <th class="py-3.5 px-4 text-right">Status</th>
           </tr>
         </thead>
         <tbody id="myOffersTableBody" class="divide-y divide-slate-100 text-sm">
           <tr>
             <td colspan="5" class="py-8 text-center text-xs text-slate-400 font-medium">
-              Loading your active offers from Supabase...
+              Loading active exchange offers from Supabase...
             </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-
 
   <!-- QUICK POST ACCESS -->
   <section id="quickPostSection" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 md:p-6">
@@ -303,7 +335,6 @@
       </a>
     </div>
   </section>
-
   <!-- FREIGHT EXCHANGE 4.0: ADVANCED PRO SEARCH ENGINE -->
   <div id="exchangeSearchPanel" class="bg-white text-slate-800 rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 relative overflow-hidden">
     <div class="absolute -right-16 -bottom-16 w-64 h-64 bg-blue-600/5 rounded-full blur-3xl pointer-events-none"></div>
@@ -328,7 +359,6 @@
         </button>
       </div>
     </div>
-
     <!-- GLOBAL SEARCH FORM -->
     <form id="exchangeSearchForm" onsubmit="executeGlobalSearch(event)" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-blue-50/60 p-4 rounded-xl border border-blue-100">
@@ -344,7 +374,6 @@
           <p id="equipmentCount" class="text-[11px] text-slate-500 mt-1">No equipment types selected</p>
         </div>
       </div>
-
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <section class="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
           <div class="flex items-center justify-between border-b border-slate-100 pb-2">
@@ -365,7 +394,6 @@
           <div id="destCountries" class="max-h-64 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-1 rounded-lg bg-slate-50 border border-slate-100 p-2 text-xs"></div>
         </section>
       </div>
-
       <div class="flex flex-wrap items-center gap-x-7 gap-y-3 border-t border-slate-200 pt-4">
         <label class="inline-flex items-center gap-2 text-sm text-slate-700 cursor-pointer"><input type="checkbox" id="adrSearch" class="w-4 h-4 rounded border-slate-300 text-sky-600"><span>ADR / Dangerous Goods</span></label>
         <label class="inline-flex items-center gap-2 text-sm text-slate-700 cursor-pointer"><input type="checkbox" id="wasteSearch" class="w-4 h-4 rounded border-slate-300 text-sky-600"><span>Waste Transport</span></label>
@@ -393,7 +421,6 @@
         Open Company Directory
       </a>
     </div>
-
     <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
       <div class="flex items-center space-x-3 mb-4">
         <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
@@ -409,9 +436,7 @@
       </a>
     </div>
   </div>
-
 </main>
-
 <!-- FOOTER -->
 <footer class="bg-white border-t border-slate-200 mt-auto py-6">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
@@ -424,18 +449,14 @@
     </div>
   </div>
 </footer>
-
 <!-- JAVASCRIPT LOGIC -->
 <script>
   const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
   let autoRefreshTimer = null;
-
   document.addEventListener("DOMContentLoaded", async () => {
     if (typeof lucide !== 'undefined') lucide.createIcons();
-
     // Check user & subscription validity
     const urlParams = new URLSearchParams(window.location.search);
     const username = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user') || '';
@@ -443,7 +464,6 @@
     
     if (username) localStorage.setItem('cargotrans_user', username);
     if (cargoTransId) localStorage.setItem('cargotrans_id', cargoTransId);
-
     try {
       let company = null;
       if (cargoTransId) {
@@ -468,17 +488,15 @@
     } catch (err) {
       console.error('Supabase company lookup error:', err);
     }
-
     // Initialize Checkbox listeners for max 5 limitation counters
     initCheckboxCounters();
-
-    // Load User's Offers ("My Offers")
+    // Load User's Cargo Offers ("My Cargo")
+    loadMyCargoOffers();
+    // Load Live Search Offers
     loadMyOffers();
-
     // Setup 30s Auto-Refresh Interval
     setupAutoRefresh();
   });
-
   // Global location data copied from the existing CargoTrans Post Cargo form.
   const fullWorldData = {
       EU: [
@@ -537,7 +555,7 @@
     };
   const regionNames = {EU:'Europe', NA:'North America (USA & Canada)', CA:'Central America & Caribbean', SA:'South America', AS:'Asia & Far East', ME:'Middle East', AF:'Africa', OC:'Australia & Oceania'};
   const roadEquipmentGroups = [{"label": "Standard & Curtainsiders", "items": [["Tarpauling", "Tarpauling / Curtainsider"], ["Tautliner", "Tautliner"], ["Mega", "Mega Trailer"], ["Box", "Box Trailer"], ["Jumbo", "Jumbo Trailer"], ["Swap body", "Swap body"]]}, {"label": "Refrigerated & Temp-Controlled", "items": [["Refrigerator", "Refrigerator / Reefer"], ["Multi-temp", "Multi-temp / Bi-thermo"], ["Meat hanging", "Meat hanging / Hooks"], ["Thermo", "Thermo"]]}, {"label": "Bulk, Silos & Tankers", "items": [["Silo", "Silo"], ["Silobas", "Silobas / Pressurized silo"], ["Tanker", "Liquid Tanker"], ["Food tanker", "Food / Milk Tanker"], ["Gas tanker", "Gas Tanker"], ["Walking floor", "Walking floor (Moving floor)"], ["Dumper", "Tipper / Dumper"]]}, {"label": "Flatbeds & Open Trailers", "items": [["Flat", "Flatbed"], ["Stepdeck", "Stepdeck"], ["Coil hollow", "Coil Well / Trough"], ["Container", "Container Chassis"]]}, {"label": "Heavy Haulage & Oversized", "items": [["Lowloader", "Lowbed / Lowloader"], ["Heavy machinery", "Heavy Machinery Transport"], ["Oversized", "Oversized / Heavy Transport"], ["Yacht transport", "Yacht & Boat Transport"]]}, {"label": "Specialized & Niche", "items": [["Car transporter", "Car Transporter"], ["Enclosed Car Transporter", "Enclosed Car Carrier"], ["Road train", "Road train"], ["Timber carrier", "Timber / Log carrier"], ["Livestock", "Livestock Transporter"]]}, {"label": "Passenger Transport", "items": [["Passenger Bus", "Passenger Bus / Coach Charter"]]}];
-const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dry Van 53ft", "Dry Van (53ft Box)"], ["Reefer 53ft", "Reefer / Refrigerated (53ft)"], ["Dry Van 48ft", "Dry Van (48ft Box)"]]}, {"label": "Flatbeds & Heavy Haul", "items": [["Flatbed 53ft", "Standard Flatbed (53ft)"], ["Step Deck", "Step Deck / Single Drop"], ["RGN Lowboy", "RGN Lowboy (Removable Gooseneck)"], ["Conestoga", "Conestoga (Rolling Tarp)"], ["Double Drop", "Double Drop / Heavy Specialized"]]}, {"label": "Specialized US Fleet", "items": [["Car Hauler", "Car Hauler / Stinger-Steered"], ["Intermodal Container", "Intermodal Chassis (40ft/53ft)"], ["Tanker US", "Liquid / Bulk Tanker"]]}, {"label": "Passenger Fleet", "items": [["Passenger Bus", "Charter Motorcoach / Bus"]]}];
+  const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dry Van 53ft", "Dry Van (53ft Box)"], ["Reefer 53ft", "Reefer / Refrigerated (53ft)"], ["Dry Van 48ft", "Dry Van (48ft Box)"]]}, {"label": "Flatbeds & Heavy Haul", "items": [["Flatbed 53ft", "Standard Flatbed (53ft)"], ["Step Deck", "Step Deck / Single Drop"], ["RGN Lowboy", "RGN Lowboy (Removable Gooseneck)"], ["Conestoga", "Conestoga (Rolling Tarp)"], ["Double Drop", "Double Drop / Heavy Specialized"]]}, {"label": "Specialized US Fleet", "items": [["Car Hauler", "Car Hauler / Stinger-Steered"], ["Intermodal Container", "Intermodal Chassis (40ft/53ft)"], ["Tanker US", "Liquid / Bulk Tanker"]]}, {"label": "Passenger Fleet", "items": [["Passenger Bus", "Charter Motorcoach / Bus"]]}];
   const oceanEquipmentGroups = [
     {label:"Container Equipment",items:[["20ft","20' Standard Dry Container"],["40ft","40' Standard Dry Container"],["40HC","40' High Cube Container"],["45HC","45' High Cube Container"],["Reefer","Reefer Container"],["LCL","LCL (Less than Container Load)"],["Open Top","Open Top Container"],["Flat Rack","Flat Rack Container"],["Tank Container","Tank Container"],["Bulk Container","Bulk Container"],["Ro-Ro","Ro-Ro / Vehicle Shipping"],["Breakbulk","Breakbulk / General Cargo"]]},
     {label:"Vessel & Special Cargo",items:[["Bulk Vessel","Bulk Vessel"],["Tanker Vessel","Tanker Vessel"],["General Cargo Vessel","General Cargo Vessel"],["Heavy Lift","Heavy Lift / Project Cargo"]]}
@@ -545,10 +563,9 @@ const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dr
   const airEquipmentGroups = [
     {label:'Air Cargo Services',items:[['Standard Air Cargo','Standard Air Cargo'],['Express','Express / Courier Cargo'],['Palletized Air Cargo','Palletized Air Cargo'],['Oversized Air Cargo','Oversized Air Cargo'],['Temperature Controlled Air','Temperature-Controlled Air Cargo'],['Live Animals','Live Animals'],['Pharma','Pharmaceutical Cargo']]}
   ];
-
   const selectedCountries = {origin: [], dest: []};
   const selectedEquipment = {road: [], ocean: [], air: []};
-
+  
   function renderCountryCheckboxes(side) {
     const continent = document.getElementById(side + 'Continent').value;
     const container = document.getElementById(side + 'Countries');
@@ -569,7 +586,6 @@ const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dr
   }
 
   function updateCountryCounter(side, changed) {
-    const selector = '.' + side + '-chk:checked';
     if (changed) {
       const current = selectedCountries[side];
       if (changed.checked && !current.includes(changed.value)) {
@@ -589,7 +605,7 @@ const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dr
     let groups = mode === 'road' ? roadEquipmentGroups.concat(northAmericanRoadGroups) : (mode === 'ocean' ? oceanEquipmentGroups : airEquipmentGroups);
     const container = document.getElementById('equipmentSelection');
     container.innerHTML = '';
-    groups.forEach((group, index) => {
+    groups.forEach((group) => {
       const section = document.createElement('section');
       section.className = 'space-y-1';
       const heading = document.createElement('h4');
@@ -598,12 +614,10 @@ const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dr
       const grid = document.createElement('div');
       grid.className = 'grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2';
       group.items.forEach(entry => {
-        // Accept both [value, label] pairs and plain text entries. This prevents
-        // JavaScript from splitting a plain string into its first two letters.
         const value = Array.isArray(entry) ? String(entry[0]) : String(entry);
         const label = Array.isArray(entry) ? String(entry[1] ?? entry[0]) : String(entry);
         const item = document.createElement('label');
-        item.className = 'flex items-start gap-2 px-2.5 py-2 rounded-lg border border-slate-100 bg-white hover:bg-blue-50 hover:border-blue-200 cursor-pointer text-slate-700 min-h-[40px]';
+        item.className = 'flex items-start gap-2 px-2.5 py-2 rounded-lg border border-slate-100 bg-white hover:bg-blue-50 hover:border-blue-200 cursor-pointer text-slate-700 min-h-[40px] text-xs';
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox'; checkbox.name = 'equipment_type'; checkbox.value = value;
         checkbox.className = 'equipment-chk mt-0.5 w-4 h-4 shrink-0 rounded border-slate-300 text-sky-600';
@@ -616,9 +630,9 @@ const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dr
         const text = document.createElement('span');
         text.className = 'leading-5';
         text.textContent = label;
-        item.append(checkbox,text); grid.appendChild(item);
+        item.append(checkbox, text); grid.appendChild(item);
       });
-      section.append(heading,grid); container.appendChild(section);
+      section.append(heading, grid); container.appendChild(section);
     });
     updateEquipmentCounter();
   }
@@ -637,25 +651,87 @@ const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dr
 
   function updateVehicleDropdowns() { renderEquipmentOptions(); }
 
-  // Function to load user's cargo & transport postings from Supabase
+  // 1. DEDICATED "MY CARGO OFFERS" FUNCTION WITH EDIT & DELETE
+  async function loadMyCargoOffers() {
+    const tbody = document.getElementById('myCargoTableBody');
+    const currentId = localStorage.getItem('cargotrans_id') || '';
+    try {
+      let query = sb.from('enter_cargo').select('*').order('created_at', { ascending: false });
+      if (currentId) {
+        query = query.eq('cargotrans_id', currentId);
+      }
+      const { data, error } = await query;
+      if (error) throw error;
+      const cargos = data || [];
+
+      if (cargos.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-xs text-slate-500">You have no active cargo offers. Post a new cargo above!</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      cargos.forEach(c => {
+        const originText = `${c.origin_country || c.origin_continent || 'N/A'} ${c.origin_postal ? '(' + c.origin_postal + ')' : ''} ${c.origin_city || ''}`.trim();
+        const destText = `${c.dest_country || c.dest_continent || 'N/A'} ${c.dest_postal ? '(' + c.dest_postal + ')' : ''} ${c.dest_city || ''}`.trim();
+        const weightText = c.weight ? `${c.weight} t` : (c.weight_lbs ? `${c.weight_lbs} lbs` : 'N/A');
+        const lengthText = c.length ? `${c.length} m` : (c.length_ft ? `${c.length_ft} ft` : 'N/A');
+        const rowId = c.id || c.cargo_id;
+
+        html += `
+          <tr class="hover:bg-slate-50 transition" id="cargo-row-${rowId}">
+            <td class="py-3 px-4 text-xs font-semibold text-slate-700">${c.loading_date || 'Immediate'}</td>
+            <td class="py-3 px-4 font-medium text-slate-900 text-xs">${originText}</td>
+            <td class="py-3 px-4 font-medium text-slate-900 text-xs">${destText}</td>
+            <td class="py-3 px-4 text-xs text-slate-600">Weight: <strong>${weightText}</strong> | Length: <strong>${lengthText}</strong></td>
+            <td class="py-3 px-4 text-right space-x-2">
+              <button type="button" onclick="editCargoOffer('${rowId}')" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded text-xs font-semibold transition">Edit</button>
+              <button type="button" onclick="deleteCargoOffer('${rowId}')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 rounded text-xs font-semibold transition">Delete</button>
+            </td>
+          </tr>`;
+      });
+      tbody.innerHTML = html;
+    } catch (err) {
+      console.error('Error loading my cargo offers:', err);
+      tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-xs text-rose-500">Error loading your cargo offers from database.</td></tr>`;
+    }
+  }
+
+  // Delete cargo offer directly from Supabase
+  async function deleteCargoOffer(id) {
+    if (!confirm("Are you sure you want to delete this cargo offer?")) return;
+    try {
+      const { error } = await sb.from('enter_cargo').delete().eq('id', id);
+      if (error) {
+        await sb.from('enter_cargo').delete().eq('cargo_id', id);
+      }
+      alert('Cargo offer deleted successfully.');
+      loadMyCargoOffers();
+    } catch (err) {
+      console.error('Delete error:', err);
+      alert('Error deleting cargo offer.');
+    }
+  }
+
+  // Redirect to edit cargo page
+  function editCargoOffer(id) {
+    window.location.href = `enter_cargo.html?edit_id=${id}`;
+  }
+
+  // 2. LOAD RECENT OFFERS FOR LIVE EXCHANGE TABLE
   async function loadMyOffers() {
     const tbody = document.getElementById('myOffersTableBody');
     try {
-      const companyId = localStorage.getItem('cargotrans_company_id');
       const [cargoRes, transportRes] = await Promise.all([
         sb.from('enter_cargo').select('*').order('created_at', { ascending: false }).limit(5),
         sb.from('enter_transport').select('*').order('created_at', { ascending: false }).limit(5)
       ]);
-
       let html = '';
       const cargos = cargoRes.data || [];
       const transports = transportRes.data || [];
-
       if (cargos.length === 0 && transports.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-xs text-slate-500">No active offers found. Post your first cargo or transport capacity above!</td></tr>`;
         return;
       }
-
       cargos.forEach(c => {
         html += `
           <tr class="hover:bg-slate-50 transition">
@@ -664,11 +740,10 @@ const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dr
             <td class="py-3 px-4 text-xs text-slate-600">${c.loading_date || 'Immediate'}</td>
             <td class="py-3 px-4 text-xs text-slate-600">${c.transport_mode || 'Road'} Freight Offer</td>
             <td class="py-3 px-4 text-right">
-              <span class="text-xs text-blue-600 font-semibold cursor-pointer hover:underline">Active</span>
+              <span class="text-xs text-blue-600 font-semibold">Active</span>
             </td>
           </tr>`;
       });
-
       transports.forEach(t => {
         html += `
           <tr class="hover:bg-slate-50 transition">
@@ -677,18 +752,16 @@ const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dr
             <td class="py-3 px-4 text-xs text-slate-600">${t.loading_date || 'Immediate'}</td>
             <td class="py-3 px-4 text-xs text-slate-600">${t.vehicle_type || 'Standard Fleet'}</td>
             <td class="py-3 px-4 text-right">
-              <span class="text-xs text-emerald-600 font-semibold cursor-pointer hover:underline">Active</span>
+              <span class="text-xs text-emerald-600 font-semibold">Active</span>
             </td>
           </tr>`;
       });
-
       tbody.innerHTML = html;
     } catch (err) {
-      console.error('Error loading offers:', err);
-      tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-xs text-rose-500">Error loading your offers from database.</td></tr>`;
+      console.error('Error loading live exchange offers:', err);
+      tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-xs text-rose-500">Error loading exchange offers from database.</td></tr>`;
     }
   }
-
 
   async function executeGlobalSearch(e) {
     e.preventDefault();
@@ -713,6 +786,7 @@ const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dr
   function manualRefreshData() {
     const icon = document.getElementById('refreshIcon');
     icon.classList.add('animate-spin');
+    loadMyCargoOffers();
     loadMyOffers();
     setTimeout(() => {
       icon.classList.remove('animate-spin');
@@ -724,6 +798,7 @@ const northAmericanRoadGroups = [{"label": "US Standard Freight", "items": [["Dr
     const toggle = document.getElementById('autoRefreshToggle');
     autoRefreshTimer = setInterval(() => {
       if (toggle && toggle.checked) {
+        loadMyCargoOffers();
         loadMyOffers();
       }
     }, 30000);
