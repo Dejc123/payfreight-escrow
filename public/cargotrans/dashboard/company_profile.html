@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -551,8 +552,7 @@
         if (usernameParam) localStorage.setItem('cargotrans_user', usernameParam);
         if (cargoTransId) localStorage.setItem('cargotrans_id', cargoTransId);
         let member = null;
-
-        if (usernameParam) {
+       if (usernameParam) {
           const result = await sb.from('company_members')
             .select('id, company_id, cargo_trans_id, username, email, first_name, last_name, role, is_active')
             .ilike('username', usernameParam)
@@ -562,7 +562,6 @@
             member = result.data[0];
           }
         }
-
         if (!member && cargoTransId) {
           const result = await sb.from('company_members')
             .select('id, company_id, cargo_trans_id, username, email, first_name, last_name, role, is_active')
@@ -573,7 +572,6 @@
             member = result.data[0];
           }
         }
-
         if (member && member.company_id) {
           companyId = String(member.company_id);
           localStorage.setItem('cargotrans_company_id', companyId);
@@ -584,7 +582,6 @@
           if (result.error) throw result.error;
           companyRecord = result.data;
         }
-
         if (!companyRecord && cargoTransId) {
           const result = await sb.from('companies')
             .select('*')
@@ -593,7 +590,6 @@
           if (result.error) throw result.error;
           companyRecord = result.data;
         }
-
         if (!companyRecord && usernameParam) {
           const result = await sb.from('companies')
             .select('*')
@@ -602,7 +598,6 @@
           if (result.error) throw result.error;
           companyRecord = result.data;
         }
-
         if (companyRecord) {
           companyId = String(companyRecord.id);
           localStorage.setItem('cargotrans_company_id', companyId);
@@ -619,18 +614,15 @@
             ctDisplay.textContent = companyRecord.cargo_trans_id || cargoTransId || '—';
           }
         }
-
         if (!companyRecord) {
           document.getElementById('displayCargoTransID').textContent = cargoTransId || 'NOT LINKED';
           console.error('No linked company found for this CargoTrans member.');
           alert('Your CargoTrans account was recognized, but its company record could not be found. Please contact support.');
           return;
         }
-
         cargoTransId = companyRecord.cargo_trans_id || cargoTransId;
         if (cargoTransId) localStorage.setItem('cargotrans_id', String(cargoTransId));
         document.getElementById('displayCargoTransID').textContent = cargoTransId || '—';
-        
         const setValue = (id, value) => { const el = document.getElementById(id); if (el && value != null) el.value = value; };
         setValue('company_name', companyRecord.company_name);
         setValue('vat_number', companyRecord.vat_number);
@@ -644,12 +636,10 @@
         setValue('fleetDescription', companyRecord.fleet_description);
         setValue('activeMarkets', companyRecord.active_markets);
         setValue('company_username', companyRecord.username);
-
         const subCheckbox = document.getElementById('subscribed_to_mailing');
         if (subCheckbox) {
           subCheckbox.checked = !!companyRecord.subscribed_to_mailing;
         }
-
         const firstName = (member && member.first_name) ? member.first_name : (companyRecord.contact_person || '');
         const lastName = (member && member.last_name) ? member.last_name : '';
         const mobilePhone = (companyRecord.mobile) ? companyRecord.mobile : (member ? member.phone : '');
@@ -880,291 +870,6 @@
       });
       lucide.createIcons();
     }
-
-    // --- BANNER ZOOM & PAN ---
-    function handleBannerUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const imgObj = new Image();
-        imgObj.onload = function() {
-          currentImg.naturalWidth = imgObj.naturalWidth;
-          currentImg.naturalHeight = imgObj.naturalHeight;
-          currentImg.src = e.target.result;
-          const imgElement = document.getElementById('imageToCrop');
-          imgElement.src = currentImg.src;
-          currentImg.x = 0;
-          currentImg.y = 0;
-          currentImg.scale = 1;
-          document.getElementById('zoomRange').value = 1;
-          updateImageTransform();
-          document.getElementById('cropperModal').classList.remove('hidden');
-          lucide.createIcons();
-        };
-        imgObj.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function setupBannerDragEvents() {
-      const viewport = document.getElementById('cropViewport');
-      if (!viewport) return;
-      viewport.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.clientX - currentImg.x;
-        startY = e.clientY - currentImg.y;
-      });
-      window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        currentImg.x = e.clientX - startX;
-        currentImg.y = e.clientY - startY;
-        updateImageTransform();
-      });
-      window.addEventListener('mouseup', () => { isDragging = false; });
-    }
-
-    function onZoomChange(val) {
-      currentImg.scale = parseFloat(val);
-      updateImageTransform();
-    }
-
-    function updateImageTransform() {
-      const imgEl = document.getElementById('imageToCrop');
-      if (imgEl) {
-        imgEl.style.transform = `translate(${currentImg.x}px, ${currentImg.y}px) scale(${currentImg.scale})`;
-      }
-    }
-
-    function closeCropperModal() {
-      document.getElementById('cropperModal').classList.add('hidden');
-      document.getElementById('bannerFileInput').value = '';
-    }
-
-    async function saveCroppedBanner() {
-      const canvas = document.createElement('canvas');
-      canvas.width = 1200;
-      canvas.height = 300;
-      const ctx = canvas.getContext('2d');
-      const imgObj = new Image();
-      imgObj.src = currentImg.src;
-      imgObj.onload = async function() {
-        ctx.fillStyle = '#0f172a';
-        ctx.fillRect(0, 0, 1200, 300);
-        const viewport = document.getElementById('cropViewport');
-        const viewportW = viewport ? viewport.clientWidth : 600;
-        const viewportH = viewport ? viewport.clientHeight : 300;
-        const ratioX = 1200 / (viewportW * 0.8);
-        const ratioY = 300 / (viewportH * 0.6);
-        ctx.save();
-        ctx.translate(600 + (currentImg.x * ratioX), 150 + (currentImg.y * ratioY));
-        ctx.scale(currentImg.scale, currentImg.scale);
-        
-        const drawW = imgObj.naturalWidth * 0.4;
-        const drawH = imgObj.naturalHeight * 0.4;
-        ctx.drawImage(imgObj, -drawW / 2, -drawH / 2, drawW, drawH);
-        ctx.restore();
-        canvas.toBlob(async (blob) => {
-          if (!blob) return;
-          const fileName = `banners/${companyId || 'company'}_${Date.now()}.png`;
-          const file = new File([blob], fileName, { type: 'image/png' });
-          const previewBox = document.getElementById('bannerPreviewBox');
-          const dataUrl = canvas.toDataURL('image/png');
-          previewBox.style.backgroundImage = `url('${dataUrl}')`;
-          previewBox.style.backgroundSize = 'cover';
-          previewBox.style.backgroundPosition = 'center';
-          document.getElementById('bannerStatusText').textContent = "Banner uploading to cloud...";
-          closeCropperModal();
-          const { data, error } = await sb.storage.from('company-files').upload(fileName, file);
-          if (error) {
-            alert("Napaka pri shranjevanju pasice: " + error.message);
-            return;
-          }
-          const { data: publicUrlData } = sb.storage.from('company-files').getPublicUrl(fileName);
-          savedBannerUrl = publicUrlData.publicUrl;
-          document.getElementById('bannerPreviewBtn').classList.remove('hidden');
-          document.getElementById('bannerPreviewBtn').classList.add('flex');
-          await saveProfile(true);
-          document.getElementById('bannerStatusText').textContent = "Banner successfully updated & saved!";
-        }, 'image/png');
-      };
-    }
-
-    // --- INSTANT UPLOAD & MODAL PREVIEW ---
-    async function handleFileUpload(event, type) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const badgeId = type === 'license' ? 'licenseBadge' : 'insuranceBadge';
-      const fileNameId = type === 'license' ? 'licenseFileName' : 'insuranceFileName';
-      const viewBtnId = type === 'license' ? 'licenseViewBtn' : 'insuranceViewBtn';
-      const deleteBtnId = type === 'license' ? 'licenseDeleteBtn' : 'insuranceDeleteBtn';
-      const badge = document.getElementById(badgeId);
-      const fileName = document.getElementById(fileNameId);
-      badge.textContent = "Uploading...";
-      badge.className = "text-[11px] font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 animate-pulse";
-      fileName.textContent = file.name;
-      const folderName = type === 'license' ? 'licenses' : 'insurances';
-      const fileExt = file.name.split('.').pop();
-      const storagePath = `${folderName}/${companyId || 'company'}_${Date.now()}.${fileExt}`;
-      const { data, error } = await sb.storage.from('company-files').upload(storagePath, file);
-      if (error) {
-        alert("Upload failed: " + error.message);
-        badge.textContent = "Not Uploaded";
-        badge.className = "text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded";
-        return;
-      }
-      const { data: publicUrlData } = sb.storage.from('company-files').getPublicUrl(storagePath);
-      const uploadedUrl = publicUrlData.publicUrl;
-      if (type === 'license') savedLicenseUrl = uploadedUrl;
-      if (type === 'insurance') savedInsuranceUrl = uploadedUrl;
-      badge.textContent = "Uploaded";
-      badge.className = "text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200";
-      document.getElementById(viewBtnId).classList.remove('hidden');
-      document.getElementById(deleteBtnId).classList.remove('hidden');
-      await saveProfile(true);
-    }
-
-    function viewDocument(type) {
-      let url = '';
-      let title = 'Document Preview';
-      if (type === 'license') {
-        url = savedLicenseUrl;
-        title = 'Carrier / Transport License Preview';
-      } else if (type === 'insurance') {
-        url = savedInsuranceUrl;
-        title = 'CMR / Cargo Insurance Certificate Preview';
-      } else if (type === 'banner') {
-        url = savedBannerUrl;
-        title = 'Corporate Banner Preview';
-      }
-      if (!url) {
-        alert("Please fulfill and upload document first.");
-        return;
-      }
-      const container = document.getElementById('docPreviewContainer');
-      document.getElementById('docPreviewTitle').querySelector('span').textContent = title;
-      const isPdf = url.toLowerCase().includes('.pdf');
-      if (isPdf) {
-        container.innerHTML = `<iframe src="${url}" class="w-full h-[550px] rounded-lg border-0"></iframe>`;
-      } else {
-        container.innerHTML = `<img src="${url}" class="max-h-[550px] w-auto object-contain rounded-lg shadow-md">`;
-      }
-      document.getElementById('docPreviewModal').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function previewBanner() {
-      viewDocument('banner');
-    }
-
-    function closeDocPreviewModal() {
-      document.getElementById('docPreviewModal').classList.add('hidden');
-      document.getElementById('docPreviewContainer').innerHTML = '';
-    }
-
-    async function deleteFile(type) {
-      if (!confirm("Are you sure you want to delete this document?")) return;
-      
-      if (type === 'license') {
-        savedLicenseUrl = '';
-        document.getElementById('licenseBadge').textContent = "Not Uploaded";
-        document.getElementById('licenseBadge').className = "text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded";
-        document.getElementById('licenseFileName').textContent = "No file selected";
-        document.getElementById('licenseDeleteBtn').classList.add('hidden');
-        document.getElementById('licenseViewBtn').classList.add('hidden');
-        document.getElementById('licenseFileInput').value = '';
-      } else if (type === 'insurance') {
-        savedInsuranceUrl = '';
-        document.getElementById('insuranceBadge').textContent = "Not Uploaded";
-        document.getElementById('insuranceBadge').className = "text-[11px] font-semibold text-slate-500 bg-slate-200 px-2 py-0.5 rounded";
-        document.getElementById('insuranceFileName').textContent = "No file selected";
-        document.getElementById('insuranceDeleteBtn').classList.add('hidden');
-        document.getElementById('insuranceViewBtn').classList.add('hidden');
-        document.getElementById('insuranceFileInput').value = '';
-      }
-      await saveProfile(true);
-    }
-
-    async function saveProfile(silent = false) {
-      const btn = document.getElementById('saveProfileBtn');
-      
-      if (!silent) {
-        const companyName = document.getElementById('company_name')?.value.trim();
-        const vatNumber = document.getElementById('vat_number')?.value.trim();
-        const address = document.getElementById('address')?.value.trim();
-        const email = document.getElementById('contact_email')?.value.trim();
-        if (!companyName || !vatNumber || !address || !email) {
-          alert("Please fulfill all required corporate details before saving.");
-          return;
-        }
-        btn.disabled = true;
-        btn.textContent = "Saving profile & uploading files...";
-      }
-      try {
-        const updateData = {
-          company_name: document.getElementById('company_name')?.value.trim() || '',
-          vat_number: document.getElementById('vat_number')?.value.trim() || '',
-          address: document.getElementById('address')?.value.trim() || '',
-          postal_code: document.getElementById('postalCode')?.value.trim() || '',
-          city: document.getElementById('city') ? document.getElementById('city'].value.trim() : '',
-          country: document.getElementById('country')?.value.trim() || '',
-          contact_email: document.getElementById('contact_email')?.value.trim() || '',
-          phone: document.getElementById('phone')?.value.trim() || '',
-          website: document.getElementById('websiteUrl')?.value.trim() || '',
-          fleet_description: document.getElementById('fleetDescription')?.value.trim() || '',
-          active_markets: document.getElementById('activeMarkets')?.value.trim() || '',
-          banner_url: savedBannerUrl,
-          license_url: savedLicenseUrl,
-          insurance_url: savedInsuranceUrl,
-          username: document.getElementById('company_username')?.value.trim() || '',
-          subscribed_to_mailing: document.getElementById('subscribed_to_mailing')?.checked || false
-        };
-        if (!companyId) throw new Error('Company record is not linked. Profile update cancelled.');
-        
-        const { error } = await sb.from('companies').update(updateData).eq('id', companyId);
-        if (error) {
-          if (!silent) alert("Error saving profile: " + error.message);
-        } else {
-          if (!silent) alert("Company profile successfully updated and visible in manager HQ!");
-        }
-      } catch (err) {
-        if (!silent) alert("Error: " + err.message);
-      } finally {
-        if (!silent) {
-          btn.disabled = false;
-          btn.innerHTML = '<i data-lucide="save" class="w-4 h-4"></i> Save Enterprise Profile Changes';
-          lucide.createIcons();
-        }
-      }
-    }
-
-    function openPasswordModal() { document.getElementById('passwordModal').classList.remove('hidden'); }
-    function closePasswordModal() {
-      document.getElementById('passwordModal').classList.add('hidden');
-      document.getElementById('newPasswordInput').value = '';
-      document.getElementById('confirmPasswordInput').value = '';
-    }
-
-    async function submitNewPassword() {
-      const p1 = document.getElementById('newPasswordInput').value;
-      const p2 = document.getElementById('confirmPasswordInput').value;
-      if (!p1 || p1.length < 5) {
-        alert('Geslo mora vsebovati vsaj 5 znakov.');
-        return;
-      }
-      if (p1 !== p2) {
-        alert('Gesli se ne ujemata!');
-        return;
-      }
-      const { error } = await sb.from('companies').update({ password: p1 }).eq('id', companyId);
-      if (error) {
-        alert('Napaka pri posodobitvi gesla: ' + error.message);
-      } else {
-        alert('Geslo je bilo uspešno spremenjeno!');
-        closePasswordModal();
-      }
-    }
-  </script>
 
     // --- BANNER ZOOM & PAN ---
     function handleBannerUpload(event) {
