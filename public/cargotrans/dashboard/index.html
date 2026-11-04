@@ -911,7 +911,7 @@
         .in('dest_country', destinations);
       
       if (transportMedium) {
-        query = query.ilike('transport_mode', transportMedium);
+        query = query.ilike('transport_mode', `%${transportMedium}%`);
       }
       if (equipment.length > 0) {
         query = query.in('vehicle_type', equipment);
