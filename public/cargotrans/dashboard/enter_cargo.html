@@ -758,13 +758,13 @@
       }
 
       const urlParams = new URLSearchParams(window.location.search);
-      let cargoTransId = urlParams.get('CargoTransID') || urlParams.get('cargotrans_id') || localStorage.getItem('cargotrans_id');
-      let userName = urlParams.get('UporabniskoIme') || urlParams.get('username') || localStorage.getItem('cargotrans_user');
+      let cargoTransId = urlParams.get('cargo_trans_id') || urlParams.get('cargotrans_id') || urlParams.get('CargoTransID') || localStorage.getItem('cargo_trans_id') || localStorage.getItem('cargotrans_id');
+      let userName = urlParams.get('username') || urlParams.get('UporabniskoIme') || localStorage.getItem('cargotrans_user');
 
       if (!cargoTransId || cargoTransId === 'null') cargoTransId = "loading";
       if (!userName || userName === 'null') userName = "loading";
 
-      localStorage.setItem('cargotrans_id', cargoTransId);
+      localStorage.setItem('cargo_trans_id', cargoTransId);
       localStorage.setItem('cargotrans_user', userName);
 
       const navUserEl = document.getElementById('navUsername');
@@ -840,17 +840,18 @@
           if (data.dest_zip) document.getElementById('destZip').value = data.dest_zip;
 
           if (data.weight) document.getElementById('inputWeight').value = data.weight;
-          if (data.price) document.getElementById('freightPriceInput').value = data.price;
+          if (data.length) document.getElementById('inputLength').value = data.length;
+          if (data.freight_price) document.getElementById('freightPriceInput').value = data.freight_price;
           if (data.loading_date) document.getElementById('loadingDateInput').value = data.loading_date;
         }
       }
     });
 
-    // SUBMIT POSLUŠALEC (Brez neobstoječega polja 'length', da ne ruši baze)
+    // SUBMIT POSLUŠALEC
     document.querySelector('form').addEventListener('submit', async function(e) {
       e.preventDefault();
 
-      const currentCargoTransId = localStorage.getItem('CargoTransID') || localStorage.getItem('cargotrans_id') || '';
+      const currentCargoTransId = localStorage.getItem('cargo_trans_id') || localStorage.getItem('cargotrans_id') || localStorage.getItem('CargoTransID') || '';
       const transportMode = document.getElementById('btnModeRoad').classList.contains('border-blue-600') ? 'Road' : 
                             document.getElementById('btnModeOcean').classList.contains('border-blue-600') ? 'Ocean' : 'Air';
       
@@ -869,24 +870,26 @@
       const isEscrowEnabled = escrowToggle ? escrowToggle.checked : false;
 
       const weightVal = document.getElementById('inputWeight') ? document.getElementById('inputWeight').value : null;
+      const lengthVal = document.getElementById('inputLength') ? document.getElementById('inputLength').value : null;
       const priceVal = document.getElementById('freightPriceInput') ? document.getElementById('freightPriceInput').value : null;
 
       const cargoData = {
-       cargotrans_id: currentCargoTransId,
-      transport_mode: transportMode,
-      origin_continent: originContinent,
-      origin_country: originCountry,
-      origin_city: originCity,
-      origin_zip: originZip,
-      dest_continent: destContinent,
-      dest_country: destCountry,
-      dest_city: destCity,
-      dest_zip: destZip,
-      weight: weightVal ? parseFloat(weightVal) : null,
-      length: lengthVal ? parseFloat(lengthVal) : null, // Dodan manjkajoči length
-      freight_price: priceVal ? parseFloat(priceVal) : null, // Popravljeno iz price v freight_price
-      loading_date: loadingDate || null,
-      payfreight_escrow: isEscrowEnabled
+        cargo_trans_id: currentCargoTransId,
+        transport_mode: transportMode,
+        origin_continent: originContinent,
+        origin_country: originCountry,
+        origin_city: originCity,
+        origin_zip: originZip,
+        dest_continent: destContinent,
+        dest_country: destCountry,
+        dest_city: destCity,
+        dest_zip: destZip,
+        weight: weightVal ? parseFloat(weightVal) : null,
+        length: lengthVal ? parseFloat(lengthVal) : null,
+        freight_price: priceVal ? parseFloat(priceVal) : null,
+        loading_date: loadingDate || null,
+        payfreight_escrow: isEscrowEnabled
+      }; // <-- Tukaj je manjkal ta zaklepaj!
 
       const urlParams = new URLSearchParams(window.location.search);
       const editCargoId = urlParams.get('id') || urlParams.get('edit_id');
@@ -937,3 +940,4 @@
   </script>
 </body>
 </html>
+
