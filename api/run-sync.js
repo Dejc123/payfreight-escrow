@@ -13,17 +13,15 @@ function fetchCargoOffers() {
             let data = '';
             res.on('data', (chunk) => { data += chunk; });
             res.on('end', () => {
+                // Če se začne z HTML oznako ali napako, takoj vrnemo jasen error
+                if (data.trim().startsWith('<') || data.trim().startsWith('A')) {
+                    return reject(new Error('CargoTrans vrača HTML/Napako namesto JSON-a: ' + data.substring(0, 150)));
+                }
                 try {
                     const parsed = JSON.parse(data);
-                    if (Array.isArray(parsed)) {
-                        resolve(parsed);
-                    } else if (parsed && parsed.error) {
-                        reject(new Error('CargoTrans napaka: ' + parsed.error));
-                    } else {
-                        reject(new Error('Neveljaven format podatkov (ni seznam).'));
-                    }
+                    resolve(parsed);
                 } catch (e) {
-                    reject(new Error('Napaka pri parsanju JSON-a.'));
+                    reject(new Error('Napaka pri parsanju JSON-a (prejeto: ' + data.substring(0, 100) + '...)'));
                 }
             });
         }).on('error', (err) => {
@@ -45,13 +43,16 @@ module.exports = async (req, res) => {
                         origin_city: offer.kraj_odhod || null,
                         dest_city: offer.kraj_prihod || null,
                         weight: offer.weight ? parseFloat(offer.weight) : null,
-                        length: offer.dimensions ? parseFloat(offer.dimensions) : null,
-                        loading_date: offer.loading_date || null
+                        length: offer.dimensions ? parseFloat(offer.dimensions) : null
                     }
                 ], { onConflict: ['cargotrans_id'] });
         }
 
-        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija je uspešno zaključena!' });
+        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija v Supabase je uspešno zaključena!' });
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }
