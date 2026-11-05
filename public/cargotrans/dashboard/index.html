@@ -633,6 +633,8 @@
   if (button) button.disabled = true;
   if (icon) icon.classList.add('animate-spin');
   try {
+ 
+    
     // 1. Najprej pokličemo Vercel skripto, ki potegne podatke iz CargoTransa in jih shrani v Supabase
     const response = await fetch('/api/run-sync');
     const result = await response.json();
@@ -918,7 +920,7 @@ async function importCargoTransOffers() {
     button.textContent = 'Importing...';
 
     try {
-        const response = await fetch('/api/run_sync', {
+        const response = await fetch('/api/run-sync', {
             method: 'POST'
         });
 
