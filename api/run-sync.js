@@ -13,20 +13,15 @@ function fetchCargoOffers() {
             let data = '';
             res.on('data', (chunk) => { data += chunk; });
             res.on('end', () => {
-                const trimmed = data.trim();
-                // Preverimo, če strežnik vrača napako ali besedilo (npr. začetek s črko 'A' ali HTML oznako)
-                if (trimmed.startsWith('<') || trimmed.startsWith('A') || trimmed.startsWith('Error')) {
-                    return reject(new Error('CargoTrans strežnik vrača napako/HTML namesto JSON-a: ' + trimmed.substring(0, 150)));
-                }
                 try {
                     const parsed = JSON.parse(data);
                     if (Array.isArray(parsed)) {
                         resolve(parsed);
                     } else {
-                        reject(new Error('Prejeti podatki niso v obliki seznama (array).'));
+                        reject(new Error('Prejeti podatki niso v obliki seznama.'));
                     }
                 } catch (e) {
-                    reject(new Error('Napaka pri parsanju JSON-a. Prejeto besedilo se začne z: ' + trimmed.substring(0, 50)));
+                    reject(new Error('Napaka pri parsanju JSON-a: ' + data.substring(0, 100)));
                 }
             });
         }).on('error', (err) => {
@@ -40,21 +35,25 @@ module.exports = async (req, res) => {
         const offers = await fetchCargoOffers();
 
         for (let offer of offers) {
+            // Varno preverjanje praznih vrednosti za tezo in dimenzije
+            const cleanWeight = offer.weight && offer.weight.trim() !== '' ? parseFloat(offer.weight) : null;
+            const cleanLength = offer.dimensions && offer.dimensions.trim() !== '' ? parseFloat(offer.dimensions) : null;
+
             await supabase
                 .from('enter_cargo')
                 .upsert([
                     { 
                         cargotrans_id: String(offer.tovor_id),
-                        origin_city: offer.kraj_odhod || null,
-                        dest_city: offer.kraj_prihod || null,
-                        weight: offer.weight && offer.weight.trim() !== '' ? parseFloat(offer.weight) : null,
-                        length: offer.dimensions && offer.dimensions.trim() !== '' ? parseFloat(offer.dimensions) : null,
+                        origin_city: offer.kraj_odhod ? offer.kraj_odhod.trim() : null,
+                        dest_city: offer.kraj_prihod ? offer.kraj_prihod.trim() : null,
+                        weight: isNaN(cleanWeight) ? null : cleanWeight,
+                        length: isNaN(cleanLength) ? null : cleanLength,
                         loading_date: offer.loading_date || null
                     }
                 ], { onConflict: ['cargotrans_id'] });
         }
 
-        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija v Supabase je uspešno zaključena!' });
+        return res.status(200).json({ success: true, count: offers.length, message: 'Uvoz vseh tovorov je uspešno zaključen!' });
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }
