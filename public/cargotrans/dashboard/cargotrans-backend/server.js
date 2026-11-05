@@ -46,3 +46,16 @@ app.post('/api/send-rating-invite', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`CargoTrans backend server is running on port: ${PORT}`);
 });
+
+// Uvozimo funkcijo za pridobivanje ponudb iz starega ASP sistema
+const { fetchCargoOffers } = require('./fetch_offers');
+
+// Nov endpoint, ki ga bo klicala vaša nova borza za prikaz tovornih ponudb iz CargoTrans-a
+app.get('/api/cargotrans-offers', (req, res) => {
+    fetchCargoOffers((err, offers) => {
+        if (err) {
+            return res.status(500).json({ success: false, error: 'Failed to fetch offers from CargoTrans ASP server.' });
+        }
+        res.json({ success: true, count: offers.length, data: offers });
+    });
+});
