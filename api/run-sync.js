@@ -42,22 +42,16 @@ module.exports = async (req, res) => {
                 .upsert([
                     { 
                         cargotrans_id: String(offer.tovor_id),
-                        origin_city: offer.kraj_odhod || 'Neznano',
-                        dest_city: offer.kraj_prihod || 'Neznano',
+                        origin_city: offer.kraj_odhod || null,
+                        dest_city: offer.kraj_prihod || null,
                         weight: offer.weight ? parseFloat(offer.weight) : null,
                         length: offer.dimensions ? parseFloat(offer.dimensions) : null,
-                        loading_date: offer.loading_date || null,
-                        transport_mode: 'road', // Nastavljeno na privzeti cestni prevoz, da dashboard ne filtrira praznih vrstic
-                        origin_country: 'SI',   // Privzeta oznaka, da filtri za državo ne izločijo vnosa
-                        dest_country: 'EU',     // Privzeta oznaka
-                        company_name: offer.company_name || 'CargoTrans Partner',
-                        contact_name: offer.contact_name || '',
-                        contact_phone: offer.contact_phone || ''
+                        loading_date: offer.loading_date || null
                     }
                 ], { onConflict: ['cargotrans_id'] });
         }
 
-        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija uspešno zaključena in prilagojena za prikaz!' });
+        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija je uspešno zaključena!' });
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }
