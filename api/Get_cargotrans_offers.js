@@ -21,7 +21,16 @@ module.exports = async (req, res) => {
 
         const { data, error } = await supabase
             .from('cargotrans_offers')
-            .select('*')
+            .select(`
+    tovor_id, ponudnik_id, podjetje, kraj_odhod, kraj_prihod,
+    drzava_odhod, drzava_prihod, drzava_ponudnik,
+    posta_odhod, posta_prihod, datum, loading_date,
+    delivery_date, delivery_date_fixed, weight, volume,
+    dimensions, loading_count, unloading_count,
+    truck_required, trailer_required, small_truck,
+    vehicle_type_id, other_setup, adr, adr_note, remarks,
+    updated_at
+`)
             .order('loading_date', { ascending: true });
 
         if (error) {
