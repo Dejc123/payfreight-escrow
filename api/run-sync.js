@@ -1,4 +1,4 @@
-const https = require('https');
+cconst https = require('https');
 const { createClient } = require('@supabase/supabase-js');
 
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -42,19 +42,20 @@ module.exports = async (req, res) => {
                 .upsert([
                     { 
                         cargotrans_id: String(offer.tovor_id),
-                        origin_city: offer.kraj_odhod || null,
-                        dest_city: offer.kraj_prihod || null,
+                        origin_city: offer.kraj_odhod || 'Neznano',
+                        dest_city: offer.kraj_prihod || 'Neznano',
                         weight: offer.weight ? parseFloat(offer.weight) : null,
                         length: offer.dimensions ? parseFloat(offer.dimensions) : null,
-                        loading_date: offer.loading_date ? offer.loading_date : null,
-                        company_name: offer.company_name || null,
-                        contact_name: offer.contact_name || null,
-                        contact_phone: offer.contact_phone || null
+                        loading_date: offer.loading_date || null,
+                        transport_mode: 'cargotrans', // Obvezno polje, da aplikacija ve, od kod je tovor
+                        company_name: offer.company_name || 'CargoTrans Partner',
+                        contact_name: offer.contact_name || '',
+                        contact_phone: offer.contact_phone || ''
                     }
                 ], { onConflict: ['cargotrans_id'] });
         }
 
-        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija in uskladitev s Supabase tabelo sta uspeli!' });
+        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija in uskladitev s frontendom sta uspeli!' });
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }
