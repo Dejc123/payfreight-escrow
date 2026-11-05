@@ -1,4 +1,4 @@
-cconst https = require('https');
+const https = require('https');
 const { createClient } = require('@supabase/supabase-js');
 
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -47,7 +47,9 @@ module.exports = async (req, res) => {
                         weight: offer.weight ? parseFloat(offer.weight) : null,
                         length: offer.dimensions ? parseFloat(offer.dimensions) : null,
                         loading_date: offer.loading_date || null,
-                        transport_mode: 'cargotrans', // Obvezno polje, da aplikacija ve, od kod je tovor
+                        transport_mode: 'road', // Nastavljeno na privzeti cestni prevoz, da dashboard ne filtrira praznih vrstic
+                        origin_country: 'SI',   // Privzeta oznaka, da filtri za državo ne izločijo vnosa
+                        dest_country: 'EU',     // Privzeta oznaka
                         company_name: offer.company_name || 'CargoTrans Partner',
                         contact_name: offer.contact_name || '',
                         contact_phone: offer.contact_phone || ''
@@ -55,7 +57,7 @@ module.exports = async (req, res) => {
                 ], { onConflict: ['cargotrans_id'] });
         }
 
-        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija in uskladitev s frontendom sta uspeli!' });
+        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija uspešno zaključena in prilagojena za prikaz!' });
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }
