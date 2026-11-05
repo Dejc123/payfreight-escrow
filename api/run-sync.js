@@ -1,3 +1,4 @@
+
 const https = require('https');
 const { createClient } = require('@supabase/supabase-js');
 
@@ -7,7 +8,6 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 function fetchCargoOffers() {
     return new Promise((resolve, reject) => {
-        // Tukaj je sedaj dodan pravilen varnostni ključ, ki ga zahteva CargoTrans
         const url = 'https://www.cargotrans.net/export_offers.asp?key=cargotrans_secure_sync_190877';
         
         https.get(url, (res) => {
@@ -15,9 +15,16 @@ function fetchCargoOffers() {
             res.on('data', (chunk) => { data += chunk; });
             res.on('end', () => {
                 try {
-                    resolve(JSON.parse(data));
+                    const parsed = JSON.parse(data);
+                    if (Array.isArray(parsed)) {
+                        resolve(parsed);
+                    } else if (parsed && parsed.error) {
+                        reject(new Error('CargoTrans napaka: ' + parsed.error));
+                    } else {
+                        reject(new Error('Neveljaven format podatkov (ni seznam).'));
+                    }
                 } catch (e) {
-                    reject(new Error('Napaka pri parsanju JSON-a (prejeto: ' + data.substring(0, 100) + '...)'));
+                    reject(new Error('Napaka pri parsanju JSON-a.'));
                 }
             });
         }).on('error', (err) => {
@@ -35,19 +42,21 @@ module.exports = async (req, res) => {
                 .from('enter_cargo')
                 .upsert([
                     { 
-                        cargotrans_id: offer.tovor_id,
-                        origin_country: offer.drzava_odhod_oznaka,
-                        origin_city: offer.kraj_odhod,
-                        dest_country: offer.drzava_prihod_oznaka,
-                        dest_city: offer.kraj_prihod,
-                        weight: offer.teza,
-                        dimensions: offer.dimenzije,
-                        vehicle_type: offer.nadgradnja
+                        cargotrans_id: String(offer.tovor_id),
+                        origin_city: offer.kraj_odhod || 'Neznano',
+                        dest_city: offer.kraj_prihod || 'Neznano',
+                        weight: offer.weight ? parseFloat(offer.weight) : null,
+                        length: offer.dimensions ? parseFloat(offer.dimensions) : null,
+                        loading_date: offer.loading_date || null,
+                        transport_mode: 'cargotrans', // Obvezno polje, da aplikacija ve, od kod je tovor
+                        company_name: offer.company_name || 'CargoTrans Partner',
+                        contact_name: offer.contact_name || '',
+                        contact_phone: offer.contact_phone || ''
                     }
                 ], { onConflict: ['cargotrans_id'] });
         }
 
-        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija v Supabase je uspešno zaključena!' });
+        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija in uskladitev s frontendom sta uspeli!' });
     } catch (error) {
         return res.status(500).json({ success: false, error: error.message });
     }
