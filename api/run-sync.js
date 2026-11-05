@@ -54,8 +54,11 @@ module.exports = async (req, res) => {
                 ], { onConflict: ['cargotrans_id'] });
         }
 
-        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija in prenos podatkov o ponudniku sta uspela!' });
+        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija in prenos podatkov o tovorih sta uspela!' });
     } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+};
         return res.status(500).json({ success: false, error: error.message });
     }
 };
