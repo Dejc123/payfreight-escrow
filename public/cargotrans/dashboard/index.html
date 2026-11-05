@@ -915,7 +915,7 @@ async function importCargoTransOffers() {
     button.textContent = 'Importing...';
 
     try {
-        const response = await fetch('/api/Run_sync', {
+        const response = await fetch('/api/run_sync', {
             method: 'POST'
         });
 
