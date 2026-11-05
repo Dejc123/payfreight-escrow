@@ -370,6 +370,11 @@
           </div>
           <input type="hidden" id="activeSearchMode" value="cargo">
         </div>
+
+        <button type="button" onclick="manualRefreshData()" class="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg text-xs font-semibold transition flex items-center gap-1.5 shadow-sm" title="Import and refresh from CargoTrans">
+    <i data-lucide="download-cloud" class="w-3.5 h-3.5"></i>
+    <span>Import from CargoTrans</span>
+</button>
         <div class="flex flex-wrap items-center gap-2">
           <div class="flex items-center gap-2 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200">
             <button type="button" onclick="toggleAutoRefresh()" id="manualRefreshButton" aria-pressed="false" class="px-3 py-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 rounded-md text-[11px] font-semibold transition flex items-center gap-1.5" title="Start automatic refresh">
@@ -387,6 +392,8 @@
         </div>
       </div>
     </div>
+
+    
     <!-- GLOBAL SEARCH FORM -->
     <div id="searchCriteriaSummary" class="hidden mb-4 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3 text-xs text-slate-700">
       <div class="font-semibold text-slate-900 mb-1">Current search criteria</div>
@@ -1318,6 +1325,44 @@
       }
     }
   }
+
+
+  async function manualRefreshData() {
+    const button = event.currentTarget;
+    const originalText = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = `<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i><span>Importing...</span>`;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+    
+    try {
+        // Najprej pokličemo Vercel endpoint, da sinhronizira sveže podatke iz CargoTransa v Supabase
+        const syncRes = await fetch('https://www.payfreight.io/api/run-sync');
+        const syncData = await syncRes.json();
+        
+        if (!syncData.success) {
+            throw new Error(syncData.error || 'Napaka pri sinhronizaciji');
+        }
+
+        // Nato osvežimo prikaz na dashboardu
+        if (typeof lastSearchCriteria !== 'undefined' && lastSearchCriteria) {
+            await executeGlobalSearch(null, true);
+        } else if (typeof loadMyOffers === 'function') {
+            await loadMyOffers();
+        }
+        if (typeof loadMyCargoOffers === 'function') {
+            await loadMyCargoOffers();
+        }
+        
+        console.log(`Uspešno uvoženih ${syncData.count || 0} ponudb.`);
+    } catch (err) {
+        console.error('Napaka pri uvozu:', err);
+        alert('Napaka pri uvozu iz CargoTransa: ' + err.message);
+    } finally {
+        button.disabled = false;
+        button.innerHTML = originalText;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+}
 </script>
 </body>
 </html>
