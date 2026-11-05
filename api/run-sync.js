@@ -7,7 +7,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 function fetchCargoOffers() {
     return new Promise((resolve, reject) => {
-        // Tukaj je sedaj dodan pravilen varnostni ključ, ki ga zahteva CargoTrans
+        // Popravljen pravilen varnostni ključ, ki preverjeno vrača JSON
         const url = 'https://www.cargotrans.net/export_offers.asp?key=cargotrans_secure_sync_190877';
         
         https.get(url, (res) => {
@@ -36,12 +36,13 @@ module.exports = async (req, res) => {
                 .upsert([
                     { 
                         cargotrans_id: offer.tovor_id,
-                        origin_country: offer.drzava_odhod_oznaka,
+                        origin_country: offer.origin_country,
                         origin_city: offer.kraj_odhod,
-                        dest_country: offer.drzava_prihod_oznaka,
+                        dest_country: offer.dest_country,
                         dest_city: offer.kraj_prihod,
                         weight: offer.teza,
                         dimensions: offer.dimenzije,
+                        loading_date: offer.loading_date,
                         vehicle_type: offer.nadgradnja
                     }
                 ], { onConflict: ['cargotrans_id'] });
