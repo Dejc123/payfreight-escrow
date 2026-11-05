@@ -623,21 +623,33 @@
     window.location.href = '../index.html?status=logged_out';
   }
 
-  // Manual refresh runs one request only and never overwrites filtered search results.
   async function manualRefreshData() {
-    const icon = document.getElementById('refreshIcon');
-    const button = document.getElementById('manualRefreshButton');
-    if (button) button.disabled = true;
-    if (icon) icon.classList.add('animate-spin');
-    try {
-      if (lastSearchCriteria) await executeGlobalSearch(null, true);
-      else await loadMyOffers();
-      await loadMyCargoOffers();
-    } finally {
-      if (icon) icon.classList.remove('animate-spin');
-      if (button) button.disabled = false;
+  const icon = document.getElementById('refreshIcon');
+  const button = document.getElementById('manualRefreshButton');
+  if (button) button.disabled = true;
+  if (icon) icon.classList.add('animate-spin');
+  try {
+    // 1. Najprej pokličemo Vercel skripto, ki potegne podatke iz CargoTransa in jih shrani v Supabase
+    const response = await fetch('/api/run-sync');
+    const result = await response.json();
+    
+    if (!result.success) {
+      throw new Error(result.error || 'Neznana napaka pri uvozu.');
     }
+
+    // 2. Nato osvežimo prikaz na strani, da se novi podatki takoj izrišejo
+    if (lastSearchCriteria) await executeGlobalSearch(null, true);
+    else await loadMyOffers();
+    await loadMyCargoOffers();
+    
+    console.log('Uvoz uspešen:', result.message);
+  } catch (error) {
+    alert('Napaka pri uvozu iz CargoTransa: ' + error.message);
+  } finally {
+    if (icon) icon.classList.remove('animate-spin');
+    if (button) button.disabled = false;
   }
+}
 
   // Global location data copied from the existing CargoTrans Post Cargo form.
   const fullWorldData = {
