@@ -41,24 +41,21 @@ module.exports = async (req, res) => {
                 .from('enter_cargo')
                 .upsert([
                     { 
-                        cargotrans_id: offer.tovor_id,
-                        origin_city: offer.kraj_odhod,
-                        dest_city: offer.kraj_prihod,
+                        cargotrans_id: String(offer.tovor_id),
+                        origin_city: offer.kraj_odhod || null,
+                        dest_city: offer.kraj_prihod || null,
                         weight: offer.weight ? parseFloat(offer.weight) : null,
-                        dimensions: offer.dimensions,
-                        loading_date: offer.loading_date || null,
-                        company_name: offer.company_name,
-                        contact_name: offer.contact_name,
-                        contact_phone: offer.contact_phone
+                        length: offer.dimensions ? parseFloat(offer.dimensions) : null,
+                        loading_date: offer.loading_date ? offer.loading_date : null,
+                        company_name: offer.company_name || null,
+                        contact_name: offer.contact_name || null,
+                        contact_phone: offer.contact_phone || null
                     }
                 ], { onConflict: ['cargotrans_id'] });
         }
 
-        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija in prenos podatkov o tovorih sta uspela!' });
+        return res.status(200).json({ success: true, count: offers.length, message: 'Sinhronizacija in uskladitev s Supabase tabelo sta uspeli!' });
     } catch (error) {
-        return res.status(500).json({ success: false, error: error.message });
-    }
-};
         return res.status(500).json({ success: false, error: error.message });
     }
 };
