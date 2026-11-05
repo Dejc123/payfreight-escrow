@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const { sendEmail } = require('./mailer');
+const { fetchCargoOffers } = require('./fetch_offers');
+const { runSync } = require('./sync');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -42,15 +44,7 @@ app.post('/api/send-rating-invite', async (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`CargoTrans backend server is running on port: ${PORT}`);
-});
-
-// Uvozimo funkcijo za pridobivanje ponudb iz starega ASP sistema
-const { fetchCargoOffers } = require('./fetch_offers');
-
-// Nov endpoint, ki ga bo klicala vaša nova borza za prikaz tovornih ponudb iz CargoTrans-a
+// Endpoint za prikaz tovornih ponudb iz CargoTrans-a
 app.get('/api/cargotrans-offers', (req, res) => {
     fetchCargoOffers((err, offers) => {
         if (err) {
@@ -58,4 +52,19 @@ app.get('/api/cargotrans-offers', (req, res) => {
         }
         res.json({ success: true, count: offers.length, data: offers });
     });
+});
+
+// Endpoint za ročni zagon sinhronizacije s starim ASP sistemom v Supabase
+app.get('/api/run-sync', async (req, res) => {
+    try {
+        await runSync();
+        res.json({ success: true, message: 'Sinhronizacija tovora v Supabase je bila uspešno sprožena!' });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Start server (Mora biti vedno na koncu!)
+app.listen(PORT, () => {
+  console.log(`CargoTrans backend server is running on port: ${PORT}`);
 });
