@@ -1173,50 +1173,49 @@
     });
 
     
+
 document.getElementById('transportOrderForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
 
-      e.preventDefault();
+  const button = document.getElementById('createOrderButton');
+  const buttonText = document.getElementById('createButtonText');
 
-      const button = document.getElementById('createOrderButton');
-      const buttonText = document.getElementById('createButtonText');
+  if (button.disabled) return;
+  if (!this.reportValidity()) return;
 
-      if (button.disabled) return;
+  button.disabled = true;
+  buttonText.textContent = 'Generating PDF...';
 
-      if (!this.reportValidity()) return;
+  try {
+    const orderData = collectOrderData();
 
-      button.disabled = true;
-      buttonText.textContent = 'Saving order & generating PDF...';
+    // Generate PDF locally. No Supabase database operation.
+    await generatePdf(orderData);
 
-      try {
-        const orderData = collectOrderData();
+    alert(
+      'Transport Order successfully generated!\n\n' +
+      'Your CargoNet PDF document has been downloaded.'
+    );
 
-        // 1. Save order first.
-        await saveOrderToSupabase(orderData);
+    // Stay on the form so the generated PDF can be checked.
 
-        // 2. Generate and download PDF after successful database save.
-        await generatePdf(orderData);
+    button.disabled = false;
+    buttonText.textContent = 'Create Transport Order & Download PDF';
 
-        alert(
-          'Transport order successfully created and saved!\n\n' +
-          'Your CargoNet PDF document has been downloaded and is ready to send by email.'
-        );
+  } catch (err) {
+    console.error('Transport Order PDF error:', err);
 
-        // 3. Return to dashboard.
-        window.location.href = 'index.html';
+    alert(
+      'PDF generation failed.\n\n' +
+      (err && err.message ? err.message : 'Please try again.')
+    );
 
-      } catch (err) {
-        console.error('Transport order error:', err);
+    button.disabled = false;
+    buttonText.textContent = 'Create Transport Order & Download PDF';
+  }
+});
 
-        alert(
-          'The transport order could not be completed.\n\n' +
-          (err && err.message ? err.message : 'Please try again.')
-        );
-
-        button.disabled = false;
-        buttonText.textContent = 'Create Transport Order & Download PDF';
-      }
-    });
-  </script>
+    
 
 </body>
 </html>
