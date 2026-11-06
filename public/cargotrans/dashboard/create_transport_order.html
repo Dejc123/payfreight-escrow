@@ -1159,8 +1159,7 @@ document.getElementById('transportOrderForm').addEventListener('submit', async f
   try {
     const orderData = collectOrderData();
 
-    // 1. Save order first.
-    await saveOrderToSupabase(orderData);
+
 
     // 2. Generate and download PDF after successful database save.
     await generatePdf(orderData);
@@ -2346,8 +2345,7 @@ document.getElementById('transportOrderForm').addEventListener('submit', async f
   try {
     const orderData = collectOrderData();
 
-    // 1. Save order first.
-    await saveOrderToSupabase(orderData);
+ 
 
     // 2. Generate and download PDF after successful database save.
     await generatePdf(orderData);
