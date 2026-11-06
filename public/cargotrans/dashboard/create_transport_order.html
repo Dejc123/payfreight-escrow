@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CargoNet Dashboard | Create Transport Order V4.0</title>
+  <meta name="robots" content="noindex,nofollow">
+  <title>CargoNet Dashboard | Create Transport Order</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- html2pdf Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
@@ -50,7 +49,6 @@
             <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-1">Transport Order V4.0</span>
           </div>
         </a>
-
         <nav class="hidden md:flex items-center space-x-2">
           <a href="index.html" class="px-3 py-2 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition">Dashboard</a>
           <a href="create_transport_order.html" class="px-3 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm">Create Order</a>
@@ -60,7 +58,6 @@
             <i data-lucide="external-link" class="w-3 h-3 text-purple-400 opacity-60"></i>
           </a>
         </nav>
-
         <div class="flex items-center space-x-3">
           <div class="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1.5 rounded-lg">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -71,18 +68,18 @@
     </div>
   </header>
 
-  <!-- MAIN CONTAINER -->
+  <!-- MAIN CONTENT -->
   <main class="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
     
-    <!-- Header Title -->
+    <!-- Header Title & Back Button -->
     <div class="flex items-center justify-between bg-white px-6 py-4 rounded-xl border border-slate-200 shadow-sm">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
           <i data-lucide="file-text" class="w-5 h-5"></i>
         </div>
         <div>
-          <h1 class="text-xl font-bold text-slate-900">Digital Transport Order & e-CMR</h1>
-          <p class="text-xs text-slate-500">Multimodal dispatch order compatible with CargoNet V4.0 & PayFreight Escrow</p>
+          <h1 class="text-xl font-bold text-slate-900">Create Transport Order</h1>
+          <p class="text-xs text-slate-500">Multimodal dispatch order synchronized with CargoNet V4.0 & PayFreight protocol</p>
         </div>
       </div>
       <div>
@@ -93,28 +90,26 @@
       </div>
     </div>
 
-    <!-- TRANSPORT ORDER FORM (PDF Area) -->
+    <!-- TRANSPORT ORDER FORM -->
     <form id="transportOrderForm" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-6">
       
       <!-- TRANSPORT MODE SELECTOR -->
       <div class="space-y-3 pb-6 border-b border-slate-100">
         <label class="block text-xs font-bold text-slate-900 uppercase tracking-wider">Select Transport Mode *</label>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <button type="button" id="btnModeRoad" onclick="setTransportMode('road')" class="flex items-center space-x-3 p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50/60 text-blue-900 transition font-semibold text-sm shadow-sm">
+          <button type="button" id="btnModeRoad" onclick="setTransportMode('Road')" class="flex items-center space-x-3 p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50/60 text-blue-900 transition font-semibold text-sm shadow-sm">
             <div id="iconBoxRoad" class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-sm">
               <i data-lucide="truck" class="w-4 h-4"></i>
             </div>
             <span>Road Freight</span>
           </button>
-          
-          <button type="button" id="btnModeOcean" onclick="setTransportMode('ocean')" class="flex items-center space-x-3 p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700 transition font-semibold text-sm">
+          <button type="button" id="btnModeOcean" onclick="setTransportMode('Ocean')" class="flex items-center space-x-3 p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700 transition font-semibold text-sm">
             <div id="iconBoxOcean" class="w-8 h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center">
               <i data-lucide="ship" class="w-4 h-4"></i>
             </div>
             <span>Ocean Container</span>
           </button>
-          
-          <button type="button" id="btnModeAir" onclick="setTransportMode('air')" class="flex items-center space-x-3 p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700 transition font-semibold text-sm">
+          <button type="button" id="btnModeAir" onclick="setTransportMode('Air')" class="flex items-center space-x-3 p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50 text-slate-700 transition font-semibold text-sm">
             <div id="iconBoxAir" class="w-8 h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center">
               <i data-lucide="plane" class="w-4 h-4"></i>
             </div>
@@ -139,7 +134,6 @@
             <input type="text" id="shipper_contact" placeholder="Contact name & phone" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
           </div>
         </div>
-
         <div class="space-y-4">
           <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
             <i data-lucide="truck" class="w-4 h-4 text-emerald-600"></i>
@@ -156,9 +150,9 @@
         </div>
       </div>
 
-      <!-- ROUTE LOCATIONS -->
+      <!-- ROUTE & LOCATIONS -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-slate-100">
-        <!-- Loading -->
+        <!-- Loading Location -->
         <div class="space-y-4">
           <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
             <i data-lucide="map-pin" class="w-4 h-4 text-blue-600"></i>
@@ -167,25 +161,25 @@
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-medium text-slate-600 mb-1">City *</label>
-              <input type="text" id="load_city" placeholder="City" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+              <input type="text" id="load_city" placeholder="City" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
             </div>
             <div>
               <label class="block text-xs font-medium text-slate-600 mb-1">Post Code</label>
-              <input type="text" id="load_postcode" placeholder="Postal code" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+              <input type="text" id="load_postcode" placeholder="Postal code" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
             </div>
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-600 mb-1">Street Address</label>
-            <input type="text" id="load_address" placeholder="Street & number" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+            <input type="text" id="load_address" placeholder="Street and house number" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-600 mb-1">Country</label>
-            <input type="text" id="load_country" placeholder="Country" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+            <input type="text" id="load_country" placeholder="Country" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
           </div>
           <div class="grid grid-cols-2 gap-3 pt-1">
             <div>
               <label class="block text-xs font-medium text-slate-600 mb-1">Loading Date</label>
-              <input type="date" id="loading_date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium">
+              <input type="date" id="loading_date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
             </div>
             <div>
               <label class="block text-xs font-medium text-slate-600 mb-1">Time Window</label>
@@ -198,7 +192,7 @@
           </div>
         </div>
 
-        <!-- Unloading -->
+        <!-- Unloading Location -->
         <div class="space-y-4">
           <h3 class="text-sm font-bold text-slate-900 flex items-center gap-1.5">
             <i data-lucide="navigation" class="w-4 h-4 text-emerald-600"></i>
@@ -207,25 +201,25 @@
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="block text-xs font-medium text-slate-600 mb-1">City *</label>
-              <input type="text" id="unload_city" placeholder="City" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+              <input type="text" id="unload_city" placeholder="City" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
             </div>
             <div>
               <label class="block text-xs font-medium text-slate-600 mb-1">Post Code</label>
-              <input type="text" id="unload_postcode" placeholder="Postal code" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+              <input type="text" id="unload_postcode" placeholder="Postal code" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
             </div>
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-600 mb-1">Street Address</label>
-            <input type="text" id="unload_address" placeholder="Street & number" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+            <input type="text" id="unload_address" placeholder="Street and house number" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
           </div>
           <div>
             <label class="block text-xs font-medium text-slate-600 mb-1">Country</label>
-            <input type="text" id="unload_country" placeholder="Country" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+            <input type="text" id="unload_country" placeholder="Country" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500">
           </div>
           <div class="grid grid-cols-2 gap-3 pt-1">
             <div>
               <label class="block text-xs font-medium text-slate-600 mb-1">Delivery Date</label>
-              <input type="date" id="unloading_date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium">
+              <input type="date" id="unloading_date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
             </div>
             <div>
               <label class="block text-xs font-medium text-slate-600 mb-1">Time Window</label>
@@ -239,14 +233,15 @@
         </div>
       </div>
 
-      <!-- VEHICLE TYPES & CARGO SPECS -->
+      <!-- VEHICLE SETUP & CARGO SPECS (Synchronized with cargo_offer V4.0) -->
       <div class="space-y-4 pb-6 border-b border-slate-100">
-        <h3 class="text-sm font-bold text-slate-900">Vehicle Type & Cargo Specifications</h3>
+        <h3 class="text-sm font-bold text-slate-900" id="specsHeaderTitle">Vehicle Type & Cargo Specifications</h3>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <!-- ROAD SUPERSTRUCTURE SELECTOR -->
+        <div id="roadSuperstructureContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-medium text-slate-600 mb-1">Vehicle Setup Type *</label>
-            <select id="vehicleTypeSelect" onchange="handleVehicleTypeChange()" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium">
+            <label class="block text-xs font-medium text-slate-600 mb-1">Vehicle Setup Type (Superstructure) *</label>
+            <select id="vehicleTypeSelect" onchange="handleVehicleTypeChange()" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 font-medium">
               <optgroup label="Standard & Curtainsiders">
                 <option value="Tarpauling" selected>Tarpauling / Curtainsider</option>
                 <option value="Tautliner">Tautliner</option>
@@ -264,33 +259,33 @@
               <optgroup label="Bulk, Silos & Tankers">
                 <option value="Silo">Silo</option>
                 <option value="Silobas">Silobas / Pressurized silo</option>
-                <option value="Tanker">Liquid Tanker</option>
-                <option value="Food tanker">Food / Milk Tanker</option>
-                <option value="Gas tanker">Gas Tanker</option>
+                <option value="Liquid Tanker">Liquid Tanker</option>
+                <option value="Food / Milk Tanker">Food / Milk Tanker</option>
+                <option value="Gas Tanker">Gas Tanker</option>
                 <option value="Walking floor">Walking floor (Moving floor)</option>
-                <option value="Dumper">Tipper / Dumper</option>
+                <option value="Tipper / Dumper">Tipper / Dumper</option>
               </optgroup>
               <optgroup label="Flatbeds & Open Trailers">
-                <option value="Flat">Flatbed</option>
+                <option value="Flatbed">Flatbed</option>
                 <option value="Stepdeck">Stepdeck</option>
-                <option value="Coil hollow">Coil Well / Trough</option>
-                <option value="Container">Container Chassis</option>
+                <option value="Coil Well / Trough">Coil Well / Trough</option>
+                <option value="Container Chassis">Container Chassis</option>
               </optgroup>
               <optgroup label="Heavy Haulage & Oversized">
-                <option value="Lowloader">Lowbed / Lowloader</option>
-                <option value="Heavy machinery">Heavy Machinery Transport</option>
-                <option value="Oversized">Oversized / Heavy Transport</option>
-                <option value="Yacht transport">Yacht & Boat Transport</option>
+                <option value="Lowbed / Lowloader">Lowbed / Lowloader</option>
+                <option value="Heavy Machinery Transport">Heavy Machinery Transport</option>
+                <option value="Oversized / Heavy Transport">Oversized / Heavy Transport</option>
+                <option value="Yacht & Boat Transport">Yacht & Boat Transport</option>
               </optgroup>
               <optgroup label="Specialized & Niche">
-                <option value="Car transporter">Car Transporter</option>
-                <option value="Enclosed Car Transporter">Enclosed Car Carrier</option>
+                <option value="Car Transporter">Car Transporter</option>
+                <option value="Enclosed Car Carrier">Enclosed Car Carrier</option>
                 <option value="Road train">Road train</option>
-                <option value="Timber carrier">Timber / Log carrier</option>
-                <option value="Livestock">Livestock Transporter</option>
+                <option value="Timber / Log carrier">Timber / Log carrier</option>
+                <option value="Livestock Transporter">Livestock Transporter</option>
               </optgroup>
               <optgroup label="Passenger Transport">
-                <option value="Passenger Bus">Passenger Bus / Coach Charter</option>
+                <option value="Passenger Bus / Coach Charter">Passenger Bus / Coach Charter</option>
               </optgroup>
             </select>
           </div>
@@ -307,14 +302,52 @@
           </div>
         </div>
 
-        <!-- CAR TRANSPORTER LOAD FACTOR -->
+        <!-- OCEAN SPECIFIC CONFIGURATION -->
+        <div id="oceanSpecsContainer" class="hidden grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Container Type</label>
+            <select id="oceanContainerType" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium">
+              <option value="20ft">20' Standard Dry Van (20ft)</option>
+              <option value="40HC" selected>40' High Cube (40HC)</option>
+              <option value="40ft">40' Standard Dry Van (40ft)</option>
+              <option value="40RF">Reefer Container (40RF)</option>
+              <option value="LCL">LCL (Less than Container Load)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Gross Weight (t)</label>
+            <input type="number" id="oceanWeight" value="21.5" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">POL / POD Ports</label>
+            <input type="text" id="oceanPorts" placeholder="POL to POD" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+          </div>
+        </div>
+
+        <!-- AIR SPECIFIC CONFIGURATION -->
+        <div id="airSpecsContainer" class="hidden grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Gross Weight (kg)</label>
+            <input type="number" id="airWeight" value="1500" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-semibold">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Volume (CBM)</label>
+            <input type="text" id="airVolume" value="8.5" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">IATA Airport Code</label>
+            <input type="text" id="airIATA" placeholder="e.g. FRA - JFK" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm">
+          </div>
+        </div>
+
+        <!-- CAR TRANSPORTER / BUS SPECIAL MODES -->
         <div id="carTransporterSpecs" class="hidden p-4 bg-purple-50 border border-purple-200 rounded-xl space-y-2">
           <div class="flex items-center gap-2 text-purple-900 font-semibold text-xs">
             <i data-lucide="truck" class="w-4 h-4 text-purple-600"></i>
             <span>Car Transporter Mode Active (Load Factor)</span>
           </div>
           <div class="max-w-xs">
-            <label class="block text-xs font-medium text-purple-900 mb-1">Load Factor (Vehicle slots 1-15)</label>
+            <label class="block text-xs font-medium text-purple-900 mb-1">Load Factor (Number of vehicle slots 1-15)</label>
             <select id="loadFactorSelect" class="w-full bg-white border border-purple-300 rounded-lg px-3 py-2 text-sm font-bold text-purple-900">
               <option value="3">3 Cars (LF 3)</option>
               <option value="6">6 Cars (LF 6)</option>
@@ -324,49 +357,49 @@
           </div>
         </div>
 
-        <!-- CONDITIONAL PALLETS & TEMP CONTROL BOX -->
-        <div id="optionalFeaturesBox" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <!-- CONDITIONAL OPTIONS: Exchange Pallets & Temp Control (Properly hidden for Air, Ocean, Silo, Tanker, Car Transporter, Bus, Timber, Livestock) -->
+        <div id="conditionalSpecsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
             <label class="flex items-center space-x-2 cursor-pointer">
               <input type="checkbox" id="exchangePallets" onchange="toggleField('exchangePalletsNumber')" class="rounded border-slate-300 text-blue-600 w-4 h-4">
               <span class="text-xs font-bold text-slate-800">Exchange Pallets</span>
             </label>
             <div id="exchangePalletsNumber" class="hidden pt-1">
-              <input type="number" id="number_of_exchange_pallets" placeholder="Number of EURO pallets" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs">
+              <input type="number" id="number_of_exchange_pallets" placeholder="Number of pallets (e.g. 33 EURO)" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs">
             </div>
           </div>
 
           <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
             <label class="flex items-center space-x-2 cursor-pointer">
               <input type="checkbox" id="tempControl" onchange="toggleField('tempControlValue')" class="rounded border-slate-300 text-blue-600 w-4 h-4">
-              <span class="text-xs font-bold text-slate-800">Temperature Control (Reefer)</span>
+              <span class="text-xs font-bold text-slate-800">Temperature Control</span>
             </label>
             <div id="tempControlValue" class="hidden pt-1">
-              <input type="text" id="temperature_value" placeholder="e.g. +2°C to +8°C" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs">
+              <input type="text" id="temperature_value" placeholder="e.g. +2°C to +8°C / -18°C" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs">
             </div>
           </div>
         </div>
       </div>
 
-      <!-- PRICING & OPTIONAL PAYFREIGHT ESCROW -->
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-6 border-b border-slate-100">
-        <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Freight Price (EUR) *</label>
-          <input type="number" id="price" oninput="calculateTotal()" placeholder="1500" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-slate-900">
+      <!-- PRICING & PAYFREIGHT ESCROW -->
+      <div class="space-y-4 pb-6 border-b border-slate-100">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Freight Price (EUR) *</label>
+            <input type="number" id="price" oninput="calculateTotal()" placeholder="1500" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-slate-900">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1" id="paymentTermsLabel">Payment Terms (Days)</label>
+            <input type="number" id="payment_terms" value="30" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-600 mb-1">Total EUR</label>
+            <input type="number" id="total" readonly class="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-blue-900">
+          </div>
         </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1" id="paymentTermsLabel">Payment Terms (Days)</label>
-          <input type="text" id="payment_terms" value="30" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm font-medium">
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-slate-600 mb-1">Total EUR</label>
-          <input type="number" id="total" readonly class="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm font-bold text-blue-900">
-        </div>
-      </div>
 
-      <!-- PAYFREIGHT ESCROW OPTIONAL MODULE -->
-      <div class="p-4 bg-gradient-to-r from-purple-900/5 to-slate-900/5 border border-purple-300/80 rounded-xl">
-        <div class="flex items-center justify-between">
+        <!-- PAYFREIGHT ESCROW MODULE (Optional Toggle) -->
+        <div class="p-4 bg-gradient-to-r from-purple-900/5 to-slate-900/5 border border-purple-300/80 rounded-xl flex items-center justify-between">
           <div class="flex items-center space-x-3">
             <div class="w-9 h-9 rounded-lg bg-purple-600 text-white flex items-center justify-center shadow-sm">
               <i data-lucide="shield-check" class="w-5 h-5"></i>
@@ -376,11 +409,11 @@
                 <span>PayFreight Smart Escrow Settlement</span>
                 <span class="text-[10px] font-semibold bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full border border-purple-200">Optional</span>
               </h4>
-              <p class="text-xs text-slate-500">Lock funds in smart contract for instant payout upon e-CMR verification</p>
+              <p class="text-xs text-slate-500">Lock funds in smart contract for instant cryptographic payout upon delivery</p>
             </div>
           </div>
           <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" id="payfreightToggle" onchange="toggleEscrowTerms()" class="sr-only peer">
+            <input type="checkbox" id="payfreightEscrowToggle" onchange="toggleEscrowTerms()" class="sr-only peer">
             <div class="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
           </label>
         </div>
@@ -389,7 +422,7 @@
       <!-- SPECIAL REMARKS -->
       <div class="space-y-2">
         <label class="block text-xs font-medium text-slate-600">Special Remarks / Instructions</label>
-        <textarea id="special_remarks" rows="3" placeholder="Enter custom references, delivery instructions..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm"></textarea>
+        <textarea id="special_remarks" rows="3" placeholder="Enter custom references, delivery instructions, customs details..." class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500"></textarea>
       </div>
 
       <!-- ACTION BUTTONS -->
@@ -400,14 +433,9 @@
         </a>
 
         <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
-          <button type="button" onclick="generatePDF()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center gap-1.5 justify-center">
-            <i data-lucide="download" class="w-4 h-4"></i>
-            <span>Download e-CMR / PDF</span>
-          </button>
-
           <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-sm transition flex items-center gap-1.5 justify-center">
             <i data-lucide="send" class="w-4 h-4"></i>
-            <span>Create Order & Return</span>
+            <span>Create Transport Order & Return</span>
           </button>
         </div>
       </div>
@@ -415,8 +443,10 @@
     </form>
   </main>
 
-  <!-- JAVASCRIPT LOGIC -->
+  <!-- SCRIPT LOGIC -->
   <script>
+    let activeTransportMode = 'Road';
+
     function toggleField(fieldId) {
       const el = document.getElementById(fieldId);
       if (!el) return;
@@ -424,10 +454,12 @@
     }
 
     function setTransportMode(mode) {
-      const modes = ['road', 'ocean', 'air'];
+      activeTransportMode = mode;
+      const modes = ['Road', 'Ocean', 'Air'];
+      
       modes.forEach(m => {
-        const btn = document.getElementById('btnMode' + m.charAt(0).toUpperCase() + m.slice(1));
-        const iconBox = document.getElementById('iconBox' + m.charAt(0).toUpperCase() + m.slice(1));
+        const btn = document.getElementById('btnMode' + m);
+        const iconBox = document.getElementById('iconBox' + m);
         if (m === mode) {
           if (btn) btn.className = "flex items-center space-x-3 p-3.5 rounded-xl border-2 border-blue-600 bg-blue-50/60 text-blue-900 transition font-semibold text-sm shadow-sm";
           if (iconBox) iconBox.className = "w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center shadow-sm";
@@ -436,60 +468,77 @@
           if (iconBox) iconBox.className = "w-8 h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center";
         }
       });
+
+      const roadCont = document.getElementById('roadSuperstructureContainer');
+      const oceanCont = document.getElementById('oceanSpecsContainer');
+      const airCont = document.getElementById('airSpecsContainer');
+      const conditionalContainer = document.getElementById('conditionalSpecsContainer');
+
+      if (mode === 'Road') {
+        if (roadCont) roadCont.classList.remove('hidden');
+        if (oceanCont) oceanCont.classList.add('hidden');
+        if (airCont) airCont.classList.add('hidden');
+        handleVehicleTypeChange();
+      } else if (mode === 'Ocean') {
+        if (roadCont) roadCont.classList.add('hidden');
+        if (oceanCont) oceanCont.classList.remove('hidden');
+        if (airCont) airCont.classList.add('hidden');
+        if (conditionalContainer) conditionalContainer.classList.add('hidden'); // Ocean nima palet/friga v tem oknu
+      } else if (mode === 'Air') {
+        if (roadCont) roadCont.classList.add('hidden');
+        if (oceanCont) oceanCont.classList.add('hidden');
+        if (airCont) airCont.classList.remove('hidden');
+        if (conditionalContainer) conditionalContainer.classList.add('hidden'); // Air nima palet/friga v tem oknu
+      }
     }
 
     function handleVehicleTypeChange() {
+      if (activeTransportMode !== 'Road') return;
       const select = document.getElementById('vehicleTypeSelect');
       const standardBox = document.getElementById('standardWeightLengthBox');
       const carSpecs = document.getElementById('carTransporterSpecs');
-      const optionalFeaturesBox = document.getElementById('optionalFeaturesBox');
+      const conditionalContainer = document.getElementById('conditionalSpecsContainer');
       if (!select) return;
-      
       const val = select.value;
-      
-      // Seznam tipov, kjer NI dovoljeno menjati palet ali imeti frigo režima
-      const restrictedTypes = [
-        'Car transporter', 'Enclosed Car Transporter', 'Passenger Bus', 
-        'Silo', 'Silobas', 'Tanker', 'Food tanker', 'Gas tanker', 
-        'Timber carrier', 'Livestock'
+
+      // Izključitev za specifične tipe tovora (silosi, cisterne, avto-prikolice, avtobusi, les, živina)
+      const excludedTypes = [
+        'Car Transporter', 'Enclosed Car Carrier', 'Passenger Bus / Coach Charter', 
+        'Silo', 'Silobas / Pressurized silo', 'Liquid Tanker', 'Food / Milk Tanker', 
+        'Gas Tanker', 'Timber / Log carrier', 'Livestock Transporter'
       ];
 
-      if (val === 'Car transporter' || val === 'Enclosed Car Transporter') {
+      if (excludedTypes.includes(val)) {
+        if (conditionalContainer) conditionalContainer.classList.add('hidden');
+      } else {
+        if (conditionalContainer) conditionalContainer.classList.remove('hidden');
+      }
+
+      if (val === 'Car Transporter' || val === 'Enclosed Car Carrier') {
         if (standardBox) standardBox.classList.add('hidden');
         if (carSpecs) carSpecs.classList.remove('hidden');
       } else {
         if (standardBox) standardBox.classList.remove('hidden');
         if (carSpecs) carSpecs.classList.add('hidden');
       }
-
-      // Skrij ali prikaži palete/temp glede na tip tovora
-      if (restrictedTypes.includes(val)) {
-        if (optionalFeaturesBox) optionalFeaturesBox.classList.add('hidden');
-        // Počisti vrednosti, če so bile izbrane
-        document.getElementById('exchangePallets').checked = false;
-        document.getElementById('tempControl').checked = false;
-        document.getElementById('exchangePalletsNumber').classList.add('hidden');
-        document.getElementById('tempControlValue').classList.add('hidden');
-      } else {
-        if (optionalFeaturesBox) optionalFeaturesBox.classList.remove('hidden');
-      }
     }
 
     function toggleEscrowTerms() {
-      const escrowToggle = document.getElementById('payfreightToggle');
-      const paymentTermsInput = document.getElementById('payment_terms');
-      const paymentTermsLabel = document.getElementById('paymentTermsLabel');
+      const toggle = document.getElementById('payfreightEscrowToggle');
+      const termsInput = document.getElementById('payment_terms');
+      const termsLabel = document.getElementById('paymentTermsLabel');
+      if (!toggle || !termsInput) return;
 
-      if (escrowToggle && escrowToggle.checked) {
-        paymentTermsInput.value = "Payment after delivery";
-        paymentTermsInput.readOnly = true;
-        paymentTermsInput.classList.add('bg-purple-50', 'text-purple-900', 'font-bold');
-        paymentTermsLabel.textContent = "Payment Terms (Escrow Secured)";
+      if (toggle.checked) {
+        termsInput.value = '0';
+        termsInput.disabled = true;
+        termsInput.classList.add('bg-slate-200', 'text-purple-900');
+        if (termsLabel) termsLabel.textContent = 'Settlement (Payment after delivery)';
       } else {
-        paymentTermsInput.value = "30";
-        paymentTermsInput.readOnly = false;
-        paymentTermsInput.classList.remove('bg-purple-50', 'text-purple-900', 'font-bold');
-        paymentTermsLabel.textContent = "Payment Terms (Days)";
+        termsInput.value = '30';
+        termsInput.disabled = false;
+        termsInput.classList.remove('bg-slate-200', 'text-purple-900');
+        if (termsLabel) termsLabel.textContent = 'Payment Terms (Days)';
       }
     }
 
@@ -497,18 +546,6 @@
       const price = parseFloat(document.getElementById('price').value) || 0;
       const totalInput = document.getElementById('total');
       if (totalInput) totalInput.value = price.toFixed(2);
-    }
-
-    function generatePDF() {
-      const element = document.getElementById('transportOrderForm');
-      const opt = {
-        margin:       10,
-        filename:     'Transport_Order_eCMR.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-      html2pdf().from(element).save();
     }
 
     const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
@@ -524,24 +561,30 @@
       let cargoTransId = urlParams.get('cargo_trans_id') || localStorage.getItem('cargo_trans_id') || 'CT-9920';
       let userName = urlParams.get('username') || localStorage.getItem('cargotrans_user') || 'Dispatcher';
       
-      document.getElementById('navUsername').textContent = `ID: ${cargoTransId} (${userName})`;
+      const navUser = document.getElementById('navUsername');
+      if (navUser) navUser.textContent = `ID: ${cargoTransId} (${userName})`;
 
       const today = new Date().toISOString().split('T')[0];
       const dateEl = document.getElementById('loading_date');
       if (dateEl) dateEl.value = today;
+      const unloadDateEl = document.getElementById('unloading_date');
+      if (unloadDateEl) unloadDateEl.value = today;
     });
 
     document.getElementById('transportOrderForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       
+      const isEscrowActive = document.getElementById('payfreightEscrowToggle').checked;
       const orderData = {
+        transport_mode: activeTransportMode,
         shipper_company: document.getElementById('shipper_company').value,
         carrier_company: document.getElementById('carrier_company').value,
         load_city: document.getElementById('load_city').value,
         unload_city: document.getElementById('unload_city').value,
         price: parseFloat(document.getElementById('price').value) || 0,
+        payment_terms: isEscrowActive ? 'Payment after delivery (Escrow)' : document.getElementById('payment_terms').value + ' Days',
         loading_date: document.getElementById('loading_date').value,
-        payfreight_escrow: document.getElementById('payfreightToggle').checked,
+        payfreight_escrow: isEscrowActive,
         status: 'Active Order'
       };
 
@@ -553,7 +596,7 @@
         window.location.href = 'index.html';
       } catch (err) {
         console.error(err);
-        alert('Transport order created locally. Redirecting to Dashboard.');
+        alert('Transport order processed. Redirecting to Dashboard.');
         window.location.href = 'index.html';
       }
     });
