@@ -1174,43 +1174,6 @@
 
     
 document.getElementById('transportOrderForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-
-  const button = document.getElementById('createOrderButton');
-  const buttonText = document.getElementById('createButtonText');
-
-  if (button.disabled) return;
-  if (!this.reportValidity()) return;
-
-  button.disabled = true;
-  buttonText.textContent = 'Generating PDF...';
-
-  try {
-    const orderData = collectOrderData();
-
-    // Generate and download PDF locally.
-    // No Supabase connection or database save required.
-    await generatePdf(orderData);
-
-    alert(
-      'Transport Order successfully generated!\n\n' +
-      'Your CargoNet PDF document has been downloaded and is ready to send by email.'
-    );
-
-    window.location.href = 'index.html';
-
-  } catch (err) {
-    console.error('Transport Order PDF error:', err);
-
-    alert(
-      'PDF generation failed.\n\n' +
-      (err && err.message ? err.message : 'Please try again.')
-    );
-
-    button.disabled = false;
-    buttonText.textContent = 'Create Transport Order & Download PDF';
-  }
-});
 
       e.preventDefault();
 
