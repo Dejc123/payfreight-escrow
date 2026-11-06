@@ -1201,7 +1201,9 @@ async function importCargoTransOffers() {
       }
       const { data, error } = await query;
       if (error) throw error;
-      const cargos = data || [];
+
+      const todayStr = new Date().toISOString().split('T')[0];
+      const cargos = (data || []).filter(c => !c.loading_date || c.loading_date >= todayStr);
 
       if (cargos.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-500">You have no active cargo offers. Post a new cargo above!</td></tr>`;
@@ -1266,7 +1268,7 @@ async function importCargoTransOffers() {
     window.location.href = `enter_cargo.html?edit_id=${id}`;
   }
 
-  async function loadMyOffers() {
+async function loadMyOffers() {
     const tbody = document.getElementById('myOffersTableBody');
     try {
       const [cargoRes, transportRes] = await Promise.all([
@@ -1274,8 +1276,12 @@ async function importCargoTransOffers() {
         sb.from('enter_transport').select('*').order('created_at', { ascending: false }).limit(5)
       ]);
       let html = '';
-      const cargos = cargoRes.data || [];
-      const transports = transportRes.data || [];
+      
+      // Tukaj pravilno vzamemo podatke in takoj filtriramo pretekle datume:
+      const todayStr = new Date().toISOString().split('T')[0];
+      const cargos = (cargoRes.data || []).filter(c => !c.loading_date || c.loading_date >= todayStr);
+      const transports = (transportRes.data || []).filter(t => !t.loading_date || t.loading_date >= todayStr);
+
       if (cargos.length === 0 && transports.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-xs text-slate-500">No active offers found. Post your first cargo or transport capacity above!</td></tr>`;
         return;
