@@ -8,7 +8,7 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <script>
@@ -651,13 +651,7 @@
   <script>
     let activeTransportMode = 'Road';
 
-    const SUPABASE_URL = 'https://wqjqjfxyucufuyioxphm.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_yk5rxZPhocyJyI0PXoVMug_geVD9mzD';
-
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
+   
 
     function getValue(id) {
       const el = document.getElementById(id);
@@ -1108,32 +1102,7 @@
       };
     }
 
-    async function saveOrderToSupabase(data) {
-      /*
-        Keep the existing Supabase database fields unchanged.
-        Additional form details are included in the generated PDF.
-      */
-      const databaseRecord = {
-        transport_mode: data.transport_mode,
-        shipper_company: data.shipper_company,
-        carrier_company: data.carrier_company,
-        load_city: data.load_city,
-        unload_city: data.unload_city,
-        price: parseFloat(data.price) || 0,
-        payment_terms: data.payment_terms,
-        loading_date: data.loading_date || null,
-        payfreight_escrow: data.payfreight_escrow,
-        status: 'Active Order'
-      };
 
-      const { error } = await supabaseClient
-        .from('transport_orders')
-        .insert([databaseRecord]);
-
-      if (error) {
-        throw error;
-      }
-    }
 
     document.addEventListener('DOMContentLoaded', function() {
       if (typeof lucide !== 'undefined') {
