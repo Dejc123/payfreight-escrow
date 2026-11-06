@@ -1020,7 +1020,7 @@ async function importCargoTransOffers() {
 
   async function toggleOfferDetails(button, item, searchMode) {
     const row = button.closest('tr');
-    const detailId = 'offer-detail-' + String(item.id || item.cargo_id || item.transport_id || Math.random()).replace(/[^a-zA-Z0-9_-]/g, '');
+    const detailId = button.dataset.detailFor || ('offer-detail-' + String(item.id || item.cargo_id || item.transport_id || Math.random()).replace(/[^a-zA-Z0-9_-]/g, ''));
     const existing = document.getElementById(detailId);
     if (existing) { existing.remove(); button.textContent = 'Info'; return; }
     // Close another expanded detail to keep the exchange compact.
@@ -1117,10 +1117,17 @@ async function importCargoTransOffers() {
           <section class="rounded-lg border border-slate-100 p-3"><h4 class="mb-2 border-b border-slate-100 pb-1.5 text-[11px] font-bold uppercase tracking-wider text-blue-800">Insurance & documents</h4>${insuranceBlock}<div class="mt-2">${detailField('Carrier licence', company?.carrier_license_url, true)}${detailField('Carrier licence status', company?.carrier_license_status)}</div></section>
           <section class="rounded-lg border border-slate-100 p-3"><h4 class="mb-2 border-b border-slate-100 pb-1.5 text-[11px] font-bold uppercase tracking-wider text-blue-800">Dispatcher</h4><div class="flex items-start gap-3">${avatar ? `<img src="${escapeHtml(avatar)}" alt="Dispatcher avatar" class="h-12 w-12 rounded-full border border-slate-200 object-cover" onerror="this.style.display='none'">` : '<div class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-500"><i data-lucide="user-round" class="h-6 w-6"></i></div>'}<div class="min-w-0 flex-1"><div class="text-sm font-semibold text-slate-900">${escapeHtml(contactName || 'Dispatcher')}</div><div class="mt-1 text-xs text-slate-600">${languages ? `Languages: ${escapeHtml(detailValue(languages))}` : 'Languages not provided'}</div><div class="mt-2 flex flex-wrap gap-2">${emailAction}${phoneAction}</div>${email ? `<div class="mt-1 break-all text-[11px] text-slate-500">${escapeHtml(email)}</div>` : ''}${phone ? `<div class="text-[11px] text-slate-500">${escapeHtml(phone)}</div>` : ''}</div></div>${detailField('Office extension', member?.office_extension)}</section>
         </div>
-        <div class="flex justify-end border-t border-slate-100 px-3 py-2"><button type="button" class="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50" onclick="this.closest('tr').remove(); const b=document.querySelector('[data-detail-for=\'${escapeHtml(detailId)}\']'); if(b)b.textContent='Info';">Close details</button></div>
+        <div class="flex justify-end border-t border-slate-100 px-3 py-2"><button type="button" class="js-close-offer-details rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+  Close details
+</button></div>
       </div></td>`;
     button.dataset.detailFor = detailId;
     row.insertAdjacentElement('afterend', detailRow);
+    detailRow.querySelector('.js-close-offer-details').addEventListener('click', function() {
+  detailRow.remove();
+  button.textContent = 'Info';
+  delete button.dataset.detailFor;
+});
     button.textContent = 'Hide info';
   }
 
