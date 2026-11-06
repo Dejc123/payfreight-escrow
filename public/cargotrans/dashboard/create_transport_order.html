@@ -233,9 +233,9 @@
         </div>
       </div>
 
-      <!-- VEHICLE SETUP & CARGO SPECS (Synchronized with cargo_offer V4.0) -->
+      <!-- VEHICLE SETUP & CARGO SPECS -->
       <div class="space-y-4 pb-6 border-b border-slate-100">
-        <h3 class="text-sm font-bold text-slate-900" id="specsHeaderTitle">Transport Type & Cargo Specifications</h3>
+        <h3 class="text-sm font-bold text-slate-900" id="specsHeaderTitle">Vehicle Type & Cargo Specifications</h3>
         
         <!-- ROAD SUPERSTRUCTURE SELECTOR -->
         <div id="roadSuperstructureContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -258,7 +258,7 @@
               </optgroup>
               <optgroup label="Bulk, Silos & Tankers">
                 <option value="Silo">Silo</option>
-                <option value="Silobas">Silobas / Pressurized silo</option>
+                <option value="Silobas / Pressurized silo">Silobas / Pressurized silo</option>
                 <option value="Liquid Tanker">Liquid Tanker</option>
                 <option value="Food / Milk Tanker">Food / Milk Tanker</option>
                 <option value="Gas Tanker">Gas Tanker</option>
@@ -340,7 +340,7 @@
           </div>
         </div>
 
-        <!-- CAR TRANSPORTER / BUS SPECIAL MODES -->
+        <!-- CAR TRANSPORTER SPECIAL MODE -->
         <div id="carTransporterSpecs" class="hidden p-4 bg-purple-50 border border-purple-200 rounded-xl space-y-2">
           <div class="flex items-center gap-2 text-purple-900 font-semibold text-xs">
             <i data-lucide="truck" class="w-4 h-4 text-purple-600"></i>
@@ -357,7 +357,7 @@
           </div>
         </div>
 
-        <!-- CONDITIONAL OPTIONS: Exchange Pallets & Temp Control (Properly hidden for Air, Ocean, Silo, Tanker, Car Transporter, Bus, Timber, Livestock) -->
+        <!-- CONDITIONAL OPTIONS: Exchange Pallets & Temp Control (Izklopljeno za Ocean, Air, Silose, Cisterne, Avto-prikolice, Avtobuse, Les, Živino in Izredne/Težke prevoze) -->
         <div id="conditionalSpecsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
             <label class="flex items-center space-x-2 cursor-pointer">
@@ -483,12 +483,12 @@
         if (roadCont) roadCont.classList.add('hidden');
         if (oceanCont) oceanCont.classList.remove('hidden');
         if (airCont) airCont.classList.add('hidden');
-        if (conditionalContainer) conditionalContainer.classList.add('hidden'); // Ocean nima palet/friga v tem oknu
+        if (conditionalContainer) conditionalContainer.classList.add('hidden'); // Ocean nima palet/friga
       } else if (mode === 'Air') {
         if (roadCont) roadCont.classList.add('hidden');
         if (oceanCont) oceanCont.classList.add('hidden');
         if (airCont) airCont.classList.remove('hidden');
-        if (conditionalContainer) conditionalContainer.classList.add('hidden'); // Air nima palet/friga v tem oknu
+        if (conditionalContainer) conditionalContainer.classList.add('hidden'); // Air nima palet/friga
       }
     }
 
@@ -501,11 +501,12 @@
       if (!select) return;
       const val = select.value;
 
-      // Izključitev za specifične tipe tovora (silosi, cisterne, avto-prikolice, avtobusi, les, živina)
+      // Izključitev opcij za menjavo palet in frigo režim za specialne, nišne, silose, cisterne ter težke/izredne prevoze (Heavy Haulage)
       const excludedTypes = [
         'Car Transporter', 'Enclosed Car Carrier', 'Passenger Bus / Coach Charter', 
         'Silo', 'Silobas / Pressurized silo', 'Liquid Tanker', 'Food / Milk Tanker', 
-        'Gas Tanker', 'Timber / Log carrier', 'Livestock Transporter'
+        'Gas Tanker', 'Timber / Log carrier', 'Livestock Transporter',
+        'Lowbed / Lowloader', 'Heavy Machinery Transport', 'Oversized / Heavy Transport', 'Yacht & Boat Transport'
       ];
 
       if (excludedTypes.includes(val)) {
