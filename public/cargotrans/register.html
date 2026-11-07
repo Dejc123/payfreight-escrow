@@ -386,14 +386,14 @@
               </div>
             </div>
 
-            <!-- DYNAMIC EQUIPMENT / SPECIALIZATION CONTAINER -->
+            <!-- DYNAMIC EQUIPMENT / SPECIALIZATION CONTAINER (SWITCHES INSTANTLY ON MODE CHANGE) -->
             <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-4 shadow-sm">
               <div class="flex items-center justify-between border-b border-slate-100 pb-2">
                 <span id="equipmentHeaderTitle" class="text-xs font-bold text-slate-900 uppercase tracking-wide">Road Transport Equipment & Certifications</span>
                 <span class="text-[10px] text-slate-400">Select one equipment type per lane build</span>
               </div>
 
-              <!-- ROAD EQUIPMENT -->
+              <!-- ROAD EQUIPMENT (Over 16 Pro Options) -->
               <div id="equipmentRoadContainer" class="space-y-3">
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 text-xs text-slate-700">
                   <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
@@ -459,59 +459,58 @@
                 </div>
               </div>
 
-              <!-- OCEAN EQUIPMENT -->
+              <!-- OCEAN EQUIPMENT (FCL / LCL / Reefer Containers) -->
               <div id="equipmentOceanContainer" class="space-y-2 hidden">
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-slate-700">
-                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 text-xs text-slate-700">
+                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
                     <input type="radio" name="equipmentType" value="20' Dry Container (20DV)" class="text-blue-600"> <span>20' Dry Container (20DV)</span>
                   </label>
-                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
                     <input type="radio" name="equipmentType" value="40' Dry Container (40DV)" class="text-blue-600"> <span>40' Dry Container (40DV)</span>
                   </label>
-                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
                     <input type="radio" name="equipmentType" value="40' High Cube (40HC)" class="text-blue-600"> <span>40' High Cube (40HC)</span>
                   </label>
-                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
-                    <input type="radio" name="equipmentType" value="Reefer Container" class="text-blue-600"> <span>Reefer Container</span>
+                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+                    <input type="radio" name="equipmentType" value="Reefer Container (40RF)" class="text-blue-600"> <span>Reefer Container (40RF)</span>
                   </label>
-                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
                     <input type="radio" name="equipmentType" value="Open Top / Flat Rack" class="text-blue-600"> <span>Open Top / Flat Rack</span>
                   </label>
-                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
                     <input type="radio" name="equipmentType" value="LCL / Consolidation" class="text-blue-600"> <span>LCL / Consolidation</span>
                   </label>
                 </div>
               </div>
 
-              <!-- AIR EQUIPMENT -->
+              <!-- AIR EQUIPMENT (ULD / Charter) -->
               <div id="equipmentAirContainer" class="space-y-2 hidden">
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-slate-700">
-                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
                     <input type="radio" name="equipmentType" value="Standard ULD Container" class="text-blue-600"> <span>Standard ULD Container</span>
                   </label>
-                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
                     <input type="radio" name="equipmentType" value="Express Air Cargo" class="text-blue-600"> <span>Express Air Cargo</span>
                   </label>
-                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer">
+                  <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
                     <input type="radio" name="equipmentType" value="Full Charter Aircraft" class="text-blue-600"> <span>Full Charter Aircraft</span>
                   </label>
                 </div>
               </div>
             </div>
 
-            <!-- STRUCTURED GLOBAL CORRIDORS BUILDER (VSE DRŽAVE SVETA TAKOJ VIDNE V MENIJIh) -->
+            <!-- STRUCTURED GLOBAL CORRIDORS BUILDER (WORLDWIDE COUNTRIES PRE-LOADED) -->
             <div class="space-y-3 pt-2 border-t border-blue-200">
               <div class="flex items-center justify-between">
                 <div>
                   <label class="block text-xs font-bold text-slate-900">Build & Save Operational Lanes (One by One)</label>
-                  <p class="text-[11px] text-slate-500">Select Origin & Destination countries directly from the worldwide lists, then click "Add Lane to Profile".</p>
+                  <p class="text-[11px] text-slate-500">Select Origin & Destination countries directly from worldwide lists, then click "Add Lane to Profile".</p>
                 </div>
                 <span id="corridorCountBadge" class="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">0 / 30 Lanes Added</span>
               </div>
 
-              <!-- BUILDER ROW WITH FULL WORLD COUNTRIES -->
+              <!-- BUILDER ROW -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
-                
                 <!-- ORIGIN COUNTRY SELECTOR -->
                 <div class="space-y-2">
                   <span class="text-xs font-bold text-blue-900 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Origin (From Country)</span>
@@ -1126,6 +1125,104 @@
     });
     hiddenInput.value = activeProCorridors.join(' | ');
   }
-  
+  let activeProCorridors = [];
+
+  // Switch equipment UI instantly based on Transport Mode selection (Road vs Ocean vs Air)
+  function switchTransportModeUI() {
+    const mode = document.getElementById('activeTransportMode').value;
+    const roadBox = document.getElementById('equipmentRoadContainer');
+    const oceanBox = document.getElementById('equipmentOceanContainer');
+    const airBox = document.getElementById('equipmentAirContainer');
+    const title = document.getElementById('equipmentHeaderTitle');
+
+    roadBox.classList.add('hidden');
+    oceanBox.classList.add('hidden');
+    airBox.classList.add('hidden');
+
+    if (mode === 'Road') {
+      roadBox.classList.remove('hidden');
+      title.textContent = 'Road Transport Equipment & Certifications (ADR / Waste)';
+    } else if (mode === 'Ocean') {
+      oceanBox.classList.remove('hidden');
+      title.textContent = 'Ocean Freight Equipment (Containers & FCL/LCL)';
+    } else if (mode === 'Air') {
+      airBox.classList.remove('hidden');
+      title.textContent = 'Air Freight Units (ULD Containers & Charter)';
+    }
+  }
+
+  // Add structured lane with mode, equipment, certificates and origin->destination
+  function addProCorridor() {
+    const mode = document.getElementById('activeTransportMode').value;
+    const selectedEquip = document.querySelector('input[name="equipmentType"]:checked');
+    const origCountry = document.getElementById('builderOriginCountry').value;
+    const destCountry = document.getElementById('builderDestCountry').value;
+
+    if (!selectedEquip) {
+      alert('Please select an equipment type.');
+      return;
+    }
+    if (!origCountry || !destCountry) {
+      alert('Please select both Origin and Destination countries.');
+      return;
+    }
+
+    let equipString = selectedEquip.value;
+    if (mode === 'Road') {
+      const adrChecked = document.getElementById('certADR').checked;
+      const wasteChecked = document.getElementById('certWaste').checked;
+      let extra = [];
+      if (adrChecked) extra.push('ADR');
+      if (wasteChecked) extra.push('Waste');
+      if (extra.length > 0) {
+        equipString += ` [${extra.join(', ')}]`;
+      }
+    }
+
+    const laneString = `[${mode}] ${equipString}: ${origCountry} -> ${destCountry}`;
+
+    if (activeProCorridors.includes(laneString)) {
+      alert('This exact operational lane is already added.');
+      return;
+    }
+
+    if (activeProCorridors.length >= 30) {
+      alert('Maximum limit of 30 operational lanes reached.');
+      return;
+    }
+
+    activeProCorridors.push(laneString);
+    renderProCorridors();
+  }
+
+  function removeProCorridor(index) {
+    activeProCorridors.splice(index, 1);
+    renderProCorridors();
+  }
+
+  function renderProCorridors() {
+    const container = document.getElementById('proCorridorsList');
+    const hiddenInput = document.getElementById('directCorridorsInput');
+    const badge = document.getElementById('corridorCountBadge');
+
+    badge.textContent = `${activeProCorridors.length} / 30 Lanes Added`;
+
+    if (activeProCorridors.length === 0) {
+      container.innerHTML = '<span class="text-xs text-slate-400 italic">No operational lanes added yet. Build and save your lanes above.</span>';
+      hiddenInput.value = '';
+      return;
+    }
+
+    container.innerHTML = '';
+    activeProCorridors.forEach((lane, idx) => {
+      container.innerHTML += `
+        <span class="inline-flex items-center gap-1.5 bg-blue-100 text-blue-900 px-3 py-1.5 rounded-xl text-xs font-bold border border-blue-200 shadow-sm">
+          🚚 ${lane}
+          <button type="button" onclick="removeProCorridor(${idx})" class="text-blue-500 hover:text-red-600 font-black ml-1 text-sm">×</button>
+        </span>
+      `;
+    });
+    hiddenInput.value = activeProCorridors.join(' | ');
+  }
 </body>
 </html>
