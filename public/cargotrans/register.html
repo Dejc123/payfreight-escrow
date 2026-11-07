@@ -357,251 +357,211 @@
           </div>
         </div>
 
-<!-- SECTION 2: OPERATIONAL PROFILE & AI MATCHING PREFERENCES (ULTIMATE PRO BUILDER) -->
-        <div class="p-6 bg-blue-50/40 border border-blue-100 rounded-2xl space-y-6">
-          <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider pb-2 border-b border-blue-200 flex items-center gap-2">
-            <i data-lucide="sliders" class="w-4 h-4 text-blue-600"></i>
-            <span>2. Operational Profile & AI Matching Fleet Builder (Pro Level)</span>
-          </h2>
+<!-- SECTION 2: OPERATIONAL PROFILE & AI MATCHING FLEET BUILDER (PRO LEVEL) -->
+<div class="p-6 bg-blue-50/40 border border-blue-100 rounded-2xl space-y-6">
+  <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider pb-2 border-b border-blue-200 flex items-center gap-2">
+    <i data-lucide="sliders" class="w-4 h-4 text-blue-600"></i>
+    <span>2. Operational Profile & AI Matching Fleet Builder (Pro Level)</span>
+  </h2>
 
-          <div class="space-y-5">
-            <!-- AI MATCHING INTEREST: CARGO OR TRANSPORT -->
-            <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">What are you interested in? *</label>
-              <select id="interestType" name="interestType" required class="w-full bg-white border border-slate-300 rounded-lg px-3.5 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600">
-                <option value="Cargo">Cargo / Loads – I have cargo and need transport</option>
-                <option value="Transport">Transport – I offer transport capacity</option>
-              </select>
-            </div>
+  <div class="space-y-5">
+    <!-- Primary Role & Transport Mode Selection -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-semibold text-slate-700 mb-1">Primary Role *</label>
+        <select id="userRole" name="userRole" required class="w-full bg-white border border-slate-300 rounded-lg px-3.5 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600">
+          <option value="Carrier">Carrier (Haulier)</option>
+          <option value="Shipper">Shipper (Factory, Marketplace, Car dealer)</option>
+          <option value="Freight Forwarder">Freight Forwarder</option>
+        </select>
+      </div>
 
-            <!-- Primary Role -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">Primary Role *</label>
-                <select id="userRole" name="userRole" required class="w-full bg-white border border-slate-300 rounded-lg px-3.5 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600">
-                  <option value="Carrier">Carrier (Haulier)</option>
-                  <option value="Shipper">Shipper (Factory, Marketplace, Car dealer,..)</option>
-                  <option value="Freight Forwarder">Freight Forwarder</option>
-                </select>
-              </div>
+      <div>
+        <label class="block text-xs font-semibold text-slate-700 mb-1">Select Active Transport Mode *</label>
+        <select id="activeTransportMode" name="activeTransportMode" onchange="switchTransportModeUI()" class="w-full bg-white border border-slate-300 rounded-lg px-3.5 py-2 text-xs font-bold text-blue-700 focus:outline-none focus:border-blue-600">
+          <option value="Road">Road Transport (Trucks & Trailers)</option>
+          <option value="Ocean">Ocean Freight (Containers & Vessels)</option>
+          <option value="Air">Air Freight (Cargo Aircraft)</option>
+        </select>
+      </div>
+    </div>
 
-              <div>
-                <label class="block text-xs font-semibold text-slate-700 mb-1">Select Active Transport Mode *</label>
-                <select id="activeTransportMode" name="activeTransportMode" required onchange="switchTransportModeUI()" class="w-full bg-white border border-slate-300 rounded-lg px-3.5 py-2 text-xs font-bold text-blue-700 focus:outline-none focus:border-blue-600">
-                  <option value="Road">Road Transport (Trucks & Trailers)</option>
-                  <option value="Ocean">Ocean Freight (Containers & Vessels)</option>
-                  <option value="Air">Air Freight (Cargo Aircraft)</option>
-                </select>
-              </div>
-            </div>
+    <!-- DYNAMIC EQUIPMENT / SPECIALIZATION CONTAINER (CHANGES INSTANTLY ON MODE SWITCH) -->
+    <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-4 shadow-sm">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+        <span id="equipmentHeaderTitle" class="text-xs font-bold text-slate-900 uppercase tracking-wide">Road Transport Equipment & Certifications</span>
+        <span class="text-[10px] text-slate-400">Select one equipment type per lane build</span>
+      </div>
 
-            <!-- DYNAMIC EQUIPMENT / SPECIALIZATION CONTAINER (SWITCHES INSTANTLY ON MODE CHANGE) -->
-            <div class="p-4 bg-white border border-slate-200 rounded-xl space-y-4 shadow-sm">
-              <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-                <span id="equipmentHeaderTitle" class="text-xs font-bold text-slate-900 uppercase tracking-wide">Road Transport Equipment & Certifications</span>
-                <span class="text-[10px] text-slate-400">Select one equipment type per lane build</span>
-              </div>
-
-              <!-- ROAD EQUIPMENT: options aligned with Enter Cargo -->
-              <div id="equipmentRoadContainer" class="space-y-3">
-                <label class="block text-xs font-semibold text-slate-700">Road vehicle / superstructure type</label>
-                <select id="roadEquipmentSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600">
-                  <optgroup label="European fleet – Enter Cargo">
-                    <option value="Tarpauling">Tarpauling / Curtainsider</option>
-                    <option value="Tautliner">Tautliner</option>
-                    <option value="Mega">Mega Trailer</option>
-                    <option value="Box">Box Trailer</option>
-                    <option value="Jumbo">Jumbo Trailer</option>
-                    <option value="Swap body">Swap body</option>
-                  </optgroup>
-                  <optgroup label="Refrigerated & temperature-controlled">
-                    <option value="Refrigerator">Refrigerator / Reefer</option>
-                    <option value="Multi-temp">Multi-temp / Bi-thermo</option>
-                    <option value="Meat hanging">Meat hanging / Hooks</option>
-                    <option value="Thermo">Thermo</option>
-                  </optgroup>
-                  <optgroup label="Bulk, silos & tankers">
-                    <option value="Silo">Silo</option>
-                    <option value="Silobas">Silobas / Pressurized silo</option>
-                    <option value="Tanker">Liquid Tanker</option>
-                    <option value="Food tanker">Food / Milk Tanker</option>
-                    <option value="Gas tanker">Gas Tanker</option>
-                    <option value="Walking floor">Walking floor (Moving floor)</option>
-                    <option value="Dumper">Tipper / Dumper</option>
-                  </optgroup>
-                  <optgroup label="Flatbeds & open trailers">
-                    <option value="Flat">Flatbed</option>
-                    <option value="Stepdeck">Stepdeck</option>
-                    <option value="Coil hollow">Coil Well / Trough</option>
-                    <option value="Container">Container Chassis</option>
-                  </optgroup>
-                  <optgroup label="Heavy haulage & oversized">
-                    <option value="Lowloader">Lowbed / Lowloader</option>
-                    <option value="Heavy machinery">Heavy Machinery Transport</option>
-                    <option value="Oversized">Oversized / Heavy Transport</option>
-                    <option value="Yacht transport">Yacht & Boat Transport</option>
-                  </optgroup>
-                  <optgroup label="Specialized & niche">
-                    <option value="Car transporter">Car Transporter</option>
-                    <option value="Enclosed Car Transporter">Enclosed Car Carrier</option>
-                    <option value="Road train">Road train</option>
-                    <option value="Timber carrier">Timber / Log carrier</option>
-                    <option value="Livestock">Livestock Transporter</option>
-                  </optgroup>
-                  <optgroup label="Passenger transport">
-                    <option value="Passenger Bus">Passenger Bus / Coach Charter</option>
-                  </optgroup>
-                  <optgroup label="US fleet – Enter Cargo">
-                    <option value="Dry Van 53ft">Dry Van (53ft Box)</option>
-                    <option value="Reefer 53ft">Reefer / Refrigerated (53ft)</option>
-                    <option value="Dry Van 48ft">Dry Van (48ft Box)</option>
-                    <option value="Flatbed 53ft">Standard Flatbed (53ft)</option>
-                    <option value="Step Deck">Step Deck / Single Drop</option>
-                    <option value="RGN Lowboy">RGN Lowboy (Removable Gooseneck)</option>
-                    <option value="Conestoga">Conestoga (Rolling Tarp)</option>
-                    <option value="Double Drop">Double Drop / Heavy Specialized</option>
-                    <option value="Car Hauler">Car Hauler / Stinger-Steered</option>
-                    <option value="Intermodal Container">Intermodal Chassis (40ft/53ft)</option>
-                    <option value="Tanker US">Liquid / Bulk Tanker</option>
-                  </optgroup>
-                </select>
-                <div class="flex flex-wrap items-center gap-5 pt-2 border-t border-slate-100 text-xs font-semibold">
-                  <label class="flex items-center gap-2 text-amber-700 cursor-pointer">
-                    <input type="checkbox" id="certADR" value="ADR" class="rounded text-amber-600">
-                    <span>ADR Hazardous / Chemicals</span>
-                  </label>
-                  <label class="flex items-center gap-2 text-emerald-700 cursor-pointer">
-                    <input type="checkbox" id="certWaste" value="Waste" class="rounded text-emerald-600">
-                    <span>Waste Transport License</span>
-                  </label>
-                  <label class="flex items-center gap-2 text-blue-700 cursor-pointer">
-                    <input type="checkbox" id="certOversized" value="Oversized / Pilot Car" class="rounded text-blue-600">
-                    <span>Oversized / Pilot Car Required</span>
-                  </label>
-                </div>
-              </div>
-
-              <!-- OCEAN EQUIPMENT: same container values as Enter Cargo -->
-              <div id="equipmentOceanContainer" class="space-y-2 hidden">
-                <label class="block text-xs font-semibold text-slate-700">Container equipment type</label>
-                <select id="oceanEquipmentSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600">
-                  <option value="20ft">20' Standard Dry Van (20ft)</option>
-                  <option value="40HC">40' High Cube (40HC)</option>
-                  <option value="40ft">40' Standard Dry Van (40ft)</option>
-                  <option value="40RF">Reefer Container (40RF)</option>
-                  <option value="LCL">LCL (Less than Container Load)</option>
-                </select>
-              </div>
-
-              <!-- AIR: cargo service options; shipment-specific weight/volume/IATA remain in Enter Cargo -->
-              <div id="equipmentAirContainer" class="space-y-2 hidden">
-                <label class="block text-xs font-semibold text-slate-700">Air freight service</label>
-                <select id="airEquipmentSelect" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600">
-                  <option value="Air Freight">Air Freight (as defined in Enter Cargo)</option>
-                </select>
-                <p class="text-[11px] text-slate-500">Enter Cargo defines Air by transport mode and collects shipment weight, volume and airport IATA codes for each offer; it does not define separate Air equipment types.</p>
-              </div>
-            </div>
-
-            <!-- STRUCTURED GLOBAL CORRIDORS BUILDER (WORLDWIDE COUNTRIES PRE-LOADED) -->
-            <div class="space-y-3 pt-2 border-t border-blue-200">
-              <div class="flex items-center justify-between">
-                <div>
-                  <label class="block text-xs font-bold text-slate-900">Build & Save Operational Lanes (One by One)</label>
-                  <p class="text-[11px] text-slate-500">Select Origin & Destination countries directly from worldwide lists, then click "Add Lane to Profile".</p>
-                </div>
-                <span id="corridorCountBadge" class="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">0 / 30 Lanes Added</span>
-              </div>
-
-              <!-- BUILDER ROW -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
-                <!-- ORIGIN COUNTRY SELECTOR -->
-                <div class="space-y-2">
-                  <span class="text-xs font-bold text-blue-900 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Origin (From Country)</span>
-                  <select id="builderOriginCountry" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-600">
-                    <option value="" disabled selected>-- Select Origin Country --</option>
-                    <optgroup label="Europe">
-                      <option value="Albania">Albania (AL)</option><option value="Andorra">Andorra (AD)</option><option value="Austria">Austria (AT)</option><option value="Belarus">Belarus (BY)</option><option value="Belgium">Belgium (BE)</option><option value="Bosnia and Herzegovina">Bosnia and Herzegovina (BA)</option><option value="Bulgaria">Bulgaria (BG)</option><option value="Croatia">Croatia (HR)</option><option value="Cyprus">Cyprus (CY)</option><option value="Czech Republic">Czech Republic (CZ)</option><option value="Denmark">Denmark (DK)</option><option value="Estonia">Estonia (EE)</option><option value="Finland">Finland (FI)</option><option value="France">France (FR)</option><option value="Germany">Germany (DE)</option><option value="Greece">Greece (GR)</option><option value="Hungary">Hungary (HU)</option><option value="Iceland">Iceland (IS)</option><option value="Ireland">Ireland (IE)</option><option value="Italy">Italy (IT)</option><option value="Kosovo">Kosovo (XK)</option><option value="Latvia">Latvia (LV)</option><option value="Liechtenstein">Liechtenstein (LI)</option><option value="Lithuania">Lithuania (LT)</option><option value="Luxembourg">Luxembourg (LU)</option><option value="Malta">Malta (MT)</option><option value="Moldova">Moldova (MD)</option><option value="Monaco">Monaco (MC)</option><option value="Montenegro">Montenegro (ME)</option><option value="Netherlands">Netherlands (NL)</option><option value="North Macedonia">North Macedonia (MK)</option><option value="Norway">Norway (NO)</option><option value="Poland">Poland (PL)</option><option value="Portugal">Portugal (PT)</option><option value="Romania">Romania (RO)</option><option value="San Marino">San Marino (SM)</option><option value="Serbia">Serbia (RS)</option><option value="Slovakia">Slovakia (SK)</option><option value="Slovenia">Slovenia (SI)</option><option value="Spain">Spain (ES)</option><option value="Sweden">Sweden (SE)</option><option value="Switzerland">Switzerland (CH)</option><option value="Ukraine">Ukraine (UA)</option><option value="United Kingdom">United Kingdom (GB)</option><option value="Vatican City">Vatican City (VA)</option>
-                    </optgroup>
-                    <optgroup label="North America">
-                      <option value="Canada">Canada (CA)</option><option value="United States">United States (US)</option><option value="Mexico">Mexico (MX)</option>
-                    </optgroup>
-                    <optgroup label="Central America & Caribbean">
-                      <option value="Antigua and Barbuda">Antigua and Barbuda</option><option value="Bahamas">Bahamas</option><option value="Barbados">Barbados</option><option value="Belize">Belize</option><option value="Costa Rica">Costa Rica</option><option value="Cuba">Cuba</option><option value="Dominican Republic">Dominican Republic</option><option value="El Salvador">El Salvador</option><option value="Guatemala">Guatemala</option><option value="Haiti">Haiti</option><option value="Honduras">Honduras</option><option value="Jamaica">Jamaica</option><option value="Nicaragua">Nicaragua</option><option value="Panama">Panama</option><option value="Trinidad and Tobago">Trinidad and Tobago</option>
-                    </optgroup>
-                    <optgroup label="South America">
-                      <option value="Argentina">Argentina</option><option value="Bolivia">Bolivia</option><option value="Brazil">Brazil</option><option value="Chile">Chile</option><option value="Colombia">Colombia</option><option value="Ecuador">Ecuador</option><option value="Paraguay">Paraguay</option><option value="Peru">Peru</option><option value="Suriname">Suriname</option><option value="Uruguay">Uruguay</option><option value="Venezuela">Venezuela</option>
-                    </optgroup>
-                    <optgroup label="Asia & Far East">
-                      <option value="China">China</option><option value="India">India</option><option value="Indonesia">Indonesia</option><option value="Japan">Japan</option><option value="Kazakhstan">Kazakhstan</option><option value="Malaysia">Malaysia</option><option value="Philippines">Philippines</option><option value="Singapore">Singapore</option><option value="South Korea">South Korea</option><option value="Taiwan">Taiwan</option><option value="Thailand">Thailand</option><option value="Vietnam">Vietnam</option>
-                    </optgroup>
-                    <optgroup label="Middle East">
-                      <option value="Bahrain">Bahrain</option><option value="Iran">Iran</option><option value="Iraq">Iraq</option><option value="Israel">Israel</option><option value="Jordan">Jordan</option><option value="Kuwait">Kuwait</option><option value="Oman">Oman</option><option value="Qatar">Qatar</option><option value="Saudi Arabia">Saudi Arabia</option><option value="Turkey">Turkey</option><option value="United Arab Emirates">United Arab Emirates</option>
-                    </optgroup>
-                    <optgroup label="Africa">
-                      <option value="Algeria">Algeria</option><option value="Egypt">Egypt</option><option value="Ethiopia">Ethiopia</option><option value="Ghana">Ghana</option><option value="Kenya">Kenya</option><option value="Morocco">Morocco</option><option value="Nigeria">Nigeria</option><option value="South Africa">South Africa</option><option value="Tanzania">Tanzania</option><option value="Tunisia">Tunisia</option>
-                    </optgroup>
-                    <optgroup label="Australia & Oceania">
-                      <option value="Australia">Australia</option><option value="Fiji">Fiji</option><option value="New Zealand">New Zealand</option><option value="Papua New Guinea">Papua New Guinea</option>
-                    </optgroup>
-                  </select>
-                </div>
-
-                <!-- DESTINATION COUNTRY SELECTOR -->
-                <div class="space-y-2">
-                  <span class="text-xs font-bold text-emerald-900 flex items-center gap-1"><i data-lucide="navigation" class="w-3.5 h-3.5"></i> Destination (To Country)</span>
-                  <select id="builderDestCountry" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-600">
-                    <option value="" disabled selected>-- Select Destination Country --</option>
-                    <optgroup label="Europe">
-                      <option value="Albania">Albania (AL)</option><option value="Andorra">Andorra (AD)</option><option value="Austria">Austria (AT)</option><option value="Belarus">Belarus (BY)</option><option value="Belgium">Belgium (BE)</option><option value="Bosnia and Herzegovina">Bosnia and Herzegovina (BA)</option><option value="Bulgaria">Bulgaria (BG)</option><option value="Croatia">Croatia (HR)</option><option value="Cyprus">Cyprus (CY)</option><option value="Czech Republic">Czech Republic (CZ)</option><option value="Denmark">Denmark (DK)</option><option value="Estonia">Estonia (EE)</option><option value="Finland">Finland (FI)</option><option value="France">France (FR)</option><option value="Germany">Germany (DE)</option><option value="Greece">Greece (GR)</option><option value="Hungary">Hungary (HU)</option><option value="Iceland">Iceland (IS)</option><option value="Ireland">Ireland (IE)</option><option value="Italy">Italy (IT)</option><option value="Kosovo">Kosovo (XK)</option><option value="Latvia">Latvia (LV)</option><option value="Liechtenstein">Liechtenstein (LI)</option><option value="Lithuania">Lithuania (LT)</option><option value="Luxembourg">Luxembourg (LU)</option><option value="Malta">Malta (MT)</option><option value="Moldova">Moldova (MD)</option><option value="Monaco">Monaco (MC)</option><option value="Montenegro">Montenegro (ME)</option><option value="Netherlands">Netherlands (NL)</option><option value="North Macedonia">North Macedonia (MK)</option><option value="Norway">Norway (NO)</option><option value="Poland">Poland (PL)</option><option value="Portugal">Portugal (PT)</option><option value="Romania">Romania (RO)</option><option value="San Marino">San Marino (SM)</option><option value="Serbia">Serbia (RS)</option><option value="Slovakia">Slovakia (SK)</option><option value="Slovenia">Slovenia (SI)</option><option value="Spain">Spain (ES)</option><option value="Sweden">Sweden (SE)</option><option value="Switzerland">Switzerland (CH)</option><option value="Ukraine">Ukraine (UA)</option><option value="United Kingdom">United Kingdom (GB)</option><option value="Vatican City">Vatican City (VA)</option>
-                    </optgroup>
-                    <optgroup label="North America">
-                      <option value="Canada">Canada (CA)</option><option value="United States">United States (US)</option><option value="Mexico">Mexico (MX)</option>
-                    </optgroup>
-                    <optgroup label="Central America & Caribbean">
-                      <option value="Antigua and Barbuda">Antigua and Barbuda</option><option value="Bahamas">Bahamas</option><option value="Barbados">Barbados</option><option value="Belize">Belize</option><option value="Costa Rica">Costa Rica</option><option value="Cuba">Cuba</option><option value="Dominican Republic">Dominican Republic</option><option value="El Salvador">El Salvador</option><option value="Guatemala">Guatemala</option><option value="Haiti">Haiti</option><option value="Honduras">Honduras</option><option value="Jamaica">Jamaica</option><option value="Nicaragua">Nicaragua</option><option value="Panama">Panama</option><option value="Trinidad and Tobago">Trinidad and Tobago</option>
-                    </optgroup>
-                    <optgroup label="South America">
-                      <option value="Argentina">Argentina</option><option value="Bolivia">Bolivia</option><option value="Brazil">Brazil</option><option value="Chile">Chile</option><option value="Colombia">Colombia</option><option value="Ecuador">Ecuador</option><option value="Paraguay">Paraguay</option><option value="Peru">Peru</option><option value="Suriname">Suriname</option><option value="Uruguay">Uruguay</option><option value="Venezuela">Venezuela</option>
-                    </optgroup>
-                    <optgroup label="Asia & Far East">
-                      <option value="China">China</option><option value="India">India</option><option value="Indonesia">Indonesia</option><option value="Japan">Japan</option><option value="Kazakhstan">Kazakhstan</option><option value="Malaysia">Malaysia</option><option value="Philippines">Philippines</option><option value="Singapore">Singapore</option><option value="South Korea">South Korea</option><option value="Taiwan">Taiwan</option><option value="Thailand">Thailand</option><option value="Vietnam">Vietnam</option>
-                    </optgroup>
-                    <optgroup label="Middle East">
-                      <option value="Bahrain">Bahrain</option><option value="Iran">Iran</option><option value="Iraq">Iraq</option><option value="Israel">Israel</option><option value="Jordan">Jordan</option><option value="Kuwait">Kuwait</option><option value="Oman">Oman</option><option value="Qatar">Qatar</option><option value="Saudi Arabia">Saudi Arabia</option><option value="Turkey">Turkey</option><option value="United Arab Emirates">United Arab Emirates</option>
-                    </optgroup>
-                    <optgroup label="Africa">
-                      <option value="Algeria">Algeria</option><option value="Egypt">Egypt</option><option value="Ethiopia">Ethiopia</option><option value="Ghana">Ghana</option><option value="Kenya">Kenya</option><option value="Morocco">Morocco</option><option value="Nigeria">Nigeria</option><option value="South Africa">South Africa</option><option value="Tanzania">Tanzania</option><option value="Tunisia">Tunisia</option>
-                    </optgroup>
-                    <optgroup label="Australia & Oceania">
-                      <option value="Australia">Australia</option><option value="Fiji">Fiji</option><option value="New Zealand">New Zealand</option><option value="Papua New Guinea">Papua New Guinea</option>
-                    </optgroup>
-                  </select>
-                </div>
-              </div>
-
-              <div class="flex items-center justify-between pt-1">
-                <button type="button" onclick="addProCorridor()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5">
-                  <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Lane to Profile
-                </button>
-                <span class="text-[11px] text-slate-400 italic">Example: Frigo from Slovenia to France</span>
-              </div>
-
-              <!-- SAVED LANES LIST -->
-              <div id="proCorridorsList" class="flex flex-wrap gap-2 pt-2 min-h-[45px] p-3 bg-slate-50 border border-slate-200 rounded-xl">
-                <span class="text-xs text-slate-400 italic">No operational lanes added yet. Build and save your lanes above.</span>
-              </div>
-              <input type="hidden" id="directCorridorsInput" name="directCorridorsInput" required>
-            </div>
-
-            <!-- GDPR & AI NOTICE (ENGLISH ONLY) -->
-            <div class="pt-2">
-              <p class="text-[11px] text-slate-500 leading-relaxed italic border-t border-blue-200/60 pt-3">
-                * Note: These operational parameters are utilized exclusively by the <strong>CargoNet AI Search Engine</strong> for fast, intelligent load matching. This core matching feature is and will always remain <strong>100% free of charge</strong>. You can fully manage, update, add, or remove these trade lanes at any time directly inside your <strong>Company Profile HQ</strong>.
-              </p>
-            </div>
-          </div>
+      <!-- ROAD EQUIPMENT (Over 20 Pro Options + ADR / Waste) -->
+      <div id="equipmentRoadContainer" class="space-y-3">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 text-xs text-slate-700">
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Tarpauling / Curtainsider" checked class="text-blue-600"> <span>Tarpauling / Curtainsider</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Tautliner" class="text-blue-600"> <span>Tautliner</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Mega Trailer" class="text-blue-600"> <span>Mega Trailer</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Box / Dry Van" class="text-blue-600"> <span>Box / Dry Van</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Jumbo Trailer" class="text-blue-600"> <span>Jumbo Trailer</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Refrigerator / Reefer" class="text-blue-600"> <span>Refrigerator / Reefer</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Silo / Silobas" class="text-blue-600"> <span>Silo / Silobas</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Liquid Tanker" class="text-blue-600"> <span>Liquid Tanker</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Walking Floor" class="text-blue-600"> <span>Walking Floor</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Tipper / Dumper" class="text-blue-600"> <span>Tipper / Dumper</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Flatbed / Open" class="text-blue-600"> <span>Flatbed / Open</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Lowbed / Lowloader" class="text-blue-600"> <span>Lowbed / Lowloader</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Car Transporter" class="text-blue-600"> <span>Car Transporter</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Passenger Bus" class="text-blue-600"> <span>Passenger Bus / Coach</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Container Chassis" class="text-blue-600"> <span>Container Chassis</span>
+          </label>
         </div>
+
+        <!-- SPECIAL CERTIFICATIONS (ADR & WASTE) -->
+        <div class="flex items-center gap-6 pt-2 border-t border-slate-100 text-xs font-semibold">
+          <label class="flex items-center space-x-2 text-amber-700 cursor-pointer">
+            <input type="checkbox" id="certADR" value="ADR Certified" class="rounded text-amber-600">
+            <span>⚠️ ADR Certified (Hazardous Cargo)</span>
+          </label>
+          <label class="flex items-center space-x-2 text-emerald-700 cursor-pointer">
+            <input type="checkbox" id="certWaste" value="Waste Transport License" class="rounded text-emerald-600">
+            <span>♻️ Waste Transport License</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- OCEAN EQUIPMENT (Containers & FCL/LCL matching Enter Cargo) -->
+      <div id="equipmentOceanContainer" class="space-y-2 hidden">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-xs text-slate-700">
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="20' Standard Dry Van (20ft)" class="text-blue-600"> <span>20' Standard Dry Van (20ft)</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="40' High Cube (40HC)" class="text-blue-600"> <span>40' High Cube (40HC)</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="40' Standard Dry Van (40ft)" class="text-blue-600"> <span>40' Standard Dry Van (40ft)</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Reefer Container (40RF)" class="text-blue-600"> <span>Reefer Container (40RF)</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="LCL (Less than Container Load)" class="text-blue-600"> <span>LCL (Less than Container Load)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- AIR EQUIPMENT (ULD & Express Air) -->
+      <div id="equipmentAirContainer" class="space-y-2 hidden">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-slate-700">
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Standard ULD Container" class="text-blue-600"> <span>Standard ULD Container</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Express Air Cargo" class="text-blue-600"> <span>Express Air Cargo</span>
+          </label>
+          <label class="flex items-center space-x-2 p-2 bg-slate-50 border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+            <input type="radio" name="equipmentType" value="Full Charter Aircraft" class="text-blue-600"> <span>Full Charter Aircraft</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- STRUCTURED GLOBAL CORRIDORS BUILDER (WORLDWIDE COUNTRIES PRE-LOADED) -->
+    <div class="space-y-3 pt-2 border-t border-blue-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <label class="block text-xs font-bold text-slate-900">Build & Save Operational Lanes (One by One)</label>
+          <p class="text-[11px] text-slate-500">Select Origin & Destination countries directly from worldwide lists, then click "Add Lane to Profile".</p>
+        </div>
+        <span id="corridorCountBadge" class="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">0 / 30 Lanes Added</span>
+      </div>
+
+      <!-- BUILDER ROW -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
+        <!-- ORIGIN COUNTRY SELECTOR -->
+        <div class="space-y-2">
+          <span class="text-xs font-bold text-blue-900 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Origin (From Country)</span>
+          <select id="builderOriginCountry" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-600">
+            <option value="" disabled selected>-- Select Origin Country --</option>
+            <optgroup label="Europe">
+              <option value="Austria">Austria (AT)</option><option value="Belgium">Belgium (BE)</option><option value="Bulgaria">Bulgaria (BG)</option><option value="Croatia">Croatia (HR)</option><option value="Czech Republic">Czech Republic (CZ)</option><option value="Denmark">Denmark (DK)</option><option value="France">France (FR)</option><option value="Germany">Germany (DE)</option><option value="Hungary">Hungary (HU)</option><option value="Italy">Italy (IT)</option><option value="Netherlands">Netherlands (NL)</option><option value="Poland">Poland (PL)</option><option value="Romania">Romania (RO)</option><option value="Serbia">Serbia (RS)</option><option value="Slovakia">Slovakia (SK)</option><option value="Slovenia">Slovenia (SI)</option><option value="Spain">Spain (ES)</option><option value="Sweden">Sweden (SE)</option><option value="Switzerland">Switzerland (CH)</option><option value="United Kingdom">United Kingdom (GB)</option>
+            </optgroup>
+            <optgroup label="North America">
+              <option value="United States">United States (US)</option><option value="Canada">Canada (CA)</option><option value="Mexico">Mexico (MX)</option>
+            </optgroup>
+            <optgroup label="Asia & Far East">
+              <option value="China">China (CN)</option><option value="India">India (IN)</option><option value="Japan">Japan (JP)</option><option value="Turkey">Turkey (TR)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- DESTINATION COUNTRY SELECTOR -->
+        <div class="space-y-2">
+          <span class="text-xs font-bold text-emerald-900 flex items-center gap-1"><i data-lucide="navigation" class="w-3.5 h-3.5"></i> Destination (To Country)</span>
+          <select id="builderDestCountry" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-600">
+            <option value="" disabled selected>-- Select Destination Country --</option>
+            <optgroup label="Europe">
+              <option value="Austria">Austria (AT)</option><option value="Belgium">Belgium (BE)</option><option value="Bulgaria">Bulgaria (BG)</option><option value="Croatia">Croatia (HR)</option><option value="Czech Republic">Czech Republic (CZ)</option><option value="Denmark">Denmark (DK)</option><option value="France">France (FR)</option><option value="Germany">Germany (DE)</option><option value="Hungary">Hungary (HU)</option><option value="Italy">Italy (IT)</option><option value="Netherlands">Netherlands (NL)</option><option value="Poland">Poland (PL)</option><option value="Romania">Romania (RO)</option><option value="Serbia">Serbia (RS)</option><option value="Slovakia">Slovakia (SK)</option><option value="Slovenia">Slovenia (SI)</option><option value="Spain">Spain (ES)</option><option value="Sweden">Sweden (SE)</option><option value="Switzerland">Switzerland (CH)</option><option value="United Kingdom">United Kingdom (GB)</option>
+            </optgroup>
+            <optgroup label="North America">
+              <option value="United States">United States (US)</option><option value="Canada">Canada (CA)</option><option value="Mexico">Mexico (MX)</option>
+            </optgroup>
+            <optgroup label="Asia & Far East">
+              <option value="China">China (CN)</option><option value="India">India (IN)</option><option value="Japan">Japan (JP)</option><option value="Turkey">Turkey (TR)</option>
+            </optgroup>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-1">
+        <button type="button" onclick="addProCorridor()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Lane to Profile
+        </button>
+        <span class="text-[11px] text-slate-400 italic">Example: Frigo from Slovenia to France</span>
+      </div>
+
+      <!-- SAVED LANES LIST -->
+      <div id="proCorridorsList" class="flex flex-wrap gap-2 pt-2 min-h-[45px] p-3 bg-slate-50 border border-slate-200 rounded-xl">
+        <span class="text-xs text-slate-400 italic">No operational lanes added yet. Build and save your lanes above.</span>
+      </div>
+      <input type="hidden" id="directCorridorsInput" name="directCorridorsInput" required>
+    </div>
+
+    <!-- GDPR & AI NOTICE (ENGLISH ONLY) -->
+    <div class="pt-2">
+      <p class="text-[11px] text-slate-500 leading-relaxed italic border-t border-blue-200/60 pt-3">
+        * Note: These operational parameters are utilized exclusively by the <strong>CargoNet AI Search Engine</strong> for fast, intelligent load matching. This core matching feature is and will always remain <strong>100% free of charge</strong>. You can fully manage, update, add, or remove these trade lanes at any time directly inside your <strong>Company Profile HQ</strong>.
+      </p>
+    </div>
+  </div>
+</div>
         
         <!-- SECTION 3: CONTACT & COMMUNICATIONS -->
         <div>
@@ -782,9 +742,9 @@
             password: document.getElementById('Geslo').value,
             // Novi operativni podatki za AI matching in profil:
             primary_role: document.getElementById('userRole').value,
-            transport_modes: Array.from(new Set(activeProCorridors.map(lane => lane.mode))),
-            cargo_specializations: Array.from(new Set(activeProCorridors.filter(lane => lane.interest === 'Cargo').map(lane => lane.equipment))),
-            active_markets: document.getElementById('directCorridorsInput').value,
+            transport_modes: selectedModes,
+            cargo_specializations: selectedCargo,
+            active_markets: document.getElementById('directCorridors').value,
             platform: 'cargonet',
             validity_days: 30,
             payfreight_enabled: true
@@ -944,6 +904,7 @@
       }
     }
 
+    // Globalni podatki vseh držav po celinah (popoln nabor za cel svet)
   const globalWorldData = {
     EU: ["Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", "Netherlands", "North Macedonia", "Norway", "Poland", "Portugal", "Romania", "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "Ukraine", "United Kingdom", "Vatican City"],
     NA: ["Canada", "United States", "Mexico"],
@@ -954,10 +915,84 @@
     AF: ["Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon", "Central African Republic", "Chad", "Comoros", "Congo", "DR Congo", "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Ivory Coast", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe"],
     OC: ["Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia", "Nauru", "New Zealand", "Palau", "Papua New Guinea", "Samoa", "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu"]
   };
-  // Structured operational lanes for CargoNet AI matching.
-  // Each lane stores interest (Cargo/Transport), mode, equipment, certifications and countries.
+
   let activeProCorridors = [];
 
+  function filterBuilderCountries(type) {
+    const continent = document.getElementById(`builder${type.charAt(0).toUpperCase() + type.slice(1)}Continent`).value;
+    const countrySelect = document.getElementById(`builder${type.charAt(0).toUpperCase() + type.slice(1)}Country`);
+    countrySelect.innerHTML = '<option value="" disabled selected>-- Select Country --</option>';
+    
+    if (globalWorldData[continent]) {
+      globalWorldData[continent].forEach(country => {
+        const opt = document.createElement('option');
+        opt.value = country;
+        opt.textContent = country;
+        countrySelect.appendChild(opt);
+      });
+    }
+  }
+
+  function addProCorridor() {
+    const origCont = document.getElementById('builderOriginContinent').value;
+    const origCountry = document.getElementById('builderOriginCountry').value;
+    const destCont = document.getElementById('builderDestContinent').value;
+    const destCountry = document.getElementById('builderDestCountry').value;
+
+    if (!origCountry || !destCountry) {
+      alert('Please select both Origin and Destination countries from the dropdowns.');
+      return;
+    }
+
+    const corridorString = `${origCountry} -> ${destCountry}`;
+    if (activeProCorridors.includes(corridorString)) {
+      alert('This exact trade lane is already added.');
+      return;
+    }
+
+    if (activeProCorridors.length >= 30) {
+      alert('Maximum limit of 30 structured trade corridors reached.');
+      return;
+    }
+
+    activeProCorridors.push(corridorString);
+    renderProCorridors();
+  }
+
+  function removeProCorridor(index) {
+    activeProCorridors.splice(index, 1);
+    renderProCorridors();
+  }
+
+  function renderProCorridors() {
+    const container = document.getElementById('proCorridorsList');
+    const hiddenInput = document.getElementById('directCorridorsInput');
+    const badge = document.getElementById('corridorCountBadge');
+
+    badge.textContent = `${activeProCorridors.length} / 30 Lanes Added`;
+
+    if (activeProCorridors.length === 0) {
+      container.innerHTML = '<span class="text-xs text-slate-400 italic">No trade corridors added yet. Add lanes above (e.g. Frigo: Slovenia -> France).</span>';
+      hiddenInput.value = '';
+      return;
+    }
+
+    container.innerHTML = '';
+    activeProCorridors.forEach((lane, idx) => {
+      container.innerHTML += `
+        <span class="inline-flex items-center gap-1.5 bg-blue-100 text-blue-900 px-3 py-1.5 rounded-xl text-xs font-bold border border-blue-200 shadow-sm">
+          📍 ${lane}
+          <button type="button" onclick="removeProCorridor(${idx})" class="text-blue-500 hover:text-red-600 font-black ml-1 text-sm">×</button>
+        </span>
+      `;
+    });
+    hiddenInput.value = activeProCorridors.join(', ');
+  }
+  </script>
+
+  let activeProCorridors = [];
+
+  // Switch equipment UI based on Transport Mode selection (Road vs Ocean vs Air)
   function switchTransportModeUI() {
     const mode = document.getElementById('activeTransportMode').value;
     const roadBox = document.getElementById('equipmentRoadContainer');
@@ -965,80 +1000,64 @@
     const airBox = document.getElementById('equipmentAirContainer');
     const title = document.getElementById('equipmentHeaderTitle');
 
-    [roadBox, oceanBox, airBox].forEach(box => box.classList.add('hidden'));
+    roadBox.classList.add('hidden');
+    oceanBox.classList.add('hidden');
+    airBox.classList.add('hidden');
 
     if (mode === 'Road') {
       roadBox.classList.remove('hidden');
-      title.textContent = 'Road Transport Equipment & Certifications';
+      title.textContent = 'Road Transport Equipment & Certifications (ADR / Waste)';
     } else if (mode === 'Ocean') {
       oceanBox.classList.remove('hidden');
-      title.textContent = 'Ocean Freight Container Equipment';
+      title.textContent = 'Ocean Freight Equipment (Containers & FCL/LCL)';
     } else if (mode === 'Air') {
       airBox.classList.remove('hidden');
-      title.textContent = 'Air Freight Services';
+      title.textContent = 'Air Freight Units (ULD Containers & Charter)';
     }
   }
 
-  function getSelectedLaneEquipment(mode) {
-    if (mode === 'Road') return document.getElementById('roadEquipmentSelect').value;
-    if (mode === 'Ocean') return document.getElementById('oceanEquipmentSelect').value;
-    if (mode === 'Air') return document.getElementById('airEquipmentSelect').value;
-    return '';
-  }
-
+  // Add structured lane with mode, equipment, certificates and origin->destination
   function addProCorridor() {
-    const interest = document.getElementById('interestType').value;
     const mode = document.getElementById('activeTransportMode').value;
-    const equipment = getSelectedLaneEquipment(mode);
-    const origin = document.getElementById('builderOriginCountry').value;
-    const destination = document.getElementById('builderDestCountry').value;
+    const selectedEquip = document.querySelector('input[name="equipmentType"]:checked');
+    const origCountry = document.getElementById('builderOriginCountry').value;
+    const destCountry = document.getElementById('builderDestCountry').value;
 
-    if (!interest || !mode || !equipment) {
-      alert('Please select Cargo or Transport, a transport mode and equipment type.');
+    if (!selectedEquip) {
+      alert('Please select an equipment type.');
       return;
     }
-    if (!origin || !destination) {
+    if (!origCountry || !destCountry) {
       alert('Please select both Origin and Destination countries.');
       return;
     }
-    if (origin === destination) {
-      alert('Origin and Destination must be different countries.');
+
+    let equipString = selectedEquip.value;
+    if (mode === 'Road') {
+      const adrChecked = document.getElementById('certADR').checked;
+      const wasteChecked = document.getElementById('certWaste').checked;
+      let extra = [];
+      if (adrChecked) extra.push('ADR');
+      if (wasteChecked) extra.push('Waste');
+      if (extra.length > 0) {
+        equipString += ` [${extra.join(', ')}]`;
+      }
+    }
+
+    const laneString = `[${mode}] ${equipString}: ${origCountry} -> ${destCountry}`;
+
+    if (activeProCorridors.includes(laneString)) {
+      alert('This exact operational lane is already added.');
       return;
     }
+
     if (activeProCorridors.length >= 30) {
       alert('Maximum limit of 30 operational lanes reached.');
       return;
     }
 
-    const certifications = [];
-    if (mode === 'Road') {
-      if (document.getElementById('certADR').checked) certifications.push('ADR');
-      if (document.getElementById('certWaste').checked) certifications.push('Waste');
-      if (document.getElementById('certOversized').checked) certifications.push('Oversized / Pilot Car');
-    }
-
-    const lane = { interest, mode, equipment, certifications, origin, destination };
-    const duplicate = activeProCorridors.some(item =>
-      item.interest === lane.interest &&
-      item.mode === lane.mode &&
-      item.equipment === lane.equipment &&
-      item.origin === lane.origin &&
-      item.destination === lane.destination &&
-      JSON.stringify(item.certifications) === JSON.stringify(lane.certifications)
-    );
-
-    if (duplicate) {
-      alert('This exact operational lane is already added.');
-      return;
-    }
-
-    activeProCorridors.push(lane);
+    activeProCorridors.push(laneString);
     renderProCorridors();
-
-    // Reset only the road certifications after a successful add.
-    document.getElementById('certADR').checked = false;
-    document.getElementById('certWaste').checked = false;
-    document.getElementById('certOversized').checked = false;
   }
 
   function removeProCorridor(index) {
@@ -1060,46 +1079,215 @@
     }
 
     container.innerHTML = '';
-    activeProCorridors.forEach((lane, index) => {
-      const certifications = lane.certifications.length
-        ? ` · ${lane.certifications.join(', ')}`
-        : '';
-      const label = `${lane.interest} · ${lane.mode} · ${lane.equipment}${certifications}: ${lane.origin} → ${lane.destination}`;
-
-      const item = document.createElement('span');
-      item.className = 'inline-flex items-center gap-1.5 bg-blue-100 text-blue-900 px-3 py-1.5 rounded-xl text-xs font-bold border border-blue-200 shadow-sm';
-      const text = document.createElement('span');
-      text.textContent = label;
-      const remove = document.createElement('button');
-      remove.type = 'button';
-      remove.className = 'text-blue-500 hover:text-red-600 font-black ml-1 text-sm';
-      remove.textContent = '×';
-      remove.setAttribute('aria-label', `Remove lane ${index + 1}`);
-      remove.addEventListener('click', () => removeProCorridor(index));
-      item.appendChild(text);
-      item.appendChild(remove);
-      container.appendChild(item);
+    activeProCorridors.forEach((lane, idx) => {
+      container.innerHTML += `
+        <span class="inline-flex items-center gap-1.5 bg-blue-100 text-blue-900 px-3 py-1.5 rounded-xl text-xs font-bold border border-blue-200 shadow-sm">
+          🚚 ${lane}
+          <button type="button" onclick="removeProCorridor(${idx})" class="text-blue-500 hover:text-red-600 font-black ml-1 text-sm">×</button>
+        </span>
+      `;
     });
+    hiddenInput.value = activeProCorridors.join(' | ');
+  }
+  let activeProCorridors = [];
 
-    // Keep the existing companies.active_markets text column, but serialize
-    // each complete lane as JSON so the AI matcher can read every field.
-    hiddenInput.value = JSON.stringify(activeProCorridors);
+  // Switch equipment UI instantly based on Transport Mode selection (Road vs Ocean vs Air)
+  function switchTransportModeUI() {
+    const mode = document.getElementById('activeTransportMode').value;
+    const roadBox = document.getElementById('equipmentRoadContainer');
+    const oceanBox = document.getElementById('equipmentOceanContainer');
+    const airBox = document.getElementById('equipmentAirContainer');
+    const title = document.getElementById('equipmentHeaderTitle');
+
+    roadBox.classList.add('hidden');
+    oceanBox.classList.add('hidden');
+    airBox.classList.add('hidden');
+
+    if (mode === 'Road') {
+      roadBox.classList.remove('hidden');
+      title.textContent = 'Road Transport Equipment & Certifications (ADR / Waste)';
+    } else if (mode === 'Ocean') {
+      oceanBox.classList.remove('hidden');
+      title.textContent = 'Ocean Freight Equipment (Containers & FCL/LCL)';
+    } else if (mode === 'Air') {
+      airBox.classList.remove('hidden');
+      title.textContent = 'Air Freight Units (ULD Containers & Charter)';
+    }
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    switchTransportModeUI();
-    renderProCorridors();
-    const form = document.getElementById('Registracija');
-    if (form) {
-      form.addEventListener('reset', () => {
-        activeProCorridors = [];
-        setTimeout(() => {
-          switchTransportModeUI();
-          renderProCorridors();
-        }, 0);
-      });
+  // Add structured lane with mode, equipment, certificates and origin->destination
+  function addProCorridor() {
+    const mode = document.getElementById('activeTransportMode').value;
+    const selectedEquip = document.querySelector('input[name="equipmentType"]:checked');
+    const origCountry = document.getElementById('builderOriginCountry').value;
+    const destCountry = document.getElementById('builderDestCountry').value;
+
+    if (!selectedEquip) {
+      alert('Please select an equipment type.');
+      return;
     }
+    if (!origCountry || !destCountry) {
+      alert('Please select both Origin and Destination countries.');
+      return;
+    }
+
+    let equipString = selectedEquip.value;
+    if (mode === 'Road') {
+      const adrChecked = document.getElementById('certADR').checked;
+      const wasteChecked = document.getElementById('certWaste').checked;
+      let extra = [];
+      if (adrChecked) extra.push('ADR');
+      if (wasteChecked) extra.push('Waste');
+      if (extra.length > 0) {
+        equipString += ` [${extra.join(', ')}]`;
+      }
+    }
+
+    const laneString = `[${mode}] ${equipString}: ${origCountry} -> ${destCountry}`;
+
+    if (activeProCorridors.includes(laneString)) {
+      alert('This exact operational lane is already added.');
+      return;
+    }
+
+    if (activeProCorridors.length >= 30) {
+      alert('Maximum limit of 30 operational lanes reached.');
+      return;
+    }
+
+    activeProCorridors.push(laneString);
+    renderProCorridors();
+  }
+
+  function removeProCorridor(index) {
+    activeProCorridors.splice(index, 1);
+    renderProCorridors();
+  }
+
+  function renderProCorridors() {
+    const container = document.getElementById('proCorridorsList');
+    const hiddenInput = document.getElementById('directCorridorsInput');
+    const badge = document.getElementById('corridorCountBadge');
+
+    badge.textContent = `${activeProCorridors.length} / 30 Lanes Added`;
+
+    if (activeProCorridors.length === 0) {
+      container.innerHTML = '<span class="text-xs text-slate-400 italic">No operational lanes added yet. Build and save your lanes above.</span>';
+      hiddenInput.value = '';
+      return;
+    }
+
+    container.innerHTML = '';
+    activeProCorridors.forEach((lane, idx) => {
+      container.innerHTML += `
+        <span class="inline-flex items-center gap-1.5 bg-blue-100 text-blue-900 px-3 py-1.5 rounded-xl text-xs font-bold border border-blue-200 shadow-sm">
+          🚚 ${lane}
+          <button type="button" onclick="removeProCorridor(${idx})" class="text-blue-500 hover:text-red-600 font-black ml-1 text-sm">×</button>
+        </span>
+      `;
+    });
+    hiddenInput.value = activeProCorridors.join(' | ');
+  }
+
+  let activeProCorridors = [];
+
+// Switch equipment UI instantly based on Transport Mode selection (Road vs Ocean vs Air)
+function switchTransportModeUI() {
+  const mode = document.getElementById('activeTransportMode').value;
+  const roadBox = document.getElementById('equipmentRoadContainer');
+  const oceanBox = document.getElementById('equipmentOceanContainer');
+  const airBox = document.getElementById('equipmentAirContainer');
+  const title = document.getElementById('equipmentHeaderTitle');
+
+  roadBox.classList.add('hidden');
+  oceanBox.classList.add('hidden');
+  airBox.classList.add('hidden');
+
+  if (mode === 'Road') {
+    roadBox.classList.remove('hidden');
+    title.textContent = 'Road Transport Equipment & Certifications (ADR / Waste)';
+  } else if (mode === 'Ocean') {
+    oceanBox.classList.remove('hidden');
+    title.textContent = 'Ocean Freight Equipment (Containers & FCL/LCL)';
+  } else if (mode === 'Air') {
+    airBox.classList.remove('hidden');
+    title.textContent = 'Air Freight Units (ULD Containers & Charter)';
+  }
+}
+
+// Add structured lane with mode, equipment, certificates and origin->destination
+function addProCorridor() {
+  const mode = document.getElementById('activeTransportMode').value;
+  const selectedEquip = document.querySelector('input[name="equipmentType"]:checked');
+  const origCountry = document.getElementById('builderOriginCountry').value;
+  const destCountry = document.getElementById('builderDestCountry').value;
+
+  if (!selectedEquip) {
+    alert('Please select an equipment type.');
+    return;
+  }
+  if (!origCountry || !destCountry) {
+    alert('Please select both Origin and Destination countries.');
+    return;
+  }
+
+  let equipString = selectedEquip.value;
+  if (mode === 'Road') {
+    const adrChecked = document.getElementById('certADR').checked;
+    const wasteChecked = document.getElementById('certWaste').checked;
+    let extra = [];
+    if (adrChecked) extra.push('ADR');
+    if (wasteChecked) extra.push('Waste');
+    if (extra.length > 0) {
+      equipString += ` [${extra.join(', ')}]`;
+    }
+  }
+
+  const laneString = `[${mode}] ${equipString}: ${origCountry} -> ${destCountry}`;
+
+  if (activeProCorridors.includes(laneString)) {
+    alert('This exact operational lane is already added.');
+    return;
+  }
+
+  if (activeProCorridors.length >= 30) {
+    alert('Maximum limit of 30 operational lanes reached.');
+    return;
+  }
+
+  activeProCorridors.push(laneString);
+  renderProCorridors();
+}
+
+function removeProCorridor(index) {
+  activeProCorridors.splice(index, 1);
+  renderProCorridors();
+}
+
+function renderProCorridors() {
+  const container = document.getElementById('proCorridorsList');
+  const hiddenInput = document.getElementById('directCorridorsInput');
+  const badge = document.getElementById('corridorCountBadge');
+
+  badge.textContent = `${activeProCorridors.length} / 30 Lanes Added`;
+
+  if (activeProCorridors.length === 0) {
+    container.innerHTML = '<span class="text-xs text-slate-400 italic">No operational lanes added yet. Build and save your lanes above.</span>';
+    hiddenInput.value = '';
+    return;
+  }
+
+  container.innerHTML = '';
+  activeProCorridors.forEach((lane, idx) => {
+    container.innerHTML += `
+      <span class="inline-flex items-center gap-1.5 bg-blue-100 text-blue-900 px-3 py-1.5 rounded-xl text-xs font-bold border border-blue-200 shadow-sm">
+        🚚 ${lane}
+        <button type="button" onclick="removeProCorridor(${idx})" class="text-blue-500 hover:text-red-600 font-black ml-1 text-sm">×</button>
+      </span>
+    `;
   });
-  </script>
+  hiddenInput.value = activeProCorridors.join(' | ');
+}
 </body>
 </html>
+
