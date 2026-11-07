@@ -357,11 +357,11 @@
           </div>
         </div>
 
-        <!-- SECTION 2: OPERATIONAL PROFILE & CAPABILITIES (DODANO!) -->
-        <div class="p-5 bg-blue-50/40 border border-blue-100 rounded-xl space-y-4">
-          <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-2 pb-2 border-b border-blue-200 flex items-center gap-2">
+<!-- SECTION 2: OPERATIONAL PROFILE & AI MATCHING PREFERENCES (ULTIMATE PRO LEVEL) -->
+        <div class="p-6 bg-blue-50/40 border border-blue-100 rounded-2xl space-y-6">
+          <h2 class="text-sm font-bold text-slate-900 uppercase tracking-wider pb-2 border-b border-blue-200 flex items-center gap-2">
             <i data-lucide="sliders" class="w-4 h-4 text-blue-600"></i>
-            <span>2. Operational Profile & AI Matching Preferences</span>
+            <span>2. Operational Profile & AI Matching Preferences (Pro Routes & Specializations)</span>
           </h2>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -384,21 +384,99 @@
             </div>
 
             <div class="md:col-span-2">
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Cargo Types & Fleet Specializations</label>
-              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs text-slate-700">
-                <label class="flex items-center space-x-1.5"><input type="checkbox" name="cargoTypes" value="Tarpauling / Curtainsider" class="text-blue-600 rounded"> Tarpauling / Curtainsider</label>
-                <label class="flex items-center space-x-1.5"><input type="checkbox" name="cargoTypes" value="Reefer" class="text-blue-600 rounded"> Refrigerated / Reefer</label>
-                <label class="flex items-center space-x-1.5"><input type="checkbox" name="cargoTypes" value="Bulk / Silo" class="text-blue-600 rounded"> Bulk / Silo</label>
-                <label class="flex items-center space-x-1.5"><input type="checkbox" name="cargoTypes" value="Containerized" class="text-blue-600 rounded"> Containerized</label>
-                <label class="flex items-center space-x-1.5"><input type="checkbox" name="cargoTypes" value="Car Transporter" class="text-blue-600 rounded"> Car Transporter</label>
-                <label class="flex items-center space-x-1.5"><input type="checkbox" name="cargoTypes" value="Heavy Haulage" class="text-blue-600 rounded"> Heavy / Oversized</label>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Detailed Cargo & Fleet Specializations *</label>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1 text-xs text-slate-700">
+                <label class="flex items-center space-x-2 p-2 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+                  <input type="checkbox" name="cargoTypes" value="Tarpauling / Tautliner" class="text-blue-600 rounded"> <span>Tarpauling / Tautliner (Splošni tovor)</span>
+                </label>
+                <label class="flex items-center space-x-2 p-2 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+                  <input type="checkbox" name="cargoTypes" value="Refrigerated / Reefer" class="text-blue-600 rounded"> <span>Refrigerated / Frigo (Hladilni prevozi)</span>
+                </label>
+                <label class="flex items-center space-x-2 p-2 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+                  <input type="checkbox" name="cargoTypes" value="Bulk / Silo" class="text-blue-600 rounded"> <span>Bulk / Silo (Razsuti tovor / Silosi)</span>
+                </label>
+                <label class="flex items-center space-x-2 p-2 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+                  <input type="checkbox" name="cargoTypes" value="Containerized / Intermodal" class="text-blue-600 rounded"> <span>Containerized (Pomorski/Intermodalni)</span>
+                </label>
+                <label class="flex items-center space-x-2 p-2 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+                  <input type="checkbox" name="cargoTypes" value="Car Transporter" class="text-blue-600 rounded"> <span>Car Transporter (Prevoz avtomobilov)</span>
+                </label>
+                <label class="flex items-center space-x-2 p-2 bg-white border border-slate-200 rounded-lg cursor-pointer hover:border-blue-500">
+                  <input type="checkbox" name="cargoTypes" value="Heavy Haulage / Oversized" class="text-blue-600 rounded"> <span>Heavy / Oversized (Izredni prevozi)</span>
+                </label>
               </div>
             </div>
 
-            <div class="md:col-span-2">
-              <label class="block text-xs font-semibold text-slate-700 mb-1">Direct Corridors / Key Trade Lanes of Interest</label>
-              <input type="text" id="directCorridors" name="directCorridors" placeholder="Ex: SI-DE, IT-DE, AT-FR" class="w-full bg-white border border-slate-300 rounded-lg px-3.5 py-2 text-xs text-slate-900 focus:outline-none focus:border-blue-600">
-              <span class="text-[10px] text-slate-500 mt-1 block">Used by CargoNet AI matching to instantly connect relevant loads & transport providers.</span>
+            <!-- STRUCTURED GLOBAL CORRIDors BUILDER (VSE CELINE IN VSE DRŽAVE SVETA) -->
+            <div class="md:col-span-2 space-y-3 pt-3 border-t border-blue-200">
+              <div class="flex items-center justify-between">
+                <div>
+                  <label class="block text-xs font-bold text-slate-900">Structured Direct Trade Corridors (Lanes Builder)</label>
+                  <p class="text-[11px] text-slate-500">Select continent and country for Origin & Destination to build precise operational lanes.</p>
+                </div>
+                <span id="corridorCountBadge" class="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">0 / 30 Lanes Added</span>
+              </div>
+
+              <!-- BUILDER ROW -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-white border border-slate-200 rounded-xl shadow-sm">
+                <!-- ORIGIN SELECTION -->
+                <div class="space-y-2">
+                  <span class="text-xs font-bold text-blue-900 flex items-center gap-1"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i> Origin (Od kod)</span>
+                  <select id="builderOriginContinent" onchange="filterBuilderCountries('origin')" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-600">
+                    <option value="" disabled selected>-- Select Origin Continent --</option>
+                    <option value="EU">Europe</option>
+                    <option value="NA">North America (USA & Canada)</option>
+                    <option value="CA">Central America & Caribbean</option>
+                    <option value="SA">South America</option>
+                    <option value="AS">Asia & Far East</option>
+                    <option value="ME">Middle East</option>
+                    <option value="AF">Africa</option>
+                    <option value="OC">Australia & Oceania</option>
+                  </select>
+                  <select id="builderOriginCountry" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-600">
+                    <option value="" disabled selected>-- Select Origin Country --</option>
+                  </select>
+                </div>
+
+                <!-- DESTINATION SELECTION -->
+                <div class="space-y-2">
+                  <span class="text-xs font-bold text-emerald-900 flex items-center gap-1"><i data-lucide="navigation" class="w-3.5 h-3.5"></i> Destination (Do konca)</span>
+                  <select id="builderDestContinent" onchange="filterBuilderCountries('dest')" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-600">
+                    <option value="" disabled selected>-- Select Dest Continent --</option>
+                    <option value="EU">Europe</option>
+                    <option value="NA">North America (USA & Canada)</option>
+                    <option value="CA">Central America & Caribbean</option>
+                    <option value="SA">South America</option>
+                    <option value="AS">Asia & Far East</option>
+                    <option value="ME">Middle East</option>
+                    <option value="AF">Africa</option>
+                    <option value="OC">Australia & Oceania</option>
+                  </select>
+                  <select id="builderDestCountry" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-600">
+                    <option value="" disabled selected>-- Select Dest Country --</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between pt-1">
+                <button type="button" onclick="addProCorridor()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+                  <i data-lucide="plus-circle" class="w-4 h-4"></i> Add Structured Lane to Profile
+                </button>
+                <span class="text-[11px] text-slate-400 italic">Example: Frigo from Slovenia to France</span>
+              </div>
+
+              <!-- PREVIEW / GENERATED LANES CHIPS -->
+              <div id="proCorridorsList" class="flex flex-wrap gap-2 pt-2 min-h-[40px] p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                <span class="text-xs text-slate-400 italic">No trade corridors added yet. Add lanes above (e.g. Frigo: Slovenia -> France).</span>
+              </div>
+              <input type="hidden" id="directCorridorsInput" name="directCorridorsInput">
+            </div>
+
+            <!-- PRO AI NOTICE & GDPR FOOTNOTE -->
+            <div class="md:col-span-2 pt-3">
+              <p class="text-[11px] text-slate-500 leading-relaxed italic border-t border-blue-200/60 pt-3">
+                * Note: These structured operational parameters are optional and utilized exclusively by the <strong>CargoNet AI Search Engine</strong> for fast, intelligent load and transport matching across global corridors. This core matching feature is and will always remain **100% free of charge**. You can fully manage, update, add, or remove these trade lanes at any time directly inside your **Company Profile HQ**.
+              </p>
             </div>
           </div>
         </div>
@@ -743,7 +821,93 @@
         submitBtn.textContent = 'Sign In to Dashboard';
       }
     }
+
+    // Globalni podatki vseh držav po celinah (popoln nabor za cel svet)
+  const globalWorldData = {
+    EU: ["Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus", "Czech Republic", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", "Kosovo", "Latvia", "Liechtenstein", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", "Netherlands", "North Macedonia", "Norway", "Poland", "Portugal", "Romania", "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "Ukraine", "United Kingdom", "Vatican City"],
+    NA: ["Canada", "United States", "Mexico"],
+    CA: ["Antigua and Barbuda", "Bahamas", "Barbados", "Belize", "Costa Rica", "Cuba", "Dominica", "Dominican Republic", "El Salvador", "Grenada", "Guatemala", "Haiti", "Honduras", "Jamaica", "Nicaragua", "Panama", "Trinidad and Tobago"],
+    SA: ["Argentina", "Bolivia", "Brazil", "Chile", "Colombia", "Ecuador", "Guyana", "Paraguay", "Peru", "Suriname", "Uruguay", "Venezuela"],
+    AS: ["Afghanistan", "Armenia", "Azerbaijan", "Bangladesh", "Bhutan", "Brunei", "Cambodia", "China", "Georgia", "Hong Kong", "India", "Indonesia", "Japan", "Kazakhstan", "Kyrgyzstan", "Laos", "Macau", "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", "Pakistan", "Philippines", "Singapore", "South Korea", "Sri Lanka", "Taiwan", "Tajikistan", "Thailand", "Timor-Leste", "Turkmenistan", "Uzbekistan", "Vietnam"],
+    ME: ["Bahrain", "Iran", "Iraq", "Israel", "Jordan", "Kuwait", "Lebanon", "Oman", "Palestine", "Qatar", "Saudi Arabia", "Syria", "Turkey", "United Arab Emirates", "Yemen"],
+    AF: ["Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon", "Central African Republic", "Chad", "Comoros", "Congo", "DR Congo", "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Ivory Coast", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe"],
+    OC: ["Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia", "Nauru", "New Zealand", "Palau", "Papua New Guinea", "Samoa", "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu"]
+  };
+
+  let activeProCorridors = [];
+
+  function filterBuilderCountries(type) {
+    const continent = document.getElementById(`builder${type.charAt(0).toUpperCase() + type.slice(1)}Continent`).value;
+    const countrySelect = document.getElementById(`builder${type.charAt(0).toUpperCase() + type.slice(1)}Country`);
+    countrySelect.innerHTML = '<option value="" disabled selected>-- Select Country --</option>';
+    
+    if (globalWorldData[continent]) {
+      globalWorldData[continent].forEach(country => {
+        const opt = document.createElement('option');
+        opt.value = country;
+        opt.textContent = country;
+        countrySelect.appendChild(opt);
+      });
+    }
+  }
+
+  function addProCorridor() {
+    const origCont = document.getElementById('builderOriginContinent').value;
+    const origCountry = document.getElementById('builderOriginCountry').value;
+    const destCont = document.getElementById('builderDestContinent').value;
+    const destCountry = document.getElementById('builderDestCountry').value;
+
+    if (!origCountry || !destCountry) {
+      alert('Please select both Origin and Destination countries from the dropdowns.');
+      return;
+    }
+
+    const corridorString = `${origCountry} -> ${destCountry}`;
+    if (activeProCorridors.includes(corridorString)) {
+      alert('This exact trade lane is already added.');
+      return;
+    }
+
+    if (activeProCorridors.length >= 30) {
+      alert('Maximum limit of 30 structured trade corridors reached.');
+      return;
+    }
+
+    activeProCorridors.push(corridorString);
+    renderProCorridors();
+  }
+
+  function removeProCorridor(index) {
+    activeProCorridors.splice(index, 1);
+    renderProCorridors();
+  }
+
+  function renderProCorridors() {
+    const container = document.getElementById('proCorridorsList');
+    const hiddenInput = document.getElementById('directCorridorsInput');
+    const badge = document.getElementById('corridorCountBadge');
+
+    badge.textContent = `${activeProCorridors.length} / 30 Lanes Added`;
+
+    if (activeProCorridors.length === 0) {
+      container.innerHTML = '<span class="text-xs text-slate-400 italic">No trade corridors added yet. Add lanes above (e.g. Frigo: Slovenia -> France).</span>';
+      hiddenInput.value = '';
+      return;
+    }
+
+    container.innerHTML = '';
+    activeProCorridors.forEach((lane, idx) => {
+      container.innerHTML += `
+        <span class="inline-flex items-center gap-1.5 bg-blue-100 text-blue-900 px-3 py-1.5 rounded-xl text-xs font-bold border border-blue-200 shadow-sm">
+          📍 ${lane}
+          <button type="button" onclick="removeProCorridor(${idx})" class="text-blue-500 hover:text-red-600 font-black ml-1 text-sm">×</button>
+        </span>
+      `;
+    });
+    hiddenInput.value = activeProCorridors.join(', ');
+  }
   </script>
+
   
 </body>
 </html>
